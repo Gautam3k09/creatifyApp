@@ -1,0 +1,41 @@
+.box { 
+    height: 80%;
+    width: 80%;
+    border: 5px;
+    border-color: red;
+}
+.resize {
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    top: 0;
+    left: 0;
+    background-color: red;
+    resize: both;
+    overflow: auto;
+    overflow-y: hidden;
+  }
+  
+  .resizeIMg {
+    height: 100%;
+    width: 100%;
+  /* or
+    object-fit: cover; */
+  } 
+  
+  .container {
+    position: relative;
+    width: 500px; /* Adjust according to your image size */
+    height: 500px; /* Adjust according to your image size */
+    /* pointer-events: none; */
+    cursor: grab;
+  }
+  .container::after { 
+    cursor: grabbing;
+  }
+  
+  img {
+    position: absolute;
+  }
+
+

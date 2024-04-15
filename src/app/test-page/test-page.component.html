@@ -1,0 +1,11 @@
+<!-- <div class="box">
+
+    <div class="resize" resized (resized)="onResized($event)">
+      <img class="resizeIMg" src="../../assets/t-shirts.jpg">
+    </div>
+</div> -->
+
+<!-- app.component.html -->
+<div class="container" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mousedown)="onMouseDown($event)">
+  <img id="draggable" src="../../assets/t-shirts.jpg" >
+</div>
