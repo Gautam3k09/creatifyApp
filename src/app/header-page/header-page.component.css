@@ -1,0 +1,16 @@
+.heading {
+    height: 10%;
+    background-color: aqua;
+    padding: 25px 50px 0 100px;
+}
+#left-header {
+    float: left;
+} 
+#right-header {
+    display: flex;
+    
+    float: right;
+}
+.tabs {
+    margin-left: 20px;
+}
