@@ -18,6 +18,8 @@ export class CanvasAreaComponent {
   isDragging = false;
   startX: any;
   startY: any;
+  offsetX = 0; 
+  offsetY = 0;
   width = 200; // Initial width
   height = 150; // Initial height
 
@@ -51,8 +53,11 @@ export class CanvasAreaComponent {
 
   updateImage() {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-    const newX = Math.max(0, this.canvas.nativeElement.width / 2 - this.width / 2); // Center image
-    const newY = Math.max(0, this.canvas.nativeElement.height / 2 - this.height / 2);
+    const canvasWidth = this.canvas.nativeElement.width;
+    const canvasHeight = this.canvas.nativeElement.height;
+    
+    const newX = Math.max(0, Math.min(canvasWidth - this.width, this.offsetX));
+    const newY = Math.max(0, Math.min(canvasHeight - this.height, this.offsetY));
     this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
   }
 
@@ -60,27 +65,38 @@ export class CanvasAreaComponent {
     this.isDragging = true;
     this.startX = event.offsetX;
     this.startY = event.offsetY;
+    
   }
-
   handleMouseUp() {
     this.isDragging = false;
   }
 
-  handleMouseMove(event: MouseEvent) {
+   handleMouseMove(event: MouseEvent) {
     if (this.isDragging) {
       const deltaX = event.offsetX - this.startX;
       const deltaY = event.offsetY - this.startY;
       this.startX = event.offsetX;
       this.startY = event.offsetY;
-      this.updateImagePosition(deltaX, deltaY);
+
+      // Update offset values considering canvas boundaries
+      this.offsetX = Math.max(0, Math.min(this.offsetX + deltaX, this.canvas.nativeElement.width - this.width));
+      this.offsetY = Math.max(0, Math.min(this.offsetY + deltaY, this.canvas.nativeElement.height - this.height));
+
+      
+
+      this.updateImage();
     }
   }
 
   updateImagePosition(deltaX: number, deltaY: number) {
-    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-    const newX = Math.max(0, this.width + deltaX); 
-    const newY = Math.max(0, this.height + deltaY);
-    this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
+    this.offsetX += deltaX; // Update offset based on drag movement
+    this.offsetY += deltaY;
+    this.offsetX = Math.max(0, this.offsetX); // Prevent off-screen (left)
+    this.offsetY = Math.max(0, this.offsetY); // Prevent off-screen (top)
+    this.offsetX = Math.min(this.canvas.nativeElement.width - this.width, this.offsetX); // Prevent off-screen (right)
+    this.offsetY = Math.min(this.canvas.nativeElement.height - this.height, this.offsetY); // Prevent off-screen (bottom)
+    console.log(this.offsetX,this.offsetY,'asd')
+    this.updateImage();
   }
 
 
