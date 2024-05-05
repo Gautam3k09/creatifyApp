@@ -1,1 +1,35 @@
-<p>canvas-area works!</p>
+<div class="container">
+    
+    <img src="../../assets/t-shirts.jpg">
+    <canvas #canvas class="canvas" width="270" height="380"></canvas>
+    <div class="utils">
+        <p>colors:</p>
+        <div class="btn-group" role="group" aria-label="Color Buttons">
+            <button type="button" class="btn btn-circle btn-red" (click)="changeColor('red')"></button>
+            <button type="button" class="btn btn-circle btn-blue" (click)="changeColor('blue')"></button>
+            <button type="button" class="btn btn-circle btn-green" (click)="changeColor('green')"></button>
+        </div>
+        <p>size</p>
+        <div>
+            <button class="btn btn-primary ms-2">S</button>
+            <!-- Medium Button (default) -->
+            <button class="btn btn-primary ms-2">M</button>
+            <!-- Large Button -->
+            <button class="btn btn-primary ms-2">L</button>
+            <!-- Extra Large Button -->
+            <button class="btn btn-primary ms-2">XL</button>
+        </div>
+        
+        <input type="file" (change)="handleFileChange($event)">
+        <canvas #myCanvas width="400" height="300"></canvas>
+        <div>
+          <label for="width">Width:</label>
+          <input type="number" id="width" [(ngModel)]="width" (change)="updateImage()">
+        </div>
+        <div>
+          <label for="height">Height:</label>
+          <input type="number" id="height" [(ngModel)]="height" (change)="updateImage()">
+        </div>
+</div>
+
+<!-- <img src="../../assets/createefi-5-5-2024.png"> -->

@@ -1,4 +1,62 @@
-.uploadButton{
+/* .uploadButton{
     width: 60px;
     border: 2px solid green;
+} */
+.section1 {
+    display: flex;
+    text-align: center;
+    margin: auto;
+    margin-top: 2%;
+    width: 80%;
+    height: 20%;
 }
+.create1 { 
+    font-size: 65px;
+    text-align: left;
+    margin-left: 7%;
+}
+.section1lines {
+    margin: auto;
+    font-size: 26px;
+    width: 60%;
+    margin: auto;
+}
+.createSpan {
+    line-height: 60px;
+}
+
+.section2 {
+    display: flex;
+    text-align: center;
+    margin-top: 2%;
+    margin: auto;
+    width: 80%;
+    height: 20%;
+    
+}
+.create2 { 
+    font-size: 65px;
+    line-height: 75px;
+    text-align: right;
+    
+}
+.section2lines {
+    width: 50%;
+    margin: auto;
+}
+span {
+    line-height: 75px;
+}
+.section2header { 
+    font-size: 55px;
+    text-align: center;
+    margin: auto;
+}
+
+.section2bottom{
+    font-size: 55px;
+    text-align: center;
+    margin: auto;
+    margin-top: 3%;
+}
+

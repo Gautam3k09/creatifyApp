@@ -1,10 +1,12 @@
 .heading {
-    height: 10%;
+    height: 7%;
     background-color: aqua;
     padding: 25px 50px 0 100px;
 }
 #left-header {
     float: left;
+    cursor: pointer;
+    font-size: 30px;
 } 
 #right-header {
     display: flex;
@@ -13,4 +15,5 @@
 }
 .tabs {
     margin-left: 20px;
+    cursor: pointer;
 }

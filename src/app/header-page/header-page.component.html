@@ -1,12 +1,25 @@
 <div class="heading">
-    <div id="left-header">
-        CreaTeeFy
+    <div id="left-header" (click)="onDivClick('homes')">
+        CreaTeeFi
     </div>
     <div id="right-header">
-        <div class="tabs">Shop</div>
-        <div class="tabs">Your Store</div>
-        <div class="tabs">Your Tees</div>
-        <div class="tabs"> <i class="fa fa-sign-in" aria-hidden="true"></i></div>
-       
+        <div class="tabs" (click)="onDivClick('shop')">Shop</div>
+        <div class="tabs" (click)="onDivClick('store')">Your Store</div>
+        <div class="tabs" (click)="onDivClick('tees')">Your tees</div>
+        <div class="tabs"><i class="fa fa-sign-in" aria-hidden="true"></i></div>
     </div>
 </div>
+<div >
+    <ng-template [ngIf]="ActiveTab == 'homes'">
+        <app-home></app-home>
+    </ng-template>
+    <ng-template [ngIf]="ActiveTab == 'shop'">
+      <app-common-shop></app-common-shop>
+    </ng-template>
+    <ng-template [ngIf]="ActiveTab == 'store'">
+        <app-store></app-store>
+    </ng-template>
+    <ng-template [ngIf]="ActiveTab == 'tees'">
+        <app-your-tees></app-your-tees>
+    </ng-template>
+  </div>
