@@ -5,8 +5,8 @@ import { TestPageComponent } from './test-page.component';
 import { DraggableDirective } from './draggable.directive';
 
 @NgModule({
-    declarations:[TestPageComponent,DraggableDirective],
-    imports:[AngularResizeEventModule]
+    declarations:[DraggableDirective],
+    imports:[AngularResizeEventModule,TestPageComponent]
 })
 
 export class AppModule { }
