@@ -1,6 +1,6 @@
 <div class="container">
     
-    <img src="../../assets/t-shirts.jpg">
+    <img id="draggable" src="../../assets/t-shirts.jpg">
     <canvas #canvas class="canvas" width="270" height="380"></canvas>
     <div class="utils">
         <p>colors:</p>
@@ -11,7 +11,7 @@
         </div>
         <p>size</p>
         <div>
-            <button class="btn btn-primary ms-2">S</button>
+            <button class="btn btn-primary ms-2" [class.pattern-applied]="isPatternApplied" (click)="applyPattern()" >S</button>
             <!-- Medium Button (default) -->
             <button class="btn btn-primary ms-2">M</button>
             <!-- Large Button -->
@@ -20,8 +20,7 @@
             <button class="btn btn-primary ms-2">XL</button>
         </div>
         
-        <input type="file" (change)="handleFileChange($event)">
-        <canvas #myCanvas width="400" height="300"></canvas>
+        <input #imageInput class="file" (ngClass)="{'grab': !isDragging, 'grabbing': isDragging}" type="file" (change)="handleFileChange($event)">
         <div>
           <label for="width">Width:</label>
           <input type="number" id="width" [(ngModel)]="width" (change)="updateImage()">
@@ -30,6 +29,8 @@
           <label for="height">Height:</label>
           <input type="number" id="height" [(ngModel)]="height" (change)="updateImage()">
         </div>
+
+        <button class="btn btn-primary ms-2" (click)="download()">Save</button>
 </div>
 
 <!-- <img src="../../assets/createefi-5-5-2024.png"> -->

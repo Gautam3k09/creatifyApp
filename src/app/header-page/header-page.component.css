@@ -1,19 +1,81 @@
-.heading {
-    height: 7%;
-    background-color: aqua;
-    padding: 25px 50px 0 100px;
+*{
+    margin: 0;
+    padding: 0;
 }
-#left-header {
-    float: left;
-    cursor: pointer;
-    font-size: 30px;
-} 
-#right-header {
+
+body {
+    min-height: 100vh;
+}
+
+nav {
+    background-color: white;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul{
+    width: 100%;
+    list-style: none;
     display: flex;
-    
-    float: right;
+    justify-content: flex-end;
+    align-items: center;
 }
-.tabs {
-    margin-left: 20px;
-    cursor: pointer;
+
+nav li{
+    height: 50px;
+}
+
+.tabs{
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+
+.tabs:hover{
+    background-color: lightgray;
+}
+
+nav li:first-child {
+    margin-right: auto;
+}
+
+.sidebar{
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100vh !important;
+    width: 250px !important;
+    z-index: 999;
+    background-color: white !important;
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
+    display: none !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+}
+
+.sidebar li{
+    width: 100% !important;
+}
+
+.tabsM{
+    width: 100% !important;
+}
+
+@media(max-width:600px) {
+    .hideOnMobile{
+        display: none;
+    }
+}
+
+@media(min-width:1360px) {
+    .hideOnDesktop{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+
 }

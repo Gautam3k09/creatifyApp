@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-canvas-area',
@@ -22,19 +23,27 @@ export class CanvasAreaComponent {
   offsetY = 0;
   width = 200; // Initial width
   height = 150; // Initial height
+  isGrabbing: boolean = false;
+  isImgUploaded : boolean = false;
+  isPatternApplied: boolean = false;
 
-  constructor() {}
+  constructor(private router: Router) {}
   ngOnInit() {
+    const canvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.ctx = this.canvas?.nativeElement?.getContext('2d');
+    //border
+    const borderSize = 5;
+    this.ctx.lineWidth = borderSize;
+    this.ctx.strokeStyle = 'black';
+    this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);  
+    //image move
     this.canvas.nativeElement.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.canvas.nativeElement.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.canvas.nativeElement.addEventListener('mousemove', this.handleMouseMove.bind(this));
   }
-
-
-  ngAfterViewInit(): void {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-  }
+  // ngAfterViewInit(): void {
+  //   this.ctx = this.canvas.nativeElement.getContext('2d');
+  // }
   changeColor(color: string): void {
     console.log('Selected color:', color);
   }
@@ -47,10 +56,10 @@ export class CanvasAreaComponent {
         this.updateImage(); 
       };
       img.src = e.target.result;
+      this.isImgUploaded = true;
     };
     reader.readAsDataURL(event.target.files[0]);
   }
-
   updateImage() {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     const canvasWidth = this.canvas.nativeElement.width;
@@ -59,8 +68,15 @@ export class CanvasAreaComponent {
     const newX = Math.max(0, Math.min(canvasWidth - this.width, this.offsetX));
     const newY = Math.max(0, Math.min(canvasHeight - this.height, this.offsetY));
     this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
-  }
 
+    //for border
+    const canvas = this.canvas.nativeElement as HTMLCanvasElement;
+    const borderSize = 5;
+    this.ctx.lineWidth = borderSize;
+    this.ctx.strokeStyle = 'black';
+    this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);  
+    
+  }
   handleMouseDown(event: MouseEvent) {
     this.isDragging = true;
     this.startX = event.offsetX;
@@ -70,9 +86,8 @@ export class CanvasAreaComponent {
   handleMouseUp() {
     this.isDragging = false;
   }
-
-   handleMouseMove(event: MouseEvent) {
-    if (this.isDragging) {
+  handleMouseMove(event: MouseEvent) {
+    if (this.isDragging && this.isImgUploaded) {
       const deltaX = event.offsetX - this.startX;
       const deltaY = event.offsetY - this.startY;
       this.startX = event.offsetX;
@@ -81,13 +96,9 @@ export class CanvasAreaComponent {
       // Update offset values considering canvas boundaries
       this.offsetX = Math.max(0, Math.min(this.offsetX + deltaX, this.canvas.nativeElement.width - this.width));
       this.offsetY = Math.max(0, Math.min(this.offsetY + deltaY, this.canvas.nativeElement.height - this.height));
-
-      
-
       this.updateImage();
     }
   }
-
   updateImagePosition(deltaX: number, deltaY: number) {
     this.offsetX += deltaX; // Update offset based on drag movement
     this.offsetY += deltaY;
@@ -99,7 +110,25 @@ export class CanvasAreaComponent {
     this.updateImage();
   }
 
+  download() {
+    // const canvas = this.canvas.nativeElement as HTMLCanvasElement;
+    // const dataURL = canvas.toDataURL('image/png');
 
+    // const link = document.createElement('a');
+    // link.href = dataURL;
+    // link.download = 'my-drawing.png';
+
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    // const queryParams = { data: 'tees' };
+    // this.router.navigate([''], { queryParams: queryParams });
+  }
+
+  applyPattern() {
+    this.isPatternApplied = true;
+  }
+  
   ngOnDestroy() {
     this.canvas.nativeElement.removeEventListener('mousedown', this.handleMouseDown);
     this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
