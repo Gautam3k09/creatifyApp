@@ -1,36 +1,77 @@
-<div class="container">
+<body>
+  <div class="container">
+    <div class="utilsforMobView">
+      <div class="mb-2">
+        <p><textarea ng-model="name" (keyup)="onKey($event)" style="width: 50%;" rows="1" cols="50" placeholder="Design Name"></textarea></p>
+      </div>
+    </div>
     
     <img id="draggable" src="../../assets/t-shirts.jpg">
     <canvas #canvas class="canvas" width="270" height="380"></canvas>
     <div class="utils">
-        <p>colors:</p>
-        <div class="btn-group" role="group" aria-label="Color Buttons">
-            <button type="button" class="btn btn-circle btn-red" (click)="changeColor('red')"></button>
-            <button type="button" class="btn btn-circle btn-blue" (click)="changeColor('blue')"></button>
-            <button type="button" class="btn btn-circle btn-green" (click)="changeColor('green')"></button>
-        </div>
-        <p>size</p>
+      <div class="mb-2">
+        <p class="mb-0">Design Name:</p>
+        <textarea ng-model="name" (keyup)="onKey($event)"  rows="1" cols="50"></textarea>
+      </div>
+      <div class="mb-4">
+        <p class="mb-0">Colors:</p>
+        <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
+        <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
+        <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
+        <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
+      </div>
+      <div class="mb-4">
+        <p class="mb-0">Size:</p>
         <div>
-            <button class="btn btn-primary ms-2" [class.pattern-applied]="isPatternApplied" (click)="applyPattern()" >S</button>
+            <button class="btn btn-primary mx-2" [class.pattern-applied]="isPatternApplied" (click)="changeHeight('S')" >S</button>
             <!-- Medium Button (default) -->
-            <button class="btn btn-primary ms-2">M</button>
+            <button class="btn btn-primary mx-2" (click)="changeHeight('M')" >M</button>
             <!-- Large Button -->
-            <button class="btn btn-primary ms-2">L</button>
+            <button class="btn btn-primary mx-2" (click)="changeHeight('L')" >L</button>
             <!-- Extra Large Button -->
-            <button class="btn btn-primary ms-2">XL</button>
+            <button class="btn btn-primary mx-2" (click)="changeHeight('XL')" >XL</button>
         </div>
-        
+        <p class="mb-0">current height and width is {{size}}</p>
+      </div>
+      <div class="mb-2">
         <input #imageInput class="file" (ngClass)="{'grab': !isDragging, 'grabbing': isDragging}" type="file" (change)="handleFileChange($event)">
-        <div>
-          <label for="width">Width:</label>
-          <input type="number" id="width" [(ngModel)]="width" (change)="updateImage()">
-        </div>
-        <div>
-          <label for="height">Height:</label>
-          <input type="number" id="height" [(ngModel)]="height" (change)="updateImage()">
-        </div>
 
+        <div *ngIf="isImgUploaded;">
+          <div class="mt-4 mb-2">
+            <label for="width" class="mx-2">Width:</label>
+            <input type="number" id="width" class="mx-1" [(ngModel)]="width" (change)="updateImage()">
+          </div>
+          <div>
+            <label for="height" class="mx-2">Height:</label>
+            <input type="number" id="height" [(ngModel)]="height" (change)="updateImage()">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="saveButton">
+      <p>
         <button class="btn btn-primary ms-2" (click)="download()">Save</button>
-</div>
+      </p>
+    </div>
+  </div>
+  <div class="bottomNavBarforMobView">
+    <div class="navbar">
+      <div class="upload">
+        <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
+        <p class="uploadText">upload</p>
+      </div>
+      <div class="color" (click)="changeHeight('S')">
+        <p class="colorIcon"><button class="btn btn-primary" (click)="download()"></button></p>
+        <p class="colorText">color</p>
+      </div>
+      <div class="size">
+        <p class="sizeIcon">S</p>
+        <p class="sizeText">size</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+
 
 <!-- <img src="../../assets/createefi-5-5-2024.png"> -->

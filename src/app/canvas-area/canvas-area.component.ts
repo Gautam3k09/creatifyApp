@@ -2,11 +2,12 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-canvas-area',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './canvas-area.component.html',
   styleUrl: './canvas-area.component.css'
 })
@@ -26,6 +27,8 @@ export class CanvasAreaComponent {
   isGrabbing: boolean = false;
   isImgUploaded : boolean = false;
   isPatternApplied: boolean = false;
+  name : any = "";
+  size : any = 'S';
 
   constructor(private router: Router) {}
   ngOnInit() {
@@ -125,13 +128,19 @@ export class CanvasAreaComponent {
     // this.router.navigate([''], { queryParams: queryParams });
   }
 
-  applyPattern() {
-    this.isPatternApplied = true;
+  changeHeight(string:any) {
+    this.size = string;
+    // this.isPatternApplied = true;
   }
   
   ngOnDestroy() {
     this.canvas.nativeElement.removeEventListener('mousedown', this.handleMouseDown);
     this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
     this.canvas.nativeElement.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
+
+  onKey(event: any) { 
+    this.name = event.target.value;
   }
 }

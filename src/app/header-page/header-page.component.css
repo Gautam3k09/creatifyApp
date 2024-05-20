@@ -18,6 +18,7 @@ nav ul{
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    cursor: pointer;
 }
 
 nav li{
@@ -70,12 +71,15 @@ nav li:first-child {
     }
 }
 
-@media(min-width:1360px) {
-    .hideOnDesktop{
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    .hideOnMobile{
         display: none;
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-
+@media(min-width:1025px) {
+    .hideOnDesktop{
+        display: none;
+    }
 }

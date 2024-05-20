@@ -1,7 +1,44 @@
 .container {
     position: relative;
-    padding: 2.5%;
-    margin-left: 10%;
+    /* padding: 2.5%;
+    margin-left: 10%; */
+
+    canvas {
+      position: absolute;
+      top: 231px;
+      left: 170px;
+    }
+    
+    .utils {
+      position: absolute;
+      top: 15%;
+      right: 20%;
+
+      
+
+      .btn-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        padding: 0;
+      }
+      
+      .btn-red {
+        background-color: red;
+      }
+      
+      .btn-blue {
+        background-color: blue;
+      }
+      
+      .btn-green {
+        background-color: green;
+      }
+    }
+}
+
+textarea {
+  resize: none;
 }
 
 .grab {
@@ -12,35 +49,137 @@
   cursor: grabbing;
 }
 
-canvas {
-    position: absolute;
-    top: 231px;
-    left: 170px;
-}
-.canvas {
+@media(max-width:600px) {
+  .container {
+    position: relative;
+    /* padding: 2.5%; */
+    padding-top: 20%;
+    padding-right: 3%;
+    padding-left: 9%;
+
+    .utilsforMobView { 
+      text-align: start;
+      margin-left: auto;
+    }
+
+    img {
+      width: 90%;
+    }
+
+    canvas {
+      position: absolute;
+      width: 40%;
+      left: 28%;
+      top: 42%;
+    }
+
+    .utils {
+      display: none;
+        position: absolute;
+        top: auto;
+        right: auto;
+    }
+
+    .saveButton {
+      p {
+        text-align: center;
+        margin-right: 13%;
+        margin-top: 7%;
+      }
+      display: block;
+    }
+  }
+
+  .bottomNavBarforMobView {
+    display: block;
+
+    .navbar {
+      overflow: hidden;
+      background-color: #333;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      .upload {
+        margin-left: 10%;
+        color: white;
+
+        .uploadIcon{
+          margin: 0;
+          text-align: center;
+        }
+
+        .uploadText {
+          margin: 0;
+          margin-top: -10%;
+        }
+      }
+      .color {
+        color: white;
+
+        .colorIcon{
+          margin: 0;
+          text-align: center;
+        }
+
+        .colorText {
+          margin: 0;
+          margin-top: -10%;
+        }
+      }
+      .size {
+        margin-right: 10%;
+        color: white;
+
+        .sizeIcon{
+          margin: 0;
+          text-align: center;
+        }
+
+        .sizeText {
+          margin: 0;
+          margin-top: -35%;
+        }
+      }
+    }
+  
+  
+  .navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .navbar a:hover {
+    background: #f1f1f1;
+    color: black;
+  }
+  
+  .navbar a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+  }
+
+ 
 }
 
-.utils {
-    position: absolute;
-    top: 15%;
-    right: 20%;
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    
 }
 
-.btn-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  padding: 0;
-}
+@media(min-width:1025px) {
+  .container {
+    position: relative;
+    padding: 2.5%;
+    margin-left: 10%;
+  }
 
-.btn-red {
-  background-color: red;
-}
-
-.btn-blue {
-  background-color: blue;
-}
-
-.btn-green {
-  background-color: green;
+  .bottomNavBarforMobView {
+    display: none;
+  }
 }

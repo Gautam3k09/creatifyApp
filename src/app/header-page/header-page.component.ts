@@ -19,7 +19,7 @@ export class HeaderPageComponent {
     // this.ActiveTab = string;
     console.log(string,'string');
     this.router.navigate([string]);
-    this.showSidebar(string);
+    // this.showSidebar(string);
   }
 
   showSidebar(string = '') {

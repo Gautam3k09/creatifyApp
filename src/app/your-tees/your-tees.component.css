@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height:auto;
+}
+
+.noTees{
+  position: fixed;
+  inset: 0px;
+  width: 12rem;
+  height: 5rem;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
+}
+
+.container {
+  margin: auto;
+  margin-top: 1%;
+}
+
+.exceedText {
+  margin: 3%;
+  text-align: center
+}

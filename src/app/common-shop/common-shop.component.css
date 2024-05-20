@@ -5,22 +5,10 @@
 
 body {
     min-height: 100vh;
-    
 }
 
 
-.mainbox {
+.container {
     margin: auto;
-    margin-top: 5vh;
-    width: 90vw; 
-    /* height: 80vh;  */
-    border: 2px black solid; 
-    overflow: hidden;
-    padding: 2%;
-}
-
-.clothStacks {
-    width: 20vw; 
-    height: 50vh; 
-    border: 2px black solid; 
+    margin-top: 1%;
 }
