@@ -3,11 +3,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { HeaderPageComponent } from '../header-page/header-page.component';
 @Component({
   selector: 'app-canvas-area',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,HeaderPageComponent],
   templateUrl: './canvas-area.component.html',
   styleUrl: './canvas-area.component.css'
 })

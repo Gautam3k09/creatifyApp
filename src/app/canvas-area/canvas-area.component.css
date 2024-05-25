@@ -1,7 +1,21 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+  /* overflow: auto; */
+  color: white;
+  background-image: url('../../assets/blue-purple.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+
 .container {
     position: relative;
-    /* padding: 2.5%;
-    margin-left: 10%; */
 
     canvas {
       position: absolute;
@@ -9,12 +23,20 @@
       left: 170px;
     }
     
-    .utils {
-      position: absolute;
-      top: 15%;
-      right: 20%;
+    img {
+      margin-left: 10%;
+      height: 80vh;
+      right: 20;
+    }
 
-      
+    .utils {
+      padding: 3%;
+      background-color: #333;
+      border-radius: 6%;
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      box-shadow: #333;
 
       .btn-circle {
         width: 30px;
@@ -177,7 +199,12 @@ textarea {
     position: relative;
     padding: 2.5%;
     margin-left: 10%;
+    .utilsforMobView {
+      display: none;
+    }
   }
+
+  
 
   .bottomNavBarforMobView {
     display: none;

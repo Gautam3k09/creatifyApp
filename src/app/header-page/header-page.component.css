@@ -4,11 +4,12 @@
 }
 
 body {
-    height:auto;
+    height: 5%;
+    background: none;
 }
 
 nav {
-    background-color: white;
+    /* background-color: white; */
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -22,7 +23,9 @@ nav ul{
 }
 
 nav li{
-    height: 50px;
+    font-size: 24px;
+    color: white;
+    height: 8vh;
 }
 
 .tabs{
@@ -35,11 +38,12 @@ nav li{
 }
 
 .tabs:hover{
-    background-color: lightgray;
+    background-color: black;
 }
 
 nav li:first-child {
     margin-right: auto;
+    margin-left: 5%;
 }
 
 .sidebar{
@@ -49,16 +53,28 @@ nav li:first-child {
     height: 100vh !important;
     width: 250px !important;
     z-index: 999;
-    background-color: white !important;
     box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
     display: none !important;
     flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
+    background-image: url('../../assets/blue-purple.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    overflow: hidden;
+    color: white;
+    text-align: center;    
 }
 
 .sidebar li{
     width: 100% !important;
+}
+
+.sidebar li:first-child {
+    text-align: start;
+    font-size: 5vh;
 }
 
 .tabsM{

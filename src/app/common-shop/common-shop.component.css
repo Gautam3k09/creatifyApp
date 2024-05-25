@@ -4,11 +4,40 @@
 }
 
 body {
-    min-height: 100vh;
+    overflow: auto;
+    background-image: url('../../assets/blue-purple.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    /* overflow: hidden; */
+    color: white;
 }
 
 
 .container {
     margin: auto;
     margin-top: 1%;
+}
+
+/* scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Style the scrollbar track */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: none;
+    border-radius: 10px;
+}
+
+/* Style the scrollbar thumb */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+/* Style the thumb on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #999;
 }

@@ -1,30 +1,34 @@
 <!-- <div class="uploadButton">
     <button  (click)="openModal()">Open Canvas</button>
 </div> -->
-<body>
+<body class="custom-scrollbar">
     <app-header-page></app-header-page>
-    <div class="section1">
-        <div class="create1">
-            <span class="createSpan">Upload &centerdot; Wear &centerdot; Tee</span>
-            <div class="section1lines">Tired of searching for oversized tees with your favorite design? <br>Design your own!<br>Simply upload your artwork to Createefi and we'll handle the rest.</div>
-        </div>
-        
-        <img class="ImageSec1" src="../../assets/modelImg.jpeg">
-    </div>
-    <div class="section1Footer">
-        <button type="button" class="btn btn-primary ">Create</button>
-    </div>
-    <div class="section2">
-        <img class="ImageSec2" src="../../assets/modelImg.jpeg">
-        <div class="create2">
-            <span class="create2Span">Start Your OWN Store</span>
+    <div>
+        //custom scroll bar
+        //add merch options in canvas
+        <div class="section1">
+            <div class="create1">
+                <span class="createSpan">Upload &centerdot; Wear &centerdot; Tee</span>
+                <div class="section1lines">Tired of searching for oversized tees with your favorite design? <br>Design your own!<br>Simply upload your artwork to Createefi and we'll handle the rest.</div>
+            </div>
             
-            <div class="section2headLine">Turn your designs into merch! Create your own store with Createefi. Just upload your designs and we'll handle the printing and fulfillment.</div>
+            <img class="ImageSec1" src="../../assets/modelImg.jpeg">
         </div>
-        
-    </div>
-    <div class="section2Footer">
-        <button type="button" class="btn btn-primary ">Get Started</button>
+        <div class="section1Footer">
+            <button type="button" class="btn btn-secondary" (click)="openCanvas()">Create</button>
+        </div>
+        <div class="section2">
+            <img class="ImageSec2" src="../../assets/modelImg.jpeg">
+            <div class="create2">
+                <span class="create2Span">Start Your OWN Store</span>
+                
+                <div class="section2headLine">Turn your designs into merch! Create your own store with Createefi. Just upload your designs and we'll handle the printing and fulfillment.</div>
+            </div>
+            
+        </div>
+        <div class="section2Footer">
+            <button type="button" class="btn btn-secondary" (click)="openCanvas()">Get Started</button>
+        </div>
     </div>
 </body>
 
