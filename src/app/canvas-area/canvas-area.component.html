@@ -7,9 +7,27 @@
       </div>
     </div>
     
-    <img id="draggable" src="../../assets/t-shirts.jpg">
-    <canvas #canvas class="canvas" width="270" height="380"></canvas>
+    <img id="draggable" src="../../assets/tshirt.png">
+    <canvas #canvas class="canvas" width="250" height="360"></canvas>
     <div class="utils">
+      <div class="shirtOptionContainer">
+        <div class="shirtOptionContainer1">Shirt Side</div>
+        <div class="shirtOptionContainer2">Design Preferences</div>
+      </div>
+      <div class="shirtOptionContainer">
+        <div class="shirtOptionContainer1">
+          <input type="radio" id="option1" name="radio-options" value="option1" (click)="toggleShirtSide('front')">
+          Front
+          <input type="radio" id="option1" name="radio-options" value="option1" (click)="toggleShirtSide('back')">
+          Back
+        </div>
+        <div class="shirtOptionContainer2">
+          <input type="radio" id="option2" name="radio-options1" value="option2" (click)="toggleShirtpreference('personal')">
+          Personal
+          <input type="radio" id="option2" name="radio-options1" value="option2" (click)="toggleShirtpreference('merch')">
+          Merch
+      </div>
+      </div>
       <div class="mb-2">
         <p class="mb-0">Design Name:</p>
         <textarea ng-model="name" (keyup)="onKey($event)"  rows="1" cols="50"></textarea>
@@ -40,20 +58,28 @@
         <div *ngIf="isImgUploaded;">
           <div class="mt-4 mb-2">
             <label for="width" class="mx-2">Width:</label>
-            <input type="number" id="width" class="mx-1" [(ngModel)]="width" (change)="updateImage()">
+            <input type="number" id="width" class="mx-1" max="250" [(ngModel)]="width" (change)="updateImage()">
+            <label for="customRange2" class="form-label" >Width range 0-250</label>
           </div>
           <div>
             <label for="height" class="mx-2">Height:</label>
-            <input type="number" id="height" [(ngModel)]="height" (change)="updateImage()">
+            <input type="number" id="height"  max="240" [(ngModel)]="height" (change)="updateImage()">
+            <label for="customRange2" class="form-label" >Height range 0-360</label>
           </div>
         </div>
       </div>
+      <div>
+        <label for="height" class="mx-2">Price</label>
+        <input type="number" id="height"  max="240" [(ngModel)]="priceRange">
+        <label for="customRange2" class="form-label" >Price range 555-1500</label>
+      </div>
+      <div class="saveButton hideforMobile">
+        <p>
+          <button class="btn btn-primary ms-2" (click)="rotateImage()">Save</button>
+        </p>
+      </div>
     </div>
-    <div class="saveButton">
-      <p>
-        <button class="btn btn-primary ms-2" (click)="download()">Save</button>
-      </p>
-    </div>
+   
   </div>
   <div class="bottomNavBarforMobView">
     <div class="navbar">

@@ -22,13 +22,17 @@ export class CanvasAreaComponent {
   startY: any;
   offsetX = 0; 
   offsetY = 0;
-  width = 200; // Initial width
+  width = 100; // Initial width
   height = 150; // Initial height
   isGrabbing: boolean = false;
   isImgUploaded : boolean = false;
   isPatternApplied: boolean = false;
   name : any = "";
   size : any = 'S';
+  priceRange : any = 550;
+  rotationAngle = 0;
+  shirtSideFront: boolean = true;
+  shirtPreferencesPersonal: boolean = true;
 
   constructor(private router: Router) {}
   ngOnInit() {
@@ -70,6 +74,14 @@ export class CanvasAreaComponent {
     
     const newX = Math.max(0, Math.min(canvasWidth - this.width, this.offsetX));
     const newY = Math.max(0, Math.min(canvasHeight - this.height, this.offsetY));
+
+    // change direction
+    // this.ctx.translate(this.width / 2,canvasHeight / 2);
+    // this.ctx.rotate(this.rotationAngle * Math.PI / 180);
+    // this.ctx.translate(-canvasWidth / 2, -canvasHeight / 2);
+
+    //image update
+    
     this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
 
     //for border
@@ -77,20 +89,23 @@ export class CanvasAreaComponent {
     const borderSize = 5;
     this.ctx.lineWidth = borderSize;
     this.ctx.strokeStyle = 'black';
-    this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);  
-    
+    this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);
   }
+
   handleMouseDown(event: MouseEvent) {
     this.isDragging = true;
     this.startX = event.offsetX;
     this.startY = event.offsetY;
     
   }
+
   handleMouseUp() {
     this.isDragging = false;
   }
+
   handleMouseMove(event: MouseEvent) {
     if (this.isDragging && this.isImgUploaded) {
+      console.log(this.isDragging)
       const deltaX = event.offsetX - this.startX;
       const deltaY = event.offsetY - this.startY;
       this.startX = event.offsetX;
@@ -100,8 +115,11 @@ export class CanvasAreaComponent {
       this.offsetX = Math.max(0, Math.min(this.offsetX + deltaX, this.canvas.nativeElement.width - this.width));
       this.offsetY = Math.max(0, Math.min(this.offsetY + deltaY, this.canvas.nativeElement.height - this.height));
       this.updateImage();
+    } else {
+
     }
   }
+
   updateImagePosition(deltaX: number, deltaY: number) {
     this.offsetX += deltaX; // Update offset based on drag movement
     this.offsetY += deltaY;
@@ -112,6 +130,7 @@ export class CanvasAreaComponent {
     console.log(this.offsetX,this.offsetY,'asd')
     this.updateImage();
   }
+
 
   download() {
     // const canvas = this.canvas.nativeElement as HTMLCanvasElement;
@@ -132,6 +151,15 @@ export class CanvasAreaComponent {
     this.size = string;
     // this.isPatternApplied = true;
   }
+
+  rotateImage() {
+      this.rotationAngle += 90;
+
+    // Ensure rotation angle stays within 0 to 359 degrees
+    this.rotationAngle = (this.rotationAngle + 360) % 360;
+
+    this.updateImage();
+  }
   
   ngOnDestroy() {
     this.canvas.nativeElement.removeEventListener('mousedown', this.handleMouseDown);
@@ -142,5 +170,15 @@ export class CanvasAreaComponent {
 
   onKey(event: any) { 
     this.name = event.target.value;
+  }
+
+  toggleShirtSide (string:any) {
+    if(string == 'front') this.shirtSideFront = true;
+    if(string == 'back') this.shirtSideFront = false;
+  }
+
+  toggleShirtpreference (string:any) {
+    if(string == 'personal') this.shirtPreferencesPersonal = true;
+    if(string == 'merch') this.shirtPreferencesPersonal = false;
   }
 }

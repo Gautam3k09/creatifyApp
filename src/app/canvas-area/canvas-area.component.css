@@ -19,8 +19,8 @@ body {
 
     canvas {
       position: absolute;
-      top: 231px;
-      left: 170px;
+      top: 30%;
+      left: 21%;
     }
     
     img {
@@ -34,9 +34,42 @@ body {
       background-color: #333;
       border-radius: 6%;
       position: absolute;
-      top: 20%;
+      top: 10%;
       right: 5%;
       box-shadow: #333;
+
+      .shirtOptionContainer{ 
+        text-align:center;
+        margin: auto;
+      }
+
+      .shirtOptionContainer1 {
+        display: inline;
+        margin-left: 5%;
+        margin-right: 20%;
+      }
+      .shirtOptionContainer2{
+        display:inline;
+      }
+
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+      
+      .radio-group input[type="radio"] {
+        margin-right: 5px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+      }
+      
+      .radio-group input[type="radio"]:checked {
+        background-color: #333;
+        border-color: #333;
+      }
 
       .btn-circle {
         width: 30px;
@@ -55,6 +88,10 @@ body {
       
       .btn-green {
         background-color: green;
+      }
+
+      .radio-buttons {
+        text-align: center;
       }
     }
 }
@@ -183,6 +220,10 @@ textarea {
   .navbar a.active {
     background-color: #04AA6D;
     color: white;
+  }
+
+  .hideforMobile {
+    display: none;
   }
   }
 
