@@ -16,7 +16,7 @@ export class TestPageComponent {
     this.width = event.newRect.width;
     this.height = event.newRect.height;
   }
-
+  // this.appservice.postCompnayBill(directData).subscribe();
 
   private isDragging = false;
   private isClicking = false;

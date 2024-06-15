@@ -1,0 +1,78 @@
+/* * {
+    margin: 0;
+    padding: 0;
+  } */
+  
+  body {
+    height: 100%;
+    /* overflow: auto; */
+    color: white;
+    background-image: url('../../assets/blue-purple.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+  }
+
+  .container {
+    margin-top: 4%;
+    height: 70%;
+    background: white;
+    border-radius: 37px;
+    margin-left: 28%;
+    color: rgb(0, 0, 0);
+    width: 45%;
+  }
+
+  .sidebar{
+    margin-left: 20%;
+    height: 100%;
+  }
+
+  .tab-content {
+    width: 10%;
+    color:rgb(239, 230, 230);
+    
+  }
+
+  .profile-title {
+    font-weight: 800;
+    font-size: 24px;
+    /* margin-left: 37%; */
+    /* margin-top: 4%; */
+    text-align: center;
+  }
+
+  .InfoForm{
+    text-align: center;
+    .labels{
+      margin-top: 2%;
+      input{
+        margin-left: 2rem;
+      }
+    }
+  }
+
+
+  @media(max-width:600px) {
+  .container {
+    margin-top: 22%;
+    height: 70%;
+    background: white;
+    border-radius: 37px;
+    margin-left: auto;
+    color: rgb(0, 0, 0);
+    width: 80%;
+  }
+
+  .profile-title {
+    padding-top: 20%;
+  }
+
+  .InfoForm{
+    margin-top: 25%;
+    .labels{
+      margin-top: 10%;
+    }
+  }
+}

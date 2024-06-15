@@ -4,7 +4,7 @@
 }
 
 body {
-      height: 100vh;
+      height: 100%;
       background-image: url('../../assets/blue-purple.jpg');
       background-size: cover;
       background-position: center;
@@ -32,4 +32,10 @@ body {
 .exceedText {
   margin: 3%;
   text-align: center
+}
+
+@media(max-width:600px) {
+  body{
+    height: auto;
+  }
 }

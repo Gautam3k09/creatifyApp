@@ -3,18 +3,16 @@
         <ul class="sidebar">
             <li class="tabs1" (click)="showSidebar('string')">x</li>
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
-            <li class="tabs1" (click)="onDivClick('/store')">Your Store</li>
             <li class="tabs1" (click)="onDivClick('/tees')">tees</li>
-            <li class="tabs1 " (click)="onDivClick('/tees')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+            <li class="tabs1 " (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
             
         </ul>
         <ul>
             <li class="tabs" (click)="onDivClick('')">CreaTeeFi</li>
             <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-            <li class="tabs hideOnMobile" (click)="onDivClick('/store')">Your Store</li>
             <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li>
             <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-            <li class="tabs hideOnMobile" (click)="onDivClick('/tees')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+            <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
         </ul>
     </nav>
 </body>

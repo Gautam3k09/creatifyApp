@@ -162,6 +162,11 @@ input[type="file"] {
     padding-top: 20%;
     padding-right: 3%;
     padding-left: 9%;
+    img{
+
+      margin-left: 0%;
+      height: 60vh;
+    }
 
     .utilsforMobView { 
       text-align: start;
@@ -174,9 +179,10 @@ input[type="file"] {
 
     canvas {
       position: absolute;
-      width: 40%;
-      left: 28%;
-      top: 42%;
+        width: 40%;
+        left: 28%;
+        height: 47%;
+        top: 48%;
     }
 
     .utils {
@@ -276,7 +282,6 @@ input[type="file"] {
 
  
 }
-
 
 @media only screen and (min-width: 601px) and (max-width: 1024px) {
     
