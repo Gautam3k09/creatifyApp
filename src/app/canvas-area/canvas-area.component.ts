@@ -4,19 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderPageComponent } from '../header-page/header-page.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-canvas-area',
   standalone: true,
-  imports: [FormsModule,CommonModule,HeaderPageComponent],
+  imports: [FormsModule,CommonModule,HeaderPageComponent,ReactiveFormsModule],
   templateUrl: './canvas-area.component.html',
   styleUrl: './canvas-area.component.css'
 })
 export class CanvasAreaComponent {
+  teeDetailForm!: FormGroup;
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('imageInput') fileInput: any;
   public ctx:any;
-  public selectedColor: any = '';
+  public selectedColor: any = 'black';
   globalCanvas: any = '';
   image: any = '';
   imageFncvar:any = '';
@@ -52,7 +55,7 @@ export class CanvasAreaComponent {
   canvasHeightBack : any = 480;
   currentSide : any = 'front';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private fb: FormBuilder) {}
   ngOnInit() {
     //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
@@ -66,6 +69,13 @@ export class CanvasAreaComponent {
     this.canvas.nativeElement.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.canvas.nativeElement.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.canvas.nativeElement.addEventListener('mousemove', this.handleMouseMove.bind(this));
+
+    this.teeDetailForm = this.fb.group({
+      teeName : ['', [Validators.required]],
+      color   : [this.selectedColor,Validators.required],
+      size    : [this.teeSize,Validators.required],
+      price   : ['', [Validators.required, Validators.minLength(8)]],
+    });
   }
 
   //  ngafterViewInit should not be removed may be used later 
@@ -75,6 +85,7 @@ export class CanvasAreaComponent {
 
   changeColor(color: string): void {
     console.log('Selected color:', color);
+    this.fb.control('color').setValue(color);
   }
 
   handleFileChange(event: any,from = '') {
@@ -127,6 +138,7 @@ export class CanvasAreaComponent {
   }
 
   updateImage() {
+    console.log('here')
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     const canvasWidth = this.canvas.nativeElement.width;
     const canvasHeight = this.canvas.nativeElement.height;
@@ -211,6 +223,7 @@ export class CanvasAreaComponent {
 
   changeHeight(string:any) {
     this.teeSize = string;
+    this.fb.control('size').setValue(this.teeSize);
     // this.isPatternApplied = true;
   }
 
@@ -258,7 +271,10 @@ export class CanvasAreaComponent {
       let canvasStyle = document.querySelector('canvas') as any
       canvasStyle.style.top = 30 + '%';
       this.globalCanvas.height = this.canvasHeightFront;
-     
+      this.offsetX = this.frontImageOffsetX;
+      this.offsetY = this.frontImageOffsetY;
+      this.width = this.frontImageWidth;
+      this.height = this.frontImageHeight;
 
     } else {
       this.currentSide = 'back';
@@ -271,15 +287,16 @@ export class CanvasAreaComponent {
       let canvasStyle = document.querySelector('canvas') as any
       canvasStyle.style.top = 18 + '%';
       this.globalCanvas.height = this.canvasHeightBack;
+      this.offsetX = this.backImageOffsetX;
+      this.offsetY = this.backImageOffsetY;
+      this.width = this.backImageWidth;
+      this.height = this.backImageHeight;
     }
     const borderSize = 5;
     this.ctx.lineWidth = borderSize;
     this.ctx.strokeStyle = 'black';
     this.ctx.strokeRect(borderSize / 2, borderSize / 2, this.globalCanvas.width - borderSize, this.globalCanvas.height - borderSize); 
-    this.offsetX = this.frontImageOffsetX;
-    this.offsetY = this.frontImageOffsetY;
-    this.width = this.frontImageWidth;
-    this.height = this.frontImageHeight;
+    
   }
 
   clearFiles() {
@@ -290,6 +307,10 @@ export class CanvasAreaComponent {
     this.offsetY = 0;
     this.width = 100; 
     this.height = 150;
+  }
+
+  onSubmit(form: FormGroup) {
+    console.log('Valid?', form.value); // true or false
   }
 }
 

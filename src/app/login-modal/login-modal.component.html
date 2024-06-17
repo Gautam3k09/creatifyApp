@@ -1,0 +1,56 @@
+<ul class="nav nav-tabs tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Sign In </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Sign Up</button>
+    </li>
+</ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="SignInContainer">
+            <form [formGroup]="myLoginForm" (ngSubmit)="onSubmit(myLoginForm)">
+                <div class="labels">
+                  <label>
+                    <input formControlName="username" placeholder="Your Username">
+                  </label>
+                  <div *ngIf="myLoginForm.get('username')?.invalid && (myLoginForm.get('username')?.dirty || myLoginForm.get('username')?.touched)">
+                    Please provide a valid email address.
+                  </div>
+                </div>
+                <div class="labels">
+                  <label>
+                    <input formControlName="password" placeholder="Your Password">
+                  </label>
+                  <div *ngIf="myLoginForm.get('password')?.invalid && (myLoginForm.get('password')?.dirty || myLoginForm.get('password')?.touched)">
+                    password must be at least 8 characters long.
+                  </div>
+                </div>
+                <button type="submit" [disabled]="myLoginForm.invalid">Send</button>
+              </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="SignInContainer">
+            <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)">
+                <div class="labels">
+                  <label>
+                    <input formControlName="email" placeholder="Your Email">
+                  </label>
+                  <div *ngIf="mySignupForm.get('email')?.invalid && (mySignupForm.get('email')?.dirty || mySignupForm.get('email')?.touched)">
+                    Please provide a valid email address.
+                  </div>
+                </div>
+                <div class="labels">
+                  <label>
+                    <input formControlName="password" placeholder="Your Password">
+                  </label>
+                  <div *ngIf="mySignupForm.get('password')?.invalid && (mySignupForm.get('password')?.dirty || mySignupForm.get('password')?.touched)">
+                    password must be at least 8 characters long.
+                  </div>
+                </div>
+                <button type="submit" [disabled]="mySignupForm.invalid">Send</button>
+              </form>
+        </div>
+    </div>
+  </div>

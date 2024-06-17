@@ -5,14 +5,18 @@
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
             <li class="tabs1" (click)="onDivClick('/tees')">tees</li>
             <li class="tabs1 " (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-            
         </ul>
         <ul>
             <li class="tabs" (click)="onDivClick('')">CreaTeeFi</li>
-            <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-            <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li>
-            <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-            <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+            <div class="login" *ngIf="!isLoggedIn; else elseBlock">
+                <li class="tabs hideOnMobile" (click)="openModal()">Login</li>
+            </div>
+            <ng-template #elseBlock>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li>
+                <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+            </ng-template>
         </ul>
     </nav>
 </body>

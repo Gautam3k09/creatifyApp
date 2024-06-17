@@ -1,0 +1,17 @@
+.tabs {
+    align-self: center;
+    margin-top: 4%;
+    li :first-child{
+        margin-right: 50px;
+    }
+}
+
+.tab-content {
+    padding: 50px;
+    background: #2b2b2b;
+    color: white;
+    height: 75%;
+    margin-inline: 10%;
+    margin-top: 2%;
+    border-radius: 15px;
+}

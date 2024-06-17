@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 
 @Component({
   selector: 'app-header-page',
@@ -11,9 +13,12 @@ import { Router } from '@angular/router';
 })
 export class HeaderPageComponent {
   // ActiveTab : any = '';
-  sidebarClose : any = false
+  sidebarClose : any = false;
+  isLoggedIn : boolean = false;
+  dialogConfig = new MatDialogConfig();
+  modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,public matDialog: MatDialog) { }
   
   onDivClick(string:any) {
     // this.ActiveTab = string;
@@ -31,5 +36,13 @@ export class HeaderPageComponent {
     } else {
       sidebar.style.display = 'none';
     }
+  }
+
+  openModal() {
+    
+    this.dialogConfig.id = "projects-modal-component";
+    this.dialogConfig.height = "500px";
+    this.dialogConfig.width = "650px";
+    this.modalDialog = this.matDialog.open(LoginModalComponent, this.dialogConfig);
   }
 }
