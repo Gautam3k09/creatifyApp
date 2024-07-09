@@ -7,9 +7,9 @@
       </div>
     </div>
     
+    <canvas #canvas class="canvas" id="canvas" width="250" ></canvas>
     <img id="draggable" src="../../assets/tshirt.png" >
-    <canvas #canvas class="canvas" width="250" ></canvas>
-
+    
     <form [formGroup]="teeDetailForm" (ngSubmit)="onSubmit(teeDetailForm)">
       <div class="utils">
         <div class="shirtOptionContainer">
@@ -41,19 +41,16 @@
           <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
           <button type="button" class="btn btn-circle btn-red mx-2" (click)="changeColor('red')"></button>
         </div>
-        <div class="mb-4">
+        <!-- <div class="mb-4">
           <p class="mb-0">Size:</p>
           <div>
               <button class="btn btn-primary mx-2" [class.pattern-applied]="isPatternApplied" (click)="changeHeight('S')" >S</button>
-              <!-- Medium Button (default) -->
               <button class="btn btn-primary mx-2" (click)="changeHeight('M')" >M</button>
-              <!-- Large Button -->
               <button class="btn btn-primary mx-2" (click)="changeHeight('L')" >L</button>
-              <!-- Extra Large Button -->
               <button class="btn btn-primary mx-2" (click)="changeHeight('XL')" >XL</button>
           </div>
           <p class="mb-0">current height and width is {{teeSize}}</p>
-        </div>
+        </div> -->
         <div class="mb-2">
           <div *ngIf="currentSide == 'front'; else elseBlockFront">      
             <div *ngIf="isImgUploaded == false; else uploadFront">
@@ -100,12 +97,12 @@
         </div>
         <div>
           <label for="height" class="mx-2">Price</label>
-          <input type="number" id="height"  max="240"  [(ngModel)]="priceRange" formControlName="price" >
-          <label for="customRange2" class="form-label" >Price range 555-1500</label>
+          <input type="number" id="height" min="550"max="1550" [(ngModel)]="priceRange" formControlName="price" >
+          <label for="customRange2" class="form-label" >Price range 550-1550</label>
         </div>
         <div class="saveButton hideforMobile">
           <p>
-            <button class="btn btn-primary ms-2" (click)="onSubmit(teeDetailForm)">Save</button>
+            <button class="btn btn-primary ms-2" (click)="uploadImage()">Save</button>
           </p>
         </div>
       </div>
@@ -118,16 +115,18 @@
         <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
         <p class="uploadText">upload</p>
       </div>
-      <div class="color" (click)="changeHeight('S')">
+      <!-- <div class="color" (click)="changeHeight('S')">
         <p class="colorIcon"><button class="btn btn-primary" (click)="download()"></button></p>
         <p class="colorText">color</p>
-      </div>
+      </div> -->
       <div class="size">
         <p class="sizeIcon">S</p>
         <p class="sizeText">size</p>
       </div>
     </div>
   </div>
+  <img *ngIf="base64DataFrontSide != '' " [src]="getTrustedImageUrlFront()">
+  <img *ngIf="base64DataBackSide != '' " [src]="getTrustedImageUrlBack()">
 </body>
 
 

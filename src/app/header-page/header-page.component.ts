@@ -14,7 +14,7 @@ import { LoginModalComponent } from '../login-modal/login-modal.component';
 export class HeaderPageComponent {
   // ActiveTab : any = '';
   sidebarClose : any = false;
-  isLoggedIn : boolean = false;
+  isLoggedIn : boolean = true;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
 

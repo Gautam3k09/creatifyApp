@@ -1,19 +1,23 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, ElementRef, ViewChild,inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AppServiceService } from '../app-service.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 @Component({
   selector: 'app-canvas-area',
   standalone: true,
-  imports: [FormsModule,CommonModule,HeaderPageComponent,ReactiveFormsModule],
+  imports: [FormsModule,CommonModule,HeaderPageComponent,ReactiveFormsModule,HttpClientModule],
   templateUrl: './canvas-area.component.html',
   styleUrl: './canvas-area.component.css'
 })
 export class CanvasAreaComponent {
+  httpClient = inject(HttpClient);
   teeDetailForm!: FormGroup;
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
@@ -54,15 +58,16 @@ export class CanvasAreaComponent {
   canvasHeightFront : any = 360;
   canvasHeightBack : any = 480;
   currentSide : any = 'front';
-
-  constructor(private router: Router,private fb: FormBuilder) {}
+  base64DataFrontSide : any = '';
+  base64DataBackSide : any = '';
+  imageUrl : any = '';
+  constructor(private router: Router,private fb: FormBuilder,private sanitizer:DomSanitizer) {}
   ngOnInit() {
     //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
 
     // with ctx we gonna change aspect ratio
     this.ctx = this.canvas?.nativeElement?.getContext('2d');
-
     // update border
     this.updateBorder()
     //Added listener for image move
@@ -72,8 +77,6 @@ export class CanvasAreaComponent {
 
     this.teeDetailForm = this.fb.group({
       teeName : ['', [Validators.required]],
-      color   : [this.selectedColor,Validators.required],
-      size    : [this.teeSize,Validators.required],
       price   : ['', [Validators.required, Validators.minLength(8)]],
     });
   }
@@ -84,8 +87,7 @@ export class CanvasAreaComponent {
   // }
 
   changeColor(color: string): void {
-    console.log('Selected color:', color);
-    this.fb.control('color').setValue(color);
+    //console.log(color);
   }
 
   handleFileChange(event: any,from = '') {
@@ -94,11 +96,15 @@ export class CanvasAreaComponent {
     if(from == 'changeShirtSide'){
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        // this.image = new Image();
         this.image.onload = () => {
           this.updateImage(); 
         };
         this.image.src = e.target.result;
+        if(this.shirtSideFront) {
+          this.base64DataFrontSide = this.image.src;
+        } else {
+          this.base64DataBackSide = this.image.src;
+        }
         this.isImgUploaded = true;
       };
       let targetfile = this.shirtSideFront ? this.imageFrontGlobalTarget : this.imageBackGlobalTarget;
@@ -108,14 +114,19 @@ export class CanvasAreaComponent {
     if(from == 'clearImage'){
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        // this.image = new Image();
         this.image.onload = () => {
           this.updateImage(); 
         };
         this.image.src = '';
+        if(this.shirtSideFront) {
+          this.base64DataFrontSide ='';
+        } else {
+          this.base64DataBackSide = '';
+        }
         this.isImgUploaded = false;
         reader.readAsDataURL(this.image);
       };
+      return;
     }
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -133,12 +144,16 @@ export class CanvasAreaComponent {
       };
       img.src = e.target.result;
       this.isImgUploaded = true;
+      if(this.shirtSideFront) {
+        this.base64DataFrontSide = img.src;
+      } else {
+        this.base64DataBackSide = img.src;
+      }
     };
     reader.readAsDataURL(event.target.files[0]);
   }
 
-  updateImage() {
-    console.log('here')
+  updateImage(string : any = '') {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     const canvasWidth = this.canvas.nativeElement.width;
     const canvasHeight = this.canvas.nativeElement.height;
@@ -157,11 +172,13 @@ export class CanvasAreaComponent {
       this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
     }
     //for border
-    const canvas = this.canvas.nativeElement as HTMLCanvasElement;
-    const borderSize = 5;
-    this.ctx.lineWidth = borderSize;
-    this.ctx.strokeStyle = 'black';
-    this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);
+    if(string != 'borderNone') {
+      const canvas = this.canvas.nativeElement as HTMLCanvasElement;
+      const borderSize = 5;
+      this.ctx.lineWidth = borderSize;
+      this.ctx.strokeStyle = 'black';
+      this.ctx.strokeRect(borderSize / 2, borderSize / 2, canvas.width - borderSize, canvas.height - borderSize);
+    }
 
     if(this.shirtSideFront) {
       this.frontImageWidth = this.width;
@@ -206,33 +223,19 @@ export class CanvasAreaComponent {
     }
   }
 
-  download() {
-    // const canvas = this.canvas.nativeElement as HTMLCanvasElement;
-    // const dataURL = canvas.toDataURL('image/png');
-
-    // const link = document.createElement('a');
-    // link.href = dataURL;
-    // link.download = 'my-drawing.png';
-
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-    // const queryParams = { data: 'tees' };
-    // this.router.navigate([''], { queryParams: queryParams });
-  }
-
-  changeHeight(string:any) {
-    this.teeSize = string;
-    this.fb.control('size').setValue(this.teeSize);
-    // this.isPatternApplied = true;
-  }
-
+  
+  // changeHeight(string:any) {
+  //   this.teeSize = string;
+  //   this.fb.control('size').setValue(this.teeSize);
+  //   // this.isPatternApplied = true;
+  // }
+  
   rotateImage() {
-      this.rotationAngle += 90;
-
+    this.rotationAngle += 90;
+    
     // Ensure rotation angle stays within 0 to 359 degrees
     this.rotationAngle = (this.rotationAngle + 360) % 360;
-
+    
     this.updateImage();
   }
   
@@ -241,25 +244,25 @@ export class CanvasAreaComponent {
     this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
     this.canvas.nativeElement.removeEventListener('mousemove', this.handleMouseMove);
   }
-
-
+  
+  
   onKey(event: any) { 
     this.designName = event.target.value;
   }
-
+  
   toggleShirtSide (string:any) {
     if(string == 'front') this.shirtSideFront = true;
     if(string == 'back') this.shirtSideFront = false;
     this.updateBorder();
   }
-
+  
   toggleShirtpreference (string:any) {
     if(string == 'personal') this.shirtPreferencesPersonal = true;
     if(string == 'merch') this.shirtPreferencesPersonal = false;
   }
-
+  
   updateBorder() {
-  //add border
+    //add border
     if(this.shirtSideFront){
       this.currentSide = 'front';
       this.isImgUploaded = false;
@@ -275,7 +278,7 @@ export class CanvasAreaComponent {
       this.offsetY = this.frontImageOffsetY;
       this.width = this.frontImageWidth;
       this.height = this.frontImageHeight;
-
+      this.base64DataFrontSide = this.imageUrl;
     } else {
       this.currentSide = 'back';
       this.isImgUploaded = false;
@@ -291,6 +294,7 @@ export class CanvasAreaComponent {
       this.offsetY = this.backImageOffsetY;
       this.width = this.backImageWidth;
       this.height = this.backImageHeight;
+      this.base64DataBackSide = this.imageUrl;
     }
     const borderSize = 5;
     this.ctx.lineWidth = borderSize;
@@ -298,7 +302,7 @@ export class CanvasAreaComponent {
     this.ctx.strokeRect(borderSize / 2, borderSize / 2, this.globalCanvas.width - borderSize, this.globalCanvas.height - borderSize); 
     
   }
-
+  
   clearFiles() {
     this.image = '';
     this.isImgUploaded = false;
@@ -308,10 +312,74 @@ export class CanvasAreaComponent {
     this.width = 100; 
     this.height = 150;
   }
-
+  
   onSubmit(form: FormGroup) {
     console.log('Valid?', form.value); // true or false
   }
+  
+  // will be moved to show store
+  extractBase64Data(dataURL: string) {
+    this.imageUrl = dataURL;
+    // this.getTrustedImageUrl();
+  }
+  
+  getTrustedImageUrlFront(): any {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.base64DataFrontSide);
+  }
+  
+  getTrustedImageUrlBack(): any {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.base64DataBackSide);
+  }
+  
+  download() {
+    // const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+    const dataURL = this.globalCanvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'canvas-image.png';
+    document.body.appendChild(link);
+    link.click();
+   
+    // const canvas = this.canvas.nativeElement as HTMLCanvasElement;
+    // if(this.imageFrontGlobalStore != '') {
+    //   this.toggleShirtSide('front');
+    //   this.updateImage('borderNone')
+    //    this.base64DataFrontSide = canvas.toDataURL('image/png');
+    // }
+    // if(this.imageBackGlobalStore != '') {
+    //   this.toggleShirtSide('back')
+    //   this.updateImage('borderNone')
+    //   this.base64DataBackSide = canvas.toDataURL('image/png');
+    //  }
+    // const dataURL = canvas.toDataURL('image/png');
+  
+    // const link = document.createElement('a');
+    // link.href = this.base64DataFrontSide;
+    // link.download = 'my-drawing.png';
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    // const link2 = document.createElement('a');
+    // link2.href = this.base64DataBackSide;
+    // link2.download = 'my-drawing.png';
+    // document.body.appendChild(link2);
+    // link2.click();
+    // document.body.removeChild(link2);
+    // const queryParams = { data: 'tees' };
+    // this.router.navigate([''], { queryParams: queryParams });
+  }
+  
+  uploadImage() : any{
+    console.log(this.teeDetailForm.value,'teeDetailForm');
+    const data = {
+      price : this.teeDetailForm.value.price,
+      teeName : this.teeDetailForm.value.teeName,
+      frontBase64 :  this.base64DataFrontSide,
+      backbase64 : this.base64DataBackSide
+    }
+    this.httpClient.post('http://localhost:3000/upload-print',data).subscribe();
+  }
+  
 }
 
 

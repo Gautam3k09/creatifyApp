@@ -33,7 +33,29 @@ body {
   margin: 3%;
   text-align: center
 }
+.imageContainer {
+  
 
+  img {
+    height: 50%;
+  }
+}
+
+#BackImage {
+  height: 275px;
+  background-image: url('../../assets/tshirt.png');
+  background-repeat: round;
+}
+
+#BackImage {
+  height: 275px;
+  background-image: url('../../assets/t-shirts.jpg');
+  background-repeat: round;
+}
+
+.canvas {
+  margin-top: 60px;
+}
 @media(max-width:600px) {
   body{
     height: auto;

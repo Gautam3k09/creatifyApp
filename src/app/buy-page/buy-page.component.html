@@ -1,0 +1,57 @@
+<body>
+    <app-header-page></app-header-page>
+        <div class="container">
+            <div class="right-side">
+                <canvas #canvas class="canvas" id="canvas" width="250" ></canvas>
+                <div>
+
+                  <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeColor('red')">red</button>
+                </div>
+                <img id="draggable" src="../../assets/tshirt.png" >
+            </div>
+            <div class="left-side">
+                <div class="tee-Name">
+                    Tshirt Name
+                </div>
+                <div class="mb-4">
+                  <p class="mb-0">Colors:</p>
+                    <button type="button" class="btn btn-circle btn-primary mx-0" (click)="changeColor('red')">red</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
+                </div>
+                <div class="mb-4">
+                  <p class="mb-0">Size:</p>
+                    <button type="button" class="btn btn-circle btn-primary mx-0" (click)="changeColor('red')">S</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">M</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">L</button>
+                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">XL</button>
+                </div>
+                <div class="mb-4">
+                  <p class="mb-0">Price: 555Rs</p>
+                </div>
+                <div class="mb-4">
+                  <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">Buy Now</button>
+                </div>
+            </div>
+       
+        
+    </div>
+    
+    <!-- <div class="bottomNavBarforMobView">
+      <div class="navbar">
+        <div class="upload">
+          <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
+          <p class="uploadText">upload</p>
+        </div>
+        <div class="color" (click)="changeHeight('S')">
+          <p class="colorIcon"><button class="btn btn-primary" (click)="download()"></button></p>
+          <p class="colorText">color</p>
+        </div>
+        <div class="size">
+          <p class="sizeIcon">S</p>
+          <p class="sizeText">size</p>
+        </div>
+      </div>
+    </div> -->
+  </body>
