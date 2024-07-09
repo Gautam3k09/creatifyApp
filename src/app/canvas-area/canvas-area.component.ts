@@ -7,40 +7,42 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppServiceService } from '../app-service.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-canvas-area',
   standalone: true,
-  imports: [FormsModule,CommonModule,HeaderPageComponent,ReactiveFormsModule,HttpClientModule],
+  imports: [FormsModule,CommonModule,HeaderPageComponent,ReactiveFormsModule],
+  providers:[AppServiceService],
   templateUrl: './canvas-area.component.html',
   styleUrl: './canvas-area.component.css'
 })
 export class CanvasAreaComponent {
-  httpClient = inject(HttpClient);
   teeDetailForm!: FormGroup;
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('imageInput') fileInput: any;
+
   public ctx:any;
   public selectedColor: any = 'black';
+  
   globalCanvas: any = '';
+  
   image: any = '';
   imageFncvar:any = '';
   imageFrontGlobalStore:any = '';
   imageBackGlobalStore:any = '';
   imageFrontGlobalTarget:any = '';
   imageBackGlobalTarget:any = '';
-  startX: any = 50;
-  startY: any = 50;
+  imagestartXaxis: any = 50;
+  imagestartYaxis: any = 50;
   frontImageOffsetX: any = 0;
   frontImageOffsetY: any = 0;
   backImageOffsetX: any = 0;
   backImageOffsetY: any = 0;
-  offsetX = 0; 
-  offsetY = 0;
-  width = 100; // Initial width
-  height = 150; // Initial height
+  imageOffsetX = 0; 
+  imageOffsetY = 0;
+  imageWidth = 100; // Initial width
+  imageHeight = 150; // Initial height
   frontImageWidth : any = 100;
   frontImageHeight : any = 150;
   backImageWidth : any = 100;
@@ -49,19 +51,22 @@ export class CanvasAreaComponent {
   isGrabbing: boolean = false;
   public isImgUploaded : boolean = false;
   isPatternApplied: boolean = false;
+  base64DataFrontSide : any = '';
+  base64DataBackSide : any = '';
+  imageUrl : any = '';
+  
   designName : any = "";
   teeSize : any = 'S';
   priceRange : any = 550;
   rotationAngle = 0;
+  
   shirtSideFront: boolean = true;
   shirtPreferencesPersonal: boolean = true;
   canvasHeightFront : any = 360;
   canvasHeightBack : any = 480;
   currentSide : any = 'front';
-  base64DataFrontSide : any = '';
-  base64DataBackSide : any = '';
-  imageUrl : any = '';
-  constructor(private router: Router,private fb: FormBuilder,private sanitizer:DomSanitizer) {}
+
+  constructor(private router: Router,private fb: FormBuilder,private sanitizer:DomSanitizer, private appservice:AppServiceService) {}
   ngOnInit() {
     //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
@@ -86,13 +91,11 @@ export class CanvasAreaComponent {
   //   this.ctx = this.canvas.nativeElement.getContext('2d');
   // }
 
-  changeColor(color: string): void {
-    //console.log(color);
-  }
+  
 
   handleFileChange(event: any,from = '') {
-    this.width = 100;
-    this.height = 150;
+    this.imageWidth = 100;
+    this.imageHeight = 150;
     if(from == 'changeShirtSide'){
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -143,14 +146,17 @@ export class CanvasAreaComponent {
         this.updateImage(); 
       };
       img.src = e.target.result;
-      this.isImgUploaded = true;
-      if(this.shirtSideFront) {
-        this.base64DataFrontSide = img.src;
-      } else {
-        this.base64DataBackSide = img.src;
-      }
     };
     reader.readAsDataURL(event.target.files[0]);
+    this.isImgUploaded = true;
+    setTimeout(() => {
+      
+      if(this.shirtSideFront) {
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png');
+      } else {
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png');
+      }
+    }, 1000);
   }
 
   updateImage(string : any = '') {
@@ -158,18 +164,13 @@ export class CanvasAreaComponent {
     const canvasWidth = this.canvas.nativeElement.width;
     const canvasHeight = this.canvas.nativeElement.height;
     
-    const newX = Math.max(0, Math.min(canvasWidth - this.width, this.offsetX));
-    const newY = Math.max(0, Math.min(canvasHeight - this.height, this.offsetY));
-
-    // change direction
-    // this.ctx.translate(this.width / 2,canvasHeight / 2);
-    // this.ctx.rotate(this.rotationAngle * Math.PI / 180);
-    // this.ctx.translate(-canvasWidth / 2, -canvasHeight / 2);
+    const newX = Math.max(0, Math.min(canvasWidth - this.imageWidth, this.imageOffsetX));
+    const newY = Math.max(0, Math.min(canvasHeight - this.imageHeight, this.imageOffsetY));
 
     //image update
     
     if(this.image != '') {
-      this.ctx.drawImage(this.image, newX, newY, this.width, this.height);
+      this.ctx.drawImage(this.image, newX, newY, this.imageWidth, this.imageHeight);
     }
     //for border
     if(string != 'borderNone') {
@@ -181,18 +182,18 @@ export class CanvasAreaComponent {
     }
 
     if(this.shirtSideFront) {
-      this.frontImageWidth = this.width;
-      this.frontImageHeight = this.height;
+      this.frontImageWidth = this.imageWidth;
+      this.frontImageHeight = this.imageHeight;
     } else {
-      this.backImageWidth = this.width;
-      this.backImageHeight = this.height;
+      this.backImageWidth = this.imageWidth;
+      this.backImageHeight = this.imageHeight;
     }
   }
 
   handleMouseDown(event: MouseEvent) {
     this.isDragging = true;
-    this.startX = event.offsetX;
-    this.startY = event.offsetY;
+    this.imagestartXaxis = event.offsetX;
+    this.imagestartYaxis = event.offsetY;
     
   }
 
@@ -202,33 +203,24 @@ export class CanvasAreaComponent {
 
   handleMouseMove(event: MouseEvent) {
     if (this.isDragging && this.isImgUploaded) {
-      const deltaX = event.offsetX - this.startX;
-      const deltaY = event.offsetY - this.startY;
-      this.startX = event.offsetX;
-      this.startY = event.offsetY;
+      const deltaX = event.offsetX - this.imagestartXaxis;
+      const deltaY = event.offsetY - this.imagestartYaxis;
+      this.imagestartXaxis = event.offsetX;
+      this.imagestartYaxis = event.offsetY;
 
       // Update offset values considering canvas boundaries
-      this.offsetX = Math.max(0, Math.min(this.offsetX + deltaX, this.canvas.nativeElement.width - this.width));
-      this.offsetY = Math.max(0, Math.min(this.offsetY + deltaY, this.canvas.nativeElement.height - this.height));
+      this.imageOffsetX = Math.max(0, Math.min(this.imageOffsetX + deltaX, this.canvas.nativeElement.width - this.imageWidth));
+      this.imageOffsetY = Math.max(0, Math.min(this.imageOffsetY + deltaY, this.canvas.nativeElement.height - this.imageHeight));
       if(this.shirtSideFront) {
-            this.frontImageOffsetX = this.offsetX;
-            this.frontImageOffsetY = this.offsetY;
+            this.frontImageOffsetX = this.imageOffsetX;
+            this.frontImageOffsetY = this.imageOffsetY;
           } else {
-            this.backImageOffsetX = this.offsetX;
-            this.backImageOffsetY = this.offsetY;
+            this.backImageOffsetX = this.imageOffsetX;
+            this.backImageOffsetY = this.imageOffsetY;
           }
       this.updateImage();
-    } else {
-      
     }
   }
-
-  
-  // changeHeight(string:any) {
-  //   this.teeSize = string;
-  //   this.fb.control('size').setValue(this.teeSize);
-  //   // this.isPatternApplied = true;
-  // }
   
   rotateImage() {
     this.rotationAngle += 90;
@@ -239,14 +231,7 @@ export class CanvasAreaComponent {
     this.updateImage();
   }
   
-  ngOnDestroy() {
-    this.canvas.nativeElement.removeEventListener('mousedown', this.handleMouseDown);
-    this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
-    this.canvas.nativeElement.removeEventListener('mousemove', this.handleMouseMove);
-  }
-  
-  
-  onKey(event: any) { 
+  onKeyUp(event: any) { 
     this.designName = event.target.value;
   }
   
@@ -269,16 +254,16 @@ export class CanvasAreaComponent {
       if(this.imageFrontGlobalStore != '' && this.image != '') {
         this.image = this.imageFrontGlobalStore
         this.handleFileChange(event,'changeShirtSide');
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png');
         this.isImgUploaded = true;
       }
       let canvasStyle = document.querySelector('canvas') as any
       canvasStyle.style.top = 30 + '%';
       this.globalCanvas.height = this.canvasHeightFront;
-      this.offsetX = this.frontImageOffsetX;
-      this.offsetY = this.frontImageOffsetY;
-      this.width = this.frontImageWidth;
-      this.height = this.frontImageHeight;
-      this.base64DataFrontSide = this.imageUrl;
+      this.imageOffsetX = this.frontImageOffsetX;
+      this.imageOffsetY = this.frontImageOffsetY;
+      this.imageWidth = this.frontImageWidth;
+      this.imageHeight = this.frontImageHeight;
     } else {
       this.currentSide = 'back';
       this.isImgUploaded = false;
@@ -286,31 +271,34 @@ export class CanvasAreaComponent {
         this.image = this.imageBackGlobalStore
         this.handleFileChange(event,'changeShirtSide');
         this.isImgUploaded = true;
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png');
       } 
       let canvasStyle = document.querySelector('canvas') as any
       canvasStyle.style.top = 18 + '%';
       this.globalCanvas.height = this.canvasHeightBack;
-      this.offsetX = this.backImageOffsetX;
-      this.offsetY = this.backImageOffsetY;
-      this.width = this.backImageWidth;
-      this.height = this.backImageHeight;
-      this.base64DataBackSide = this.imageUrl;
+      this.imageOffsetX = this.backImageOffsetX;
+      this.imageOffsetY = this.backImageOffsetY;
+      this.imageWidth = this.backImageWidth;
+      this.imageHeight = this.backImageHeight;
     }
     const borderSize = 5;
     this.ctx.lineWidth = borderSize;
     this.ctx.strokeStyle = 'black';
     this.ctx.strokeRect(borderSize / 2, borderSize / 2, this.globalCanvas.width - borderSize, this.globalCanvas.height - borderSize); 
-    
   }
   
   clearFiles() {
     this.image = '';
     this.isImgUploaded = false;
     this.updateImage()
-    this.offsetX = 0; 
-    this.offsetY = 0;
-    this.width = 100; 
-    this.height = 150;
+    this.imageOffsetX = 0; 
+    this.imageOffsetY = 0;
+    this.imageWidth = 100; 
+    this.imageHeight = 150;
+  }
+
+  changeColor(color: string): void {
+    //console.log(color);
   }
   
   onSubmit(form: FormGroup) {
@@ -372,19 +360,19 @@ export class CanvasAreaComponent {
   uploadImage() : any{
     console.log(this.teeDetailForm.value,'teeDetailForm');
     const data = {
+      id :  1,
       price : this.teeDetailForm.value.price,
       teeName : this.teeDetailForm.value.teeName,
       frontBase64 :  this.base64DataFrontSide,
       backbase64 : this.base64DataBackSide
     }
-    this.httpClient.post('http://localhost:3000/upload-print',data).subscribe();
+    this.appservice.postImage(data).subscribe();
   }
   
+  
+  ngOnDestroy() {
+    this.canvas.nativeElement.removeEventListener('mousedown', this.handleMouseDown);
+    this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
+    this.canvas.nativeElement.removeEventListener('mousemove', this.handleMouseMove);
+  }
 }
-
-
-
-// if front checked 
-// codn 1 - > img empty
-// codn 2 - > img there but need to change
-// codn 3 ->  img was there and changed from back to front

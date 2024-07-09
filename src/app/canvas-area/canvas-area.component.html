@@ -3,7 +3,7 @@
   <div class="container">
     <div class="utilsforMobView">
       <div class="mb-2">
-        <p><textarea ng-model="name" (keyup)="onKey($event)" style="width: 50%;" rows="1" cols="50" placeholder="Design Name"></textarea></p>
+        <p><textarea ng-model="name" (keyup)="onKeyUp($event)" style="width: 50%;" rows="1" cols="50" placeholder="Design Name"></textarea></p>
       </div>
     </div>
     
@@ -32,7 +32,7 @@
         </div>
         <div class="mb-2">
           <p class="mb-0">Design Name:</p>
-          <textarea ng-model="designName" (keyup)="onKey($event)"  rows="1" cols="50" formControlName="teeName"></textarea>
+          <textarea ng-model="designName" (keyup)="onKeyUp($event)"  rows="1" cols="50" formControlName="teeName"></textarea>
         </div>
         <div class="mb-4">
           <p class="mb-0">Colors:</p>
@@ -85,12 +85,12 @@
           <div *ngIf="isImgUploaded;">
             <div class="mt-4 mb-2">
               <label for="width" class="mx-2">Width:</label>
-              <input type="number" id="width" class="mx-1" max="250" [(ngModel)]="width" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+              <input type="number" id="width" class="mx-1" max="250" [(ngModel)]="imageWidth" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
               <label for="customRange2" class="form-label" >Width range 0-250</label>
             </div>
             <div>
               <label for="height" class="mx-2">Height:</label>
-              <input type="number" id="height"  max="240" [(ngModel)]="height" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+              <input type="number" id="height"  max="240" [(ngModel)]="imageHeight" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
               <label for="customRange2" class="form-label" >Height range 0-360</label>
             </div>
           </div>

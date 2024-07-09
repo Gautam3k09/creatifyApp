@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 
 @Injectable({
@@ -11,21 +11,12 @@ export class AppServiceService {
   private serverUrl:string=environment.backend;
 
   //bill api
-  postCompnayBill(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/add-bill`,data);
+  postImage(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/upload-print`,data);
   }
 
   getCompnayBill(): Observable<any> {
     return this.http.get(`${this.serverUrl}/fetch-bill`);
-  }
-
-  //invt api
-  postInventorydata(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/add-item`,data);
-  }
-  
-  getInventorydata(): Observable<any> {
-    return this.http.get(`${this.serverUrl}/fetch-item`);
   }
 
 }
