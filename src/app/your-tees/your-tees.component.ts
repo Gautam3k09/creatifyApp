@@ -1,13 +1,15 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AppServiceService } from '../app-service.service';
 
 @Component({
   selector: 'app-your-tees',
   standalone: true,
   imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule],
+  providers: [AppServiceService],
   templateUrl: './your-tees.component.html',
   styleUrl: './your-tees.component.css'
 })
@@ -15,31 +17,39 @@ export class YourTeesComponent {
   @ViewChild('canvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;
   teesCount : any = 0;
+  currentCanvas : any;
   public ctx : any;
   img : boolean = false;
+  teeDatas : any = [];
+  currentIndex : number = 0;
 
-  constructor(private router: Router) { }
-  // ngOnInit() {
-  // }
+  buyPage(data:any) {
+      this.router.navigate(['/buy']);
+  }
+  constructor(private router: Router,private appservice : AppServiceService) { }
+  ngOnInit() {
+    this.getTees()
+  }
   ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
-    this.ctx = canvas.getContext("2d");
-    console.log(this.ctx,'ctx');
-    // const borderSize = 5;
-    //   this.ctx.lineWidth = borderSize;
-    //   this.ctx.strokeStyle = 'black';
-    //   this.ctx.strokeRect(borderSize / 2, borderSize / 2, 250- borderSize, 250 - borderSize); 
-      this.loadimage()
+    setTimeout(() => {
+      this.loopIterator()
+    }, 100);
   }
 
-  loadimage() {
-    const canvas = this.canvasRef.nativeElement;
-    const img = new Image();
-    const boxWidth : number = canvas.width;
-    const boxHeight : number = canvas.height;
-    const imageRatio : any = img.width / img.height;
-    let newWidth, newHeight;
+  loopIterator(){
+    if(this.teeDatas.length != this.currentIndex) { 
+      let teeDataId = 'teeData' + this.currentIndex;
+      this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
+      this.ctx = this.currentCanvas.getContext("2d");
+      this.loadimage(this.teeDatas[this.currentIndex]);
+    }
+  }
 
+  loadimage(data:any) {
+    const img = new Image();
+    const boxWidth : number = this.currentCanvas.width;
+    const boxHeight : number = this.currentCanvas.height;
+    let newWidth, newHeight;
     if (1 > boxWidth / boxHeight) { // Image is wider
       newWidth = boxWidth;
       newHeight = boxWidth / 1;
@@ -47,14 +57,22 @@ export class YourTeesComponent {
       newHeight = boxHeight;
       newWidth = boxHeight * 1;
     }
-    img.src = '../../assets/canvas-image (1).png';
-    console.log(imageRatio,'asd');
+    img.src = data.teeName_frontsideImg;
     img.onload = () => {
       this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
+      this.currentIndex = this.currentIndex + 1;
+      this.loopIterator();
     }
     
+  }
+  getTees() { 
+    this.appservice.getTees().subscribe((result)=> {
+      console.log(result);
+      this.teeDatas = result;
+    })
   }
   openCanvas() {
     this.router.navigate(['/canvas']);
   }
+
 }

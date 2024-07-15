@@ -15,6 +15,6 @@ export class HomeComponent {
   constructor(private dialog: MatDialog,private router: Router) {}
   
   openCanvas() {
-    this.router.navigate(['/canvas']);
+    this.router.navigate(['/tees']);
   }
 }

@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppServiceService } from '../app-service.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-canvas-area',
@@ -367,6 +368,7 @@ export class CanvasAreaComponent {
       backbase64 : this.base64DataBackSide
     }
     this.appservice.postImage(data).subscribe();
+    this.router.navigate(['/tees']);
   }
   
   

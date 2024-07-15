@@ -15,8 +15,8 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/upload-print`,data);
   }
 
-  getCompnayBill(): Observable<any> {
-    return this.http.get(`${this.serverUrl}/fetch-bill`);
+  getTees(): Observable<any> {
+    return this.http.get(`${this.serverUrl}/fetch-tees`);
   }
 
 }
