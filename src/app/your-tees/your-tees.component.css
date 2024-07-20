@@ -4,14 +4,14 @@
 }
 
 body {
-      height: 100%;
-      background-image: url('../../assets/blue-purple.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      margin: 0;
-      overflow: hidden;
-      color: white;
+  height: 100%;
+  background-image: url('../../assets/blue-purple.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  overflow: hidden;
+  color: white;
 }
 
 .noTees{
@@ -24,6 +24,12 @@ body {
   margin: auto;
 }
 
+.shop-modal {
+  right: 2%;
+  /* position: fixed; */
+  /* top: 0 !important; */
+  width: 95vw;
+}
 .container {
   margin: auto;
   margin-top: 1%;
@@ -56,6 +62,8 @@ body {
 .canvas {
   margin-top: 60px;
 }
+
+
 @media(max-width:600px) {
   body{
     height: auto;

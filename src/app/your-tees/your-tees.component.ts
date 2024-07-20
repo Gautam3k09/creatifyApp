@@ -1,39 +1,43 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppServiceService } from '../app-service.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BuyPageComponent } from "../buy-page/buy-page.component";
+
 
 @Component({
   selector: 'app-your-tees',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule],
-  providers: [AppServiceService],
+  imports: [CommonModule, HeaderPageComponent, ReactiveFormsModule, BuyPageComponent],
+  providers: [AppServiceService,BsModalService],
   templateUrl: './your-tees.component.html',
   styleUrl: './your-tees.component.css'
 })
 export class YourTeesComponent {
   @ViewChild('canvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;
+  modalRef?: BsModalRef;
   teesCount : any = 0;
   currentCanvas : any;
   public ctx : any;
   img : boolean = false;
   teeDatas : any = [];
   currentIndex : number = 0;
+  selectedTee : any ;
 
-  buyPage(data:any) {
-      this.router.navigate(['/buy']);
-  }
-  constructor(private router: Router,private appservice : AppServiceService) { }
+  
+  constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService) { }
+
   ngOnInit() {
     this.getTees()
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.loopIterator()
-    }, 100);
+    }, 200);
   }
 
   loopIterator(){
@@ -63,11 +67,10 @@ export class YourTeesComponent {
       this.currentIndex = this.currentIndex + 1;
       this.loopIterator();
     }
-    
   }
+
   getTees() { 
     this.appservice.getTees().subscribe((result)=> {
-      console.log(result);
       this.teeDatas = result;
     })
   }
@@ -75,4 +78,11 @@ export class YourTeesComponent {
     this.router.navigate(['/canvas']);
   }
 
+  openModal(template: TemplateRef<any>,teeData:any) {
+    this.selectedTee = teeData; 
+    this.modalRef = this.modalService.show(template, {
+      animated: false,
+      backdrop: 'static',
+   });
+  }
 }
