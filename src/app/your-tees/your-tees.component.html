@@ -9,9 +9,12 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 <div *ngFor="let teeData of teeDatas; let i = index">
-                    <div class="col" (click)="openModal(template,teeData)">
+                    <div class="col" >
                         <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
-                            <div class="row g-0 ">
+                            <div>
+                                <button type="button" class="RotateBtn btn btn-circle btn-primary" (click)="deleteTees(teeData._id)">flip</button>
+                            </div>
+                            <div class="row g-0" (click)="navigateBuyPage(teeData)">
                                 <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
                                    <canvas #canvas class="canvas" [id]="'teeData' + i" width="105" height="100"></canvas>
                                 </div>
@@ -32,7 +35,7 @@
                 </div>
             </div>
         </div> 
-        <div class="exceedText" *ngIf="teeDatas.length < 4; else createBlockElse">
+        <div class="exceedText" *ngIf="teeDatas.length > 2; else createBlockElse">
             <div>Maximum limit exceeded for creating new designs</div>
             <div>Note : You can delete your tee designs to create more</div>
         </div>
@@ -45,9 +48,9 @@
     </ng-template>
     
     
-    <ng-template #template>
+    <!-- <ng-template #template>
         <div class="shop-modal">
             <app-buy-page [data]="selectedTee"></app-buy-page>
         </div>
-    </ng-template>
+    </ng-template> -->
 </body>

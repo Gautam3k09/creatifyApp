@@ -32,12 +32,12 @@ export class YourTeesComponent {
   constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService) { }
 
   ngOnInit() {
-    this.getTees()
+    this.getTees();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.loopIterator()
-    }, 200);
+    }, 1000);
   }
 
   loopIterator(){
@@ -70,19 +70,34 @@ export class YourTeesComponent {
   }
 
   getTees() { 
+    console.log('here')
     this.appservice.getTees().subscribe((result)=> {
       this.teeDatas = result;
     })
   }
+
+  deleteTees(data:any) {
+    console.log(data,'data')
+    this.appservice.deleteTees(data).subscribe(
+      (res) => {
+        console.log(res);
+        this.teeDatas.forEach((element:any,index:any) => {
+          if(element._id === data) this.teeDatas.splice(index,1);
+        });
+      }
+    );
+  }
+  
   openCanvas() {
     this.router.navigate(['/canvas']);
   }
 
-  openModal(template: TemplateRef<any>,teeData:any) {
+  navigateBuyPage(teeData:any) {
     this.selectedTee = teeData; 
-    this.modalRef = this.modalService.show(template, {
-      animated: false,
-      backdrop: 'static',
-   });
+    this.router.navigate(['/buy'], { state: { data: this.selectedTee } });
+  //   this.modalRef = this.modalService.show(template, {
+  //     animated: false,
+  //     backdrop: 'static',
+  //  });
   }
 }

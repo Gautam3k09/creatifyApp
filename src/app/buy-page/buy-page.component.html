@@ -3,14 +3,13 @@
             <div class="right-side">
                 <canvas #canvas class="canvas123" id="canvas" ></canvas>
                 <div>
-
-                  <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeColor('red')">flip</button>
+                  <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
                 </div>
                 <img id="draggable" src="../../assets/tshirt.png" >
             </div>
             <div class="left-side">
                 <div class="tee-Name">
-                    Tshirt Name
+                    {{data.teeName_Name}}
                 </div>
                 <div class="mb-4">
                   <p class="mb-0">Colors:</p>
@@ -27,7 +26,7 @@
                     <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">XL</button>
                 </div>
                 <div class="mb-4">
-                  <p class="mb-0">Price: 555Rs</p>
+                  <p class="mb-0">Price: {{data.teeName_Price}} Rs</p>
                 </div>
                 <div class="mb-4">
                   <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">Buy Now</button>

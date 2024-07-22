@@ -189,6 +189,7 @@ export class CanvasAreaComponent {
       this.backImageWidth = this.imageWidth;
       this.backImageHeight = this.imageHeight;
     }
+    this.updateImageBase64(this.shirtSideFront)
   }
 
   handleMouseDown(event: MouseEvent) {
@@ -256,6 +257,7 @@ export class CanvasAreaComponent {
         this.image = this.imageFrontGlobalStore
         this.handleFileChange(event,'changeShirtSide');
         this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png');
+        this.updateImageBase64(true);
         this.isImgUploaded = true;
       }
       let canvasStyle = document.querySelector('canvas') as any
@@ -271,6 +273,7 @@ export class CanvasAreaComponent {
       if(this.imageBackGlobalStore != '' && this.image != '') {
         this.image = this.imageBackGlobalStore
         this.handleFileChange(event,'changeShirtSide');
+        this.updateImageBase64(false);
         this.isImgUploaded = true;
         this.base64DataBackSide = this.globalCanvas.toDataURL('image/png');
       } 
@@ -357,6 +360,10 @@ export class CanvasAreaComponent {
     // const queryParams = { data: 'tees' };
     // this.router.navigate([''], { queryParams: queryParams });
   }
+
+  updateImageBase64(side:any){
+    side ? this.base64DataFrontSide= this.globalCanvas.toDataURL('image/png'): this.base64DataBackSide = this.globalCanvas.toDataURL('image/png')
+  }
   
   uploadImage() : any{
     console.log(this.teeDetailForm.value,'teeDetailForm');
@@ -367,8 +374,14 @@ export class CanvasAreaComponent {
       frontBase64 :  this.base64DataFrontSide,
       backbase64 : this.base64DataBackSide
     }
-    this.appservice.postImage(data).subscribe();
-    this.router.navigate(['/tees']);
+    this.appservice.postImage(data).subscribe(
+      (response) => {
+        this.router.navigate(['/tees']);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
   
   

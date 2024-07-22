@@ -19,4 +19,9 @@ export class AppServiceService {
     return this.http.get(`${this.serverUrl}/fetch-tees`);
   }
 
+  deleteTees(data:any): Observable<any> {
+    console.log(data,'data');
+    return this.http.post(`${this.serverUrl}/delete-tees/`+data,data);
+  }
+
 }
