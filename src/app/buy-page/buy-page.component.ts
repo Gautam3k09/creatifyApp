@@ -52,7 +52,16 @@ export class BuyPageComponent implements OnInit  {
   }
   
   changeSide(){
-    this.imageSideFront = !this.imageSideFront;
+    let canvasStyle = document.querySelector('canvas') as any;
+    if(this.imageSideFront) {
+      canvasStyle.classList.remove('canvasFront');
+      canvasStyle.classList.add('canvasBack');
+      this.imageSideFront = false;
+    } else {
+      canvasStyle.classList.remove('canvasBack');
+      canvasStyle.classList.add('canvasFront');
+      this.imageSideFront = true;
+    }
     this.loadimage()
   }
 }

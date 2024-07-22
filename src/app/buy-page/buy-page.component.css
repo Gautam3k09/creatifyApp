@@ -25,14 +25,20 @@ body {
     float: right;
     width: auto;
     /* height: 100px !important; */
-  canvas {
+  .canvasFront {
     height: 47vh;
     width: 32vw;
     margin-top: 13%;
     position: absolute;
     /* top: 30%; */
     margin-left: 13%;
-
+  }
+  .canvasBack {
+    height: 54vh;
+    width: 32vw;
+    margin-top: 21vh;
+    position: absolute;
+    margin-left: 11vw;
   }
   .RotateBtn{
 
