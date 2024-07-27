@@ -17,7 +17,7 @@ export class HeaderPageComponent {
   isLoggedIn : boolean = true;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-
+  merchPage: boolean = false;
   constructor(private router: Router,public matDialog: MatDialog) { }
   
   onDivClick(string:any) {

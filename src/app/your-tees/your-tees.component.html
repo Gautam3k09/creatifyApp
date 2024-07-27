@@ -1,50 +1,59 @@
 <body>
     <app-header-page></app-header-page>
-    <div class="noTees" *ngIf="teeDatas.length < 1; else elseBlock">
-        <div>You dont have any tshirt</div>
-        <button type="button" class="btn btn-primary" (click)="openCanvas()">Create</button>
-    </div>
-
-    <ng-template #elseBlock>
-        <div class="container">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <div *ngFor="let teeData of teeDatas; let i = index">
-                    <div class="col" >
-                        <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
-                            <div>
-                                <button type="button" class="RotateBtn btn btn-circle btn-primary" (click)="deleteTees(teeData._id)">flip</button>
-                            </div>
-                            <div class="row g-0" (click)="navigateBuyPage(teeData)">
-                                <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
-                                   <canvas #canvas class="canvas" [id]="'teeData' + i" width="105" height="100"></canvas>
+    <div class="" *ngIf="isLogin == 'true'; else notLogin">
+        <div class="noTees" *ngIf="teeDatas.length < 1; else elseBlock">
+            <div>You dont have any tshirt</div>
+            <button type="button" class="btn btn-primary" (click)="openCanvas('canvas')">Create</button>
+        </div>
+    
+        <ng-template #elseBlock>
+            <div class="container">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <div *ngFor="let teeData of teeDatas; let i = index">
+                        <div class="col" >
+                            <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
+                                <div>
+                                    <button type="button" class="RotateBtn btn btn-circle btn-primary" (click)="deleteTees(teeData._id)">flip</button>
                                 </div>
-                                <!-- <div class="col-md-6"> -->
-                                    <div class="card-body text-center">
-                                        <p class="card-text">Design Name</p>
-                                        <p>status : Checking</p>
-                                        <!-- <span aria-hidden="true">
-                                            <span class="">&#8377;</span>
-                                            <span class="display-6">500</span>
-                                            <span>M.R.P</span>
-                                        </span> -->
+                                <div class="row g-0" (click)="navigateBuyPage(teeData)">
+                                    <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
+                                       <canvas #canvas class="canvas" [id]="'teeData' + i" width="105" height="100"></canvas>
+                                    </div>
+                                    <!-- <div class="col-md-6"> -->
+                                        <div class="card-body text-center">
+                                            <p class="card-text">Design Name</p>
+                                            <p>status : Checking</p>
+                                            <!-- <span aria-hidden="true">
+                                                <span class="">&#8377;</span>
+                                                <span class="display-6">500</span>
+                                                <span>M.R.P</span>
+                                            </span> -->
+                                    </div>
+                                    <!-- </div> -->
                                 </div>
-                                <!-- </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
+            </div> 
+            <div class="exceedText" *ngIf="teeDatas.length > 2; else createBlockElse">
+                <div>Maximum limit exceeded for creating new designs</div>
+                <div>Note : You can delete your tee designs to create more</div>
             </div>
-        </div> 
-        <div class="exceedText" *ngIf="teeDatas.length > 2; else createBlockElse">
-            <div>Maximum limit exceeded for creating new designs</div>
-            <div>Note : You can delete your tee designs to create more</div>
-        </div>
-        <ng-template #createBlockElse>
-            <div class="exceedText">
-                <button type="button" class="btn btn-primary px-3 py-2" (click)="openCanvas()">Create</button>
-            </div>
+            <ng-template #createBlockElse>
+                <div class="exceedText">
+                    <button type="button" class="btn btn-primary px-3 py-2" (click)="openCanvas('canvas')">Create</button>
+                </div>
+            </ng-template>
+    
         </ng-template>
+    </div>
 
+    <ng-template #notLogin>
+        <div class="noTees">
+            <div>Login before viewing tshirts</div>
+            <button type="button" class="btn btn-primary" (click)="openCanvas('login')">Log in</button>
+        </div>
     </ng-template>
     
     

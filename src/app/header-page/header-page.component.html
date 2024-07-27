@@ -1,5 +1,5 @@
 <body>
-    <nav>
+    <nav *ngIf="!merchPage; else merchHeader">
         <ul class="sidebar">
             <li class="tabs1" (click)="showSidebar('string')">x</li>
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
@@ -19,4 +19,21 @@
             </ng-template>
         </ul>
     </nav>
+    <ng-template #merchHeader>
+        <nav>
+
+            <ul>
+                <li class="tabs" (click)="onDivClick('settings')">C/User_name</li>
+                <div class="login" *ngIf="!isLoggedIn; else elseBlock1">
+                    <li class="tabs hideOnMobile" (click)="openModal()">Login</li>
+                </div>
+                <ng-template #elseBlock1>
+                    <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
+                    <!-- <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li> -->
+                    <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+                    <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+                </ng-template>
+            </ul>
+        </nav>
+    </ng-template>
 </body>

@@ -26,12 +26,15 @@ export class YourTeesComponent {
   img : boolean = false;
   teeDatas : any = [];
   currentIndex : number = 0;
-  selectedTee : any ;
+  selectedTee : any;
+  isLogin : any = false;
 
   
   constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService) { }
 
   ngOnInit() {
+    this.isLogin  = localStorage.getItem('Login');
+    console.log(this.isLogin,'login')
     this.getTees();
   }
   ngAfterViewInit() {
@@ -88,8 +91,8 @@ export class YourTeesComponent {
     );
   }
   
-  openCanvas() {
-    this.router.navigate(['/canvas']);
+  openCanvas(string:any) {
+    this.router.navigate([string]);
   }
 
   navigateBuyPage(teeData:any) {
