@@ -9,30 +9,33 @@
         <ul>
             <li class="tabs" (click)="onDivClick('')">CreaTeeFi</li>
             <div class="login" *ngIf="!isLoggedIn; else elseBlock">
-                <li class="tabs hideOnMobile" (click)="openModal()">Login</li>
+                <li class="tabs hideOnMobile" (click)="openModal()"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
             </div>
             <ng-template #elseBlock>
                 <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
                 <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li>
-                <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-                <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+                <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-cog" aria-hidden="true"></i></li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-cog" aria-hidden="true"></i></li>
             </ng-template>
         </ul>
     </nav>
     <ng-template #merchHeader>
         <nav>
-
             <ul>
-                <li class="tabs" (click)="onDivClick('settings')">C/User_name</li>
-                <div class="login" *ngIf="!isLoggedIn; else elseBlock1">
-                    <li class="tabs hideOnMobile" (click)="openModal()">Login</li>
-                </div>
-                <ng-template #elseBlock1>
-                    <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-                    <!-- <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li> -->
-                    <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-                    <li class="tabs hideOnMobile" (click)="onDivClick('/settings')"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
-                </ng-template>
+                <li class="tabs" (click)="onDivClick('merch')">C/User_name</li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
+                <li class="tabs hideOnDesktop" *ngIf="isLoggedIn;" (click)="openModal()">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                </li>
+                <li class="tabs hideOnDesktop" *ngIf="!isLoggedIn;" (click)="onDivClick('/settings')">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                </li>
+                <li class="tabs hideOnMobile" *ngIf="isLoggedIn;" (click)="openModal()">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                </li>
+                <li class="tabs hideOnMobile" *ngIf="!isLoggedIn;" (click)="onDivClick('/settings')">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                </li>
             </ul>
         </nav>
     </ng-template>

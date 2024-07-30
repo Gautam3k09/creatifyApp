@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, input, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import { BuyPageComponent } from "../buy-page/buy-page.component";
   styleUrl: './your-tees.component.css'
 })
 export class YourTeesComponent {
+  @Input() isMerchHomePage: any = false;
   @ViewChild('canvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;
   modalRef?: BsModalRef;
@@ -33,6 +34,7 @@ export class YourTeesComponent {
   constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService) { }
 
   ngOnInit() {
+    console.log(this.isMerchHomePage,'isMerchHomePage')
     this.isLogin  = localStorage.getItem('Login');
     console.log(this.isLogin,'login')
     this.getTees();
