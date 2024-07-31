@@ -15,3 +15,17 @@
     margin-top: 2%;
     border-radius: 15px;
 }
+
+
+.otp-letter-input{
+    max-width: 85%;
+    height: 45px;
+    border-radius: 10px;
+    color: #5a5aff;
+    font-size: 36px;
+    text-align: center;
+    font-weight: bold;
+}
+.btn{
+    height: 50px;
+}

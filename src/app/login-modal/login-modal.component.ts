@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-modal',
@@ -14,12 +15,12 @@ import { CommonModule } from '@angular/common';
 export class LoginModalComponent {
   myLoginForm!: FormGroup;
   mySignupForm!: FormGroup;
-  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private fb: FormBuilder) { }
+  mobileNumber: any;
+  mobileNumberVerified: boolean = false;
+  sendOtp :any = '';
+
+  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private fb: FormBuilder,private router: Router) { }
   ngOnInit() {
-    this.myLoginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-    });
     this.mySignupForm = this.fb.group({
       email: ['', [Validators.required,Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -31,8 +32,21 @@ export class LoginModalComponent {
     console.log('Email', form.value.username);
     console.log('Address', form.value.password);
   }
-  
+  onkeyUp(data:any){
+    this.mobileNumber = data.target.value;
+    console.log(this.mobileNumber);
+  }
+
   closeModal() {
     this.dialogRef.close();
+  }
+
+  login() {
+    localStorage.setItem('Login', 'true');
+    this.router.navigate(['']);
+  }
+
+  verify(){
+    this.sendOtp = true
   }
 }

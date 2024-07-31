@@ -36,7 +36,7 @@ export class YourTeesComponent {
   ngOnInit() {
     console.log(this.isMerchHomePage,'isMerchHomePage')
     this.isLogin  = localStorage.getItem('Login');
-    console.log(this.isLogin,'login')
+    console.log(this.isLogin,'logsin')
     this.getTees();
   }
   ngAfterViewInit() {
