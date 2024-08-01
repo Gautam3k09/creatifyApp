@@ -22,6 +22,6 @@ export class LoginPageComponent {
 
   login() {
     localStorage.setItem('Login', 'true');
-    this.router.navigate(['']);
+    location.reload()
   }
 }

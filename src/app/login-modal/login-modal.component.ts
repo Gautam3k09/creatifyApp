@@ -15,11 +15,18 @@ import { Router } from '@angular/router';
 export class LoginModalComponent {
   myLoginForm!: FormGroup;
   mySignupForm!: FormGroup;
-  mobileNumber: any;
+  mobileNumber: any ='';
   mobileNumberVerified: boolean = false;
-  sendOtp :any = '';
+  sendOtp :any = false;
 
-  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private fb: FormBuilder,private router: Router) { }
+  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private fb: FormBuilder,private router: Router) {
+    this.myLoginForm = this.fb.group({
+      otp1: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp2: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp3: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp4: ['', [Validators.required, Validators.pattern('[0-9]')] ]
+    });
+   }
   ngOnInit() {
     this.mySignupForm = this.fb.group({
       email: ['', [Validators.required,Validators.email]],
@@ -28,13 +35,10 @@ export class LoginModalComponent {
   }
 
   onSubmit(form: FormGroup) {
-    console.log('Valid?', form.valid); // true or false
-    console.log('Email', form.value.username);
-    console.log('Address', form.value.password);
+
   }
   onkeyUp(data:any){
     this.mobileNumber = data.target.value;
-    console.log(this.mobileNumber);
   }
 
   closeModal() {
@@ -43,10 +47,27 @@ export class LoginModalComponent {
 
   login() {
     localStorage.setItem('Login', 'true');
-    this.router.navigate(['']);
+    location.reload();
   }
 
   verify(){
     this.sendOtp = true
   }
+  
+  get otpControls() {
+    return this.myLoginForm.controls;
+  }
+  moveToNextInput(event: any) {
+    const currentInput = event.target as HTMLInputElement;
+    const nextInputId = currentInput.id.replace(/(\d+)/, (match, group1) => {
+      const nextIndex = event.key=='Backspace' ?  parseInt(group1, 10) - 1 : parseInt(group1, 10) + 1;
+      return nextIndex.toString();
+    });
+    const nextInput = document.getElementById(nextInputId) as HTMLInputElement;
+    if (nextInput) {
+      nextInput.focus();
+    }
+    if(this.myLoginForm.value.otp1 != '' && this.myLoginForm.value.otp2 != '' && this.myLoginForm.value.otp3 != '' && this.myLoginForm.value.otp4 != '') this.mobileNumberVerified = true
+  }
+
 }

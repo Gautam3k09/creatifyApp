@@ -9,7 +9,7 @@
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="SignInContainer">
-            <form [formGroup]="myLoginForm" (ngSubmit)="onSubmit(myLoginForm)">
+            <form [formGroup]="myLoginForm" >
               <div class="text-center mb-4">
                 <div class="labels">
                   <label>
@@ -25,16 +25,16 @@
               <div *ngIf="sendOtp">
                   <div class="row  pb-2">
                     <div class="col-3">
-                        <input class="otp-letter-input" type="text">
+                        <input class="otp-letter-input" id="input1" type="text" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
                     </div>
                     <div class="col-3">
-                        <input class="otp-letter-input" type="text">
+                        <input class="otp-letter-input" id="input2" type="text" formControlName="otp2" maxlength="1" (keyup)="moveToNextInput($event)">
                     </div>
                     <div class="col-3">
-                        <input class="otp-letter-input" type="text">
+                        <input class="otp-letter-input" id="input3" type="text" formControlName="otp3" maxlength="1" (keyup)="moveToNextInput($event)">
                     </div>
                     <div class="col-3">
-                        <input class="otp-letter-input" type="text">
+                        <input class="otp-letter-input" id="input4" type="text" formControlName="otp4" maxlength="1" (keyup)="moveToNextInput($event)">
                     </div>
                   </div>
               </div>
@@ -44,11 +44,12 @@
                 <label class="form-check-label" for="loginCheck"> Remember me </label>
               </div>
               <div class="text-center mb-4">  
-                <button type="submit" [disabled]="mobileNumberVerified">Sign In</button>
+                <button type="submit" [disabled]="!mobileNumberVerified" (click)="login()">Sign In</button>
               </div>
             </form>
         </div>
     </div>
+
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <div class="SignInContainer">
             <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)">
