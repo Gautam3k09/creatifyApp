@@ -17,7 +17,7 @@ export class HeaderPageComponent {
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-  merchPage: boolean = false;
+  merchPage: boolean = true;
   constructor(private router: Router,public matDialog: MatDialog) { }
 
   ngOnInit(){
@@ -43,7 +43,6 @@ export class HeaderPageComponent {
   }
 
   openModal() {
-    
     this.dialogConfig.id = "projects-modal-component";
     this.dialogConfig.height = "500px";
     this.dialogConfig.width = "650px";

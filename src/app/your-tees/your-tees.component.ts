@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
@@ -6,12 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppServiceService } from '../app-service.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { BuyPageComponent } from "../buy-page/buy-page.component";
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 
 
 @Component({
   selector: 'app-your-tees',
   standalone: true,
-  imports: [CommonModule, HeaderPageComponent, ReactiveFormsModule, BuyPageComponent],
+  imports: [CommonModule, HeaderPageComponent, ReactiveFormsModule, BuyPageComponent,LoginModalComponent],
   providers: [AppServiceService,BsModalService],
   templateUrl: './your-tees.component.html',
   styleUrl: './your-tees.component.css'
@@ -19,6 +21,8 @@ import { BuyPageComponent } from "../buy-page/buy-page.component";
 export class YourTeesComponent {
   @Input() isMerchHomePage: any = false;
   @ViewChild('canvas', { static: false })
+  dialogConfig = new MatDialogConfig();
+  modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
   canvasRef!: ElementRef<HTMLCanvasElement>;
   modalRef?: BsModalRef;
   teesCount : any = 0;
@@ -31,7 +35,7 @@ export class YourTeesComponent {
   isLogin : any = false;
 
   
-  constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService) { }
+  constructor(private router: Router,private appservice : AppServiceService,private modalService: BsModalService,public matDialog: MatDialog) { }
 
   ngOnInit() {
     console.log(this.isMerchHomePage,'isMerchHomePage')
@@ -49,7 +53,7 @@ export class YourTeesComponent {
     if(this.teeDatas.length != this.currentIndex) { 
       let teeDataId = 'teeData' + this.currentIndex;
       this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
-      this.ctx = this.currentCanvas.getContext("2d");
+      this.ctx = this.currentCanvas?.getContext("2d");
       this.loadimage(this.teeDatas[this.currentIndex]);
     }
   }
@@ -98,11 +102,18 @@ export class YourTeesComponent {
   }
 
   navigateBuyPage(teeData:any) {
+    if(this.isLogin) {
     this.selectedTee = teeData; 
     this.router.navigate(['/buy'], { state: { data: this.selectedTee } });
-  //   this.modalRef = this.modalService.show(template, {
-  //     animated: false,
-  //     backdrop: 'static',
-  //  });
+    } else {
+      this.openModal()
+    }
+  }
+  openModal() {
+    this.dialogConfig.id = "projects-modal-component";
+    this.dialogConfig.height = "500px";
+    this.dialogConfig.width = "650px";
+    this.modalDialog = this.matDialog.open(LoginModalComponent,this.dialogConfig);
+    localStorage.setItem('apiData', '123');
   }
 }

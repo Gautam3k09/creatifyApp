@@ -10,20 +10,16 @@
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="SignInContainer">
             <form [formGroup]="myLoginForm" >
-              <div class="text-center mb-4">
-                <div class="labels">
-                  <label>
-                    <input placeholder="Mobile Number" (keyup)="onkeyUp($event)">
-                  </label>
+              <div style="display: flex; justify-content: space-between;" [ngClass]="{'mb-5': !sendOtp,'mb-4':sendOtp}">
+                <div data-mdb-input-init class="form-outline" style="width: 70%;">
+                  <input onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,true)" id="form2Example1" class="form-control" pattern="[0-9]*" placeholder="Mobile Number"/>
                 </div>
-              </div>
-              <div class="text-center mb-4">
-                <div *ngIf="mobileNumber.length == 10">
-                  <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" (click)="verify()">verify</button>
+                <div class="text-center">
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" (click)="verify(true)" style="height: 5vh;" [disabled]="mobileNumber.length != 10">verify</button>
                 </div>
               </div>
               <div *ngIf="sendOtp">
-                  <div class="row  pb-2">
+                  <div class="row  pb-2 mb-2">
                     <div class="col-3">
                         <input class="otp-letter-input" id="input1" type="text" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
                     </div>
@@ -40,7 +36,7 @@
               </div>
 
               <div class="text-center mb-4">
-                <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
                 <label class="form-check-label" for="loginCheck"> Remember me </label>
               </div>
               <div class="text-center mb-4">  
@@ -53,23 +49,53 @@
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <div class="SignInContainer">
             <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)">
-                <div class="labels">
-                  <label>
-                    <input formControlName="email" placeholder="Your Email">
-                  </label>
-                  <div *ngIf="mySignupForm.get('email')?.invalid && (mySignupForm.get('email')?.dirty || mySignupForm.get('email')?.touched)">
-                    Please provide a valid email address.
-                  </div>
+              <div style="display: flex; justify-content: space-between;" [ngClass]="{'mb-5': !sendOtpForRegister,'mb-2':sendOtpForRegister}">
+                <div data-mdb-input-init class="form-outline" style="width: 70%;">
+                  <input onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1" class="form-control" pattern="[0-9]*" placeholder="Mobile Number"/>
                 </div>
-                <div class="labels">
-                  <label>
-                    <input formControlName="password" placeholder="Your Password">
-                  </label>
-                  <div *ngIf="mySignupForm.get('password')?.invalid && (mySignupForm.get('password')?.dirty || mySignupForm.get('password')?.touched)">
-                    password must be at least 8 characters long.
-                  </div>
+                <div class="text-center">
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" (click)="verify(false)" style="height: 5vh;" [disabled]="registerNumber.length != 10">verify</button>
                 </div>
-                <button type="submit" [disabled]="mySignupForm.invalid">Send</button>
+              </div>
+
+
+              <div *ngIf="sendOtpForRegister">
+                  <div class="row  pb-2">
+                    <div class="col-3">
+                        <input class="otp-letter-input" id="input1r" type="text" formControlName="rOtp1" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                    </div>
+                    <div class="col-3">
+                        <input class="otp-letter-input" id="input2r" type="text" formControlName="rOtp2" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                    </div>
+                    <div class="col-3">
+                        <input class="otp-letter-input" id="input3r" type="text" formControlName="rOtp3" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                    </div>
+                    <div class="col-3">
+                        <input class="otp-letter-input" id="input4r" type="text" formControlName="rOtp4" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                    </div>
+                  </div>
+              </div>
+
+              <div data-mdb-input-init class="form-outline mb-4" >
+                <input maxlength="12" type="text" id="form2Example1" class="form-control" formControlName="userName" placeholder="UserName"/>
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('minlength')">
+                  Your Username must be at least 4 characters long.
+                  </p>
+                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('maxlength')">
+                      Your Username cannot exceed 12 characters.
+                  </p>
+                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('required') && mySignupForm.controls['userName'].dirty">
+                    Username is required
+                  </p>
+              </div>
+
+              <div class="text-center mb-4">
+                <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
+                <label class="form-check-label" for="loginCheck"> Remember me </label>
+              </div>
+              <div class="text-center mb-4">  
+                <button type="submit" [disabled]="mySignupForm.invalid" (click)="login()">Sign Up</button>
+              </div>
               </form>
         </div>
     </div>

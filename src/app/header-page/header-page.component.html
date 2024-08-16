@@ -24,17 +24,17 @@
             <ul>
                 <li class="tabs" (click)="onDivClick('merch')">C/User_name</li>
                 <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-                <li class="tabs hideOnDesktop" *ngIf="isLoggedIn;" (click)="openModal()">
+                <li class="tabs hideOnDesktop" *ngIf="isLoggedIn;" (click)="onDivClick('/settings')">
                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                 </li>
-                <li class="tabs hideOnDesktop" *ngIf="!isLoggedIn;" (click)="onDivClick('/settings')">
+                <li class="tabs hideOnDesktop" *ngIf="!isLoggedIn;" (click)="openModal()">
                     <i class="fa fa-cog" aria-hidden="true"></i>
                 </li>
-                <li class="tabs hideOnMobile" *ngIf="isLoggedIn;" (click)="openModal()">
+                <li class="tabs hideOnMobile" *ngIf="isLoggedIn;" (click)="onDivClick('/settings')">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                </li>
+                <li class="tabs hideOnMobile" *ngIf="!isLoggedIn;" (click)="openModal()">
                     <i class="fa fa-sign-in" aria-hidden="true"></i>
-                </li>
-                <li class="tabs hideOnMobile" *ngIf="!isLoggedIn;" (click)="onDivClick('/settings')">
-                    <i class="fa fa-cog" aria-hidden="true"></i>
                 </li>
             </ul>
         </nav>
