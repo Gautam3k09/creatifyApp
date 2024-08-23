@@ -26,15 +26,19 @@ export class LoginModalComponent {
   sendOtp :any = false;
   sendOtpForRegister: boolean = false;
   numberExists: any ;
+  regNumberExists:any;
   otpPage: any = false;
   showWrongOtpError: boolean = false;
+  showWrongOtpErrorForRegister: boolean = false;
+  storeUserId :any;
 
   constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private appservice : AppServiceService,private fb: FormBuilder,private router: Router,@Inject(MAT_DIALOG_DATA) public data: any) {
     this.myLoginForm = this.fb.group({
       otp1: ['', [Validators.required, Validators.pattern('[0-9]')] ],
       otp2: ['', [Validators.required, Validators.pattern('[0-9]')] ],
       otp3: ['', [Validators.required, Validators.pattern('[0-9]')] ],
-      otp4: ['', [Validators.required, Validators.pattern('[0-9]')] ]
+      otp4: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      number:  ['',[Validators.required,Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]')]],
     });
     this.mySignupForm = this.fb.group({
       userName : ['',[Validators.required,Validators.minLength(4), Validators.maxLength(12)]],
@@ -58,15 +62,26 @@ export class LoginModalComponent {
   }
 
   onkeyUp(data:any,login:any){
-    if(login) this.mobileNumber = data.target.value;
+    this.storeUserId = '';
+    if(login){
+      this.mobileNumber = data.target.value;
+      this.sendOtp = false;
+      this.myLoginForm.controls['number'].setErrors({
+        "number": true
+      });
+      if(this.mobileNumber.length == 10 ) {
+        this.verifyNumber(this.mobileNumber,login)
+      }
+    } 
     if(!login) {
       this.numberExists = false;
       this.registerNumber = data.target.value;
       this.mySignupForm.controls['number'].setErrors({
         "number": true
       });
-      if(this.registerNumber.length == 10) {
-        this.verifyNumber(login)
+      
+      if(this.registerNumber.length == 10 ) {
+        this.verifyNumber(this.registerNumber,login)
       }
     }
   }
@@ -100,11 +115,20 @@ export class LoginModalComponent {
   }
 
   login(boolean:boolean) {
-    this.showWrongOtpError = false;
-    if(!boolean){
-      let userOtp = this.otpForm.value.rOtp1 + this.otpForm.value.rOtp2 + this.otpForm.value.rOtp3 + this.otpForm.value.rOtp4;
-      console.log(userOtp.toString() == '0000')
-      if(userOtp === '0000') {
+    let userOtp : any;
+    if(boolean ){
+      this.showWrongOtpError = false;
+      userOtp = this.myLoginForm.value.otp1 +this.myLoginForm.value.otp2 +this.myLoginForm.value.otp3 +this.myLoginForm.value.otp4;
+    } else{
+      this.showWrongOtpErrorForRegister = false;
+      userOtp = this.otpForm.value.rOtp1 + this.otpForm.value.rOtp2 + this.otpForm.value.rOtp3 + this.otpForm.value.rOtp4;
+    }
+    if(userOtp === '0000') {
+      if(boolean){
+        localStorage.setItem('Login', 'true');
+        localStorage.setItem('userId',this.storeUserId);
+        location.reload();
+      } else {
         const data = {
           number : this.registerNumber,
           username : this.mySignupForm.value.userName,
@@ -113,16 +137,19 @@ export class LoginModalComponent {
         this.appservice.postUserDataForRegister(data).subscribe(
           (response) => {
             // this.router.navigate(['/tees']);
+            console.log(response,'response');
             localStorage.setItem('Login', 'true');
+            localStorage.setItem('userId',response.result._id);
             location.reload();
           },
           (error) => {
             console.log(error);
           }
         );
-      }else{
-        this.showWrongOtpError = true;
       }
+      
+    }else{
+      this.showWrongOtpError = true;
     }
    
   }
@@ -132,22 +159,24 @@ export class LoginModalComponent {
     if (action === 'back') this.otpPage = false;
   }
 
-  verifyNumber(login:any){
-    if(login) this.sendOtp = true;
-    
-    // for sign up process
-    if (!login){
-        this.appservice.postUserCheck({data:this.registerNumber}).subscribe((response) => {
-            if (!response.status) {
-              this.numberExists = false;
-              this.mySignupForm.controls['number'].setErrors(null);
-            } else { 
-              this.numberExists = true;
-            }
-          },
-          (error) => { console.log(error); }
-        );}
-      
+  verifyNumber(data:any,login:any){
+    this.appservice.postUserCheck({data:data}).subscribe((response) => {
+        if (!response.status && !login) {
+          this.regNumberExists = false;
+          this.mySignupForm.controls['number'].setErrors(null);
+        } else if(response.status && !login) { 
+          this.regNumberExists = true;
+        } else if (!response.status && login) {
+          this.numberExists = true;
+        } else {
+          this.myLoginForm.controls['number'].setErrors(null);
+          this.numberExists = false;
+          this.sendOtp = true;
+          this.storeUserId = response.data[0]._id;
+        }
+      },
+      (error) => { console.log(error); }
+    );
   }
 
   verifyReferral(event:any) {
