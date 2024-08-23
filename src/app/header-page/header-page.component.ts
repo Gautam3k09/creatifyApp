@@ -17,7 +17,7 @@ export class HeaderPageComponent {
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-  merchPage: boolean = true;
+  merchPage: boolean = false;
   constructor(private router: Router,public matDialog: MatDialog) { }
 
   ngOnInit(){

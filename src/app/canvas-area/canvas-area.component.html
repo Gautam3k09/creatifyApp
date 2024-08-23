@@ -55,7 +55,7 @@
           <div *ngIf="currentSide == 'front'; else elseBlockFront">      
             <div *ngIf="isImgUploaded == false; else uploadFront">
               <div class="fileUpload" >
-                <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/png,image/jpeg"/>
+                <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/png"/>
                 <span>Uploadfront</span>
               </div>
             </div>    
@@ -69,7 +69,7 @@
           <ng-template #elseBlockFront>
             <div *ngIf="isImgUploaded == false; else uploadBack">
               <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
-                <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/png,image/jpeg" />
+                <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/png" />
                 <span>UploadBack</span>
               </div>
             </div>
