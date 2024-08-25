@@ -80,7 +80,10 @@ export class YourTeesComponent {
 
   getTees() { 
     console.log('here')
-    this.appservice.getTees().subscribe((result)=> {
+    const data = {
+      id : localStorage.getItem('userId')
+    }
+    this.appservice.getTees(data).subscribe((result)=> {
       this.teeDatas = result;
     })
   }

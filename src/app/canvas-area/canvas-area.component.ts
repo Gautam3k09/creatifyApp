@@ -54,8 +54,6 @@ export class CanvasAreaComponent {
   isPatternApplied: boolean = false;
   base64DataFrontSide : any = '';
   base64DataBackSide : any = '';
-  base64DataFrontSideNonBorders : any = '';
-  base64DataBackSideNonBorders : any = '';
   imageUrl : any = '';
   
   designName : any = "";
@@ -142,11 +140,9 @@ export class CanvasAreaComponent {
         if(this.shirtSideFront) {
           this.imageFrontGlobalStore = img;
           this.imageFrontGlobalTarget = event.target.files[0];
-          this.base64DataFrontSideNonBorders = img.src;
         } else {
           this.imageBackGlobalStore = img;
           this.imageBackGlobalTarget = event.target.files[0];
-          this.base64DataBackSideNonBorders = img.src;
         }
         this.updateImage(); 
       };
@@ -369,14 +365,13 @@ export class CanvasAreaComponent {
   }
   
   uploadImage() : any{
+    const id = localStorage.getItem('userId');
     const data = {
-      id :  1,
+      id :  id,
       price : this.teeDetailForm.value.price,
       teeName : this.teeDetailForm.value.teeName,
       frontBase64 :  this.base64DataFrontSide,
       backbase64 : this.base64DataBackSide,
-      frontBase64NonBorder : this.base64DataFrontSideNonBorders,
-      backBase64NonBorder : this.base64DataBackSideNonBorders,
     }
     this.appservice.postImage(data).subscribe(
       (response) => {

@@ -28,8 +28,8 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/upload-print`,data);
   }
 
-  getTees(): Observable<any> {
-    return this.http.get(`${this.serverUrl}/fetch-tees`);
+  getTees(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/fetch-tees`,data);
   }
 
   deleteTees(data:any): Observable<any> {
