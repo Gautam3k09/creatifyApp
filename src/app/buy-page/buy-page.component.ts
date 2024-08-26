@@ -3,13 +3,16 @@ import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { WindowRefService } from '../window-ref.service';
+import { AppServiceService } from '../app-service.service';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
   imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule],
   templateUrl: './buy-page.component.html',
-  styleUrl: './buy-page.component.css'
+  styleUrl: './buy-page.component.css',
+  providers: [WindowRefService,AppServiceService],
 })
 export class BuyPageComponent implements OnInit  {
   @Input() data: any;
@@ -18,7 +21,7 @@ export class BuyPageComponent implements OnInit  {
   globalCanvas : any;
   globalctx: any;
   imageSideFront :any = true;
-  constructor(public bsModalRef: BsModalRef) {
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService) {
     
   }
   ngOnInit() {
@@ -63,5 +66,55 @@ export class BuyPageComponent implements OnInit  {
       this.imageSideFront = true;
     }
     this.loadimage()
+  }
+
+  createRazorPayOrder () {
+    const options:any = {
+      amount: this.data.teeName_Price,
+      currency: 'INR',
+      receipt: 'order_123456780',
+    };
+    this.appservice.createOrder(options).subscribe((result)=> {
+      console.log(result,'result');
+      const order_id = result.offer_id;
+      this.payWithRazor(order_id);
+    })
+  }
+
+  payWithRazor(order_id: any) {
+    const options: any = {
+      key: 'rzp_test_RbOpZbmihpoCFb',
+      amount: this.data.teeName_Price * 100, // amount should be in paisa
+      currency: 'INR',
+      name: 'Creatify',
+      description: 'Test Transaction',
+      order_id: order_id,
+      image: 'assets/blue-purple.jpg',
+      modal:{
+        escape:false
+      },
+      
+      prefill: {
+        name: 'Monti',
+        email: 'monti@example.com',
+        contact: '9511830363',
+      },
+      notes: {
+        teeName: this.data.teeName_Name,
+      },
+      theme: {
+        color: '#3399cc',
+      },
+    };
+    options.handler = (response:any) => {
+      console.log(response,'response');
+      // After successful payment, make a request to your server to verify the transaction
+    };
+    options.modal.ondismiss = ()=>{
+      console.log('payment cancelled');
+      // Handle the cancellation of the payment
+    }
+    const rzp = this.winRef.nativeWindow.Razorpay(options);
+    rzp.open();
   }
 }

@@ -60,8 +60,8 @@ export class YourTeesComponent {
 
   loadimage(data:any) {
     const img = new Image();
-    const boxWidth : number = this.currentCanvas.width;
-    const boxHeight : number = this.currentCanvas.height;
+    const boxWidth : any = this.currentCanvas.width;
+    const boxHeight : any = this.currentCanvas.height;
     let newWidth, newHeight;
     if (1 > boxWidth / boxHeight) { // Image is wider
       newWidth = boxWidth;

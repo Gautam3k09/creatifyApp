@@ -32,7 +32,18 @@ body {
 }
 .container {
   margin: auto;
-  margin-top: 1%;
+  margin-top: 2%;
+}
+
+.RotateBtn {
+  padding: 1%;
+  margin-left: 3%;
+  margin-top: 3%;
+}
+
+.tshirtDiv {
+  margin-top: -3%;
+  cursor: pointer;
 }
 
 .exceedText {
@@ -61,6 +72,12 @@ body {
 
 .canvas {
   margin-top: 60px;
+}
+
+.NameText{
+  color: black;
+  font-weight: bolder;
+  text-transform: uppercase;
 }
 
 

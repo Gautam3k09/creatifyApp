@@ -51,13 +51,33 @@ body {
 }
 
 .left-side {
-  margin-top: 5%;
+  margin-top: 15%;
   float: left;
-  background: red;
+  background: #333;
   width: 25%;
   height: auto;
-  margin-left: 10%;
+  margin-left: 15%;
+  padding: 1% 2% 1% 2% ;
+  border-radius: 6%;
+  box-shadow: #333;
+
   .tee-Name{
     text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 4%;
+    margin-top: 5%;
   }
+
+  .colorText{
+    /* text-align: center; */
+  }
+  .price{
+    text-align: center;
+  }
+
+  .buyButton{
+    text-align: center;
+  }
+
+  
 }

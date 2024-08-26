@@ -37,5 +37,9 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/delete-tees/`+data,data);
   }
   
+  // razor api
+  createOrder(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/paymentOrder`,data);
+  }
 
 }
