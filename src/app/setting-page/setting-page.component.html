@@ -73,11 +73,11 @@
     <div class="container">
       <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
         <div class="InfoForm">
-          <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+          <form [formGroup]="myForm">
             <div class="labels">
               <label>
-                Name
-                <input formControlName="name" placeholder="Your name">
+                Name &nbsp;&nbsp;
+                <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
               </label>
               <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
                 Please provide a name.
@@ -85,10 +85,10 @@
             </div>
             <div class="labels">
               <label>
-                Email
-                <input formControlName="email" placeholder="Your email">
+                Number
+                <input formControlName="number" placeholder="Phone Number">
               </label>
-              <div *ngIf="myForm.get('email')?.invalid && (myForm.get('email')?.dirty || myForm.get('email')?.touched)">
+              <div *ngIf="myForm.get('number')?.invalid && (myForm.get('number')?.dirty || myForm.get('number')?.touched)">
                 Please provide a valid email address.
               </div>
             </div>
@@ -107,14 +107,12 @@
             <div>
               <p>Creatify coins : 123</p>
             </div>
-            <button type="submit" [disabled]="myForm.invalid">Send</button>
+            <button type="submit" (click)='edit(saveBtn)'>{{saveBtn}}</button>
           </form>
+          <div>
+            <button class="btn btn-primary ms-2 mt-3" (click)="logout()">Logout</button>
+          </div>
         </div>
       </div>
     </div>
-
-    <div>
-      <button class="btn btn-primary ms-2" (click)="logout()">Logout</button>
-    </div>
-    
-  </body>
+</body>

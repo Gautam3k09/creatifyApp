@@ -14,13 +14,19 @@ import { Router } from '@angular/router';
 })
 export class SettingPageComponent {
   myForm!: FormGroup;
+  userData: any;
+  formEdit:any = true;
+  saveBtn:any = 'edit';
   constructor(private fb: FormBuilder,private router: Router) {}
 
   ngOnInit() {
+    let userData : any = (localStorage.getItem('userId'));
+    userData = JSON.parse(userData);
+    console.log(userData);
     this.myForm = this.fb.group({
-      name: ['Sammy', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      address: ['', [Validators.required, Validators.minLength(15)]],
+      name: [{value: userData.user_Name, disabled: this.formEdit}, Validators.required],
+      number: [{value: userData.user_Number, disabled: this.formEdit}, [Validators.required]],
+      address: [{value: 'asd', disabled: this.formEdit}, [Validators.required, Validators.minLength(15)]],
     });
   }
 
@@ -34,5 +40,20 @@ export class SettingPageComponent {
   logout(){
     localStorage.removeItem("Login");
     this.router.navigate(['']);
+  }
+
+  edit(flag:any) {
+    console.log(flag);  // edit or save
+    if(flag == 'edit'){
+      this.formEdit = false;
+      this.saveBtn = 'save';
+      this.myForm.controls['name'].enable();
+      this.myForm.controls['address'].enable();
+    } else {
+      this.saveBtn = 'edit';
+      this.formEdit = true;
+      this.myForm.controls['address'].disable();
+      this.myForm.controls['name'].disable();
+    }
   }
 }

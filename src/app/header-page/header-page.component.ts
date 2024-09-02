@@ -22,6 +22,8 @@ export class HeaderPageComponent {
 
   ngOnInit(){
     this.isLoggedIn  = localStorage.getItem('Login');
+    let data : any = (localStorage.getItem('userId'));
+    data = JSON.parse(data);
   }
   
   onDivClick(string:any) {

@@ -8,8 +8,6 @@ import { HomeComponent } from './home/home.component';
 import { SettingPageComponent } from './setting-page/setting-page.component';
 import { BuyPageComponent } from './buy-page/buy-page.component';
 import {MerchHomePageComponent } from './merch-home-page/merch-home-page.component';
-import { LoginPageComponent } from './login-page/login-page.component';
-import { RegisterPageComponent } from './register-page/register-page.component';
 
 export const routes: Routes = [
     // { path: '', component: HeaderPageComponent},
@@ -21,6 +19,4 @@ export const routes: Routes = [
     { path: 'settings', component: SettingPageComponent},
     { path: 'buy', component: BuyPageComponent},
     { path: 'merch',component: MerchHomePageComponent},
-    { path: 'login',component: LoginPageComponent},
-    { path: 'register',component: RegisterPageComponent},
 ];

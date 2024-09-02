@@ -1,9 +1,10 @@
 <body>
+  <app-header-page></app-header-page>
         <div class="container">
             <div class="right-side">
                 <canvas #canvas class="canvasFront" id="canvas" ></canvas>
                 <div>
-                  <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
+                  <button type="button" style="width: 15%;" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
                 </div>
                 <img id="draggable" src="../../assets/tshirt.png" >
             </div>

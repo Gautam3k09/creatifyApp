@@ -30,7 +30,7 @@ export class LoginModalComponent {
   otpPage: any = false;
   showWrongOtpError: boolean = false;
   showWrongOtpErrorForRegister: boolean = false;
-  storeUserId :any;
+  storeUserData :any;
 
   constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private appservice : AppServiceService,private fb: FormBuilder,private router: Router,@Inject(MAT_DIALOG_DATA) public data: any) {
     this.myLoginForm = this.fb.group({
@@ -62,7 +62,7 @@ export class LoginModalComponent {
   }
 
   onkeyUp(data:any,login:any){
-    this.storeUserId = '';
+    this.storeUserData = '';
     if(login){
       this.mobileNumber = data.target.value;
       this.sendOtp = false;
@@ -126,7 +126,7 @@ export class LoginModalComponent {
     if(userOtp === '0000') {
       if(boolean){
         localStorage.setItem('Login', 'true');
-        localStorage.setItem('userId',this.storeUserId);
+        localStorage.setItem('userId',JSON.stringify(this.storeUserData));
         location.reload();
       } else {
         const data = {
@@ -137,7 +137,6 @@ export class LoginModalComponent {
         this.appservice.postUserDataForRegister(data).subscribe(
           (response) => {
             // this.router.navigate(['/tees']);
-            console.log(response,'response');
             localStorage.setItem('Login', 'true');
             localStorage.setItem('userId',response.result._id);
             location.reload();
@@ -172,7 +171,7 @@ export class LoginModalComponent {
           this.myLoginForm.controls['number'].setErrors(null);
           this.numberExists = false;
           this.sendOtp = true;
-          this.storeUserId = response.data[0]._id;
+          this.storeUserData = response.data[0];
         }
       },
       (error) => { console.log(error); }
