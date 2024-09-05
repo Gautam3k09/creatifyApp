@@ -4,30 +4,33 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
   selector: 'app-setting-page',
   standalone: true,
-  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule],
+  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,NgxUiLoaderModule],
   templateUrl: './setting-page.component.html',
   styleUrl: './setting-page.component.css'
 })
 export class SettingPageComponent {
   myForm!: FormGroup;
-  userData: any;
+  userData: any = '';
   formEdit:any = true;
   saveBtn:any = 'edit';
-  constructor(private fb: FormBuilder,private router: Router) {}
+  constructor(private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService) {}
 
   ngOnInit() {
+    this.ngxLoader.start();
     let userData : any = (localStorage.getItem('userId'));
-    userData = JSON.parse(userData);
-    console.log(userData);
+    this.userData = JSON.parse(userData);
+    this.ngxLoader.stop();
     this.myForm = this.fb.group({
       name: [{value: userData.user_Name, disabled: this.formEdit}, Validators.required],
       number: [{value: userData.user_Number, disabled: this.formEdit}, [Validators.required]],
       address: [{value: 'asd', disabled: this.formEdit}, [Validators.required, Validators.minLength(15)]],
     });
+    
   }
 
   onSubmit(form: FormGroup) {
