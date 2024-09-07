@@ -138,7 +138,7 @@ export class LoginModalComponent {
           (response) => {
             // this.router.navigate(['/tees']);
             localStorage.setItem('Login', 'true');
-            localStorage.setItem('userId',response.result._id);
+            localStorage.setItem('userId',response.result);
             location.reload();
           },
           (error) => {

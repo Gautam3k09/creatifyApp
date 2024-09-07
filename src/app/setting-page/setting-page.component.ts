@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
+import { AppServiceService } from '../app-service.service';
 
 @Component({
   selector: 'app-setting-page',
@@ -18,17 +19,23 @@ export class SettingPageComponent {
   userData: any = '';
   formEdit:any = true;
   saveBtn:any = 'edit';
-  constructor(private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService) {}
+  activeTab : string = 'profile';
+  merchAccount:string = 'Normal';
+  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService) {}
 
   ngOnInit() {
     this.ngxLoader.start();
     let userData : any = (localStorage.getItem('userId'));
     this.userData = JSON.parse(userData);
     this.ngxLoader.stop();
+    // this.merchAccount = this.userData
+    console.log(this.userData,'here')
     this.myForm = this.fb.group({
-      name: [{value: userData.user_Name, disabled: this.formEdit}, Validators.required],
-      number: [{value: userData.user_Number, disabled: this.formEdit}, [Validators.required]],
-      address: [{value: 'asd', disabled: this.formEdit}, [Validators.required, Validators.minLength(15)]],
+      building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
+      area: [this.userData.user_Address[0] ? this.userData.user_Address[0].area : ''],
+      landmark: [this.userData.user_Address[0] ? this.userData.user_Address[0].landmark : ''],
+      city: [this.userData.user_Address[0] ? this.userData.user_Address[0].city : ''],
+      pincode: [this.userData.user_Address[0] ? this.userData.user_Address[0].pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     });
     
   }
@@ -58,5 +65,42 @@ export class SettingPageComponent {
       this.myForm.controls['address'].disable();
       this.myForm.controls['name'].disable();
     }
+  }
+
+  AddOrUpdateAddress() { 
+    this.ngxLoader.start();
+    let data = {
+      area : this.myForm.value.area,
+      building : this.myForm.value.building,
+      city :  this.myForm.value.city,
+      landmark :  this.myForm.value.landmark,
+      pincode :  this.myForm.value.pincode,
+      name: this.userData.user_Name,
+    }
+    this.appservice.addUpdateAdress(data).subscribe((response) => {
+      if(response && response.status) {
+        window.localStorage.removeItem('userId');
+        this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
+          localStorage.setItem('userId',JSON.stringify(response.data[0]));
+          let userData : any = (localStorage.getItem('userId'));
+          this.userData = JSON.parse(userData);
+          this.ngxLoader.stop();
+        })
+      } else {
+        console.log('Address not updated');
+      }
+    });
+  }
+
+  changeTab(tab: string) {
+    this.activeTab = tab;
+  }
+
+  updateMerch(){
+    this.appservice.updateRole({name: this.userData.user_Name}).subscribe((response) => {
+      if(response.status){
+        this.merchAccount = 'Merch'
+      }
+    });
   }
 }

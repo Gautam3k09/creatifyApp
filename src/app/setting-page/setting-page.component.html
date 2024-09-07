@@ -4,102 +4,100 @@
     <div class="container">
         <div class="d-flex align-items-center sidebar" >
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</button>
-              <button class="nav-link  sideButton" id="v-pills-your-tees-tab" data-bs-toggle="pill" data-bs-target="#v-pills-your-tees" type="button" role="tab" aria-controls="v-pills-your-tees" aria-selected="false">Your Tees</button>
-              <button class="nav-link sideButton" id="v-pills-Payout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-controls="v-pills-Payout" aria-selected="false">Payout</button>
+              <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')">Profile</button>
+              <button class="nav-link  sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('merch')">Merch</button>
+              <button class="nav-link sideButton" id="v-pills-Payout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-controls="v-pills-Payout" aria-selected="false" (click)="changeTab('profile')">Payout</button>
               <button class="nav-link sideButton" id="v-pills-Payout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-controls="v-pills-Payout" aria-selected="false" (click)="logout()">Logout</button>
             </div>
 
              <!-- content from here  -->
             
-            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-              <div class="content-container">
-                <div class="profile-title">
-                  Profile Information
-                </div>
-                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                  <div class="InfoForm">
-                    <div>
-                      Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Name}}
-                    </div>           
-                    <div>
-                      Number &nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Number}}
-                    </div>             
+
+              <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <div class="content-container">
+                  <div *ngIf="this.activeTab == 'profile'">
+                    <div class="profile-title">
+                      Profile Information
+                    </div>
+                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                      <div class="InfoForm">
+                        <div>
+                          Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Name}}
+                        </div>           
+                        <div>
+                          Number &nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Number}}
+                        </div>             
+                      </div>
+                    </div>
+                    <div class="profile-title">
+                      Address
+                    </div>
+                    <div class="addressForm">
+                      <form [formGroup]="myForm">
+                        <div class="Building">
+                          <label>  Flat, House no., Building, Apartment , Street </label>
+                          <div class="input">
+                            <input formControlName="building" [disabled]="formEdit">
+                          </div>
+                        </div>
+                        <div class="Area">
+                          <label> Area, Sector, town/city </label>
+                          <div class="input">
+                            <input formControlName="area" [disabled]="formEdit">
+                          </div>
+                        </div>
+                        <div class="LandMark">
+                          <label> Landmark </label>
+                          <div class="input">
+                            <input formControlName="landmark" [disabled]="formEdit" placeholder="E.g Near appolo hospital - dombivli(e)" >
+                          </div>
+                        </div>
+                        <div class="flex">
+                          <div class="stateDiv" >
+                            <label>
+                              State
+                            </label>
+                            <div class="input-half">
+                              <input formControlName="city" [disabled]="formEdit" >
+                            </div>
+                          </div>
+                          <div class="pincode">
+                            <label>
+                              pincode
+                            </label>
+                            <div class="input-half">
+                              <input type="number"  onpaste="return false;" onKeyPress="if(this.value.length>=6) return false;" formControlName="pincode" [disabled]="formEdit" >
+                            </div>
+                          </div>
+                        </div>
+                        <div class="text-center mt-4" style="margin-left: -3vw;">  
+                          <button type="submit" [disabled]="myForm.invalid" (click)="AddOrUpdateAddress()">Update</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div *ngIf="this.activeTab == 'merch'">
+                    <div *ngIf="this.merchAccount == 'Normal';else merchArea">
+                      <div class="profile-title">
+                        Merch Tools
+                      </div>
+                      <div class="tab-pane fade show active " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <div class="addressArea">
+                          Upgrade your Account to merch account and Start Selling your Creatives
+                          <div class="text-center mt-4" style="margin-left: -3vw;">  
+                            <button type="submit" [disabled]="myForm.invalid" (click)="updateMerch()">Update</button>
+                          </div>   
+                        </div>
+                      </div>
+                    </div>
+                    <ng-template #merchArea>
+                      asd
+                    </ng-template>
                   </div>
                 </div>
-                <div class="profile-title">
-                  Address
-                </div>
-                <div class="addressForm">
-                  <form [formGroup]="myForm">
-                    <div class="">
-                      <label>
-                        Flat, House no., Building, Company, Apartment
-                      </label>
-                      <div class="input">
-                        <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
-                        <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
-                          Please provide a name.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="">
-                      <label>
-                        Area, Street, Sector, Village
-                      </label>
-                      <div class="input">
-                        <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
-                        <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
-                          Please provide a name.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="">
-                      <label>
-                        LandMark
-                      </label>
-                      <div class="input">
-                        <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
-                        <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
-                          Please provide a name.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="">
-                      <label>
-                        LandMark
-                      </label>
-                      <div class="input">
-                        <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
-                        <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
-                          Please provide a name.
-                        </div>
-                      </div>
-                      <label>
-                        LandMark
-                      </label>
-                      <div class="input">
-                        <input formControlName="name" [disabled]="formEdit" placeholder="Your name">
-                        <div *ngIf="myForm.get('name')?.invalid && (myForm.get('name')?.dirty || myForm.get('name')?.touched)">
-                          Please provide a name.
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
               </div>
-            </div>
-
-           <!-- your Tees  -->
-            <div class="tab-pane fade" id="v-pills-your-tees" role="tabpanel" aria-labelledby="v-pills-your-tees-tab">
-                your Tees
-            </div>
-
-              <!-- payout -->
-            <div class="tab-pane fade" id="v-pills-Payout" role="tabpanel" aria-labelledby="v-pills-Payout-tab">
-                payout
-            </div>
-            </div>
+            
+        </div>
     </div>
     
     <!-- <div class="profile-title">

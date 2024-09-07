@@ -22,6 +22,14 @@ export class AppServiceService {
   checkUserName(data:any):Observable<any> {
     return this.http.post(`${this.serverUrl}/checkUserName`,data);
   }
+  
+  addUpdateAdress(data:any):Observable<any> {
+    return this.http.post(`${this.serverUrl}/add-update-address`,data);
+  }
+
+  updateRole(data:any):Observable<any> {
+    return this.http.post(`${this.serverUrl}/update-role`,data);
+  }
 
   //bill api
   postImage(data:any): Observable<any> {

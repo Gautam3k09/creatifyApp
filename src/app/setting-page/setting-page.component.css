@@ -64,6 +64,17 @@
     }
   }
 
+  .flex{
+    display: flex;
+    justify-content: space-around;
+    width: 47vw;
+  }
+
+  .addressArea{
+    text-align: center;
+    margin-top: 20vh;
+  }
+
 
 /* @media(max-width:600px) {
   .content-container {
