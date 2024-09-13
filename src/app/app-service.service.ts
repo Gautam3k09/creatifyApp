@@ -50,4 +50,21 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/paymentOrder`,data);
   }
 
+  // coupon api
+  createCoupon(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/create-coupon`,data);
+  }
+
+  getCoupon(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/get-coupon`,data);
+  }
+
+  deleteCoupon(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/delete-coupon/`,data);
+  }
+
+  //help api
+  postQuestion(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/post-question`,data);
+  }
 }

@@ -60,8 +60,8 @@ export class YourTeesComponent {
 
   loadimage(data:any) {
     const img = new Image();
-    const boxWidth : any = this.currentCanvas.width;
-    const boxHeight : any = this.currentCanvas.height;
+    const boxWidth : any = this.currentCanvas?.width;
+    const boxHeight : any = this.currentCanvas?.height;
     let newWidth, newHeight;
     if (1 > boxWidth / boxHeight) { // Image is wider
       newWidth = boxWidth;
@@ -72,19 +72,24 @@ export class YourTeesComponent {
     }
     img.src = data.teeName_frontsideImg;
     img.onload = () => {
-      this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
-      this.currentIndex = this.currentIndex + 1;
-      this.loopIterator();
+      if(this.ctx){
+
+        this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
+        this.currentIndex = this.currentIndex + 1;
+        this.loopIterator();
+      }
     }
   }
 
   getTees() { 
-    console.log('here')
+    let id : any = localStorage.getItem('userId');
+    id = JSON.parse(id);
+    console.log(id,'asd')
     const data = {
-      id : localStorage.getItem('userId')
+      _id : id._id
     }
     this.appservice.getTees(data).subscribe((result)=> {
-      this.teeDatas = result;
+      this.teeDatas = result.data;
     })
   }
 

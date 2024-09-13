@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import { HeaderPageComponent } from '../header-page/header-page.component';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 import { AppServiceService } from '../app-service.service';
+import { MatDialogConfig, MatDialogRef,MatDialog } from '@angular/material/dialog';
+import { ConfirmationBoxComponent } from '../confirmation-box/confirmation-box.component';
 
 @Component({
   selector: 'app-setting-page',
   standalone: true,
-  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,NgxUiLoaderModule],
+  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,FormsModule,NgxUiLoaderModule,ConfirmationBoxComponent],
+  // providers: [AppServiceService],
   templateUrl: './setting-page.component.html',
   styleUrl: './setting-page.component.css'
 })
@@ -21,15 +24,21 @@ export class SettingPageComponent {
   saveBtn:any = 'edit';
   activeTab : string = 'profile';
   merchAccount:string = 'Normal';
-  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService) {}
+  couponOff : number = 5;
+  couponName: string = '';
+  couponAvailable : boolean = false;
+  dialogConfig = new MatDialogConfig();
+  modalDialog: MatDialogRef<ConfirmationBoxComponent, any> | undefined;
+  queryQuetions: any = '';
+
+  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog) {}
 
   ngOnInit() {
     this.ngxLoader.start();
-    let userData : any = (localStorage.getItem('userId'));
-    this.userData = JSON.parse(userData);
+    this.parseLocalstorage();
     this.ngxLoader.stop();
-    // this.merchAccount = this.userData
     console.log(this.userData,'here')
+    this.merchAccount = this.userData.user_Role;
     this.myForm = this.fb.group({
       building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
       area: [this.userData.user_Address[0] ? this.userData.user_Address[0].area : ''],
@@ -40,6 +49,11 @@ export class SettingPageComponent {
     
   }
 
+  parseLocalstorage(){
+    let userData : any = (localStorage.getItem('userId'));
+    this.userData = JSON.parse(userData);
+  }
+
   onSubmit(form: FormGroup) {
     console.log('Valid?', form.valid); // true or false
     console.log('Name', form.value.name);
@@ -47,11 +61,7 @@ export class SettingPageComponent {
     console.log('Address', form.value.address);
   }
 
-  logout(){
-    localStorage.removeItem("Login");
-    this.router.navigate(['']);
-  }
-
+  
   edit(flag:any) {
     console.log(flag);  // edit or save
     if(flag == 'edit'){
@@ -66,7 +76,14 @@ export class SettingPageComponent {
       this.myForm.controls['name'].disable();
     }
   }
-
+  
+  updateLocalStorage(){
+    this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
+      localStorage.setItem('userId',JSON.stringify(response.data[0]));
+      this.parseLocalstorage();
+    })
+    
+  }
   AddOrUpdateAddress() { 
     this.ngxLoader.start();
     let data = {
@@ -80,27 +97,111 @@ export class SettingPageComponent {
     this.appservice.addUpdateAdress(data).subscribe((response) => {
       if(response && response.status) {
         window.localStorage.removeItem('userId');
-        this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
-          localStorage.setItem('userId',JSON.stringify(response.data[0]));
-          let userData : any = (localStorage.getItem('userId'));
-          this.userData = JSON.parse(userData);
-          this.ngxLoader.stop();
-        })
+        this.updateLocalStorage()
+        this.ngxLoader.stop();
       } else {
         console.log('Address not updated');
       }
     });
   }
-
+  
   changeTab(tab: string) {
     this.activeTab = tab;
+    if(this.activeTab == 'merch') {
+      this.appservice.getCoupon({data:this.userData._id}).subscribe((response) => {
+        if(response.status && response.data && response.data.length > 0) {
+          console.log('here')
+          this.couponName = response.data[0].coupon_Name;
+          this.couponOff = response.data[0].coupon_Off;
+          this.couponAvailable = true;
+        } else{
+          this.couponAvailable = false;
+        }
+      })
+    }
   }
-
+  
   updateMerch(){
     this.appservice.updateRole({name: this.userData.user_Name}).subscribe((response) => {
       if(response.status){
         this.merchAccount = 'Merch'
+        this.updateLocalStorage();
       }
     });
   }
+  
+  addCoupon(){
+    console.log(this.couponName,this.couponOff,'asd')
+    let data = {
+      name : this.couponName,
+      off: this.couponOff,
+      _id : this.userData._id
+    };
+    this.appservice.createCoupon(data).subscribe((response) => {
+      if(response.status){
+        console.log('Coupon added or updated successfully');
+        this.couponAvailable = true;
+      }
+    });
+  }
+  
+  removeCoupon(){
+    this.appservice.deleteCoupon({id : this.userData._id}).subscribe((response) => {
+      if(response.status){
+        console.log('Coupon added or updated successfully');
+        this.couponName = '';
+        this.couponOff = 5;
+        this.couponAvailable = false;
+      } else{
+        console.log('Coupon not removed');
+      }
+    });
+  }
+  
+  openModal(data:any){
+    this.modalDialog = this.matDialog.open(ConfirmationBoxComponent,  {
+      width: '350px',
+      height: '200px',
+      data: data
+    });
+  }
+    
+  withdraw() {
+    let data :any = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to ' + '35$' + ' withdraw?',
+      for : 'withdraw'
+    } 
+    this.openModal(data);
+  }
+  onKeyUp(event: any) { 
+    this.queryQuetions = event.target.value;
+  }
+
+  postQuestion(){
+    let data = {
+      id: this.userData._id,
+      question: this.queryQuetions
+    }
+    this.appservice.postQuestion(data).subscribe((response) => {
+      if(response){
+        let textarea : any = document.querySelector('textarea');
+        textarea.value = '';
+      } else{
+
+      }
+    });
+  }
+  
+  logout(){
+    let data :any = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to Logout',
+      for : 'logout'
+    };
+    this.openModal(data);
+  }
+
+
 }
+  

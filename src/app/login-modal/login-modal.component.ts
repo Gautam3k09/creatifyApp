@@ -22,7 +22,7 @@ export class LoginModalComponent {
   otpForm!: FormGroup;
   mobileNumber: any ='';
   registerNumber: any='';
-  // mobileNumberVerified: boolean = false;
+  // mobileNumberVerified: boolean = false;g
   sendOtp :any = false;
   sendOtpForRegister: boolean = false;
   numberExists: any ;
