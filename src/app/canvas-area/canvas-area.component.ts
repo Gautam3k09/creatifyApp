@@ -365,9 +365,10 @@ export class CanvasAreaComponent {
   }
   
   uploadImage() : any{
-    const id = localStorage.getItem('userId');
+    let id : any= localStorage.getItem('userId');
+    id = JSON.parse(id);
     const data = {
-      id :  id,
+      id :  id._id,
       price : this.teeDetailForm.value.price,
       teeName : this.teeDetailForm.value.teeName,
       frontBase64 :  this.base64DataFrontSide,

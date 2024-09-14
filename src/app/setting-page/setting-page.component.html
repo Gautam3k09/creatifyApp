@@ -130,7 +130,7 @@
                           </div>   
                         </ng-template> 
                         <div class="withdraw" >
-                          <input  (ngModel)="couponOff" placeholder="Enter upi Id"><button type="submit" (click)="withdraw()">withdraw</button> 
+                          <input [(ngModel)]="upiId" placeholder="Enter upi Id" [ngModelOptions]="{standalone: true}"><button type="submit" [disabled]="upiId.length < 15" (click)="withdraw()">withdraw</button> 
                          </div>
                       </div>
                     </div>
@@ -143,10 +143,10 @@
                   <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                     <div class="InfoForm">
                       <div class="help" >
-                        <textarea  type="text" (keyup)="onKeyUp($event)"rows="2" cols="50" placeholder="Raise A Concern/Query"></textarea>
+                        <textarea  id="textarea" type="text" (keyup)="onKeyUp($event)"rows="2" cols="50" placeholder="Raise A Concern/Query"></textarea>
                       </div>         
                       <div class="raiseBtn">
-                      <button type="submit" (click)="postQuestion()">Raise</button>
+                      <button type="submit" [disabled]="queryQuetions.length < 15" (click)="postQuestion()">Raise</button>
                       </div>
                     </div>
                   </div>

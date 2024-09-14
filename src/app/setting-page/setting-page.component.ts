@@ -30,6 +30,7 @@ export class SettingPageComponent {
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<ConfirmationBoxComponent, any> | undefined;
   queryQuetions: any = '';
+  upiId:string ='';
 
   constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog) {}
 
@@ -164,13 +165,30 @@ export class SettingPageComponent {
       height: '200px',
       data: data
     });
+
+    this.modalDialog.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if(result == 'withdraw'){
+        let upiData = {
+          id: this.userData._id,
+          question: this.upiId,
+          from: 'withdraw'
+        } 
+        this.postQuestionApi(upiData);
+      }
+    });
   }
     
   withdraw() {
     let data :any = {
       title: 'Confirmation',
       message: 'Are you sure you want to ' + '35$' + ' withdraw?',
-      for : 'withdraw'
+      for : 'withdraw',
+      input: {
+        id: this.userData._id,
+        question: this.upiId,
+        from: 'withdraw'
+      }
     } 
     this.openModal(data);
   }
@@ -178,19 +196,32 @@ export class SettingPageComponent {
     this.queryQuetions = event.target.value;
   }
 
-  postQuestion(){
-    let data = {
-      id: this.userData._id,
-      question: this.queryQuetions
-    }
+  postQuestionApi(data:any){
     this.appservice.postQuestion(data).subscribe((response) => {
       if(response){
-        let textarea : any = document.querySelector('textarea');
-        textarea.value = '';
+        if(data.from == 'withdraw'){
+          this.upiId = '';
+        } else {
+          console.log('Question posted successfully');
+          let textarea : any = document.getElementById('textarea');
+          if(textarea){
+            textarea.value = '';
+          } 
+          this.queryQuetions = ''
+        }
       } else{
 
       }
     });
+  }
+
+  postQuestion(){
+    let data = {
+      id: this.userData._id,
+      question: this.queryQuetions,
+      from: 'questions'
+    }
+    this.postQuestionApi(data);
   }
   
   logout(){

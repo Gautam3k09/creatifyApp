@@ -1,17 +1,19 @@
 *{
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-body {
-  /* height: 100%; */
-  background-image: url('../../assets/blue-purple.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin: 0;
-  overflow: auto;
-  color: white;
+
+
+.container {
+    height:100%;
+    width: 100%;
+    overflow: auto;
+    /* margin: auto; */
+    margin-top: 4%;
+}
+.height{
+  height: auto;
 }
 
 .noTees{
@@ -50,9 +52,8 @@ body {
   margin: 3%;
   text-align: center
 }
-.imageContainer {
-  
 
+.imageContainer {
   img {
     height: 50%;
   }
@@ -85,4 +86,26 @@ body {
   body{
     height: auto;
   }
+}
+
+/* scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Style the scrollbar track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: none;
+  border-radius: 10px;
+}
+
+/* Style the scrollbar thumb */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+/* Style the thumb on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #999;
 }
