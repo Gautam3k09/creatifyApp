@@ -49,6 +49,10 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/get-all-tees`,data);
   }
 
+  getOnetee(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/get-one-tee`,data);
+  }
+
   // razor api
   createOrder(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/paymentOrder`,data);

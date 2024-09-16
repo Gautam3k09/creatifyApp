@@ -12,7 +12,6 @@ import { LoginModalComponent } from '../login-modal/login-modal.component';
   styleUrl: './header-page.component.css'
 })
 export class HeaderPageComponent {
-  // ActiveTab : any = '';
   sidebarClose : any = false;
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();
@@ -22,6 +21,7 @@ export class HeaderPageComponent {
 
   ngOnInit(){
     this.isLoggedIn  = localStorage.getItem('Login');
+    console.log('isLoggedIn', this.isLoggedIn);
     let data : any = (localStorage.getItem('userId'));
     data = JSON.parse(data);
   }

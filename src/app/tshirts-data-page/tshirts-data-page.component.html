@@ -1,30 +1,41 @@
-<div class="container custom-scrollbar">
-    <div class="height row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div *ngFor="let teeData of teeDatas; let i = index">
-            <div class="col" >
-                <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
-                    <div>
-                        <button type="button" class="RotateBtn btn btn-circle btn-primary">flip</button>
-                        <!-- (click)="navigateBuyPage(teeData)"  (click)="deleteTees(teeData._id)" -->
-                    </div>
-                    <div class="row g-0" >
-                        <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
-                            <canvas #canvas class="canvas" [id]="'teeData' + i" width="105" height="100"></canvas>
+<ngx-ui-loader ></ngx-ui-loader>
+<body>
+    <div class="container custom-scrollbar">
+        <div class="height row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div *ngFor="let teeData of teeDatas; let i = index">
+                <div class="col" >
+                    <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
+                        <div class="helperButton">
+                            <div class="delete" *ngIf="from == 'personal'">
+                                <button title="Delete" type="button" class="RotateBtn btn btn-circle btn-danger" (click)="deleteTees(teeData._id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="share">
+                                <button title="Share" type="button" class="RotateBtn btn btn-circle btn-dark" (click)="copytext(teeData._id)"><i class="fa-solid fa-share"></i></button>
+                            </div>
                         </div>
-                        <!-- <div class="col-md-6"> -->
-                            <div class="card-body text-center">
-                                <p class="card-text">Design Name</p>
-                                <p>status : Checking</p>
-                                <!-- <span aria-hidden="true">
-                                    <span class="">&#8377;</span>
-                                    <span class="display-6">500</span>
-                                    <span>M.R.P</span>
-                                </span> -->
+                        <div class="row g-0" (click)="navigateBuyPage(teeData)">
+                            <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
+                                <canvas #canvas class="canvas" [id]="'teeData' + i" width="105" height="100"></canvas>
+                            </div>
+                            <!-- <div class="col-md-6"> -->
+                                <div class="card-body text-center">
+                                    <p class="card-text">Design Name</p>
+                                    <p *ngIf="from == 'personal'">status : Checking</p>
+                                    <!-- <span aria-hidden="true">
+                                        <span class="">&#8377;</span>
+                                        <span class="display-6">500</span>
+                                        <span>M.R.P</span>
+                                    </span> -->
+                            </div>
+                            <!-- </div> -->
                         </div>
-                        <!-- </div> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+</body>
+<div class="loadMore" *ngIf="from == 'common' && !DataFetched">
+    <button type="button" class="btn btn-primary px-3 py-2" (click)="getTees()">Load more</button>
 </div>

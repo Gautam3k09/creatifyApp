@@ -17,6 +17,6 @@ export const routes: Routes = [
     { path: 'test', component:  TestPageComponent},
     { path: 'canvas',component: CanvasAreaComponent},
     { path: 'settings', component: SettingPageComponent},
-    { path: 'buy', component: BuyPageComponent},
+    { path: 'buy/:userId', component: BuyPageComponent},
     { path: 'merch',component: MerchHomePageComponent},
 ];

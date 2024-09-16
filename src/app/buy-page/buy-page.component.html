@@ -10,7 +10,7 @@
             </div>
             <div class="left-side">
                 <div class="tee-Name">
-                    {{data.teeName_Name}}
+                    {{data?.teeName_Name}}
                 </div>
                 <div class="mb-4">
                   <p class="mb-0 colorText">Colors
@@ -29,7 +29,7 @@
                   </p>
                 </div>
                 <div class="mb-4">
-                  <p class="mb-0 price">Price: {{data.teeName_Price}} Rs</p>
+                  <p class="mb-0 price">Price: {{data?.teeName_Price}} Rs</p>
                 </div>
                 <div class="mb-4 buyButton">
                   <button type="button" style="width: 60%;"class=" btn btn-circle btn-primary mx-2" (click)="createRazorPayOrder()">Buy Now</button>

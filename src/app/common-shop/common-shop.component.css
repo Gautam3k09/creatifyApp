@@ -17,7 +17,7 @@ body {
 .container {
     height: 80%;
     margin: auto;
-    margin-top: 4%;
+    margin-top: 2%;
 }
 
 /* scroll bar */
@@ -39,5 +39,5 @@ body {
 
 /* Style the thumb on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-background: #999;
+    background: #999;
 }

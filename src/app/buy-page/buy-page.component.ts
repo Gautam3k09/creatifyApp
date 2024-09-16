@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { WindowRefService } from '../window-ref.service';
 import { AppServiceService } from '../app-service.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-buy-page',
@@ -15,26 +16,44 @@ import { AppServiceService } from '../app-service.service';
   providers: [WindowRefService,AppServiceService],
 })
 export class BuyPageComponent implements OnInit  {
-  @Input() data: any;
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   globalCanvas : any;
   globalctx: any;
   imageSideFront :any = true;
-  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService) {
+  tshirtId: any;
+  data : any
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,) {
     
   }
   ngOnInit() {
-    this.data = history.state?.data;
+    this.route.params.subscribe((params:any) => {
+      this.tshirtId = params['userId'];
+    });
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.globalctx= this.globalCanvas.getContext("2d");
-    this.loadimage()
-    console.log(this.data)
+    this.getTee();
   }
   changeColor(string: string) {
     console.log(string,'string')
   }
   
+  getTee(){
+    let data1 = String(this.tshirtId);
+    console.log(`"${data1}"`,'tshirtId')
+    let data = {
+      _id :  this.tshirtId ,
+    }
+    this.appservice.getOnetee(data).subscribe((result) => {
+      if(result && result.data != null){
+        this.data = result.data;
+        this.loadimage()
+      } else {
+        this.router.navigate(['']);
+      }
+    })
+  }
+
   loadimage() {
     this.globalctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     const img = new Image();
@@ -48,7 +67,7 @@ export class BuyPageComponent implements OnInit  {
       newHeight = boxHeight;
       newWidth = boxHeight * 1;
     }
-    img.src = this.imageSideFront ? this.data.teeName_frontsideImg: this.data.teeName_backsideImg;
+    img.src = this.imageSideFront ? this.data?.teeName_frontsideImg: this.data?.teeName_backsideImg;
     img.onload = () => {
       this.globalctx.drawImage(img, 0, 0, newWidth, newHeight);
     }
@@ -100,7 +119,7 @@ export class BuyPageComponent implements OnInit  {
         contact: '9511830363',
       },
       notes: {
-        teeName: this.data.teeName_Name,
+        teeName: this.data?.teeName_Name,
       },
       theme: {
         color: '#3399cc',
