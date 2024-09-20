@@ -46,8 +46,7 @@ export class SettingPageComponent {
       landmark: [this.userData.user_Address[0] ? this.userData.user_Address[0].landmark : ''],
       city: [this.userData.user_Address[0] ? this.userData.user_Address[0].city : ''],
       pincode: [this.userData.user_Address[0] ? this.userData.user_Address[0].pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
-    });
-    
+    }); 
   }
 
   parseLocalstorage(){

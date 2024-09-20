@@ -1,5 +1,5 @@
 <body>
-    <nav *ngIf="!merchPage; else merchHeader">
+    <nav *ngIf="!merchPage && visit == ''; else merchHeader">
         <ul class="sidebar">
             <li class="tabs1" (click)="showSidebar('string')">x</li>
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
@@ -22,20 +22,7 @@
     <ng-template #merchHeader>
         <nav>
             <ul>
-                <li class="tabs" (click)="onDivClick('merch')">C/User_name</li>
-                <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-                <li class="tabs hideOnDesktop" *ngIf="isLoggedIn;" (click)="onDivClick('/settings')">
-                    <i class="fa fa-cog" aria-hidden="true"></i>
-                </li>
-                <li class="tabs hideOnDesktop" *ngIf="!isLoggedIn;" (click)="openModal()">
-                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                </li>
-                <li class="tabs hideOnMobile" *ngIf="isLoggedIn;" (click)="onDivClick('/settings')">
-                    <i class="fa fa-cog" aria-hidden="true"></i>
-                </li>
-                <li class="tabs hideOnMobile" *ngIf="!isLoggedIn;" (click)="openModal()">
-                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                </li>
+                <li class="tabs" style="margin-right: 0px !important;" (click)="onDivClick(merchName)">C/{{merchName}}</li>
             </ul>
         </nav>
     </ng-template>

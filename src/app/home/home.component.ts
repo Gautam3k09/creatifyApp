@@ -20,6 +20,9 @@ export class HomeComponent {
     this.isLogin = localStorage.getItem('Login');
   }
   
+  ngOnInit(){
+    sessionStorage.setItem("visit", "");
+  }
   openCanvas() {
     if(!this.isLogin) {
       this.openModal();

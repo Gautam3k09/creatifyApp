@@ -30,6 +30,9 @@ export class AppServiceService {
   updateRole(data:any):Observable<any> {
     return this.http.post(`${this.serverUrl}/update-role`,data);
   }
+  checkRole(data:any):Observable<any> {
+    return this.http.post(`${this.serverUrl}/check-role`,data);
+  }
 
   //bill api
   postImage(data:any): Observable<any> {

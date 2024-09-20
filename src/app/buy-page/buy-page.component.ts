@@ -22,7 +22,7 @@ export class BuyPageComponent implements OnInit  {
   globalctx: any;
   imageSideFront :any = true;
   tshirtId: any;
-  data : any
+  data : any;
   constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,) {
     
   }

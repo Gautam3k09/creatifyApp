@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -16,21 +16,28 @@ export class HeaderPageComponent {
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-  merchPage: boolean = false;
+  visit : any = '';
+  @Input() merchPage: any = false;
+  @Input() merchName: any = '';
   constructor(private router: Router,public matDialog: MatDialog) { }
 
   ngOnInit(){
+    if(this.merchPage == 'merchant') this.merchPage = true
     this.isLoggedIn  = localStorage.getItem('Login');
     console.log('isLoggedIn', this.isLoggedIn);
     let data : any = (localStorage.getItem('userId'));
     data = JSON.parse(data);
+    this.visit = sessionStorage.getItem("visit");
+    if(this.visit != '') this.merchName = this.visit
   }
   
   onDivClick(string:any) {
-    // this.ActiveTab = string;
+    if(!this.merchPage && this.visit == '') {
+      this.router.navigate([string]);
+    } else {
+      this.router.navigate(['/'+ string + '/merch']);
+    }
     console.log(string,'string');
-    this.router.navigate([string]);
-    // this.showSidebar(string);
   }
 
   showSidebar(string = '') {

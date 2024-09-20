@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { SettingPageComponent } from './setting-page/setting-page.component';
 import { BuyPageComponent } from './buy-page/buy-page.component';
 import {MerchHomePageComponent } from './merch-home-page/merch-home-page.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
     // { path: '', component: HeaderPageComponent},
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'canvas',component: CanvasAreaComponent},
     { path: 'settings', component: SettingPageComponent},
     { path: 'buy/:userId', component: BuyPageComponent},
-    { path: 'merch',component: MerchHomePageComponent},
+    { path: ':userName/merch/:userId',component: MerchHomePageComponent},
+    { path: '**', component: NotFoundComponent } 
 ];

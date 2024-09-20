@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -55,6 +55,11 @@ export class LoginModalComponent {
   }
 
   ngOnInit() {
+  }
+
+  @HostListener('input', ['$event']) onInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    inputElement.value = inputElement.value.replace(/\s/g, '');
   }
 
   onSubmit(form: FormGroup) {

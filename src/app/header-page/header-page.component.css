@@ -17,7 +17,7 @@ nav ul{
     width: 100%;
     list-style: none;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
 }

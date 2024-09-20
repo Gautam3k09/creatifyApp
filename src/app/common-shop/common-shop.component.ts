@@ -1,6 +1,7 @@
-import { Component} from '@angular/core';
+import { Component, input, Input} from '@angular/core';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { TshirtsDataPageComponent } from "../tshirts-data-page/tshirts-data-page.component";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-common-shop',
   standalone: true,
@@ -9,13 +10,19 @@ import { TshirtsDataPageComponent } from "../tshirts-data-page/tshirts-data-page
   styleUrl: './common-shop.component.css'
 })
 export class CommonShopComponent {
+  
+  @Input() fromMerchLink: any ;
+  @Input() merchName: any;
 
-  constructor(){
+  constructor(public router:Router){
 
   }
 
   ngOnInit(){
-    // this.getTees();
+    if(!this.merchName) this.merchName = 'common' 
+    if(localStorage.getItem('userId')!= null && sessionStorage.getItem("visit") != '') {
+      this.router.navigate(['']);
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { AppServiceService } from '../app-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
@@ -13,6 +13,7 @@ import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 })
 export class TshirtsDataPageComponent {
   @Input() from: any;
+  userId: any;
   img : boolean = false;
   teeDatas : any =[];
   currentIndex : number = 0;
@@ -24,8 +25,8 @@ export class TshirtsDataPageComponent {
   canvasRef!: ElementRef<HTMLCanvasElement>;  
   DataFetched : boolean = false;
   localData : any;
-  constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,){
-
+  constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute){
+    this.userId = route.snapshot.params['userId']
   }
 
   ngOnInit(){
@@ -59,9 +60,16 @@ export class TshirtsDataPageComponent {
           this.teeDatas = this.teeDatas == ''? result.data : this.teeDatas.concat(result.data);
         }
       })
-    } else if(this.from == 'personal') {
-      const data = {
-        id : this.localData._id,
+    } else  {
+      let data : any;
+      if(this.from == 'personal') {
+        data = {
+          id : this.localData._id,
+        }
+      } else {
+        data = {
+          id : this.userId,
+        }
       }
       this.appservice.getTees(data).subscribe((result)=> {
         if(result){
@@ -120,7 +128,7 @@ export class TshirtsDataPageComponent {
 
   navigateBuyPage(teeData:any) {
     console.log(teeData._id,'teedata')
-    if(localStorage.getItem('userId')!= null) {
+    if(localStorage.getItem('userId')!= null || sessionStorage.getItem("visit") != '') {
       this.router.navigate(['/buy/'+teeData._id]);
     }
   }
