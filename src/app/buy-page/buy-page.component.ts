@@ -6,11 +6,13 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { WindowRefService } from '../window-ref.service';
 import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { OrderStepperComponent } from '../order-stepper/order-stepper.component';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule],
+  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,OrderStepperComponent],
   templateUrl: './buy-page.component.html',
   styleUrl: './buy-page.component.css',
   providers: [WindowRefService,AppServiceService],
@@ -23,7 +25,9 @@ export class BuyPageComponent implements OnInit  {
   imageSideFront :any = true;
   tshirtId: any;
   data : any;
-  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,) {
+  dialogConfig = new MatDialogConfig();
+  modalDialog: MatDialogRef<OrderStepperComponent, any> | undefined;
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog) {
     
   }
   ngOnInit() {
@@ -135,5 +139,25 @@ export class BuyPageComponent implements OnInit  {
     }
     const rzp = this.winRef.nativeWindow.Razorpay(options);
     rzp.open();
+  }
+
+  openModal(){
+    this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
+      width: 'auto',
+      height: 'auto',
+      data: 'data'
+    });
+
+    this.modalDialog.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if(result == 'withdraw'){
+        // let upiData = {
+        //   id: this.userData._id,
+        //   question: this.upiId,
+        //   from: 'withdraw'
+        // } 
+        // this.postQuestionApi(upiData);
+      }
+    });
   }
 }

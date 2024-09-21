@@ -25,6 +25,8 @@ export class TshirtsDataPageComponent {
   canvasRef!: ElementRef<HTMLCanvasElement>;  
   DataFetched : boolean = false;
   localData : any;
+  canvasfrontHeight = 100;
+  canvasbackHeight = 120;
   constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute){
     this.userId = route.snapshot.params['userId']
   }
@@ -43,7 +45,7 @@ export class TshirtsDataPageComponent {
   ngAfterViewInit() {
     setTimeout(() => {
       this.loopIterator()
-    }, 1000);
+    }, 1200);
   }
 
   getTees() { 
@@ -94,8 +96,16 @@ export class TshirtsDataPageComponent {
 
   loadimage(data:any) {
     const img = new Image();
+    let boxHeight : any = ''
+    if( !data?.teeName_frontsideImg){
+      boxHeight = this.canvasbackHeight;
+      img.src = data?.teeName_backsideImg;
+    }else {
+      boxHeight = this.canvasfrontHeight;
+      img.src = data?.teeName_frontsideImg;
+    }
     const boxWidth : any = this.currentCanvas?.width;
-    const boxHeight : any = this.currentCanvas?.height;
+    console.log(boxWidth,'widh')
     let newWidth, newHeight;
     if (1 > boxWidth / boxHeight) { // Image is wider
       newWidth = boxWidth;
@@ -104,10 +114,10 @@ export class TshirtsDataPageComponent {
       newHeight = boxHeight;
       newWidth = boxHeight * 1;
     }
-    img.src = data?.teeName_frontsideImg;
+    
+    // img.src = data?.teeName_frontsideImg;
     img.onload = () => {
       if(this.ctx){
-
         this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
         this.currentIndex = this.currentIndex + 1;
         this.loopIterator();

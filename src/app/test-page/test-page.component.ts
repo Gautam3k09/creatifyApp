@@ -1,10 +1,22 @@
-import { Component } from '@angular/core';
-import { ResizedEvent } from 'angular-resize-event'
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormsModule, Validators,ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatButtonModule} from '@angular/material/button';
+import { ResizedEvent } from 'angular-resize-event';
 
 @Component({
   selector: 'app-test-page',
   standalone: true,
-  imports: [],
+  imports: [
+    MatButtonModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './test-page.component.html',
   styleUrl: './test-page.component.css'
 })
@@ -54,4 +66,13 @@ export class TestPageComponent {
       console.log('Image clicked!');
     }
   }
+  private _formBuilder = inject(FormBuilder);
+
+  firstFormGroup = this._formBuilder.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+  isLinear = false;
 }
