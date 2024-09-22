@@ -1,35 +1,89 @@
-  <mat-stepper [linear]="!isLinear" #stepper>
+  <mat-stepper [linear]="false" #stepper style="height: 420px;">
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Fill out your Address</ng-template>
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-        </mat-form-field>
         <div>
-          <button mat-button matStepperNext>Next</button>
+          <mat-form-field style="width: 100%">
+            <mat-label>Flat, House no., Building, Apartment , Street</mat-label>
+            <input matInput placeholder="Flat, House no., Building, Apartment , Street" formControlName="building" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field style="width: 45%; margin-right: 5%;">
+            <mat-label>Area, Sector, town/city</mat-label>
+            <input matInput placeholder="Area, Sector, town/city" formControlName="area" required>
+          </mat-form-field>
+          <mat-form-field style="width: 50%;">
+            <mat-label>Landmark</mat-label>
+            <input matInput placeholder="Landmark" formControlName="landmark">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field style="width: 45%; margin-right: 5%;">
+            <mat-label>State</mat-label>
+            <input matInput placeholder="State" oninput="this.value = this.value.toUpperCase()"  formControlName="city" required>
+          </mat-form-field>
+          <mat-form-field style="width: 50%;">
+            <mat-label>Pincode</mat-label>
+            <input matInput placeholder="Pincode" formControlName="pincode" required>
+          </mat-form-field>
+        </div>
+        <div style="text-align: center;">
+          <button type="button" style="width: 15%;" class="RotateBtn btn btn-circle btn-primary mx-0" [disabled]="firstFormGroup.invalid" matStepperNext>Next</button>
         </div>
       </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup" label="Order Summary">
       <form [formGroup]="secondFormGroup">
-        <mat-form-field>
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                 required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+        <div class="containerAddressGroup">
+          <div class="orderTshirtHeader">
+            <div> Buying : </div>
+            <div class="orderTshirtName">&nbsp;Naruto</div>
+          </div>
+          <hr>
+          <div>
+          <div class="orderTshirtName">Deliver To :</div>
+            <div> {{firstFormGroup.value.building}} </div>
+            <div> {{firstFormGroup.value.area}} &nbsp; {{firstFormGroup.value.landmark}} </div>
+            <div> {{firstFormGroup.value.city}} &nbsp; {{firstFormGroup.value.pincode}}</div>
+          </div>
+          <hr>
+          <div>
+            <div class="orderTshirtName">Price Details</div>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer">Price </div>
+              <div class="detailsFlexContainer">$500</div>
+            </div>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer">coins used </div>
+              <div class="detailsFlexContainer">$500</div>
+            </div>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer">Quantity</div>
+              <div class="detailsFlexContainer">5</div>
+            </div>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer">Delivery Charges</div>
+              <div class="detailsFlexContainer">$500</div>
+            </div>
+            <hr>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer orderTshirtName">Total Amount</div>
+              <div class="detailsFlexContainer orderTshirtName">$500</div>
+            </div>
+          </div>
+        </div> 
+        <div class="buttonContainer">
+          <div class="btnBack">
+            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" matStepperPrevious>Back</button>
+          </div>
+          <div class="btnCod">
+            <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" matStepperNext (click)="openModal('cod')">Proceed with COD</button>
+          </div>
+          <div class="btnOnline">
+            <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" matStepperNext (click)="createRazorPayOrder()">Instant Pay</button>
+          </div>
         </div>
       </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
     </mat-step>
   </mat-stepper>

@@ -1,0 +1,24 @@
+<div class="confirmContainer" *ngIf="fromCod; else orderPlaced">
+    <div>
+        Proceeding payment with cash on delivery will add extra 59 INR
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" (click)="placeOrder()">Proceed</button>
+    </div>
+</div>
+<ng-template #orderPlaced>
+    <div class="success-container">
+        <h1 class="monserrat-font" style="color: Grey">Thank you for your order</h1>
+        <br>
+        <div class="confirm-green-box">
+            <br>
+            <h5>ORDER CONFIRMATION</h5>
+            <p>Your order #2465 has been Placed!</p>
+            <p>Thank you for choosing CreateeFi.</p>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <button type="button" class="RotateBtn btn btn-circle btn-warning">Back to shop</button>
+        </div>
+    </div>
+</ng-template>

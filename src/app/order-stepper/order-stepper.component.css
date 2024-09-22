@@ -1,7 +1,73 @@
 .mat-stepper-horizontal {
-    margin-top: 8px;
-  }
-  
-  .mat-mdc-form-field {
-    margin-top: 16px;
-  }
+  margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+.containerAddressGroup{
+  height: 36vh;
+  overflow: auto;
+  padding: 10px;
+}
+
+.orderTshirtHeader{
+  display: flex;
+  justify-content: center;
+}
+
+.orderTshirtName{
+  font-weight: bolder;
+  font-size: 20px;
+  margin-top: -2px;
+}
+
+.detailsFlex{
+  display: flex;
+  justify-content: space-between;
+}
+
+.detailsFlexContainer{
+  display: inline;
+}
+
+.buttonContainer{
+  display: flex;
+  height: 8vh;
+  padding-top: 18px;
+  justify-content: space-around;
+}
+
+.btnBack{
+  width: auto;
+}
+
+.btnCod{
+  width: auto;
+}
+
+.btnOnline{
+  width: auto;
+}
+
+.containerAddressGroup::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Style the scrollbar track */
+.containerAddressGroup::-webkit-scrollbar-track {
+background: none;
+border-radius: 10px;
+}
+
+/* Style the scrollbar thumb */
+.containerAddressGroup::-webkit-scrollbar-thumb {
+background: #c1c1c1;
+border-radius: 10px;
+}
+
+/* Style the thumb on hover */
+.containerAddressGroup::-webkit-scrollbar-thumb:hover {
+background: #999;
+}

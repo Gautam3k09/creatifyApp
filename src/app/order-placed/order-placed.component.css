@@ -1,0 +1,34 @@
+.confirmContainer{
+    height: 420px;
+    padding: 15%;
+}
+
+.container{
+    height: auto;
+}
+
+.message-box{
+    display: flex;
+    justify-content: center;
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+  }
+  .success-container{
+    padding: 5px;
+    background: white;
+    height: 100%;
+    width: 100%;
+    box-shadow: 5px 5px 10px grey;
+    text-align: center;
+  }
+  .confirm-green-box{
+    width: 100%;
+    height: 140px;
+    background: #d7f5da;
+  }
+  
+  
+  .monserrat-font{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 2px;
+  }
