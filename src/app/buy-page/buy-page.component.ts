@@ -142,10 +142,11 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openModal(){
+    console.log(this.data)
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
       width: 'auto',
       height: 'auto',
-      data: 'data'
+      data: this.data
     });
 
     this.modalDialog.afterClosed().subscribe(result => {

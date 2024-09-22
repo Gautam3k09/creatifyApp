@@ -38,7 +38,7 @@
         <div class="containerAddressGroup">
           <div class="orderTshirtHeader">
             <div> Buying : </div>
-            <div class="orderTshirtName">&nbsp;Naruto</div>
+            <div class="orderTshirtName">&nbsp;{{buyPageData.teeName_Name}}</div>
           </div>
           <hr>
           <div>
@@ -52,24 +52,24 @@
             <div class="orderTshirtName">Price Details</div>
             <div class="detailsFlex">
               <div class="detailsFlexContainer">Price </div>
-              <div class="detailsFlexContainer">$500</div>
-            </div>
-            <div class="detailsFlex">
-              <div class="detailsFlexContainer">coins used </div>
-              <div class="detailsFlexContainer">$500</div>
+              <div class="detailsFlexContainer">₹{{buyPageData.teeName_Price}}</div>
             </div>
             <div class="detailsFlex">
               <div class="detailsFlexContainer">Quantity</div>
-              <div class="detailsFlexContainer">5</div>
+              <div class="detailsFlexContainer">{{userQuantity}}</div>
+            </div>
+            <div class="detailsFlex">
+              <div class="detailsFlexContainer">coins used </div>
+              <div class="detailsFlexContainer">₹{{userCoins}}</div>
             </div>
             <div class="detailsFlex">
               <div class="detailsFlexContainer">Delivery Charges</div>
-              <div class="detailsFlexContainer">$500</div>
+              <div class="detailsFlexContainer">₹0</div>
             </div>
             <hr>
             <div class="detailsFlex">
               <div class="detailsFlexContainer orderTshirtName">Total Amount</div>
-              <div class="detailsFlexContainer orderTshirtName">$500</div>
+              <div class="detailsFlexContainer orderTshirtName">₹{{finalPrice}}</div>
             </div>
           </div>
         </div> 

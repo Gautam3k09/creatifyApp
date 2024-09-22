@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-order-placed',
@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class OrderPlacedComponent {
   fromCod = true;
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {from: any,message:any,for:any ,input : any}) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any},public dialogRef: MatDialogRef<OrderPlacedComponent> ) { }
   ngOnInit(){
 
     if(this.data.from == 'cod') {
@@ -23,6 +23,10 @@ export class OrderPlacedComponent {
 
   placeOrder(){
     this.fromCod = false
+  }
+
+  closeModal(){
+    this.dialogRef.close();
   }
 
 }
