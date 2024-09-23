@@ -36,7 +36,7 @@ export class OrderStepperComponent {
   finalPrice:any;
   modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any}){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any},public dialogRef: MatDialogRef<OrderStepperComponent>){
 
   }
 
@@ -120,7 +120,8 @@ export class OrderStepperComponent {
     let data = {
       from : string,
       buyPageData:this.buyPageData,
-      userData:this.userData
+      userData:this.userData,
+      finalPrice:this.finalPrice
     }
     this.modalDialog = this.matDialog.open(OrderPlacedComponent,  {
       width: '50vw',
@@ -131,7 +132,12 @@ export class OrderStepperComponent {
 
     this.modalDialog.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
+      this.closeModal();
     });
+  }
+
+  closeModal(){
+    this.dialogRef.close();
   }
 
 }

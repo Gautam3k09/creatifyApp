@@ -1,6 +1,6 @@
 <div class="confirmContainer" *ngIf="fromCod; else orderPlaced">
     <div class="d-flex justify-content-center">
-        Proceeding payment with cash on delivery will add extra 59 INR
+        Proceeding payment with cash on delivery will add extra ₹59 ,which will cost you ₹{{finalPrice}}
     </div>
     <div class="d-flex justify-content-around mt-4">
         <div>
@@ -23,7 +23,7 @@
         </div>
         <br>
         <div class="d-flex justify-content-center">
-            <button type="button" class="RotateBtn btn btn-circle btn-warning">Back to shop</button>
+            <button type="button" class="RotateBtn btn btn-circle btn-warning" (click)="redirectShop()">Back to shop</button>
         </div>
     </div>
 </ng-template>

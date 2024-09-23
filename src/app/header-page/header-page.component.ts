@@ -37,7 +37,6 @@ export class HeaderPageComponent {
     } else {
       this.router.navigate(['/'+ string + '/merch']);
     }
-    console.log(string,'string');
   }
 
   showSidebar(string = '') {
