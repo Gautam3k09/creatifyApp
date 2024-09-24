@@ -78,4 +78,9 @@ export class AppServiceService {
   postQuestion(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/post-question`,data);
   }
+
+  // order api
+  postOrder(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/place-order`,data);
+  }
 }

@@ -21,7 +21,7 @@ import { OrderPlacedComponent } from '../order-placed/order-placed.component';
     MatInputModule,
     OrderPlacedComponent
   ],
-  providers: [WindowRefService,AppServiceService],
+  providers: [WindowRefService],
   templateUrl: './order-stepper.component.html',
   styleUrl: './order-stepper.component.css'
 })
@@ -36,7 +36,7 @@ export class OrderStepperComponent {
   finalPrice:any;
   modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any},public dialogRef: MatDialogRef<OrderStepperComponent>){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any},public dialogRef: MatDialogRef<OrderStepperComponent>){
 
   }
 
@@ -59,7 +59,7 @@ export class OrderStepperComponent {
   }
 
   calculatePrice(){
-    this.finalPrice = (this.buyPageData.teeName_Price * this.userQuantity) - this.userCoins
+    this.finalPrice = (this.buyPageData?.teeName_Price * this.userQuantity) - this.userCoins
   }
 
   createRazorPayOrder () {
@@ -103,10 +103,8 @@ export class OrderStepperComponent {
     options.handler = (response:any) => {
       console.log(response,'response');
       if(response.razorpay_payment_id){
-
-        this.openModal('paid');
+        this.placeOrder();        
       }
-      // After successful payment, make a request to your server to verify the transaction
     };
     options.modal.ondismiss = ()=>{
       console.log('payment cancelled');
@@ -121,7 +119,9 @@ export class OrderStepperComponent {
       from : string,
       buyPageData:this.buyPageData,
       userData:this.userData,
-      finalPrice:this.finalPrice
+      finalPrice:this.finalPrice,
+      address: this.firstFormGroup.value
+      
     }
     this.modalDialog = this.matDialog.open(OrderPlacedComponent,  {
       width: '50vw',
@@ -132,12 +132,28 @@ export class OrderStepperComponent {
 
     this.modalDialog.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      this.closeModal();
+      if(result != 'back'){
+        this.closeModal();
+      }
     });
   }
 
   closeModal(){
     this.dialogRef.close();
+  }
+
+  placeOrder(){
+    let data = {
+      tshirtId : this.buyPageData._id,
+      by: this.userData.user_Name,
+      madeBy: this.buyPageData.user_Id,
+      address: this.firstFormGroup.value
+    }
+    this.appservice.postOrder(data).subscribe((result)=> {
+      if(result.status){
+        this.openModal('paid');
+      }
+    })
   }
 
 }
