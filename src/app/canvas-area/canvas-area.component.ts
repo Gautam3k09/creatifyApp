@@ -376,6 +376,7 @@ export class CanvasAreaComponent {
       teeName : this.teeDetailForm.value.teeName,
       frontBase64 :  this.base64DataFrontSide,
       backbase64 : this.base64DataBackSide,
+      role : id.user_Role
     }
     this.appservice.postImage(data).subscribe(
       (response) => {

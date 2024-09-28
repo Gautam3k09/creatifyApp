@@ -52,7 +52,7 @@ export class TshirtsDataPageComponent {
   getTees() { 
     if(this.from != 'personal'){
       const data = {
-        pageNumber:this.pageCount
+        pageNumber:this.pageCount,
       }
       this.appservice.getAlltees(data).subscribe((result)=> {
         if(result){
