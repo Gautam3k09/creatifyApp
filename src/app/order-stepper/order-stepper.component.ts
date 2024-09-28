@@ -8,6 +8,9 @@ import { WindowRefService } from '../window-ref.service';
 import { AppServiceService } from '../app-service.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { OrderPlacedComponent } from '../order-placed/order-placed.component';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-order-stepper',
@@ -19,7 +22,9 @@ import { OrderPlacedComponent } from '../order-placed/order-placed.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    OrderPlacedComponent
+    OrderPlacedComponent,
+    CommonModule,
+    MatIconModule
   ],
   providers: [WindowRefService],
   templateUrl: './order-stepper.component.html',
@@ -28,6 +33,7 @@ import { OrderPlacedComponent } from '../order-placed/order-placed.component';
 export class OrderStepperComponent {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
   dialogConfig = new MatDialogConfig();
   @Input() data: any;
   userData: any;
@@ -35,16 +41,17 @@ export class OrderStepperComponent {
   userQuantity: any = 2;
   finalPrice:any;
   modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
+  numberVerified = true;
+  verifyLabel:any = 'Verify & Proceed';
+  storedData: any;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any},public dialogRef: MatDialogRef<OrderStepperComponent>){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
-  }
-
-  ngOnInit() {
-    this.userData  = localStorage.getItem('userId');
-    if(this.userData){
-      this.userData = JSON.parse(this.userData);
+    this.storedData = this.localStorage.getUserLocalStorage();
+    if(this.storedData && this.storedData.LoggedIn != null){
+      this.userData = JSON.parse(this.storedData.userData);
     }
+        
     this.firstFormGroup = this.fb.group({
       building: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.building : '' ],
       area: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.area : ''],
@@ -53,8 +60,15 @@ export class OrderStepperComponent {
       pincode: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     });
     this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
+      phoneNumber: ['',[Validators.required,Validators.minLength(10), Validators.maxLength(10), ]],
+      otp1: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp2: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp3: ['', [Validators.required, Validators.pattern('[0-9]')] ],
+      otp4: ['', [Validators.required, Validators.pattern('[0-9]')] ],
     });
+  }
+
+  ngOnInit() {
     this.calculatePrice();
   }
 
@@ -118,7 +132,7 @@ export class OrderStepperComponent {
     let data = {
       from : string,
       buyPageData:this.buyPageData,
-      userData:this.userData,
+      userData: this.storedData.LoggedIn != null ? this.userData : this.secondFormGroup.value,
       finalPrice:this.finalPrice,
       address: this.firstFormGroup.value
       
@@ -145,15 +159,47 @@ export class OrderStepperComponent {
   placeOrder(){
     let data = {
       tshirtId : this.buyPageData._id,
-      by: this.userData.user_Name,
+      by: this.storedData.LoggedIn != null ? this.userData.user_Name : this.secondFormGroup.value.phoneNumber,
       madeBy: this.buyPageData.user_Id,
       address: this.firstFormGroup.value
     }
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){
-        this.openModal('paid');
+        setTimeout(() => {
+          
+          this.openModal('paid');
+        }, 100);
       }
     })
+  }
+
+  moveToNextInputReg(event:any){
+    const currentInput = event.target as HTMLInputElement;
+    const nextInputId = currentInput.id.replace(/(\d+)/, (match, group1) => {
+      const nextIndex = event.key=='Backspace' ?  parseInt(group1, 10) - 1 : parseInt(group1, 10) + 1;
+      return nextIndex.toString();
+    });
+    const nextInput = document.getElementById(nextInputId) as HTMLInputElement;
+    if (nextInput) {
+      nextInput.focus();
+    } 
+  }
+
+  onkeyUp(data:any){
+
+  }
+
+  verify(){
+    this.numberVerified = true;
+    this.verifyLabel = 'proceed'
+    this.secondFormGroup.disable();
+  }
+
+  clearForm(){
+    this.secondFormGroup.reset();
+    this.numberVerified = false;
+    this.verifyLabel = 'Verify & Proceed'
+    this.secondFormGroup.enable();
   }
 
 }

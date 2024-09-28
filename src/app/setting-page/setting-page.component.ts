@@ -8,6 +8,7 @@ import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 import { AppServiceService } from '../app-service.service';
 import { MatDialogConfig, MatDialogRef,MatDialog } from '@angular/material/dialog';
 import { ConfirmationBoxComponent } from '../confirmation-box/confirmation-box.component';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-setting-page',
@@ -31,14 +32,18 @@ export class SettingPageComponent {
   modalDialog: MatDialogRef<ConfirmationBoxComponent, any> | undefined;
   queryQuetions: any = '';
   upiId:string ='';
+  storedData:any;
 
-  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog) {}
+  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog,public localStorage : localStorageService) {
+    this.storedData = this.localStorage.getUserLocalStorage();
+    if(this.storedData ){
+      this.userData = JSON.parse(this.storedData.userData);
+    }
+  }
 
   ngOnInit() {
     this.ngxLoader.start();
-    this.parseLocalstorage();
     this.ngxLoader.stop();
-    console.log(this.userData,'here')
     this.merchAccount = this.userData.user_Role;
     this.myForm = this.fb.group({
       building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
@@ -48,11 +53,7 @@ export class SettingPageComponent {
       pincode: [this.userData.user_Address[0] ? this.userData.user_Address[0].pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     }); 
   }
-
-  parseLocalstorage(){
-    let userData : any = (localStorage.getItem('userId'));
-    this.userData = JSON.parse(userData);
-  }
+ 
 
   onSubmit(form: FormGroup) {
     console.log('Valid?', form.valid); // true or false
@@ -79,8 +80,12 @@ export class SettingPageComponent {
   
   updateLocalStorage(){
     this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
-      localStorage.setItem('userId',JSON.stringify(response.data[0]));
-      this.parseLocalstorage();
+      let localData : any = {
+        LoggedIn : true,
+        userData : JSON.stringify(response.data[0])
+      };
+      localData = JSON.stringify(localData)
+      this.localStorage.setUserLocalStorage(localData);
     })
     
   }
@@ -110,7 +115,6 @@ export class SettingPageComponent {
     if(this.activeTab == 'merch') {
       this.appservice.getCoupon({data:this.userData._id}).subscribe((response) => {
         if(response.status && response.data && response.data.length > 0) {
-          console.log('here')
           this.couponName = response.data[0].coupon_Name;
           this.couponOff = response.data[0].coupon_Off;
           this.couponAvailable = true;
@@ -131,7 +135,6 @@ export class SettingPageComponent {
   }
   
   addCoupon(){
-    console.log(this.couponName,this.couponOff,'asd')
     let data = {
       name : this.couponName,
       off: this.couponOff,
@@ -139,7 +142,6 @@ export class SettingPageComponent {
     };
     this.appservice.createCoupon(data).subscribe((response) => {
       if(response.status){
-        console.log('Coupon added or updated successfully');
         this.couponAvailable = true;
       }
     });

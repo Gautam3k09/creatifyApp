@@ -2,6 +2,7 @@ import { Component, Inject, input } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppServiceService } from '../app-service.service';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-confirmation-box',
@@ -15,7 +16,7 @@ export class ConfirmationBoxComponent {
   public title: any;
   public message: any;
   public for:any
-  constructor(private appservice : AppServiceService, private router: Router,@Inject(MAT_DIALOG_DATA) public data: {title: any,message:any,for:any ,input : any},public dialogRef: MatDialogRef<ConfirmationBoxComponent> ) {
+  constructor(private appservice : AppServiceService, private router: Router,@Inject(MAT_DIALOG_DATA) public data: {title: any,message:any,for:any ,input : any},public dialogRef: MatDialogRef<ConfirmationBoxComponent>,public localStorage: localStorageService) {
   }
   ngOnInit() {
     this.title = this.data?.title;
@@ -25,7 +26,7 @@ export class ConfirmationBoxComponent {
 
   closeModal() {
     if (this.for == 'logout'){
-      localStorage.removeItem("Login");
+      this.localStorage.removeUserLocalStorage();
       this.router.navigate(['']);
       this.dialogRef.close();
     }

@@ -8,6 +8,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { BuyPageComponent } from "../buy-page/buy-page.component";
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { TshirtsDataPageComponent } from "../tshirts-data-page/tshirts-data-page.component";
+import { localStorageService } from '../local-storage-service';
 
 
 @Component({
@@ -22,17 +23,21 @@ export class YourTeesComponent {
   @Input() isMerchHomePage: any = false;
   modalRef?: BsModalRef;
   teesCount : any = 0;
+  storedData : any;
 
   
-  constructor(private router: Router,private appservice : AppServiceService) { }
+  constructor(private router: Router,private appservice : AppServiceService,public localStorage : localStorageService) {
+    this.storedData = this.localStorage.getUserLocalStorage();
+   }
 
   ngOnInit() {
     this.getTees()
   }
 
   getTees() { 
-    let id : any = localStorage.getItem('userId');
-    id = JSON.parse(id);
+    let id : any = this.storedData;
+    // JSON.parse(id);
+    id = JSON.parse(this.storedData.userData);
       const data = {
         id : id._id,
       }

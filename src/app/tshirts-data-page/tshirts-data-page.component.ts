@@ -3,6 +3,7 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-tshirts-data-page',
@@ -12,7 +13,7 @@ import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
   styleUrl: './tshirts-data-page.component.css'
 })
 export class TshirtsDataPageComponent {
-  @Input() from: any;
+  @Input() from :any;
   userId: any;
   img : boolean = false;
   teeDatas : any =[];
@@ -24,24 +25,24 @@ export class TshirtsDataPageComponent {
   @ViewChild('canvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;  
   DataFetched : boolean = false;
-  localData : any;
+  userData : any;
   canvasfrontHeight = 100;
   canvasbackHeight = 120;
-  constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute){
-    this.userId = route.snapshot.params['userId']
+  storedData : any;
+  constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute,public localstorage : localStorageService){
+    this.userId = route.snapshot.params['userId'];
+    this.storedData = this.localstorage.getUserLocalStorage();
+    if(this.storedData && this.storedData.LoggedIn != null){
+      this.userData = JSON.parse(this.storedData.userData);
+    }
   }
 
   ngOnInit(){
     this.ngxLoader.start();
-    this.setLocalStorage();
     this.getTees();
     this.ngxLoader.stop();
   }
 
-  setLocalStorage(){
-    this.localData = localStorage.getItem('userId');
-    this.localData = JSON.parse(this.localData);
-  }
   ngAfterViewInit() {
     setTimeout(() => {
       this.loopIterator()
@@ -49,7 +50,7 @@ export class TshirtsDataPageComponent {
   }
 
   getTees() { 
-    if(this.from == 'common'){
+    if(this.from != 'personal'){
       const data = {
         pageNumber:this.pageCount
       }
@@ -64,9 +65,9 @@ export class TshirtsDataPageComponent {
       })
     } else  {
       let data : any;
-      if(this.from == 'personal') {
+      if(this.from == 'personal' && this.storedData.visitor == null) {
         data = {
-          id : this.localData._id,
+          id : this.userData._id,
         }
       } else {
         data = {
@@ -105,7 +106,6 @@ export class TshirtsDataPageComponent {
       img.src = data?.teeName_frontsideImg;
     }
     const boxWidth : any = this.currentCanvas?.width;
-    console.log(boxWidth,'widh')
     let newWidth, newHeight;
     if (1 > boxWidth / boxHeight) { // Image is wider
       newWidth = boxWidth;
@@ -137,14 +137,13 @@ export class TshirtsDataPageComponent {
 
 
   navigateBuyPage(teeData:any) {
-    console.log(teeData._id,'teedata')
-    if(localStorage.getItem('userId')!= null || sessionStorage.getItem("visit") != '') {
+    if(this.storedData != null || this.storedData.Visitor == '') {
       this.router.navigate(['/buy/'+teeData._id]);
     }
   }
 
   copytext(teeDataId: string){
-    let text = 'http://localhost:4200/buy/' + teeDataId
+    let text = 'http://localhost:4200/buy/' + teeDataId;
     const tempElement = document.createElement('textarea');
     tempElement.value = text;
     document.body.appendChild(tempElement); 

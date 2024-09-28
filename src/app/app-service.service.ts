@@ -44,7 +44,6 @@ export class AppServiceService {
   }
 
   deleteTees(data:any): Observable<any> {
-    console.log(data,'data');
     return this.http.post(`${this.serverUrl}/delete-tees/`+data,data);
   }
   

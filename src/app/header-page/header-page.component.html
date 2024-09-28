@@ -1,5 +1,5 @@
 <body>
-    <nav *ngIf="!merchPage && (visit == '' || visit == null); else merchHeader">
+    <nav *ngIf="!merchPage && (visitor == '' || visitor == null); else merchHeader">
         <ul class="sidebar">
             <li class="tabs1" (click)="showSidebar('string')">x</li>
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
@@ -22,7 +22,7 @@
     <ng-template #merchHeader>
         <nav>
             <ul>
-                <li class="tabs" style="margin-right: 0px !important;" (click)="onDivClick(merchName)">C/{{merchName}}</li>
+                <li class="tabs" style="margin-right: 0px !important;" (click)="onDivClick(visitor)">C/{{visitor}}</li>
             </ul>
         </nav>
     </ng-template>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-header-page',
@@ -16,31 +17,31 @@ export class HeaderPageComponent {
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-  visit : any = '';
-  @Input() merchPage: any = false;
-  @Input() merchName: any = '';
-  constructor(private router: Router,public matDialog: MatDialog) { }
+  visitor : any = '';
+  storedData : any ;
+  merchPage : any = false;
+  constructor(private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
+    this.storedData = this.localStorage.getUserLocalStorage();
+    if(this.storedData){
+      this.visitor = this.storedData.visitor ? this.storedData.visitor : '';
+      this.isLoggedIn = this.storedData.LoggedIn ? this.storedData.LoggedIn: '';
+    }
+   }
 
   ngOnInit(){
-    if(this.merchPage == 'merchant') this.merchPage = true
-    this.isLoggedIn  = localStorage.getItem('Login');
-    console.log('isLoggedIn', this.isLoggedIn);
-    let data : any = (localStorage.getItem('userId'));
-    data = JSON.parse(data);
-    this.visit = sessionStorage.getItem("visit");
-    if(this.visit != '') this.merchName = this.visit
+    if(this.visitor != '') this.merchPage = true;
+    if(this.visitor != '') this.visitor = this.visitor;
   }
   
   onDivClick(string:any) {
-    if(!this.merchPage && this.visit == '') {
+    if(!this.merchPage && this.visitor != null) {
       this.router.navigate([string]);
     } else {
-      this.router.navigate(['/'+ string + '/merch']);
+      this.router.navigate(['/'+ string + '/merch/' + this.storedData.user_id]);
     }
   }
 
   showSidebar(string = '') {
-    console.log(string,'string');
     if(string != '') this.sidebarClose = !this.sidebarClose;
     const sidebar : any = document.querySelector('.sidebar');
     if(this.sidebarClose) {

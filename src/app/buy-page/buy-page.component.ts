@@ -43,8 +43,6 @@ export class BuyPageComponent implements OnInit  {
   }
   
   getTee(){
-    let data1 = String(this.tshirtId);
-    console.log(`"${data1}"`,'tshirtId')
     let data = {
       _id :  this.tshirtId ,
     }
@@ -98,7 +96,6 @@ export class BuyPageComponent implements OnInit  {
       receipt: 'order_123456780',
     };
     this.appservice.createOrder(options).subscribe((result)=> {
-      console.log(result,'result');
       const order_id = result.offer_id;
       this.payWithRazor(order_id);
     })
@@ -142,10 +139,10 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openModal(){
-    console.log(this.data)
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
-      width: 'auto',
+      width: '40%',
       height: 'auto',
+      // overflow: 'auto',
       data: this.data
     });
 

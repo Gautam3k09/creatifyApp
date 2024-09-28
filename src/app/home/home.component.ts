@@ -4,6 +4,7 @@ import { HeaderPageComponent } from '../header-page/header-page.component';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +17,21 @@ export class HomeComponent {
   dialogConfig = new MatDialogConfig();
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
   isLogin : any = false;
-  constructor(private dialog: MatDialog,private router: Router) {
-    this.isLogin = localStorage.getItem('Login');
+  storedData:any;
+  constructor(private dialog: MatDialog,private router: Router,public localStorage: localStorageService) {
+    this.storedData = localStorage.getUserLocalStorage();
+    if(this.storedData && this.storedData.visitor == null) {
+      this.isLogin = this.storedData.LoggedIn;
+    } else {
+      this.isLogin = false;
+    }
   }
   
   ngOnInit(){
-    sessionStorage.setItem("visit", "");
+    if(this.storedData && this.storedData.visitor != null){
+      this.localStorage.removeUserLocalStorage();
+      location.reload()
+    }
   }
   openCanvas() {
     if(!this.isLogin) {

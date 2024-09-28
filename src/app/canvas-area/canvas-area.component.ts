@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppServiceService } from '../app-service.service';
-import {HttpClient} from '@angular/common/http';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-canvas-area',
@@ -66,8 +66,11 @@ export class CanvasAreaComponent {
   canvasHeightFront : any = 360;
   canvasHeightBack : any = 480;
   currentSide : any = 'front';
+  storedData : any;
 
-  constructor(private router: Router,private fb: FormBuilder,private sanitizer:DomSanitizer, private appservice:AppServiceService) {}
+  constructor(private router: Router,private fb: FormBuilder,private sanitizer:DomSanitizer, private appservice:AppServiceService,public localStorage : localStorageService) {
+    this.storedData = this.localStorage.getUserLocalStorage();
+  }
   ngOnInit() {
     //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
@@ -365,7 +368,7 @@ export class CanvasAreaComponent {
   }
   
   uploadImage() : any{
-    let id : any= localStorage.getItem('userId');
+    let id : any= this.storedData.userData;
     id = JSON.parse(id);
     const data = {
       id :  id._id,

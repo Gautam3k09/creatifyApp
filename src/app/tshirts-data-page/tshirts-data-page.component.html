@@ -36,6 +36,6 @@
     </div>
 
 </body>
-<div class="loadMore" *ngIf="from == 'common' && !DataFetched">
+<div class="loadMore" *ngIf="from != 'personal' && !DataFetched">
     <button type="button" class="btn btn-primary px-3 py-2" (click)="getTees()">Load more</button>
 </div>

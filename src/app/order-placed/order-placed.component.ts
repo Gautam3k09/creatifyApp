@@ -3,6 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppServiceService } from '../app-service.service';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-order-placed',
@@ -14,7 +15,10 @@ import { AppServiceService } from '../app-service.service';
 export class OrderPlacedComponent {
   fromCod = true;
   finalPrice = 0;
-  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService) { }
+  storeData : any;
+  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService) { 
+    this.storeData = this.localStorage.getUserLocalStorage();
+  }
 
   ngOnInit(){
     this.finalPrice = this.data.finalPrice + 59 ;
@@ -30,20 +34,19 @@ export class OrderPlacedComponent {
   }
 
   redirectShop(){
-    let visit = sessionStorage.getItem("visit");
-    if(visit == '') {
+    if(this.storeData.visitor == null) {
       this.closeModal('shop');
       this.router.navigate(['/shop']);
     } else {
       this.closeModal('shop');
-      this.router.navigate(['/'+ visit + '/merch/' + this.data.buyPageData.user_Id ]);
+      this.router.navigate(['/'+ this.storeData.visitor + '/merch/' + this.data.buyPageData.user_Id ]);
     }
   }
 
   placeOrder(){
     let data = {
       tshirtId : this.data.buyPageData._id,
-      by: this.data.userData.user_Name,
+      by:  this.storeData.visitor == null ?this.data.userData.user_Name : this.data.userData.phoneNumber,
       madeBy: this.data.buyPageData.user_Id,
       address: this.data.address,
     }

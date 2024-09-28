@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppServiceService } from '../app-service.service';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-login-modal',
@@ -32,7 +33,7 @@ export class LoginModalComponent {
   showWrongOtpErrorForRegister: boolean = false;
   storeUserData :any;
 
-  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private appservice : AppServiceService,private fb: FormBuilder,private router: Router,@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private appservice : AppServiceService,private fb: FormBuilder,private router: Router,@Inject(MAT_DIALOG_DATA) public data: any,public localStorage: localStorageService) {
     this.myLoginForm = this.fb.group({
       otp1: ['', [Validators.required, Validators.pattern('[0-9]')] ],
       otp2: ['', [Validators.required, Validators.pattern('[0-9]')] ],
@@ -130,9 +131,15 @@ export class LoginModalComponent {
     }
     if(userOtp === '0000') {
       if(boolean){
-        localStorage.setItem('Login', 'true');
-        localStorage.setItem('userId',JSON.stringify(this.storeUserData));
-        location.reload();
+        let localData : any = {
+          LoggedIn : true,
+          userData : JSON.stringify(this.storeUserData)
+        }
+        localData = JSON.stringify(localData)
+        this.localStorage.setUserLocalStorage(localData);
+        setTimeout(() => {
+          location.reload();
+        }, 500);
       } else {
         const data = {
           number : this.registerNumber,
@@ -141,9 +148,12 @@ export class LoginModalComponent {
         }
         this.appservice.postUserDataForRegister(data).subscribe(
           (response) => {
-            // this.router.navigate(['/tees']);
-            localStorage.setItem('Login', 'true');
-            localStorage.setItem('userId',JSON.stringify(response.data));
+            let localData : any = {
+              LoggedIn : true,
+              userData : JSON.stringify(response.data)
+            };
+            localData = JSON.stringify(localData)
+            this.localStorage.setUserLocalStorage(localData);
             setTimeout(() => {
               location.reload();
             }, 500);
@@ -207,9 +217,6 @@ export class LoginModalComponent {
     }
   }
   
-  // get otpControls() {
-  //   return this.myLoginForm.controls;
-  // }
 
   moveToNextInput(event: any) {
     const currentInput = event.target as HTMLInputElement;
@@ -221,7 +228,6 @@ export class LoginModalComponent {
     if (nextInput) {
       nextInput.focus();
     }
-    // if(this.myLoginForm.value.otp1 != '' && this.myLoginForm.value.otp2 != '' && this.myLoginForm.value.otp3 != '' && this.myLoginForm.value.otp4 != '') this.mobileNumberVerified = true
   }
 
   moveToNextInputReg(event:any){

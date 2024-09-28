@@ -33,8 +33,46 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Order Summary">
+    <mat-step [stepControl]="secondFormGroup" label="Verify User" *ngIf=" this.storedData.visitor !=null">
       <form [formGroup]="secondFormGroup">
+        <!-- <ng-template matStepLabel>Enter Mobile Number</ng-template> -->
+        <div>
+          <mat-form-field style="width: 100%">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput type="text"  placeholder="Mobile Number" maxlength="10" formControlName="phoneNumber" required [disabled]="true"/>
+           
+              <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
+                <mat-icon>close</mat-icon>
+              </button>
+            <!-- <mat-error *ngIf="secondFormGroup.invalid">{{secondFormGroup.invalid}}</mat-error> -->
+          </mat-form-field>
+        </div>
+        <div class="d-flex justify-content-around" *ngIf="secondFormGroup.value.phoneNumber.length == 10">
+          <mat-form-field style="width: 20%">
+            <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp1" (keyup)="moveToNextInputReg($event)" maxlength="1" required>
+          </mat-form-field>
+          <mat-form-field style="width: 20%">
+            <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp2" (keyup)="moveToNextInputReg($event)" maxlength="1" required>
+          </mat-form-field>
+          <mat-form-field style="width: 20%">
+            <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp3" (keyup)="moveToNextInputReg($event)" maxlength="1" required>
+          </mat-form-field>
+          <mat-form-field style="width: 20%">
+            <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp4" (keyup)="moveToNextInputReg($event)" maxlength="1" required>
+          </mat-form-field>
+          
+        </div>
+        <div class="buttonContainer">
+          <div class="btnBack">
+            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" matStepperPrevious>{{numberVerified}}</button>
+          </div>
+          <div class="btnOnline">
+            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" [disabled]="secondFormGroup.invalid" matStepperNext (click)="verify()">{{verifyLabel}}</button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step label="Order Summary">      
         <div class="containerAddressGroup">
           <div class="orderTshirtHeader">
             <div> Buying : </div>
@@ -84,6 +122,5 @@
             <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" matStepperNext (click)="createRazorPayOrder()">Instant Pay</button>
           </div>
         </div>
-      </form>
     </mat-step>
   </mat-stepper>

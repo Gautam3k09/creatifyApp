@@ -51,6 +51,10 @@
   width: auto;
 }
 
+.otpButton{
+  text-align:center;
+}
+
 .containerAddressGroup::-webkit-scrollbar {
   width: 10px;
 }
