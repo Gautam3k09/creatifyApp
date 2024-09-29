@@ -4,14 +4,15 @@
 }
 
 body {
-        overflow: auto;
-        color: white;
-        background-image: url('../../assets/blue-purple.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        margin: 0;
-        /* overflow: hidden; */
+    height: 101vh;
+    overflow: auto;
+    color: white;
+    background-image: url('../../assets/black-bgg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    /* overflow: hidden; */
 }
 
 .section1 {

@@ -9,7 +9,7 @@
         <ul>
             <li class="tabs" (click)="onDivClick('')">CreaTeeFi</li>
             <div class="login" *ngIf="!isLoggedIn; else elseBlock">
-                <li class="tabs hideOnMobile" (click)="openModal()"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
+                <li class="tabs " (click)="openModal()"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
             </div>
             <ng-template #elseBlock>
                 <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
