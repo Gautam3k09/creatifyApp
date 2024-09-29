@@ -29,6 +29,7 @@ export class TshirtsDataPageComponent {
   canvasfrontHeight = 100;
   canvasbackHeight = 120;
   storedData : any;
+  hideLoadbtn : boolean = false;
   constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute,public localstorage : localStorageService){
     this.userId = route.snapshot.params['userId'];
     this.storedData = this.localstorage.getUserLocalStorage();
@@ -60,7 +61,10 @@ export class TshirtsDataPageComponent {
             this.DataFetched = true;
             return;
           }
-          this.teeDatas = this.teeDatas == ''? result.data : this.teeDatas.concat(result.data);
+          if(result.data.length < 12){
+            this.hideLoadbtn = true;
+          }
+          this.teeDatas = this.teeDatas == '' ? result.data : this.teeDatas.concat(result.data);
         }
       })
     } else  {
