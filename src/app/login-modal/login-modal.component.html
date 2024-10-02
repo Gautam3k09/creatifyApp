@@ -6,133 +6,134 @@
       <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Sign Up</button>
     </li>
 </ul>
-  <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="SignInContainer">
-            <form [formGroup]="myLoginForm">
-              <div  style="display: flex; justify-content: center;" >
-                <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                  <input  onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,true)" id="form2Example1" class="form-control mb-2" pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
-                  <p class="alert alert-danger" *ngIf="numberExists" style="padding: 0px; text-align: center;">
-                    Number Doesnt exists
-                  </p>
-                </div>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="SignInContainer">
+          <form [formGroup]="myLoginForm">
+            <div  style="display: flex; justify-content: center;" >
+              <div data-mdb-input-init class="inputTag form-outline" style="width: 70%;">
+                <mat-form-field style="width: 100%">
+                  <mat-label>Mobile Number</mat-label>
+                  <input matInput type="text"  placeholder="Mobile Number" maxlength="10" (keyup)="onkeyUp($event,true)" formControlName="number" required/>
+                </mat-form-field>
+                <p class="alert alert-danger" *ngIf="numberExists" style="padding: 0px; text-align: center;">
+                  Number Doesnt exists
+                </p>
               </div>
-              <div *ngIf="sendOtp">
-                  <div class="row  pb-2 mb-2">
-                    <div class="col-3">
-                        <input class="otp-letter-input" id="input1" type="text" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
-                    </div>
-                    <div class="col-3">
-                        <input class="otp-letter-input" id="input2" type="text" formControlName="otp2" maxlength="1" (keyup)="moveToNextInput($event)">
-                    </div>
-                    <div class="col-3">
-                        <input class="otp-letter-input" id="input3" type="text" formControlName="otp3" maxlength="1" (keyup)="moveToNextInput($event)">
-                    </div>
-                    <div class="col-3">
-                        <input class="otp-letter-input" id="input4" type="text" formControlName="otp4" maxlength="1" (keyup)="moveToNextInput($event)">
-                    </div>
-                  </div>
-              </div>
-              <p class="alert alert-danger" *ngIf="showWrongOtpError" style="padding: 0px; text-align: center;">
-                Please enter a valid OTP
-              </p>
-
-              
-              <div class="text-center mb-4">  
-                <button type="submit" [disabled]="myLoginForm.invalid" (click)="login(true)">Sign In</button>
-              </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <div class="SignInContainer">
-            
-            <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)" *ngIf="!otpPage; else otpPageSection">
-              <div  style="display: flex; justify-content: center;" >
-                <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                  <input  onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1" class="form-control mb-2" pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
-                  <p class="alert alert-danger" *ngIf="regNumberExists" style="padding: 0px; text-align: center;">
-                    Number already exists
-                  </p>
-                </div>
-              </div>
-              
-              <div style="display: flex; justify-content: center;">
-                <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                  <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="userName" placeholder="UserName" (keyup)="onkeyUpName($event)">
-                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('minlength')" style="padding: 0px; text-align: center;">
-                    Username must be at least 4 characters long.
-                  </p>
-                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('maxlength')" style="padding: 0px; text-align: center;">
-                    Username cannot exceed 12 characters.
-                  </p>
-                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('required') && mySignupForm.controls['userName'].dirty" style="padding: 0px; text-align: center;">
-                    Username is required
-                  </p>
-                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('usernameAlreadyExist') && mySignupForm.controls['userName'].dirty" style="padding: 0px; text-align: center;">
-                    Username Already Exists
-                  </p>
-                </div>
-              </div>
-
-              <div  style="display: flex; justify-content:center; "   >
-                <div style="width: 70%;" data-mdb-input-init class="form-outline">
-                  <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="referral" placeholder="Referral Code" (keyup)="verifyReferral($event)"/>
-                  <p class="alert alert-danger" *ngIf="mySignupForm.controls['referral'].hasError('referralCode') && mySignupForm.controls['referral'].dirty" style="padding: 0px; text-align: center;">
-                    Referral Code Unavailable
-                  </p>
-                  
-                </div>
-              </div>
-
-              <div class="text-center mb-3" >
-                <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
-                <label class="form-check-label" for="loginCheck"> Remember me </label>
-              </div>
-              <div class="text-center mb-3">  
-                <button type="submit" [disabled]="mySignupForm.invalid" (click)="Proceed('proceed')">Proceed</button>
-              </div>
-            </form>
-
-            <!--  otp page -->
-            <ng-template #otpPageSection>
-              <div  style="display: flex; justify-content: center;" >
-                <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                  <p> Otp sent on {{this.mySignupForm.value.number}}</p>
-                </div>
-              </div>
-
-              <form [formGroup]="otpForm">
-                <div class="row  pb-2 mb-2">
+            </div>
+            <div *ngIf="sendOtp">
+                <div class="row  pb-2 mb-2 otpClassFormobile">
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input1r" type="text" formControlName="rOtp1" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                      <input class="otp-letter-input" id="input1" type="text" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input2r" type="text" formControlName="rOtp2" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                      <input class="otp-letter-input" id="input2" type="text" formControlName="otp2" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input3r" type="text" formControlName="rOtp3" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                      <input class="otp-letter-input" id="input3" type="text" formControlName="otp3" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input4r" type="text" formControlName="rOtp4" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                      <input class="otp-letter-input" id="input4" type="text" formControlName="otp4" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
-                  <p class="alert alert-danger" *ngIf="showWrongOtpErrorForRegister" style="padding: 0px; text-align: center;">
-                    Please enter a valid OTP
-                  </p>
                 </div>
-              </form>
-
-              <div class="text-center mb-4">
-                <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
-                <label class="form-check-label" for="loginCheck"> Remember me </label>
-              </div>
-
-              <div class="text-center mb-4">  
-                <button type="submit" (click)="login(false)">Sign Up</button>
-              </div>
-            </ng-template>
-        </div>
-    </div>
+            </div>
+            <p class="alert alert-danger" *ngIf="showWrongOtpError" style="padding: 0px; text-align: center;">
+              Please enter a valid OTP
+            </p>
+            <div class="text-center mb-4">  
+              <button type="submit" [disabled]="myLoginForm.invalid" (click)="login(true)">Sign In</button>
+            </div>
+          </form>
+      </div>
   </div>
+
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <div class="SignInContainer">
+          
+          <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)" *ngIf="!otpPage; else otpPageSection">
+            <div  style="display: flex; justify-content: center;" >
+              <div data-mdb-input-init class="form-outline" style="width: 70%;">
+                <input  onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1" class="form-control mb-2" pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
+                <p class="alert alert-danger" *ngIf="regNumberExists" style="padding: 0px; text-align: center;">
+                  Number already exists
+                </p>
+              </div>
+            </div>
+            
+            <div style="display: flex; justify-content: center;">
+              <div data-mdb-input-init class="form-outline" style="width: 70%;">
+                <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="userName" placeholder="UserName" (keyup)="onkeyUpName($event)">
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('minlength')" style="padding: 0px; text-align: center;">
+                  Username must be at least 4 characters long.
+                </p>
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('maxlength')" style="padding: 0px; text-align: center;">
+                  Username cannot exceed 12 characters.
+                </p>
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('required') && mySignupForm.controls['userName'].dirty" style="padding: 0px; text-align: center;">
+                  Username is required
+                </p>
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('usernameAlreadyExist') && mySignupForm.controls['userName'].dirty" style="padding: 0px; text-align: center;">
+                  Username Already Exists
+                </p>
+              </div>
+            </div>
+
+            <div  style="display: flex; justify-content:center; "   >
+              <div style="width: 70%;" data-mdb-input-init class="form-outline">
+                <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="referral" placeholder="Referral Code" (keyup)="verifyReferral($event)"/>
+                <p class="alert alert-danger" *ngIf="mySignupForm.controls['referral'].hasError('referralCode') && mySignupForm.controls['referral'].dirty" style="padding: 0px; text-align: center;">
+                  Referral Code Unavailable
+                </p>
+                
+              </div>
+            </div>
+
+            <div class="text-center mb-3" >
+              <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
+              <label class="form-check-label" for="loginCheck"> Remember me </label>
+            </div>
+            <div class="text-center mb-3">  
+              <button type="submit" [disabled]="mySignupForm.invalid" (click)="Proceed('proceed')">Proceed</button>
+            </div>
+          </form>
+
+          <!--  otp page -->
+          <ng-template #otpPageSection>
+            <div  style="display: flex; justify-content: center;" >
+              <div data-mdb-input-init class="form-outline" style="width: 70%;">
+                <p> Otp sent on {{this.mySignupForm.value.number}}</p>
+              </div>
+            </div>
+
+            <form [formGroup]="otpForm">
+              <div class="row  pb-2 mb-2">
+                <div class="col-3">
+                    <input class="otp-letter-input" id="input1r" type="text" formControlName="rOtp1" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                </div>
+                <div class="col-3">
+                    <input class="otp-letter-input" id="input2r" type="text" formControlName="rOtp2" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                </div>
+                <div class="col-3">
+                    <input class="otp-letter-input" id="input3r" type="text" formControlName="rOtp3" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                </div>
+                <div class="col-3">
+                    <input class="otp-letter-input" id="input4r" type="text" formControlName="rOtp4" maxlength="1" (keyup)="moveToNextInputReg($event)">
+                </div>
+                <p class="alert alert-danger" *ngIf="showWrongOtpErrorForRegister" style="padding: 0px; text-align: center;">
+                  Please enter a valid OTP
+                </p>
+              </div>
+            </form>
+
+            <div class="text-center mb-4">
+              <input class="form-check-input mx-2" type="checkbox" value="" id="loginCheck" checked />
+              <label class="form-check-label" for="loginCheck"> Remember me </label>
+            </div>
+
+            <div class="text-center mb-4">  
+              <button type="submit" (click)="login(false)">Sign Up</button>
+            </div>
+          </ng-template>
+      </div>
+  </div>
+</div>

@@ -7,12 +7,15 @@ import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppServiceService } from '../app-service.service';
 import { localStorageService } from '../local-storage-service';
+import {MatInputModule} from '@angular/material/input';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-login-modal',
   standalone: true,
   providers: [AppServiceService],
-  imports: [ReactiveFormsModule,CommonModule,MatFormFieldModule,MatDialogTitle],
+  imports: [ReactiveFormsModule,CommonModule,MatFormFieldModule,MatDialogTitle,MatInputModule,MatStepperModule,MatButtonModule],
   templateUrl: './login-modal.component.html',
   styleUrl: './login-modal.component.css'
 })

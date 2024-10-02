@@ -52,9 +52,16 @@ export class HeaderPageComponent {
   }
 
   openModal() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    console.log(width,height,'asd')
+    if(width > 600) {
+      this.dialogConfig.width = "30%";
+    } else {
+      this.dialogConfig.width = "80%";
+    }
     this.dialogConfig.id = "projects-modal-component";
-    this.dialogConfig.height = "500px";
-    this.dialogConfig.width = "650px";
+    this.dialogConfig.height = "auto";
     this.modalDialog = this.matDialog.open(LoginModalComponent, this.dialogConfig);
   }
 }

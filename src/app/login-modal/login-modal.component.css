@@ -1,9 +1,6 @@
 .tabs {
     align-self: center;
     margin-top: 4%;
-    li :first-child{
-        margin-right: 50px;
-    }
 }
 
 .tab-content {
@@ -14,8 +11,12 @@
     margin-inline: 10%;
     margin-top: 2%;
     border-radius: 15px;
+    margin-bottom: 2%;
 }
 
+.inputTag{
+    width: 70%;
+}
 
 .otp-letter-input{
     max-width: 85%;
@@ -30,6 +31,37 @@
     height: 50px;
 }
 
+/* mobile size */
+
+@media(max-width:600px) {
+    .tab-content {
+        padding: 0px;
+        background: #2b2b2b;
+        color: white;
+        height: 80%;
+        margin-inline: 10%;
+        margin-top:5%;
+        border-radius: 15px;
+    }
+    .inputTag{
+        margin-top: 25%;
+        width: 100%;
+    }
+
+    .otp-letter-input[_ngcontent-ng-c3522181231] {
+        max-width: 75%;
+        height: 30px;
+        border-radius: 10px;
+        color: #5a5aff;
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .otpClassFormobile{
+        margin-left: 0;
+    }
+
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

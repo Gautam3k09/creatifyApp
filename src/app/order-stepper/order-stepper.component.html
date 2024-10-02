@@ -40,10 +40,9 @@
           <mat-form-field style="width: 100%">
             <mat-label>Mobile Number</mat-label>
             <input matInput type="text"  placeholder="Mobile Number" maxlength="10" formControlName="phoneNumber" required [disabled]="true"/>
-           
-              <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
-                <mat-icon>close</mat-icon>
-              </button>
+            <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
+              <mat-icon>close</mat-icon>
+            </button>
             <!-- <mat-error *ngIf="secondFormGroup.invalid">{{secondFormGroup.invalid}}</mat-error> -->
           </mat-form-field>
         </div>
