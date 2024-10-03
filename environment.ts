@@ -1,4 +1,4 @@
 
 export const environment = {
-    backend: 'http://localhost:443',
+    backend: 'https://creatifyappbackend.onrender.com'
 };
