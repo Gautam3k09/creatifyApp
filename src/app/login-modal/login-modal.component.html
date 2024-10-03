@@ -11,10 +11,10 @@
       <div class="SignInContainer">
           <form [formGroup]="myLoginForm">
             <div  style="display: flex; justify-content: center;" >
-              <div data-mdb-input-init class="inputTag form-outline" style="width: 70%;">
+              <div data-mdb-input-init class="inputTag form-outline">
                 <mat-form-field style="width: 100%">
                   <mat-label>Mobile Number</mat-label>
-                  <input matInput type="text"  placeholder="Mobile Number" maxlength="10" (keyup)="onkeyUp($event,true)" formControlName="number" required/>
+                  <input matInput type="number"  placeholder="Mobile Number" maxlength="10" (keyup)="onkeyUp($event,true)" formControlName="number" required/>
                 </mat-form-field>
                 <p class="alert alert-danger" *ngIf="numberExists" style="padding: 0px; text-align: center;">
                   Number Doesnt exists
@@ -24,16 +24,16 @@
             <div *ngIf="sendOtp">
                 <div class="row  pb-2 mb-2 otpClassFormobile">
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input1" type="text" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
+                      <input class="otp-letter-input" id="input1" type="number" formControlName="otp1" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input2" type="text" formControlName="otp2" maxlength="1" (keyup)="moveToNextInput($event)">
+                      <input class="otp-letter-input" id="input2" type="number" formControlName="otp2" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input3" type="text" formControlName="otp3" maxlength="1" (keyup)="moveToNextInput($event)">
+                      <input class="otp-letter-input" id="input3" type="number" formControlName="otp3" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                   <div class="col-3">
-                      <input class="otp-letter-input" id="input4" type="text" formControlName="otp4" maxlength="1" (keyup)="moveToNextInput($event)">
+                      <input class="otp-letter-input" id="input4" type="number" formControlName="otp4" maxlength="1" (keyup)="moveToNextInput($event)">
                   </div>
                 </div>
             </div>
@@ -49,11 +49,13 @@
 
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="SignInContainer">
-          
           <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)" *ngIf="!otpPage; else otpPageSection">
-            <div  style="display: flex; justify-content: center;" >
-              <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                <input  onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1" class="form-control mb-2" pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
+            <div style="display: flex; justify-content: center;" >
+              <div data-mdb-input-init class="inputTagforSignup form-outline" style="margin-top: 25%;">
+                <mat-form-field style="width: 100%">
+                  <mat-label>Mobile Number</mat-label>
+                   <input matInput onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1"  pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
+                </mat-form-field>
                 <p class="alert alert-danger" *ngIf="regNumberExists" style="padding: 0px; text-align: center;">
                   Number already exists
                 </p>
@@ -61,8 +63,11 @@
             </div>
             
             <div style="display: flex; justify-content: center;">
-              <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="userName" placeholder="UserName" (keyup)="onkeyUpName($event)">
+              <div data-mdb-input-init class="form-outline inputTagforSignup">
+                <mat-form-field style="width: 100%">
+                  <mat-label>UserName</mat-label>
+                   <input matInput maxlength="12" type="text" id="form2Example1" formControlName="userName" placeholder="UserName" (keyup)="onkeyUpName($event)">
+                </mat-form-field>
                 <p class="alert alert-danger" *ngIf="mySignupForm.controls['userName'].hasError('minlength')" style="padding: 0px; text-align: center;">
                   Username must be at least 4 characters long.
                 </p>
@@ -79,8 +84,11 @@
             </div>
 
             <div  style="display: flex; justify-content:center; "   >
-              <div style="width: 70%;" data-mdb-input-init class="form-outline">
-                <input maxlength="12" type="text" id="form2Example1" class="form-control mb-2" formControlName="referral" placeholder="Referral Code" (keyup)="verifyReferral($event)"/>
+              <div data-mdb-input-init class="form-outline inputTagforSignup">
+                <mat-form-field style="width: 100%">
+                  <mat-label>Referral Code</mat-label>
+                    <input matInput maxlength="12" type="text" id="form2Example1" formControlName="referral" placeholder="Referral Code" (keyup)="verifyReferral($event)"/>
+                </mat-form-field>
                 <p class="alert alert-danger" *ngIf="mySignupForm.controls['referral'].hasError('referralCode') && mySignupForm.controls['referral'].dirty" style="padding: 0px; text-align: center;">
                   Referral Code Unavailable
                 </p>

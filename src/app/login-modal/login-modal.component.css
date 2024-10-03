@@ -17,6 +17,9 @@
 .inputTag{
     width: 70%;
 }
+.inputTagforSignup{
+    width: 70%;
+}
 
 .otp-letter-input{
     max-width: 85%;
@@ -45,10 +48,14 @@
     }
     .inputTag{
         margin-top: 25%;
-        width: 100%;
+        width: 70%;
+    }
+    .inputTagforSignup{
+        margin-top: 5%;
+        width: 70%;
     }
 
-    .otp-letter-input[_ngcontent-ng-c3522181231] {
+    .otp-letter-input {
         max-width: 75%;
         height: 30px;
         border-radius: 10px;
