@@ -127,7 +127,7 @@ export class LoginModalComponent {
     let userOtp : any;
     if(boolean ){
       this.showWrongOtpError = false;
-      userOtp = this.myLoginForm.value.otp1 +this.myLoginForm.value.otp2 +this.myLoginForm.value.otp3 +this.myLoginForm.value.otp4;
+      userOtp = this.myLoginForm.value.otp1.toString() +this.myLoginForm.value.otp2.toString() +this.myLoginForm.value.otp3.toString() +this.myLoginForm.value.otp4.toString();
     } else{
       this.showWrongOtpErrorForRegister = false;
       userOtp = this.otpForm.value.rOtp1 + this.otpForm.value.rOtp2 + this.otpForm.value.rOtp3 + this.otpForm.value.rOtp4;

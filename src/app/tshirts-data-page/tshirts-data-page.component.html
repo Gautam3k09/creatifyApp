@@ -18,14 +18,14 @@
                                 <canvas #canvas class="canvas" [id]="'teeData' + i"  height="100"></canvas>
                             </div>
                             <!-- <div class="col-md-6"> -->
-                                <div class="card-body text-center">
-                                    <p class="card-text">Design Name</p>
-                                    <p *ngIf="from == 'personal'">status : Checking</p>
-                                    <!-- <span aria-hidden="true">
-                                        <span class="">&#8377;</span>
-                                        <span class="display-6">500</span>
-                                        <span>M.R.P</span>
-                                    </span> -->
+                            <div class="card-body text-center">
+                                <p class="card-text">{{teeData.teeName_Name}}</p>
+                                <p *ngIf="from == 'personal'">status : Checking</p>
+                                <!-- <span aria-hidden="true">
+                                    <span class="">&#8377;</span>
+                                    <span class="display-6">500</span>
+                                    <span>M.R.P</span>
+                                </span> -->
                             </div>
                             <!-- </div> -->
                         </div>
@@ -34,8 +34,7 @@
             </div>
         </div>
     </div>
-
+    <div class="loadMore" *ngIf="from == 'common' && !DataFetched && !hideLoadbtn">
+        <button type="button" class="btn btn-dark px-3 py-2" (click)="getTees()">Load more</button>
+    </div>
 </body>
-<div class="loadMore" *ngIf="from != 'personal' && !DataFetched && !hideLoadbtn">
-    <button type="button" class="btn btn-primary px-3 py-2" (click)="getTees()">Load more</button>
-</div>

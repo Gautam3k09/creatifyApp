@@ -4,7 +4,7 @@
 }
 
 body {
-    background-image: url('../../assets/blue-purple.jpg');
+    background-image: url('../../assets/black-bgg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -13,11 +13,10 @@ body {
     color: white;
 }
 
-
 .container {
     height: 80%;
     margin: auto;
-    margin-top: 2%;
+    margin-top: 3%;
 }
 
 /* scroll bar */

@@ -4,23 +4,20 @@
 }
 
 body{
-  background : #333;
-  border-radius: 37px;
+  background : #dfdfdf;
+  border-radius: 30px;
   height: 100%;
-  padding: 25px 50px 75px 100px;
+  padding: 25px 50px 75px 50px;
+  box-shadow: 0px 25px 20px 20px rgb(0 0 0);
 }
 
 .container {
-    
     border-radius: 37px;
-   
-    /* box-shadow: 25px 25px 45px rgba(255, 1, 1, 0.05); */
     height:100%;
     width: 100%;
-    overflow: auto;
-    /* margin: auto; */
+    overflow-y: auto;
+    overflow-x: hidden;
     margin-top: 4%;
-    /* transform: translateZ(80px); */
 }
 .height{
   height: auto;
@@ -95,7 +92,6 @@ body{
 .loadMore{
   display: flex;
   justify-content: center;
-  margin-top: 1%;
 }
 
 .helperButton{
@@ -118,6 +114,10 @@ body{
       padding: 20%;
     }
   }
+}
+
+.card-text{
+  color: #000;
 }
 
 @media(max-width:600px) {
