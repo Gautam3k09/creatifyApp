@@ -35,8 +35,6 @@ body{
 
 .shop-modal {
   right: 2%;
-  /* position: fixed; */
-  /* top: 0 !important; */
   width: 95vw;
 }
 .container {
@@ -45,9 +43,13 @@ body{
 }
 
 .RotateBtn {
-  padding: 1%;
+  padding: 5px;
   margin-left: 3%;
   margin-top: 3%;
+  color: black;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
 }
 
 .tshirtDiv {
@@ -69,12 +71,6 @@ body{
 #BackImage {
   height: 275px;
   background-image: url('../../assets/tshirt.png');
-  background-repeat: round;
-}
-
-#BackImage {
-  height: 275px;
-  background-image: url('../../assets/t-shirts.jpg');
   background-repeat: round;
 }
 
@@ -122,7 +118,52 @@ body{
 
 @media(max-width:600px) {
   body{
-    height: auto;
+    margin-top: 14%;
+    height: 84vh;
+    margin-inline: 10%;
+    padding: 25px 0px 75px 0px;
+  }
+
+  .loadMore{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+    margin-right: 10px;
+  }
+  .mainCard{
+    width: 50%;
+  }
+
+  #BackImage {
+    height: 118px;
+    background-image: url('../../assets/tshirt.png');
+    background-repeat: round;
+  }
+
+  canvas{
+    margin-top: 30px !important;
+    margin-left: 25%;
+    height: 55px;
+  }
+
+  .helperButton{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    .RotateBtn{
+      padding: 2px;
+      margin-left: 3%;
+      color: black;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 5px;
+      font-size: 10px;
+    }
+    .share{
+      margin-inline: 2%;
+      margin-top: 0%;
+      margin-bottom: -3%;
+    }
   }
 }
 

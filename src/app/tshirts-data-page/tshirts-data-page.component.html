@@ -2,18 +2,18 @@
 <body>
     <div class="container custom-scrollbar">
         <div class="height row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <div *ngFor="let teeData of teeDatas; let i = index">
+            <div *ngFor="let teeData of teeDatas; let i = index" class="mainCard">
                 <div class="col" >
-                    <div class="card m-3 h-200  bg-transparent text-white" style="max-width: 540px;">
+                    <div class="card m-3 h-200 bg-transparent text-white" style="max-width: 540px;">
                         <div class="helperButton">
                             <div class="delete" *ngIf="from == 'personal'">
                                 <button title="Delete" type="button" class="RotateBtn btn btn-circle btn-danger" (click)="deleteTees(teeData._id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </div>
                             <div class="share">
-                                <button title="Share" type="button" class="RotateBtn btn btn-circle btn-dark" (click)="copytext(teeData._id)"><i class="fa-solid fa-share"></i></button>
+                                <i class="RotateBtn fa-solid fa-share" title="Share" type=" button" (click)="copytext(teeData._id)"></i>
                             </div>
                         </div>
-                        <div class="row g-0" (click)="navigateBuyPage(teeData)">
+                        <div class="row g-0" style="margin-top: -10px" (click)="navigateBuyPage(teeData)">
                             <div class="col-md-6 text-center mx-auto mt-3 imageContainer" [id]="img ? 'frontImage' : 'BackImage'">
                                 <canvas #canvas class="canvas" [id]="'teeData' + i"  height="100"></canvas>
                             </div>

@@ -112,8 +112,11 @@
   <div class="bottomNavBarforMobView">
     <div class="navbar">
       <div class="upload">
-        <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
-        <p class="uploadText">upload</p>
+        <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
+          <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/png" />
+          <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
+          <p class="uploadText">upload</p>
+        </div>
       </div>
       <!-- <div class="color" (click)="changeHeight('S')">
         <p class="colorIcon"><button class="btn btn-primary" (click)="download()"></button></p>
