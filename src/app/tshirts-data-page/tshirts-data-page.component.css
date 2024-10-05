@@ -51,7 +51,7 @@ body{
   border-width: 1px;
   border-radius: 5px;
 }
-
+  
 .tshirtDiv {
   margin-top: -3%;
   cursor: pointer;
@@ -91,6 +91,7 @@ body{
 }
 
 .helperButton{
+  z-index: 99;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -98,7 +99,7 @@ body{
     margin-inline: 4%;
     margin-top: 4%;
     margin-bottom: -3%;
-    button{
+        button{
       padding: 20%;
     }
   }
@@ -135,7 +136,7 @@ body{
   }
 
   #BackImage {
-    height: 118px;
+    height: 26vh;
     background-image: url('../../assets/tshirt.png');
     background-repeat: round;
   }
@@ -147,21 +148,14 @@ body{
   }
 
   .helperButton{
+    z-index: 99;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     cursor: pointer;
-    .RotateBtn{
-      padding: 2px;
-      margin-left: 3%;
-      color: black;
-      border-style: solid;
-      border-width: 1px;
-      border-radius: 5px;
-      font-size: 10px;
-    }
+    
     .share{
       margin-inline: 2%;
-      margin-top: 0%;
+      margin-top: 6%;
       margin-bottom: -3%;
     }
   }

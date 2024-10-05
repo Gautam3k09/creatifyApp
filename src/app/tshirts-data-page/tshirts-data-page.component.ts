@@ -41,7 +41,7 @@ export class TshirtsDataPageComponent {
   ngOnInit(){
     this.ngxLoader.start();
     this.getTees();
-    this.ngxLoader.stop();
+    
   }
 
   ngAfterViewInit() {
@@ -96,6 +96,9 @@ export class TshirtsDataPageComponent {
       this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
       this.ctx = this.currentCanvas?.getContext("2d");
       this.loadimage(this.teeDatas[this.currentIndex]);
+    }
+    if(this.teeDatas.length ==  this.currentIndex){
+      this.ngxLoader.stop();
     }
   }
 
