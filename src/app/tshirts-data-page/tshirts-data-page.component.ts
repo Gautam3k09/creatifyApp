@@ -73,6 +73,7 @@ export class TshirtsDataPageComponent {
         data = {
           id : this.userData._id,
         }
+        console.log('formher')
       } else {
         data = {
           id : this.userId,
@@ -158,6 +159,10 @@ export class TshirtsDataPageComponent {
     document.execCommand('copy');
     document.body.removeChild(tempElement); 
     window.alert('Text copied successfully')
+  }
+
+  openCanvas(string:any) {
+    this.router.navigate([string]);
   }
   
 }

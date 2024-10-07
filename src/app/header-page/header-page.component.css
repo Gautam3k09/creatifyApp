@@ -18,7 +18,6 @@ nav ul{
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
 }
 
 nav li{
@@ -34,6 +33,7 @@ nav li{
     display: flex;
     align-items: center;
     color: black;
+    cursor: pointer;
 }
 
 .tabs:hover{

@@ -1,24 +1,6 @@
 <body>
     <app-header-page></app-header-page>
-    <div class="container" *ngIf="teesCount > 0; else elseBlockfornoshirt">
+    <div class="container" >
         <app-tshirts-data-page [from]="'personal'" ></app-tshirts-data-page>
-        <div  *ngIf="teesCount > 15; else createBlockElse">
-            <div class="create">Maximum limit exceeded for creating new designs</div>
-            <div class="create">Note : You can delete your tee designs to create more</div>
-        </div>
-        <ng-template #createBlockElse>
-            <div class="create">
-                <button type="button" class=" btn btn-primary px-3 py-2" (click)="openCanvas('canvas')">Create</button>
-            </div>
-        </ng-template>
-    </div>
-    <ng-template #elseBlockfornoshirt>
-        <div class="noTees">
-            <div>You dont have any tshirt</div>
-            <div>
-                <button type="button" class="create btn btn-dark p-2" (click)="openCanvas('canvas')">Create</button>
-            </div>
-        </div>
-    </ng-template>
-        
+    </div>        
 </body>

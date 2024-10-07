@@ -46,7 +46,6 @@ body{
   padding: 5px;
   margin-left: 3%;
   margin-top: 3%;
-  color: black;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -94,22 +93,17 @@ body{
   z-index: 99;
   display: flex;
   align-items: center;
-  cursor: pointer;
   .delete{
     margin-inline: 4%;
     margin-top: 4%;
     margin-bottom: -3%;
-        button{
-      padding: 20%;
-    }
+    color: red;
   }
   .share{
     margin-inline: 2%;
     margin-top: 4%;
-    margin-bottom: -3%;
-    button{
-      padding: 20%;
-    }
+    margin-bottom: -3%;    
+    color: black;
   }
 }
 
@@ -117,11 +111,15 @@ body{
   color: #000;
 }
 
+.create{
+  justify-content: center;
+}
+
 @media(max-width:600px) {
   body{
     margin-top: 14%;
     height: 84vh;
-    margin-inline: 10%;
+    margin-inline: 4%;
     padding: 25px 0px 75px 0px;
   }
 
@@ -150,8 +148,6 @@ body{
   .helperButton{
     z-index: 99;
     display: flex;
-    /* align-items: center; */
-    cursor: pointer;
     
     .share{
       margin-inline: 2%;
