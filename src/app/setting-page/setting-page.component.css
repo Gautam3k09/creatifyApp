@@ -1,43 +1,39 @@
-/* * {
-    margin: 0;
-    padding: 0;
-  } */
-  
+
   body {
-    /* height: 100%; */
-    /* overflow: auto; */
     color: white;
-    background-image: url('../../assets/blue-purple.jpg');
+    background-image: url('../../assets/black-bgg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* margin: auto; */
+    overflow: hidden;
   }
   .container{
     margin-top: 10vh;
   }
+
+  .buttonList {
+    
+  }
+
+  .nav-link{
+    color: rgb(235, 235, 235);
+  }
+  .nav-link.active{
+    background-color: rgb(235, 235, 235) !important;
+    border-color: #212529;
+    color: black;
+  }
+
   .content-container {
-    /* margin-top: 10vh; */
     padding: 4%;
-    /* height: 70%; */
-    background-color: #333;
+    background-color: rgb(235, 235, 235);
     border-radius: 37px;
     margin-left: 20%;
-    color: rgb(255, 255, 255);
+    color: black;
     width: 60vw;
     height: 70vh;
+    box-shadow: 0px 25px 20px 20px rgb(0 0 0);
   }
-
-  /*.sidebar{
-    margin-left: 20%;
-    height: 100%;
-  }
-
-  .tab-content {
-    width: 10%;
-    color:rgb(239, 230, 230);
-    
-  }*/
 
   .profile-title {
     font-weight: 800;
@@ -46,8 +42,33 @@
     margin-bottom: 3vh;
   }
 
+  .profile-title-merch{
+    font-weight: 800;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .profile-title-coupon{
+    font-weight: 800;
+    font-size: 24px;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profile-title-help{
+    font-weight: 800;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 3vh;
+  }
+
+  .main-container{
+    height: 82vh;
+    display: flex;
+    align-items: center;
+  }
+
   .InfoForm{
-    /* text-align: center; */
     margin-left: 3vw;
     .labels{
       margin-top: 2%;
@@ -75,18 +96,28 @@
     margin-top: 20vh;
   }
 
+  .hideOnDesktop{
+    display: none
+  }
 
   /* merch css */
   .flexdivformerch{
     display: flex;
-    justify-content: space-between;
-    width: 47vw;
+    justify-content: space-evenly;
+    font-size: 24px;
   }
 
   .flexdivformerchlable{
     display: flex;
-    justify-content: space-between;
-    width: 47vw;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .couponBtn{
+    text-align: center; 
+    width: 100%;
+    margin-bottom: 2vh;
+    margin-top: 1vh;
   }
 
   .border{
@@ -95,23 +126,19 @@
     width: auto;
     padding-left: 1%;
     margin-left: 1vw;
-    /* cursor: pointer; */
-    button{
-      position: relative;
-      float: right;
-      background: white;
-      top: -10px;
-      right: -10px;
+    
+  }
+
+  .deleteBtn{
       width: 25px;
       height: 25px;
       border-radius: 10px;
       i{
         vertical-align: middle;
         position: relative;
-        top: -3px;
+        top: -44%;
+        margin-left: -2px;
       }
-  
-    }
   }
 
   .withdraw{
@@ -129,26 +156,146 @@
     display: flex;
     justify-content: center;
     margin-top: 3vh;
+  } 
+
+  .hideOnMobile{
+    z-index: 99;
   }
-/* @media(max-width:600px) {
+  
+
+@media(max-width:600px) {
+  body{
+    width: 100vw !important;
+  }
+
+  .container{
+    margin-top: 5vh;
+  }
+
+  .main-container{
+    height: 80vh;
+    justify-content: center;
+  }
+
+  .buttonList{
+    display: grid;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .tablist{
+    display: ruby;
+  }
   .content-container {
-    margin-top: 22%;
-    height: 70%;
+    height: auto;
     background: white;
     border-radius: 37px;
-    margin-left: auto;
+    margin-left: 5%;
     color: rgb(0, 0, 0);
-    width: 80%;
+    width: 95%;
   }
 
   .profile-title {
-    padding-top: 20%;
+    margin-bottom: 0;
+    
+  }
+
+  .profile-title-merch{
+    width: 80%;
+  }
+
+  .profile-title-coupon{
+    width: 80%;
   }
 
   .InfoForm{
-    margin-top: 25%;
     .labels{
       margin-top: 10%;
     }
   }
-} */
+  .flexdiv{
+    display: block;
+    justify-content: space-around;
+  }
+  .hideOnDesktop{
+    display: flex;
+    justify-content: center;
+    box-shadow: 0px -11px 20px 0px rgb(85 83 83);
+  }
+
+  .hideOnMobile{
+    display: none;
+  }
+
+  .buttonDiv{
+    width: 90vw;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .textTag{
+    margin-bottom: 0px;
+    margin-top: -5px;
+  }
+
+  .flexdivformerch{
+    width: 60vw;
+    font-size: 14px;
+    div:first-child{
+      width: 72%;
+    }
+    input{
+      width: 80%;
+    }
+  }
+
+  .merch-container{
+    width: 80vw;
+  }
+
+  .flexdivformerchlable{
+    width: auto;
+    font-size: 16px;
+  }
+
+  .withdraw-btn{
+    display: flex;
+    justify-content: center;
+    width: 74%;
+    margin-top: 3vh;
+  }
+
+  .mobileWidth{
+    width: 74%;
+    font-size: 16px !important;
+  }
+
+  .couponBtn{
+    text-align: center; 
+    width: 74%;
+    margin-bottom: 2vh;
+  }
+
+  .helpDiv{
+    width: 90vw;
+  }
+   
+  .help{
+    width:74vw;
+  }
+
+  .profile-title-help{
+    width: 90%;
+  }
+
+  .raiseBtn{
+    width: 86%;
+  }
+
+  .deleteBtn{
+    width: 18px;
+    height: 18px;
+    border-radius: 10px;
+  }
+}
+
+textarea { resize: none; }

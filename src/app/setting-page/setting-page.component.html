@@ -2,15 +2,18 @@
     <app-header-page></app-header-page>
     <!--code for multiple tab we might need -->
     <div class="container">
-        <div class="d-flex align-items-center sidebar " style="justify-content:center; " >
-            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')">Profile</button>
-              <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('merch')">Merch</button>
-              <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('help')">Need help?</button>
-              <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-selected="false" (click)="logout()">Logout</button>
+        <div class="align-items-center sidebar buttonList">
+          <div class="main-container">
+            <div class="hideOnMobile">
+              <div class="nav flex-column nav-pills me-3 tablist" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')">Profile</button>
+                <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('merch')">Merch</button>
+                <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('help')">Need help?</button>
+                <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-selected="false" (click)="logout()">Logout</button>
+              </div>
             </div>
              <!-- content from here  -->
-            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" style="margin-bottom: 50px; margin-left: -6vw;">
               <div class="content-container">
                 <div *ngIf="this.activeTab == 'profile'">
                   <div class="profile-title">
@@ -68,14 +71,14 @@
                         </div>
                       </div>
                       <div class="text-center mt-4" style="margin-left: -3vw;">  
-                        <button type="submit" [disabled]="myForm.invalid" (click)="AddOrUpdateAddress()">Update</button>
+                        <button class="btn btn-dark" type="submit" [disabled]="myForm.invalid" (click)="AddOrUpdateAddress()">Update</button>
                       </div>
                     </form>
                   </div>
                 </div>
-                <div *ngIf="this.activeTab == 'merch'">
-                  <div class="profile-title">
-                    Merch
+                <div *ngIf="this.activeTab == 'merch'" class="merch-container">
+                  <div class="profile-title-merch">
+                    Merch Info
                   </div>
                   <div *ngIf="this.merchAccount == 'Normal';else merchArea">
                     <div class="tab-pane fade show active " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
@@ -90,54 +93,64 @@
                   <ng-template #merchArea>
                     <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                       <div class="InfoForm">
-                        <div>
+                        <div class="d-flex justify-content-center fs-6 mobileWidth">
                           Tshirts sold &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;123123
                         </div>           
-                        <div>
+                        <div class="d-flex justify-content-center fs-6 mobileWidth">
                           Money earned &nbsp;&nbsp; : &nbsp;&nbsp;123123
                         </div>   
-                        <div>
+                        <div class="d-flex justify-content-center fs-6 mobileWidth mb-3">
                           Money available &nbsp;&nbsp; : &nbsp;&nbsp;123123
                         </div> 
-                        <div *ngIf="couponAvailable == false; else activeCouponArea" class="mb-3 mt-3">
-                          <div class="flexdivformerch" >
-                            <div>
-                              coupon name : <input type="text" placeholder="Monti20" [(ngModel)]="couponName" [ngModelOptions]="{standalone: true}">
-                            </div>
-                             <div>
-                              coupon off : <input onkeyup="if(this.value > 20) this.value = null; if(this.value < 0) this.value = null" type="number" min="5" max="20" value="5" (ngModel)="couponOff">
-                             </div>
-                          </div>   
-                          <div class="flexdivformerchlable">
-                            <div>
-                              <label style="display:inline-block; text-align:left;" >Enter Name followed by number</label>
-                            </div>
-                            <div>
-                              <label style="display:inline-block; text-align:left;" >Discount range from 5 to 20 %</label>
-                              
-                            </div>
-                          </div> 
-                          <div style="text-align: center;">
-                            <button  type="submit" [disabled]="couponOff == 0 || couponName == '' " (click)="addCoupon()">Add coupon</button>
+                        <div>
+                          <div class="profile-title-coupon mobileWidth ">
+                            Add Coupon
                           </div>
-                        </div>
-                        <ng-template #activeCouponArea>
-                          <div class="flexdivformerch mb-3 mt-3" style="justify-content:flex-start;">
-                            <div>
-                              Active coupon name : 
+                          <div *ngIf="couponAvailable == false; else activeCouponArea" class="mb-1 mt-1">
+                            <div class="flexdivformerch" >
+                              <div>
+                                Coupon name <input type="text" placeholder="Monti20" [(ngModel)]="couponName" [ngModelOptions]="{standalone: true}">
+                              </div>
+                               <div>
+                                Coupon off <input onkeyup="if(this.value > 20) this.value = null; if(this.value < 0) this.value = null" type="number" min="5" max="20" value="5" (ngModel)="couponOff">
+                               </div>
+                            </div>   
+                            <div class="flexdivformerchlable mobileWidth">
+                              <div>
+                                Discount range from 5 to 20 %
+                              </div>
+                            </div> 
+                            <div class="couponBtn" >
+                              <button  class="btn btn-dark" type="submit" [disabled]="couponOff == 0 || couponName == '' " (click)="addCoupon()">Add coupon</button>
                             </div>
-                            <div class="border">{{this.couponName}} <button (click)="removeCoupon()"><i class="fa fa-trash fa-2xs" aria-hidden="true"></i></button></div>
-                          </div>   
-                        </ng-template> 
+                          </div>
+                          <ng-template #activeCouponArea>
+                            <div class="flexdivformerch mb-3 mt-3" style="justify-content:flex-start;">
+                              <div>
+                                Active coupon name : 
+                              </div>
+                              <div class="border">{{this.couponName}} </div>
+                              <button class="deleteBtn" (click)="removeCoupon()"><i class="fa fa-trash fa-2xs" aria-hidden="true"></i></button>
+                            </div>   
+                          </ng-template> 
+                        </div>
                         <div class="withdraw" >
-                          <input [(ngModel)]="upiId" placeholder="Enter upi Id" [ngModelOptions]="{standalone: true}"><button type="submit" [disabled]="upiId.length < 15" (click)="withdraw()">withdraw</button> 
+                          <div class="profile-title-coupon mobileWidth ">
+                            Withdraw
+                          </div>
+                          <div class="text-center mobileWidth">
+                            <input [(ngModel)]="upiId" placeholder="Enter upi Id" [ngModelOptions]="{standalone: true}">
+                          </div>
+                          <div class="withdraw-btn text-center mt-2 mobileWidth">
+                            <button class="btn btn-dark" type="submit" [disabled]="upiId.length < 15" (click)="withdraw()">withdraw</button> 
+                          </div>
                          </div>
                       </div>
                     </div>
                   </ng-template>
                 </div>
-                <div *ngIf="this.activeTab == 'help'">
-                  <div class="profile-title">
+                <div *ngIf="this.activeTab == 'help'" class="helpDiv">
+                  <div class="profile-title-help">
                     Help
                   </div>
                   <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
@@ -146,13 +159,33 @@
                         <textarea  id="textarea" type="text" (keyup)="onKeyUp($event)"rows="2" cols="50" placeholder="Raise A Concern/Query"></textarea>
                       </div>         
                       <div class="raiseBtn">
-                      <button type="submit" [disabled]="queryQuetions.length < 15" (click)="postQuestion()">Raise</button>
+                      <button class="btn btn-dark" type="submit" [disabled]="queryQuetions.length < 15" (click)="postQuestion()">Raise</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="hideOnDesktop">
+            <div class="nav flex-column nav-pills me-3 tablist" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <div class="buttonDiv">
+                <div>
+                  <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')"><i class="fa fa-user" aria-hidden="true"></i><p class="textTag">Profile</p></button>
+                  <!-- <p>profile</p> -->
+                </div>
+                <div>
+                  <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('merch')"><i class="fas fa-tshirt"></i><p class="textTag">Merch</p></button>
+                </div>
+                <div>
+                  <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('help')"><i class="fa fa-question-circle" aria-hidden="true"></i><p class="textTag">Help?</p></button>
+                </div>
+                <div>
+                  <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-selected="false" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i><p class="textTag">Logout</p></button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
     <ngx-ui-loader ></ngx-ui-loader>
