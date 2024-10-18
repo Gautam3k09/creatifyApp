@@ -5,79 +5,246 @@
   
 body {
   height: 100vh;
-  background-image: url('../../assets/blue-purple.jpg');
+  background-image: url('../../assets/black-bgg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin: 0;
-  overflow: hidden;
+  overflow: auto;
   color: white;
   position: fixed;
   width: 100vw;
 }
 
-.container {
-  position: relative;
+.mainBox{
+  margin-top: 6vh;
 }
 
-.right-side {
-  margin-top: 2%;
-    float: right;
-    width: auto;
-    /* height: 100px !important; */
-  .canvasFront {
-    height: 47vh;
-    width: 32vw;
-    margin-top: 13%;
-    position: absolute;
-    /* top: 30%; */
-    margin-left: 13%;
-  }
-  .canvasBack {
-    height: 54vh;
-    width: 32vw;
-    margin-top: 21vh;
-    position: absolute;
-    margin-left: 11vw;
-  }
-  .RotateBtn{
+.container {
+  background: white;
+  position: relative;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  color: black;
+  border-radius: 30px;
 
-  }
-  img {
-    margin-left: 10%;
-    height: 80vh;
-    /* right: 20; */
-  }
 }
 
 .left-side {
-  margin-top: 15%;
+  margin-top: 2%;
   float: left;
-  background: #333;
-  width: 25%;
+  width: auto;
+}
+.canvasFront {
+  height: 47vh;
+  width: 32vw;
+  margin-top: 13%;
+  position: absolute;
+  /* top: 30%; */
+  margin-left: 13%;
+}
+.canvasBack {
+  height: 54vh;
+  width: 32vw;
+  margin-top: 21vh;
+  position: absolute;
+  margin-left: 11vw;
+}
+.RotateBtn{
+
+}
+.imgTag {
+  margin-left: 10%;
+  height: 80vh;
+  /* right: 20; */
+  img{
+    border: solid;
+    height: 100%;
+  }
+}
+
+.right-side {
+  margin-top: 5%;
+  background: transparent;
+  width: 30%;
   height: auto;
-  margin-left: 15%;
-  padding: 1% 2% 1% 2% ;
-  border-radius: 6%;
-  box-shadow: #333;
+  margin-left: 5%;
+  font-size: larger;
+  font-weight: 600;
+
+  .sellerlabel{
+    font-weight: 600;
+  }
 
   .tee-Name{
-    text-align: center;
-    text-transform: uppercase;
-    margin-bottom: 4%;
-    margin-top: 5%;
+    font-weight: 400;
   }
 
   .colorText{
     /* text-align: center; */
   }
   .price{
-    text-align: center;
+    /* text-align: center; */
   }
 
   .buyButton{
     text-align: center;
+    button{
+      width: 60%;
+    }
+  }
+}
+
+.colorBtn{
+  border : 2px solid black;
+  height: 25px;
+  width: 25px;
+  border-radius: 50px;
+}
+
+.colorDiv{
+  display: flex;
+}
+
+.colorBtnDiv{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  
+}
+.active{
+  border: 3px solid black !important;
+}
+
+.sizeDiv{
+  position: relative;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  color: blue;
+  .sizeTxt{
+    cursor: pointer;
+  }
+  button{
+    z-index: 99;
+    font-weight: 600;
+    width: 15%;
+    border: 3px solid rgb(164, 164, 164);
+  }
+  button:hover{
+    border: 3px solid black !important;
+  }
+}
+
+.productTitle{
+  display: flex;
+  justify-content: center;
+}
+
+.productChild{
+  display: flex;
+  justify-content: space-between;
+  font-weight: 300;
+}
+
+.borderTop{
+  border-top: 4px solid #d9d9d9;
+}
+.hr{  
+  height: 5px;
+  border-bottom: 4px solid #d9d9d9;
+}
+@media(max-width:600px) {
+  .mainBox{
+    /* margin-bottom: 6vh; */
+  }
+  .container{
+    position: relative;
+    height: auto;
+    display: block;
+    justify-content: center;
+    margin: auto;
+    color: black;
+    border-radius: 30px;
+    padding-bottom: 12%;
   }
 
+  .right-side {
+    margin-top: 8%;
+    width: 90vw;
+    float: none;
+    canvas{
+      display: none;
+    }
+    .canvasFront {
+      height: 47vh;
+      width: 32vw;
+      margin-top: 13%;
+      position: absolute;
+      /* top: 30%; */
+      margin-left: 13%;
+    }
+    .canvasBack {
+      height: 54vh;
+      width: 32vw;
+      margin-top: 21vh;
+      position: absolute;
+      margin-left: 11vw;
+    }
+    .RotateBtn{
   
+    }
+   
+  }
+
+  .left-side{
+    margin-top: 6%;
+    /* background: red; */
+    width: 80vw;
+    margin-left: 0%;
+    padding: 1% 2% 1% 2%;
+    border-radius: 6%;
+  }
+  .imgTag {
+    height: auto;
+    img{
+      border: solid;
+      height: 56vh;
+      width: 80vw;
+    }
+  }
+
+  .colorBtn{
+    border : 2px solid black;
+    height: 25px;
+    width: 25px;
+    border-radius: 50px;
+  }
+
+  .buyButton{
+    position: fixed;
+    bottom: 0;
+    width: 100% !important;
+    text-align: center;
+    margin-left: -5%;
+    background-color: black;
+    z-index: 9999;
+    button{
+      height: 5vh;
+      width: 100% !important;
+    }
+  }
+
+  .checkoutText{
+    font-size: 18px;
+    margin-top: -5%;
+    margin-bottom: 3%;
+  }
+
+  .borderBottom{
+    border-bottom: 5px solid #d0cfcf;
+    padding-bottom: 8px;
+  }
 }

@@ -8,11 +8,12 @@ import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { OrderStepperComponent } from '../order-stepper/order-stepper.component';
+import { ReferralPageComponent } from '../referral-page/referral-page.component';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,OrderStepperComponent],
+  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,OrderStepperComponent,ReferralPageComponent],
   templateUrl: './buy-page.component.html',
   styleUrl: './buy-page.component.css',
   providers: [WindowRefService,AppServiceService],
@@ -26,7 +27,10 @@ export class BuyPageComponent implements OnInit  {
   tshirtId: any;
   data : any;
   dialogConfig = new MatDialogConfig();
+  activeColorBtn : any = 'white';
+  activeSizeBtn : any = 'S';
   modalDialog: MatDialogRef<OrderStepperComponent, any> | undefined;
+  modalDialogforReferral: MatDialogRef<ReferralPageComponent,any> | undefined;
   constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog) {
     
   }
@@ -38,8 +42,14 @@ export class BuyPageComponent implements OnInit  {
     this.globalctx= this.globalCanvas.getContext("2d");
     this.getTee();
   }
+
   changeColor(string: string) {
     console.log(string,'string')
+    this.activeColorBtn = string;
+  }
+
+  changeSize(string: string) {
+    this.activeSizeBtn = string;
   }
   
   getTee(){
@@ -155,6 +165,27 @@ export class BuyPageComponent implements OnInit  {
         //   from: 'withdraw'
         // } 
         // this.postQuestionApi(upiData);
+      }
+    });
+  }
+
+  showImage(){
+    let imageSrc: string = '../../assets/sizeChart.jpg';
+    window.open(imageSrc, '_blank');
+    // document.body.appendChild(image);
+  }
+
+  openRefferalModal(){
+    this.modalDialogforReferral = this.matDialog.open(ReferralPageComponent,  {
+      width: '40%',
+      height: '30%',
+      // overflow: 'auto',
+      // data: this.data
+    });
+
+    this.modalDialogforReferral.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if(result == 'withdraw'){
       }
     });
   }

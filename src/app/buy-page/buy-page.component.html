@@ -1,43 +1,77 @@
 <body>
   <app-header-page></app-header-page>
-        <div class="container">
-            <div class="right-side">
-                <canvas #canvas class="canvasFront" id="canvas" ></canvas>
-                <div>
-                  <button type="button" style="width: 15%;" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
-                </div>
-                <img id="draggable" src="../../assets/tshirt.png" >
+  <div class="mainBox">
+    <div class="container">
+        <div class="left-side">
+            <canvas #canvas class="canvasFront" id="canvas" ></canvas>
+            <div>
+              <button type="button" style="width: 15%;" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
             </div>
-            <div class="left-side">
-                <div class="tee-Name">
-                    {{data?.teeName_Name}}
-                </div>
-                <div class="mb-4">
-                  <p class="mb-0 colorText">Colors
-                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
-                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
-                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
-                    <button type="button" class="btn btn-circle btn-primary mx-2" (click)="changeColor('red')">red</button>
-                  </p>
-                </div>
-                <div class="mb-4">
-                  <p class="mb-0">Size
-                    <button type="button"  style="width: 15%;" class="btn btn-circle btn-light mx-2" (click)="changeColor('red')">S</button>
-                    <button type="button" style="width: 15%;" class="btn btn-circle btn-light mx-2" (click)="changeColor('red')">M</button>
-                    <button type="button" style="width: 15%;" class="btn btn-circle btn-light mx-2" (click)="changeColor('red')">L</button>
-                    <button type="button" style="width: 15%;" class="btn btn-circle btn-light mx-2" (click)="changeColor('red')">XL</button>
-                  </p>
-                </div>
-                <div class="mb-4">
-                  <p class="mb-0 price">Price: {{data?.teeName_Price}} Rs</p>
-                </div>
-                <div class="mb-4 buyButton">
-                  <button type="button" style="width: 60%;"class=" btn btn-circle btn-primary mx-2" (click)="openModal()">Buy Now</button>
-                </div>
+            <div class="imgTag">
+              <img src="../../assets/tshirt.png" >
             </div>
-       
-        
+        </div>
+        <div class="right-side">
+          <div class="sellerlabel">
+            Createefi
+          </div>
+          <div class="tee-Name">
+              {{data?.teeName_Name}}
+          </div>
+          <div class="mb-2 borderBottom">
+            <p class="mb-0 price">Rs. {{data?.teeName_Price}}</p>
+            <p class="h6"> Tax included.Shipping free on Online Payment!</p>
+            <p class="h6"> Normal Delivery | 5-9 days</p>
+          </div>
+            <!-- <div class="colorDiv mb-4">
+              <p class="mb-0 colorText">Colors</p>
+              <div class="colorBtnDiv">
+                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'white'}" class="colorBtn btn btn-circle mx-2" style="background-color: white; " (click)="changeColor('white')"></button></div>
+                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'black'}" class="colorBtn btn btn-circle mx-2" style="background-color: black;" (click)="changeColor('black')"></button></div>
+                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'maroon'}" class="colorBtn btn btn-circle mx-2" style="background-color: maroon;" (click)="changeColor('maroon')"></button></div>
+                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'navy'}" class="colorBtn btn btn-circle mx-2" style="background-color: navy;" (click)="changeColor('navy')"></button></div>
+              </div>
+            </div> -->
+          <div class="mb-4 borderBottom">
+            <div class="sizeDiv mb-0" >
+              <div class="sizeTxt" (click)="showImage()">Size</div>
+              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
+              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'M'}" (click)="changeSize('M')">M</button>
+              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'L'}" (click)="changeSize('L')">L</button>
+              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'XL'}" (click)="changeSize('XL')">XL</button>
+            </div>
+            <p class="h6 d-flex justify-content-center"> Click on Size for Size Chart</p>
+          </div>
+            
+          <div class="buyButton">
+            <button type="button" class=" btn btn-circle btn-dark" (click)="openModal()">Buy Now</button>
+          </div>
+          <div class="text-center checkoutText borderBottom">Coupons can be added to checkout page*</div>
+
+          <div class="ReferralSection borderBottom">
+            <p>Refer & Earn</p>
+            <p>You will get Rs.500 for every friend</p>
+            <p style="color: blue;position: relative;z-index: 999;" (click)="openRefferalModal()">Refer Now</p>
+          </div>
+
+          <div class="productDetails">
+            <div class="productTitle">Product Details</div>
+            <div class="productChild">
+              <p>Color</p><p>Black</p>
+            </div>
+            <div class="productChild">
+              <p>Fabric</p> <p>Black</p>
+            </div>
+            <div class="productChild">
+              <p>Ocassion</p> <p>Baalack</p>
+            </div>
+            <div class="productChild">
+              <p>WashCare</p> <p>Black</p>
+            </div>
+          </div>
+        </div>
     </div>
+  </div>
     
     <!-- <div class="bottomNavBarforMobView">
       <div class="navbar">
