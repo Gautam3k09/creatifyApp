@@ -4,6 +4,7 @@ import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 import { localStorageService } from '../local-storage-service';
+import { environment } from '../../../environment';
 
 @Component({
   selector: 'app-tshirts-data-page',
@@ -151,7 +152,7 @@ export class TshirtsDataPageComponent {
   }
 
   copytext(teeDataId: string){
-    let text = 'http://localhost:4200/buy/' + teeDataId;
+    let text = environment.frontend + 'buy/' + teeDataId;
     const tempElement = document.createElement('textarea');
     tempElement.value = text;
     document.body.appendChild(tempElement); 

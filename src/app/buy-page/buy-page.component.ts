@@ -29,6 +29,10 @@ export class BuyPageComponent implements OnInit  {
   dialogConfig = new MatDialogConfig();
   activeColorBtn : any = 'white';
   activeSizeBtn : any = 'S';
+  openCouponInput : any = false;
+  enteredCouponInput : any = '';
+  couponData : any = [];
+  discountedPrice : any = '';
   modalDialog: MatDialogRef<OrderStepperComponent, any> | undefined;
   modalDialogforReferral: MatDialogRef<ReferralPageComponent,any> | undefined;
   constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog) {
@@ -150,8 +154,8 @@ export class BuyPageComponent implements OnInit  {
 
   openModal(){
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
-      width: '40%',
-      height: 'auto',
+      width: '510px',
+      height: '475px',
       // overflow: 'auto',
       data: this.data
     });
@@ -177,8 +181,8 @@ export class BuyPageComponent implements OnInit  {
 
   openRefferalModal(){
     this.modalDialogforReferral = this.matDialog.open(ReferralPageComponent,  {
-      width: '40%',
-      height: '30%',
+      width: '500px',
+      height: '300px',
       // overflow: 'auto',
       // data: this.data
     });
@@ -186,6 +190,38 @@ export class BuyPageComponent implements OnInit  {
     this.modalDialogforReferral.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if(result == 'withdraw'){
+      }
+    });
+  }
+
+  openCouponModal(){
+    this.openCouponInput = !this.openCouponInput;
+    this.enteredCouponInput = '' ;
+    this.couponData = [];
+  }
+  
+  onKeyUp(event: any) { 
+    this.couponData = [];
+    this.enteredCouponInput = event.target.value;
+  }
+  
+  checkCoupon() {
+    let data ={
+      text : this.enteredCouponInput,
+      using : 'text'
+    }
+    this.appservice.getCoupon(data).subscribe((response) => {
+      if(response.status && response.data && response.data.length > 0) {
+        this.couponData = {
+          coupon_Name: response.data[0].coupon_Name,
+          coupon_Off: response.data[0].coupon_Off,
+          coupon_text: 'Coupon Applied',
+        };
+        this.discountedPrice =this.data?.teeName_Price -  (this.data?.teeName_Price * this.couponData.coupon_Off) / 100;
+      } else{
+        this.couponData = {
+          coupon_text: 'Coupon Not Available',
+        };
       }
     });
   }

@@ -59,6 +59,41 @@
   width: 10px;
 }
 
+@media(max-width:600px) {
+  .mat-step-text-label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  .btnBack{
+    button{
+      font-size: 12px;
+    }
+  }
+  .btnCod{
+    height: 4vh;
+    button{
+      font-size: 12px;
+      height: 100%;
+      padding: 2px;
+    }
+  }
+  .btnOnline{
+    height: 4vh;
+    button{
+      font-size: 12px;
+      height: 100%;
+      padding: 2px;
+    }
+  }
+
+  .mobileFontSize{
+    font-size: 10px;
+  }
+  
+}
+
 /* Style the scrollbar track */
 .containerAddressGroup::-webkit-scrollbar-track {
 background: none;

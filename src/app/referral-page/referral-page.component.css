@@ -27,10 +27,6 @@ body {
     color: blue;
     
 }
-span:hover{
-    font-size: 24px;
-    cursor: pointer;
-}
 
 .codeHelper{
     text-align: center;

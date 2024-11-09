@@ -37,8 +37,8 @@ export class OrderStepperComponent {
   dialogConfig = new MatDialogConfig();
   @Input() data: any;
   userData: any;
-  userCoins: any = 50;
-  userQuantity: any = 2;
+  userCoins: any = 100;
+  userQuantity: any = 1;
   finalPrice:any;
   modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
   numberVerified = true;
@@ -73,6 +73,7 @@ export class OrderStepperComponent {
   }
 
   calculatePrice(){
+    console.log('here in calc')
     this.finalPrice = (this.buyPageData?.teeName_Price * this.userQuantity) - this.userCoins
   }
 
@@ -168,7 +169,7 @@ export class OrderStepperComponent {
         setTimeout(() => {
           
           this.openModal('paid');
-        }, 100);
+        }, 1000);
       }
     })
   }

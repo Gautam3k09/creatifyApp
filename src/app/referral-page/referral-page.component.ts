@@ -9,4 +9,13 @@ import { Component } from '@angular/core';
 })
 export class ReferralPageComponent {
 
+  copy(){
+    const tempElement = document.createElement('textarea');
+    tempElement.value = 'text';
+    document.body.appendChild(tempElement); 
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement); 
+    window.alert('Text copied successfully')
+  }
 }

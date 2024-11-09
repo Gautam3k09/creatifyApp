@@ -19,7 +19,10 @@
               {{data?.teeName_Name}}
           </div>
           <div class="mb-2 borderBottom">
-            <p class="mb-0 price">Rs. {{data?.teeName_Price}}</p>
+            <p class="mb-0 price" *ngIf="couponData.length == 0; else elseBlockforPrice">Rs. {{data?.teeName_Price}}</p>
+            <ng-template #elseBlockforPrice>
+              <s> Rs. {{data?.teeName_Price}} </s> <p>Rs. {{discountedPrice}}</p>
+            </ng-template>
             <p class="h6"> Tax included.Shipping free on Online Payment!</p>
             <p class="h6"> Normal Delivery | 5-9 days</p>
           </div>
@@ -32,7 +35,7 @@
                 <div><button type="button" [ngClass]="{'active': activeColorBtn === 'navy'}" class="colorBtn btn btn-circle mx-2" style="background-color: navy;" (click)="changeColor('navy')"></button></div>
               </div>
             </div> -->
-          <div class="mb-4 borderBottom">
+          <div class="mb-3 borderBottom">
             <div class="sizeDiv mb-0" >
               <div class="sizeTxt" (click)="showImage()">Size</div>
               <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
@@ -42,16 +45,26 @@
             </div>
             <p class="h6 d-flex justify-content-center"> Click on Size for Size Chart</p>
           </div>
+          
+          <div class="borderBottom">
+            <input type="text" class="form-control" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
+              <div *ngIf="couponData.length == 0; else elseBlock">
+                <button type="button" class="btn btn-dark" (click)="checkCoupon()" >Apply</button>
+              </div>
+              <ng-template #elseBlock>
+                <div> {{couponData.coupon_text}}</div>
+              </ng-template>
+          </div>
             
           <div class="buyButton">
             <button type="button" class=" btn btn-circle btn-dark" (click)="openModal()">Buy Now</button>
           </div>
-          <div class="text-center checkoutText borderBottom">Coupons can be added to checkout page*</div>
+          
 
           <div class="ReferralSection borderBottom">
             <p>Refer & Earn</p>
             <p>You will get Rs.500 for every friend</p>
-            <p style="color: blue;position: relative;z-index: 999;" (click)="openRefferalModal()">Refer Now</p>
+            <p style="color: blue;position: relative;z-index: 999; cursor: pointer;" (click)="openRefferalModal()">Refer Now</p>
           </div>
 
           <div class="productDetails">

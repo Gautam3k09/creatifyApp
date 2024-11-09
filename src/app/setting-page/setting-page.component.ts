@@ -113,7 +113,11 @@ export class SettingPageComponent {
   changeTab(tab: string) {
     this.activeTab = tab;
     if(this.activeTab == 'merch') {
-      this.appservice.getCoupon({data:this.userData._id}).subscribe((response) => {
+      let data = {
+        using : 'Id',
+        userId : this.userData._id 
+      }
+      this.appservice.getCoupon(data).subscribe((response) => {
         if(response.status && response.data && response.data.length > 0) {
           this.couponName = response.data[0].coupon_Name;
           this.couponOff = response.data[0].coupon_Off;
@@ -121,7 +125,7 @@ export class SettingPageComponent {
         } else{
           this.couponAvailable = false;
         }
-      })
+      });
     }
   }
   
