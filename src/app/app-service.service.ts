@@ -82,4 +82,10 @@ export class AppServiceService {
   postOrder(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/place-order`,data);
   }
+
+
+  // admin apis
+  getAllOrder() {
+    return this.http.get(`${this.serverUrl}/orderAll`);
+  };
 }

@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { TestPageComponent } from './test-page/test-page.component';
 import { HeaderPageComponent } from './header-page/header-page.component';
 import { CanvasAreaComponent } from './canvas-area/canvas-area.component';
@@ -9,6 +10,8 @@ import { SettingPageComponent } from './setting-page/setting-page.component';
 import { BuyPageComponent } from './buy-page/buy-page.component';
 import {MerchHomePageComponent } from './merch-home-page/merch-home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
+import { AdminOrderPageComponent } from './admin-order-page/admin-order-page.component';
 
 export const routes: Routes = [
     // { path: '', component: HeaderPageComponent},
@@ -20,5 +23,16 @@ export const routes: Routes = [
     { path: 'settings', component: SettingPageComponent},
     { path: 'buy/:userId', component: BuyPageComponent},
     { path: ':userName/merch/:userId',component: MerchHomePageComponent},
-    { path: '**', component: NotFoundComponent } 
+
+    //admin
+    { path: 'admin', component: AdminHomePageComponent },
+    { path: 'admin/order', component: AdminOrderPageComponent },
+    
+    // end
+    { path: '**', component: NotFoundComponent },
 ];
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+  })
+  export class AppRoutingModule { }
