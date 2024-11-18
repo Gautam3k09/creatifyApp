@@ -26,7 +26,7 @@ export const routes: Routes = [
 
     //admin
     { path: 'admin', component: AdminHomePageComponent },
-    { path: 'admin/order', component: AdminOrderPageComponent },
+    { path: 'order', component: AdminOrderPageComponent },
     
     // end
     { path: '**', component: NotFoundComponent },

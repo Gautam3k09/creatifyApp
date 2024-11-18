@@ -19,7 +19,7 @@
               {{data?.teeName_Name}}
           </div>
           <div class="mb-2 borderBottom">
-            <p class="mb-0 price" *ngIf="couponData.length == 0; else elseBlockforPrice">Rs. {{data?.teeName_Price}}</p>
+            <p class="mb-0 price" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.teeName_Price}}</p>
             <ng-template #elseBlockforPrice>
               <s> Rs. {{data?.teeName_Price}} </s> <p>Rs. {{discountedPrice}}</p>
             </ng-template>
@@ -47,7 +47,7 @@
           </div>
           
           <div class="borderBottom">
-            <input type="text" class="form-control" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
+            <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
               <div *ngIf="couponData.length == 0; else elseBlock">
                 <button type="button" class="btn btn-dark" (click)="checkCoupon()" >Apply</button>
               </div>

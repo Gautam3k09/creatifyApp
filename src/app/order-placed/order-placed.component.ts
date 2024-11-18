@@ -49,7 +49,11 @@ export class OrderPlacedComponent {
       by:  this.storeData.visitor == null ?this.data.userData.user_Name : this.data.userData.phoneNumber,
       madeBy: this.data.buyPageData.user_Id,
       address: this.data.address,
-    }
+      paymentMethod : 'COD',
+      tshirtPrice : this.data.buyPageData.teeName_Price,
+      quantity : this.data.buyPageData.quantity,
+      size : this.data.buyPageData.size,
+    };
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){
         this.fromCod = false;

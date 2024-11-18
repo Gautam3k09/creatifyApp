@@ -45,7 +45,7 @@ export class OrderStepperComponent {
   verifyLabel:any = 'Verify & Proceed';
   storedData: any;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any,quantity:any,size:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
     this.storedData = this.localStorage.getUserLocalStorage();
     if(this.storedData && this.storedData.LoggedIn != null){
@@ -130,6 +130,7 @@ export class OrderStepperComponent {
   }
 
   openModal(string:any){
+    this.buyPageData.quantity = this.userQuantity;
     let data = {
       from : string,
       buyPageData:this.buyPageData,
@@ -162,7 +163,11 @@ export class OrderStepperComponent {
       tshirtId : this.buyPageData._id,
       by: this.storedData.LoggedIn != null ? this.userData.user_Name : this.secondFormGroup.value.phoneNumber,
       madeBy: this.buyPageData.user_Id,
-      address: this.firstFormGroup.value
+      address: this.firstFormGroup.value,
+      paymentMethod : 'ONLINE',
+      tshirtPrice : this.buyPageData.teeName_Price,
+      quantity : this.userQuantity,
+      size : this.buyPageData.size,
     }
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){

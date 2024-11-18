@@ -163,7 +163,10 @@ body {
   color: blue;
   cursor: pointer;
 }
-
+.borderBottom{
+  position: relative;
+  z-index: 999;
+}
 @media(max-width:600px) {
   .mainBox{
     /* margin-bottom: 6vh; */

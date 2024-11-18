@@ -2,27 +2,42 @@
     <table mat-table [dataSource]="dataSource">
   
       <!-- Position Column -->
-      <ng-container matColumnDef="position">
+      <ng-container matColumnDef="orderBy">
         <th mat-header-cell *matHeaderCellDef> OrderBy. </th>
         <td mat-cell *matCellDef="let element"> {{element.orderBy}} </td>
       </ng-container>
   
       <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.tshirtId}} </td>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> price </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
       </ng-container>
   
       <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef> Weight </th>
-        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef> quantity </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
       </ng-container>
   
       <!-- Symbol Column -->
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> Symbol </th>
-        <td mat-cell *matCellDef="let element"> {{element.orderStatus}} </td>
+      <ng-container matColumnDef="size">
+        <th mat-header-cell *matHeaderCellDef> size </th>
+        <td mat-cell *matCellDef="let element"> {{element.size}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> type </th>
+        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -30,7 +45,7 @@
     </table>
   
     <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                   showFirstLastButtons
-                   aria-label="Select page of periodic elements">
+        showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>

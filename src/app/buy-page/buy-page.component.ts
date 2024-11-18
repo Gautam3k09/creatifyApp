@@ -153,6 +153,8 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openModal(){
+    this.data.teeName_Price = this.couponData.couponAvailable == 0 ? this.data.teeName_Price : this.discountedPrice;
+    this.data.size = this.activeSizeBtn;
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
       width: '510px',
       height: '475px',
@@ -216,11 +218,13 @@ export class BuyPageComponent implements OnInit  {
           coupon_Name: response.data[0].coupon_Name,
           coupon_Off: response.data[0].coupon_Off,
           coupon_text: 'Coupon Applied',
+          couponAvailable : true
         };
         this.discountedPrice =this.data?.teeName_Price -  (this.data?.teeName_Price * this.couponData.coupon_Off) / 100;
       } else{
         this.couponData = {
           coupon_text: 'Coupon Not Available',
+          couponAvailable : false
         };
       }
     });
