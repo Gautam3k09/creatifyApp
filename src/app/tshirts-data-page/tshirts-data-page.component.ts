@@ -99,7 +99,7 @@ export class TshirtsDataPageComponent {
       this.ctx = this.currentCanvas?.getContext("2d");
       this.loadimage(this.teeDatas[this.currentIndex]);
     }
-    if(this.teeDatas.length ==  this.currentIndex){
+    if(this.teeDatas.length >=  this.currentIndex){
       this.ngxLoader.stop();
     }
   }

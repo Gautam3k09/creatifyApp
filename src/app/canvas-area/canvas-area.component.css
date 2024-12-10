@@ -4,10 +4,11 @@
 }
 
 body {
+  text-transform: uppercase;
   height: 100%;
   /* overflow: auto; */
   color: white;
-  background-image: url('../../assets/blue-purple.jpg');
+  background-image: url('../../assets/black-bgg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -15,41 +16,49 @@ body {
 }
 
 .container {
-    position: relative;
-
-    canvas {
-      position: absolute;
-      top: 30%;
-      left: 21%;
+    position: fixed;
+    .canvas {
+      position: relative;
+      display: block;
+      border: 1px solid red;
+      z-index: 999;
+      margin-top: 78px;
+      margin-left: 122px;
+    }
+    .mainCanvas{
+      display: block;
+      position: fixed;
+      top: 10vh;
+      border: 1px solid red;
     }
     
-    img {
+    .imgContainer{
       margin-left: 10%;
-      height: 80vh;
-      right: 20;
+      margin-top: 6%;
+    }
+
+    img {
+      height: 60vh;
     }
 
     .utils {
+      position: fixed;
       padding: 3%;
-      background-color: #333;
+      background-color: #dfdfdf;
       border-radius: 6%;
-      position: absolute;
-      top: 10%;
+      top: 15%;
       right: 5%;
       box-shadow: #333;
+      color: black;
 
       .shirtOptionContainer{ 
         text-align:center;
         margin: auto;
       }
 
-      .shirtOptionContainer1 {
-        display: inline;
-        margin-left: 5%;
-        margin-right: 20%;
-      }
-      .shirtOptionContainer2{
-        display:inline;
+      .sideLabel{
+        width: 4vw;
+        border-color: white;
       }
 
       .radio-group {
@@ -94,6 +103,34 @@ body {
         text-align: center;
       }
     }
+
+    .saveButton {
+      display: flex;
+      justify-content: center;
+    }
+
+    .colorNote{
+      width: 28vw;
+      text-align: center;
+    }
+
+    .RemoveBtn{
+      padding: 10px;
+      display: flex ;
+      justify-content: center;        
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      border-radius: 15px;
+    }
+}
+
+.mainDiv{
+  height: 60vh;
+}
+
+.tipDiv{
+  width: 25vw;
+  text-align: center;
 }
 
 textarea {
@@ -110,7 +147,7 @@ textarea {
 
 /* fileupload */
 .fileUpload {
-	background: #00bcbe;
+	background: #000000;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -126,7 +163,7 @@ textarea {
    cursor: pointer;
 }
 .fileUpload:hover, .fileUpload:active, .fileUpload:focus {
-	background: #00a2a4;
+	background: #000000;
   cursor: pointer;
 }
 .fileUpload input.upload {
@@ -155,6 +192,20 @@ input[type="file"] {
     cursor: pointer;
 }
 
+.btnColorBlack{
+  background-color: black;
+}
+.btnColorWhite{
+  background-color: white;
+  border-color: black;
+}
+.btnColorBlue{
+  background-color: rgba(0,0,57,255);
+}
+.btnColorMaroon{
+  background-color: rgba(74,0,0,255)
+}
+
 @media(max-width:600px) {
   .container {
     position: relative;
@@ -177,12 +228,16 @@ input[type="file"] {
       width: 90%;
     }
 
-    canvas {
+    .canvas {
       position: absolute;
         width: 40%;
-        left: 28%;
+        left: 20.6%;
         height: 47%;
         top: 48%;
+    }
+
+    .mainCanvas{
+      border: 1px solid red;
     }
 
     .utils {
@@ -193,6 +248,8 @@ input[type="file"] {
     }
 
     .saveButton {
+      display: flex;
+      justify-content: center;
       p {
         text-align: center;
         margin-right: 13%;
