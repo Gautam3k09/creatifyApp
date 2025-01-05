@@ -20,9 +20,13 @@ export class TshirtsDataPageComponent {
   teeDatas : any =[];
   currentIndex : number = 0;
   currentCanvas : any;
-  public ctx : any;
+  currentMainCanvas : any;
+  public ctx : any; 
+  public MainCanvasctx: any;
   commonShop : any = '';
   pageCount : number = 1;
+  @ViewChild('mainCanvas', { static: false })
+  canvasRef_for_Bg!: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvas', { static: false })
   canvasRef!: ElementRef<HTMLCanvasElement>;  
   DataFetched : boolean = false;
@@ -31,6 +35,23 @@ export class TshirtsDataPageComponent {
   canvasbackHeight = 120;
   storedData : any;
   hideLoadbtn : boolean = false;
+
+  imageFrontSrc = 'assets/display-tees/front-black.png';
+  imageFrontUrls = [ 
+    {key : 'Onyx black', value : 'assets/display-tees/front-black.png'},
+    {key : 'Pearl white', value : 'assets/display-tees/front-white.png'},
+    {key : 'Sapphire blue', value : 'assets/display-tees/front-blue.png'},
+    {key : 'Ruby maroon', value : 'assets/display-tees/front-maroon.png'},    
+  ];
+  imageBackSrc = 'assets/display-tees/back-black.png';
+  imageBackUrls = [
+    {key : 'Onyx black', value : 'assets/display-tees/back-black.png'},
+    {key : 'Pearl white', value : 'assets/display-tees/back-white.png'},
+    {key : 'Sapphire blue', value : 'assets/display-tees/back-blue.png'},
+    {key : 'Ruby maroon', value : 'assets/display-tees/back-maroon.png'},
+  ];
+
+
   constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute,public localstorage : localStorageService){
     this.userId = route.snapshot.params['userId'];
     this.storedData = this.localstorage.getUserLocalStorage();
@@ -47,8 +68,20 @@ export class TshirtsDataPageComponent {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.loopIterator()
+      // this.loopIterator()
     }, 1200);
+  }
+
+  drawImageOnCanvas(image : any): void {
+    const canvas = this.canvasRef_for_Bg?.nativeElement;
+    const ctx = this.currentMainCanvas.getContext('2d');
+    canvas.width = 175; // You can adjust the width
+    canvas.height = 150; // You can adjust the height
+    const img = new Image();
+    img.src = image;
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+    };    
   }
 
   getTees() { 
@@ -87,19 +120,34 @@ export class TshirtsDataPageComponent {
       });
     }
     setTimeout(() => {
-      this.loopIterator()
+      if(this.teeDatas.length > 0){
+          this.loopIterator()
+        } else {
+          this.ngxLoader.stop();
+        }
     }, 1500);
     this.pageCount = this.pageCount + 1
   }
 
   loopIterator(){
-    if(this.teeDatas.length != this.currentIndex) { 
+    if(this.teeDatas.length != this.currentIndex) {
+      this.changeTshirtColor(this.currentIndex)
+      let mainCanvas = 'mainTeeData' + this.currentIndex;
+      this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
+      this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
+      this.drawImageOnCanvas(this.imageFrontSrc);
+      
       let teeDataId = 'teeData' + this.currentIndex;
       this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
       this.ctx = this.currentCanvas?.getContext("2d");
       this.loadimage(this.teeDatas[this.currentIndex]);
     }
     if(this.teeDatas.length >=  this.currentIndex){
+      this.changeTshirtColor(0)
+      let mainCanvas = 'mainTeeData' + 0;
+      this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
+      this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
+      this.drawImageOnCanvas(this.imageFrontSrc);
       this.ngxLoader.stop();
     }
   }
@@ -107,12 +155,24 @@ export class TshirtsDataPageComponent {
   loadimage(data:any) {
     const img = new Image();
     let boxHeight : any = ''
-    if( !data?.teeName_frontsideImg){
+    if( !data?.tee_frontsideImg){
+      const screenWidth = window.innerWidth;
+      if(screenWidth > 800) {
+        this.currentCanvas .style.height = '268px';
+        this.currentCanvas .style.marginTop = '-64%';
+        this.currentCanvas .style.marginLeft = '30%';
+        this.currentCanvas .style.width = '230px';
+      } else {
+        this.currentCanvas .style.height = '145px';
+        this.currentCanvas .style.marginTop = '65px';
+        this.currentCanvas .style.marginLeft = '30%';
+        this.currentCanvas .style.width = '89px';
+      }
       boxHeight = this.canvasbackHeight;
-      img.src = data?.teeName_backsideImg;
+      img.src = data?.tee_backsideImg;
     }else {
       boxHeight = this.canvasfrontHeight;
-      img.src = data?.teeName_frontsideImg;
+      img.src = data?.tee_frontsideImg;
     }
     const boxWidth : any = this.currentCanvas?.width;
     let newWidth, newHeight;
@@ -124,7 +184,6 @@ export class TshirtsDataPageComponent {
       newWidth = boxHeight * 1;
     }
     
-    // img.src = data?.teeName_frontsideImg;
     img.onload = () => {
       if(this.ctx){
         this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
@@ -166,4 +225,22 @@ export class TshirtsDataPageComponent {
     this.router.navigate([string]);
   }
   
+  changeTshirtColor (index:any) {
+    if(this.teeDatas.length > 0){
+      let data = this.teeDatas[index];
+      if( !data.tee_frontsideImg){
+        this.imageBackUrls.find((imageData: any) => {
+          if(imageData.key == data.tee_Color){
+            this.imageFrontSrc = imageData.value
+          }
+        })
+      }else {
+        this.imageFrontUrls.find((imageData: any) => {
+          if(imageData.key == data.tee_Color){
+            this.imageFrontSrc = imageData.value
+          }
+        })
+      }
+    }
+  }
 }

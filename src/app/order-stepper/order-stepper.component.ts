@@ -45,7 +45,7 @@ export class OrderStepperComponent {
   verifyLabel:any = 'Verify & Proceed';
   storedData: any;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,teeName_Price:any,user_Id:any,_id:any,quantity:any,size:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,tee_Price:any,user_Id:any,_id:any,quantity:any,size:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
     this.storedData = this.localStorage.getUserLocalStorage();
     if(this.storedData && this.storedData.LoggedIn != null){
@@ -74,7 +74,7 @@ export class OrderStepperComponent {
 
   calculatePrice(){
     console.log('here in calc')
-    this.finalPrice = (this.buyPageData?.teeName_Price * this.userQuantity) - this.userCoins
+    this.finalPrice = (this.buyPageData?.tee_Price * this.userQuantity) - this.userCoins
   }
 
   createRazorPayOrder () {
@@ -165,7 +165,7 @@ export class OrderStepperComponent {
       madeBy: this.buyPageData.user_Id,
       address: this.firstFormGroup.value,
       paymentMethod : 'ONLINE',
-      tshirtPrice : this.buyPageData.teeName_Price,
+      tshirtPrice : this.buyPageData.tee_Price,
       quantity : this.userQuantity,
       size : this.buyPageData.size,
     }

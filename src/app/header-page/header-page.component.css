@@ -51,7 +51,7 @@ nav li:first-child {
     right: 0 !important;
     height: 100vh !important;
     width: 250px !important;
-    z-index: 999;
+    z-index: 999999;
     box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
     display: none !important;
     flex-direction: column !important;

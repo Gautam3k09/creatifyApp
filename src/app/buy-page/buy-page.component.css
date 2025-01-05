@@ -14,6 +14,7 @@ body {
   color: white;
   position: fixed;
   width: 100vw;
+  overflow-x: hidden;
 }
 
 .mainBox{
@@ -21,36 +22,47 @@ body {
 }
 
 .container {
-  background: white;
+  background: #dfdfdf;
   position: relative;
-  height: auto;
+  height: 80vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin: auto;
   color: black;
   border-radius: 30px;
 
 }
+.mainCanvas{
+  height: 350px;
+  margin-left: 60%;
+  margin-top: 40%;
+}
 
-.left-side {
-  margin-top: 2%;
-  float: left;
-  width: auto;
+.canvas-container {
+  position: relative;
+  width: 175px; /* Adjust to the width of your canvas */
+  height: 150px; /* Adjust to the height of your canvas */
+}
+
+.canvas-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .canvasFront {
-  height: 47vh;
-  width: 32vw;
-  margin-top: 13%;
+  height: 190px;
   position: absolute;
-  /* top: 30%; */
-  margin-left: 13%;
+  margin-top: 145px;
+  margin-left: 225px;
+  width: 340px;
 }
+
 .canvasBack {
-  height: 54vh;
-  width: 32vw;
-  margin-top: 21vh;
+  height: 220px;
   position: absolute;
-  margin-left: 11vw;
+  margin-top: 153px;
+  margin-left: 225px;
+  width: 340px;
 }
 .RotateBtn{
 
@@ -66,7 +78,7 @@ body {
 }
 
 .right-side {
-  margin-top: 5%;
+  margin-top: 2%;
   background: transparent;
   width: 30%;
   height: auto;
@@ -80,13 +92,6 @@ body {
 
   .tee-Name{
     font-weight: 400;
-  }
-
-  .colorText{
-    /* text-align: center; */
-  }
-  .price{
-    /* text-align: center; */
   }
 
   .buyButton{
@@ -167,10 +172,17 @@ body {
   position: relative;
   z-index: 999;
 }
+.icon-style {
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 50px;
+  cursor: pointer;
+  margin-left: 75px !important;
+  position: absolute;
+  z-index: 999;
+}
 @media(max-width:600px) {
-  .mainBox{
-    /* margin-bottom: 6vh; */
-  }
   .container{
     position: relative;
     height: auto;
@@ -181,38 +193,47 @@ body {
     border-radius: 30px;
     padding-bottom: 12%;
   }
+  .mainCanvas{
+    height: 320px;
+    margin-left: 4px;
+    margin-top: 16px;
+  }
+  
+  .canvas-container {
+    position: relative;
+    width: 175px; /* Adjust to the width of your canvas */
+    height: 150px; /* Adjust to the height of your canvas */
+  }
+  
+  .canvas-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .canvasFront {
+    height: 190px;
+    position: absolute;
+    margin-top: 80px;
+    margin-left: 104px;
+    width: 340px;
+  }
+  
+  .canvasBack {
+    height: 220px;
+    position: absolute;
+    margin-top:80px;
+    margin-left: 109px;
+    width: 340px;
+  }
 
   .right-side {
-    margin-top: 8%;
+    margin-top: 50%;
     width: 90vw;
-    float: none;
-    canvas{
-      display: none;
-    }
-    .canvasFront {
-      height: 47vh;
-      width: 32vw;
-      margin-top: 13%;
-      position: absolute;
-      /* top: 30%; */
-      margin-left: 13%;
-    }
-    .canvasBack {
-      height: 54vh;
-      width: 32vw;
-      margin-top: 21vh;
-      position: absolute;
-      margin-left: 11vw;
-    }
-    .RotateBtn{
-  
-    }
-   
+    float: none;   
   }
 
   .left-side{
     margin-top: 6%;
-    /* background: red; */
     width: 80vw;
     margin-left: 0%;
     padding: 1% 2% 1% 2%;
@@ -260,5 +281,15 @@ body {
   .borderBottom{
     border-bottom: 5px solid #d0cfcf;
     padding-bottom: 8px;
+  }
+  .icon-style {
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 5px;
+    cursor: pointer;
+    margin-left: 5px !important;
+    position: absolute;
+    z-index: 999;
   }
 }

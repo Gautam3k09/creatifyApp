@@ -20,9 +20,6 @@ body{
     overflow-x: hidden;
     margin-top: 4%;
 }
-.height{
-  height: auto;
-}
 
 .noTees{
   position: fixed;
@@ -75,8 +72,10 @@ body{
 }
 
 .canvas {
-  margin-top: 60px;
-  margin-left: 25%;
+  height: 242px;
+  margin-top: -68%;
+  margin-left: 29%;
+  width: 280px;
 }
 
 .NameText{
@@ -112,6 +111,10 @@ body{
   color: #000;
 }
 
+.rupee-text{
+  color: #000;
+}
+
 .create{
   justify-content: center;
 }
@@ -139,11 +142,29 @@ body{
     background-image: url('../../assets/tshirt.png');
     background-repeat: round;
   }
+  
+  .canvas-container{
+    position: relative;
+    height: 250px;
+    margin-top: -10px;
+  }
 
   canvas{
-    margin-top: 30px !important;
-    margin-left: 25%;
-    height: 55px;
+    margin-top: 20px;
+    margin-left: 0;
+    height: 180px;
+    position: absolute;
+  }
+
+  .canvas{
+    height: 140px;
+    margin-top: 54px;
+    margin-left: 29%;
+    width: 110px;
+  }
+
+  .card-text{
+    margin-top: 197px;
   }
 
   .helperButton{
@@ -152,7 +173,6 @@ body{
     
     .share{
       margin-inline: 2%;
-      margin-top: 6%;
       margin-bottom: -3%;
     }
   }

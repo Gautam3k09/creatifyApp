@@ -50,7 +50,7 @@ export class OrderPlacedComponent {
       madeBy: this.data.buyPageData.user_Id,
       address: this.data.address,
       paymentMethod : 'COD',
-      tshirtPrice : this.data.buyPageData.teeName_Price,
+      tshirtPrice : this.data.buyPageData.tee_Price,
       quantity : this.data.buyPageData.quantity,
       size : this.data.buyPageData.size,
     };

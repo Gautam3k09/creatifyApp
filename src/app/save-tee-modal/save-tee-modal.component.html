@@ -1,0 +1,33 @@
+<body>
+     <div class="container" *ngIf="!helper">
+          <div class="teeName d-flex justify-content-center">
+               {{data.teeName}}
+          </div>
+          <div class="price" *ngIf="data.isMerch == 'Merch'">
+               The selling price is ₹{{data.finalPrice}}, with ₹{{price}} going to CREATEEFI, leaving you with a profit of ₹{{profitPrice}} per tee!
+          </div>
+          <div class="condn">
+               By saving this tee design, you confirm your agreement to our terms and conditions.
+          </div>
+          <div class="saveButton d-flex justify-content-center">
+               <button class="btn btn-dark ms-2 p-2" (click)="closeModal()">Save</button>                  
+          </div>
+     </div>
+     <div class="container" *ngIf="helper">
+          <div class="tipDiv">
+               <div class="teeName d-flex justify-content-center">
+                    Useful Tools/AI
+               </div>
+               <div class="d-flex justify-content-center mb-1">
+                    Use &nbsp;<strong><a href="https://www.textstudio.com/" target="_blank" style="color: #FF4500;">TEXTSTUDIO</a></strong>&nbsp; for text to image
+               </div>
+               <div class="d-flex justify-content-center mb-2">
+                    Use &nbsp;<strong><a href="https://pixlr.com/" target="_blank" style="color: #FF4500;">PIXLR</a></strong>&nbsp;for Editing/Creating Image
+               </div>
+               <div class="mb-1" style="text-align: center;">
+                    <strong>Attention : </strong>Displayed colors of tees are approximate and may not exactly match the final product
+               </div>
+          </div>
+     </div>
+</body>
+<!-- (click)="openModal() -->

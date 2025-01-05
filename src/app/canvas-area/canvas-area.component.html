@@ -2,13 +2,13 @@
   <app-header-page></app-header-page>
   <div class="container">
     <div class="utilsforMobView">
-      <div class="mb-2">
-        <p><textarea ng-model="name" (keyup)="onKeyUp($event)" style="width: 50%;" rows="1" cols="50" placeholder="Design Name"></textarea></p>
+      <div class="mb-2 ">
+        <p class="d-flex justify-content-center" style="margin-left: -3%;"><textarea ng-model="name" (keyup)="onKeyUp($event)" style="width: 50%; padding-left: 12vw;" rows="1" cols="50" placeholder="Tee Name"></textarea></p>
       </div>
     </div>
     <div class="mainDiv">
-      <canvas #mainCanvas class="mainCanvas"></canvas>
-      <canvas #canvas class="canvas" id="canvas" width="160" ></canvas>
+      <canvas #mainCanvas class="mainCanvas" role="dialog" aria-hidden="false" tabindex="-1"></canvas>
+      <canvas #canvas class="canvas" id="canvas" width="160" role="dialog" aria-hidden="false" tabindex="-1" ></canvas>
     </div>
     <div class="tipDiv">
       <div>
@@ -26,113 +26,180 @@
       <div class="utils">
         <div class="shirtOptionContainer">
           <div class="shirtOptionContainer1">Shirt Side</div>
-          <!-- <div class="shirtOptionContainer2">Design Preferences</div> -->
         </div>
         <div class="shirtOptionContainer">
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-              <label class="btn btn-outline-dark sideLabel" for="btnradio1" (click)="toggleShirtSide('front')">Front</label>
-            
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-              <label class="btn btn-outline-dark sideLabel" for="btnradio2" (click)="toggleShirtSide('back')">Back</label>
-            </div>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" [checked]="true">
+            <label class="btn btn-outline-dark sideLabel" id="frontLabel" for="btnradio1" (click)="toggleShirtSide('front')">Front</label>
+          
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-dark sideLabel" id="backLabel" for="btnradio2" (click)="toggleShirtSide('back')">Back</label>
+          </div>
         </div>
         <div class="mb-2">
-          <p class="mb-0">Design Name:</p>
+          <p class="mb-0">Tee Name:</p>
           <textarea ng-model="designName" (keyup)="onKeyUp($event)"  rows="1" cols="50" formControlName="teeName"></textarea>
         </div>
         <div class="mb-4">
-          <p class="mb-0">Colors: {{imageColor}}</p>
-          <button type="button" class="btn btn-circle  mx-2 btnColorBlack" (click)="changeImage(0)"></button>
+          <p class="mb-0">Color: {{imageColor}}</p>
           <button type="button" class="btn btn-circle mx-2 btnColorWhite" (click)="changeImage(1)"></button>
           <button type="button" class="btn btn-circle mx-2 btnColorBlue" (click)="changeImage(2)"></button>
           <button type="button" class="btn btn-circle mx-2 btnColorMaroon" (click)="changeImage(3)"></button>
+          <button type="button" class="btn btn-circle mx-2 btnColorBlack" (click)="changeImage(0)"></button>
         </div>
         <div class="colorNote">
           Attention: The displayed colors of tees are approximate and may not exactly match the final product
         </div>
         <div class="mb-2">
           <div *ngIf="currentSide == 'front'; else elseBlockFront">      
-            <div *ngIf="isImgUploaded == false; else uploadFront">
-              <div class="fileUpload" >
+            <div *ngIf="isImgUploaded == false;">
+              <div class="fileUpload">
                 <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/*"/>
                 <span style="font-size: 12px;">UploadImage</span>
               </div>
-            </div>    
-            <ng-template #uploadFront>
-              <div class="RemoveBtn">
-                <button class=" btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveFront</button>                
-              </div>
-            </ng-template>
+            </div>
           </div>
           <ng-template #elseBlockFront>
-            <div *ngIf="isImgUploaded == false; else uploadBack">
+            <div *ngIf="isImgUploaded == false;">
               <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
                 <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/*"/>
                 <span style="font-size: 12px;">UploadImage</span>
               </div>
             </div>
-            <ng-template #uploadBack>
-              <div class="RemoveBtn">
-                <button class="btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveBack</button>
-              </div>
-            </ng-template>
           </ng-template>
 
           <div *ngIf="isImgUploaded;">
             <div *ngIf="currentSide == 'front'; else elseBlockFrontForInput">
               <div class="mt-4 mb-2">
-                <label for="width" class="mx-2">Width:</label>
-                <input type="number" id="width" class="mx-1" max="205" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,205)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
-                <label for="customRange2" class="form-label" >range 1-205</label>
+                <label for="width" class="mx-2">Width:&nbsp;</label>
+                <input type="number" id="width" class="mx-1" max="209" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,209)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <label for="customRange2" class="form-label" >range 1-209</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mr-1" max="268" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,268)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
-                <label for="customRange2" class="form-label" >range 1-268</label>
+                <input type="number" id="height" class="mr-1" max="270" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,270)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <label for="customRange2" class="form-label" >&nbsp;range 1-270</label>
+              </div>
+              <div class="RemoveBtn">
+                <button class=" btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveFront</button>                
               </div>
             </div>
             <ng-template #elseBlockFrontForInput>
               <div class="mt-4 mb-2">
-                <label for="width" class="mx-2">Width:</label>
+                <label for="width" class="mx-2">Width:&nbsp;</label>
                 <input type="number" id="width" class="mx-1" max="230" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,230)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >range 1-230</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mx-1" max="310" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,310)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
-                <label for="customRange2" class="form-label" > range 1-310</label>
+                <input type="number" id="height" class="mr-1" max="312" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,312)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <label for="customRange2" class="form-label" >&nbsp;range 1-312</label>
+              </div>
+              <div class="RemoveBtn">
+                <button class="btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveBack</button>
               </div>
             </ng-template>
           </div>
         </div>
-        <div>
-          <label for="height" class="mx-2">Price</label>
-          <input type="number" id="height" min="550"max="1550" class ="mx-1" (input)="validatePrice($event)" [(ngModel)]="priceRange" formControlName="price" >
-          <label for="customRange2" class="form-label" >range 550-1550</label>
+        <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'; else elseBlockForprice">
+          <label for="height" class="mx-2">Price : {{priceRange}}</label>
+          <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
         </div>
+        <ng-template #elseBlockForprice>
+          <!-- <div> {{couponData.coupon_text}}</div> -->
+          <div class="d-flex justify-content-center ms-2">Price will be 649</div> 
+
+        </ng-template>
         <div class="saveButton hideforMobile">
           <p>
-            <button class="btn btn-dark ms-2 p-2" (click)="uploadImage()">Save</button>
+            <button class="btn btn-dark ms-2 p-2" [disabled]="teeDetailForm.invalid" (click)="openModal()">Continue</button>
           </p>
         </div>
       </div>
-    </form>
-  </div>
+      <div class="utilsforMobView">
+        <div class="whiteSpace">
+          <div class="shirtOptionContainer" style="font-size: 17px; margin-top: 3px; font-weight: bold; ">
+            Shirt Side
+          </div>
+          <div class="shirtOptionContainer">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" [checked]="true">
+              <label class="btn btn-outline-dark sideLabel" id="frontLabel" for="btnradio1" (click)="toggleShirtSide('front')">Front</label>
+            
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-dark sideLabel" id="backLabel" for="btnradio2" (click)="toggleShirtSide('back')">Back</label>
+            </div>
+          </div>
+          <div class="my-2 d-flex justify-content-center">
+            <p class="mx-2" style="font-size: 16px; margin-top: 3px; font-weight: bold; ">Color: {{imageColor}}</p>
+            <button type="button" class="btn btn-circle mx-2 btnColorWhite" (click)="changeImage(1)"></button>
+            <button type="button" class="btn btn-circle mx-2 btnColorBlue" (click)="changeImage(2)"></button>
+            <button type="button" class="btn btn-circle mx-2 btnColorMaroon" (click)="changeImage(3)"></button>
+            <button type="button" class="btn btn-circle mx-2 btnColorBlack" (click)="changeImage(0)"></button>
+          </div>
+          <div class="mb-1">
+            <div *ngIf="currentSide == 'front'; else elseBlockFrontForMob">
+              <div *ngIf="isImgUploaded == false;">
+                <div class="fileUpload">
+                  <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/*"/>
+                  <span style="font-size: 15px;">UploadImage</span>
+                </div>
+              </div>
+            </div>
+            <ng-template #elseBlockFrontForMob>
+              <div *ngIf="isImgUploaded == false;">
+                <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
+                  <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/*"/>
+                  <span style="font-size: 15px;">UploadImage</span>
+                </div>
+              </div>
+            </ng-template>
   
-  <div class="bottomNavBarforMobView">
-    <div class="navbar">
-      <div class="upload">
-        <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
-          <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/png" />
-          <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
-          <p class="uploadText">upload</p>
+            <div *ngIf="isImgUploaded;">
+              <div *ngIf="currentSide == 'front'; else elseBlockFrontForInputForMob">
+                <div class="mt-3 mb-2">
+                  <label for="width" class="mx-2">Width:&nbsp;</label>
+                  <input type="number" id="width" class="mx-1" max="202" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,202)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                  <label for="customRange2" class="form-label" >range 1-202</label>
+                </div>
+                <div>
+                  <label for="height" class="mx-2">Height:</label>
+                  <input type="number" id="height" class="mr-1" max="157" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,157)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                  <label for="customRange2" class="form-label" >&nbsp;range 1-155</label>
+                </div>
+                <div class="RemoveBtn">
+                  <button class=" btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveFront</button>                
+                </div>
+              </div>
+              <ng-template #elseBlockFrontForInputForMob>
+                <div class="mt-3 mb-2">
+                  <label for="width" class="mx-2">Width:&nbsp;</label>
+                  <input type="number" id="width" class="mx-1" max="172" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,172)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                  <label for="customRange2" class="form-label" >range 1-172</label>
+                </div>
+                <div>
+                  <label for="height" class="mx-2">Height:</label>
+                  <input type="number" id="height" class="mr-1" max="235" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,235)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                  <label for="customRange2" class="form-label" >&nbsp;range 1-235</label>
+                </div>
+                <div class="RemoveBtn">
+                  <button class="btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveBack</button>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div class="d-flex">
+            <label for="height" class="mx-2">Price : {{priceRange}}</label>
+            <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="saveButton d-flex mt-1">
+            <button class="btn btn-dark ms-2 p-2" [disabled]="designName == ''" (click)="openModal()">Continue</button>
+          </div>
+          <div id="stickyIcon" (click)="openModal(true)">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </div>
         </div>
       </div>
-      <div class="size">
-        <p class="sizeIcon">S</p>
-        <p class="sizeText">size</p>
-      </div>
-    </div>
+    </form>
   </div>
 </body>

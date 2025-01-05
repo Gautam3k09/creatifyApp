@@ -1,0 +1,17 @@
+.container {
+     padding: 5px;
+
+     .teeName {
+          font-weight: 900;
+          font-size: 24px;
+     }
+     .price{
+          margin-top: 10px;
+          text-align: center;
+     }
+     .condn {
+          text-align: center;
+          margin-top: 10px;
+          margin-bottom: 10px;
+     }
+}

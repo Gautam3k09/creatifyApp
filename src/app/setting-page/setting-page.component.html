@@ -27,6 +27,9 @@
                       <div>
                         Number &nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Number}}
                       </div>             
+                      <div>
+                        Coins &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;{{userData?.user_Creatify_Coins}}
+                      </div>             
                     </div>
                   </div>
                   <div class="profile-title">
@@ -70,7 +73,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="text-center mt-4" style="margin-left: -3vw;">  
+                      <div class="text-center mt-2" style="margin-left: -3vw;">  
                         <button class="btn btn-dark" type="submit" [disabled]="myForm.invalid" (click)="AddOrUpdateAddress()">Update</button>
                       </div>
                     </form>

@@ -2,49 +2,38 @@
   <app-header-page></app-header-page>
   <div class="mainBox">
     <div class="container">
-        <div class="left-side">
-            <canvas #canvas class="canvasFront" id="canvas" ></canvas>
-            <div>
-              <button type="button" style="width: 15%;" class="RotateBtn btn btn-circle btn-primary mx-0" (click)="changeSide()">flip</button>
-            </div>
-            <div class="imgTag">
-              <img src="../../assets/tshirt.png" >
-            </div>
+      <div class="left-side">
+        <i class="fa-solid fa-rotate icon-style" (click)="changeSide()"></i>
+        <div class="canvas-container">
+          <canvas #mainCanvas class="mainCanvas" [id]="'mainTeeData'" width="175" height="150"></canvas>
+          <canvas #canvas class="canvasFront" id="canvas" ></canvas>
         </div>
-        <div class="right-side">
-          <div class="sellerlabel">
-            Createefi
-          </div>
-          <div class="tee-Name">
-              {{data?.teeName_Name}}
-          </div>
-          <div class="mb-2 borderBottom">
-            <p class="mb-0 price" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.teeName_Price}}</p>
-            <ng-template #elseBlockforPrice>
-              <s> Rs. {{data?.teeName_Price}} </s> <p>Rs. {{discountedPrice}}</p>
-            </ng-template>
-            <p class="h6"> Tax included.Shipping free on Online Payment!</p>
-            <p class="h6"> Normal Delivery | 5-9 days</p>
-          </div>
-            <!-- <div class="colorDiv mb-4">
-              <p class="mb-0 colorText">Colors</p>
-              <div class="colorBtnDiv">
-                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'white'}" class="colorBtn btn btn-circle mx-2" style="background-color: white; " (click)="changeColor('white')"></button></div>
-                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'black'}" class="colorBtn btn btn-circle mx-2" style="background-color: black;" (click)="changeColor('black')"></button></div>
-                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'maroon'}" class="colorBtn btn btn-circle mx-2" style="background-color: maroon;" (click)="changeColor('maroon')"></button></div>
-                <div><button type="button" [ngClass]="{'active': activeColorBtn === 'navy'}" class="colorBtn btn btn-circle mx-2" style="background-color: navy;" (click)="changeColor('navy')"></button></div>
-              </div>
-            </div> -->
+      </div>
+      <div class="right-side">
+        <div class="sellerlabel">
+          Createefi
+        </div>
+        <div class="tee-Name">
+            {{data?.teeName_Name}}
+        </div>
+        <div class="mb-2 borderBottom">
+          <p class="mb-0 price" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
+          <ng-template #elseBlockforPrice>
+            <s> Rs. {{data?.tee_Price}} </s> <p>Rs. {{discountedPrice}}</p>
+          </ng-template>
+          <p class="h6"> Tax included.Shipping free on Online Payment!</p>
+          <p class="h6"> Normal Delivery | 5-9 days</p>
+        </div>
           <div class="mb-3 borderBottom">
-            <div class="sizeDiv mb-0" >
-              <div class="sizeTxt" (click)="showImage()">Size</div>
-              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
-              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'M'}" (click)="changeSize('M')">M</button>
-              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'L'}" (click)="changeSize('L')">L</button>
-              <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'XL'}" (click)="changeSize('XL')">XL</button>
-            </div>
-            <p class="h6 d-flex justify-content-center"> Click on Size for Size Chart</p>
+          <div class="sizeDiv mb-0" >
+            <div class="sizeTxt" (click)="showImage()">Size</div>
+            <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
+            <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'M'}" (click)="changeSize('M')">M</button>
+            <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'L'}" (click)="changeSize('L')">L</button>
+            <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'XL'}" (click)="changeSize('XL')">XL</button>
           </div>
+          <p class="h6 d-flex justify-content-center"> Click on Size for Size Chart</p>
+        </div>
           
           <div class="borderBottom">
             <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
@@ -85,21 +74,4 @@
         </div>
     </div>
   </div>
-    
-    <!-- <div class="bottomNavBarforMobView">
-      <div class="navbar">
-        <div class="upload">
-          <p class="uploadIcon"><i class="fa fa-upload" aria-hidden="true"></i> </p>
-          <p class="uploadText">upload</p>
-        </div>
-        <div class="color" (click)="changeHeight('S')">
-          <p class="colorIcon"><button class="btn btn-primary" (click)="download()"></button></p>
-          <p class="colorText">color</p>
-        </div>
-        <div class="size">
-          <p class="sizeIcon">S</p>
-          <p class="sizeText">size</p>
-        </div>
-      </div>
-    </div> -->
   </body>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild,inject, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppServiceService } from '../app-service.service';
 import { localStorageService } from '../local-storage-service';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { SaveTeeModalComponent } from '../save-tee-modal/save-tee-modal.component';
 
 @Component({
   selector: 'app-canvas-area',
@@ -44,9 +46,15 @@ export class CanvasAreaComponent implements AfterViewInit{
   backImageOffsetY: any = 0;
   imageOffsetX = 0; 
   imageOffsetY = 0;
-  // for size
-  imageWidth = 100; // Initial width
-  imageHeight = 150; // Initial height
+  // for size in inches
+  frontHeightInches : any = 0;
+  frontWidthInches : any = 0;
+  backHeightInches : any = 0;
+  backWidthInches : any = 0;
+
+  imageWidth : any = 100;// Initial width
+  imageHeight : any = 150; // Initial height
+  
   frontImageWidth : any = 100;
   frontImageHeight : any = 150;
   backImageWidth : any = 100;
@@ -62,15 +70,20 @@ export class CanvasAreaComponent implements AfterViewInit{
   imageUrl : any = '';  
   designName : any = "";
   teeSize : any = 'S';
-  priceRange : any = 550;
+  priceRange : any = 649;
   rotationAngle = 0;
   // for sides
   shirtSideFront: boolean = true;
   shirtPreferencesPersonal: boolean = true;
-  canvasWidthFront : any = 205;
-  canvasHeightFront : any = 268;
+  canvasWidthFront : any = 209;
+  canvasHeightFront : any = 270;
   canvasWidthBack : any = 230;
-  canvasHeightBack : any = 310;
+  canvasHeightBack : any = 312;
+  // for mobile side
+  canvasHeightBackMob : any = 236;
+  canvasWidthBackMob : any = 173;
+  canvasWidthFrontMob : any = 202;
+  canvasHeightFrontMob : any = 157;
   currentSide : any = 'front';
   storedData : any;
 
@@ -98,12 +111,25 @@ export class CanvasAreaComponent implements AfterViewInit{
   backImgFormdata : FormData = new FormData();
   userData : any;
 
-  constructor(private router: Router,private fb: FormBuilder, private appservice:AppServiceService,public localStorage : localStorageService) {
+  //for mobile
+  isMobile : boolean = false;
+  
+  modalDialog: MatDialogRef<SaveTeeModalComponent, any> | undefined;
+  dialogConfig = new MatDialogConfig();
+
+  constructor(private router: Router,private fb: FormBuilder, private appservice:AppServiceService,public localStorage : localStorageService,public matDialog: MatDialog) {
     this.storedData = this.localStorage.getUserLocalStorage();
+    this.isMobile = window.innerWidth > 500 ? false : true;
+    if(window.innerWidth < 372 || (window.innerHeight < 790 && window.innerWidth < 1200)) {
+      alert('Your device does not support this functionality. Please use a device with a larger screen.');
+      this.router.navigate(['/tees']);
+    }
   }
   ngOnInit() {
     this.userData = this.storedData.userData;
     this.userData = JSON.parse(this.userData);
+    console.log(this.userData.user_Role);
+    this.priceRange = this.userData?.user_Role == 'Merch' ? 549 : 649;
     //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
     //Added listener for image move
@@ -113,8 +139,9 @@ export class CanvasAreaComponent implements AfterViewInit{
 
     this.teeDetailForm = this.fb.group({
       teeName : ['', [Validators.required]],
-      price   : ['', [Validators.required, Validators.minLength(8)]],
+      price   : [this.priceRange, [Validators.required]],
     });
+    this.toggleShirtSide('front',true);
   }
 
   //  ngafterViewInit should not be removed may be used later 
@@ -123,8 +150,13 @@ export class CanvasAreaComponent implements AfterViewInit{
     const secondaryCanvas = this.canvas.nativeElement;
     mainCanvas.width = 450;
     mainCanvas.height = 350;
-    secondaryCanvas.width = this.canvasWidthFront;
-    secondaryCanvas.height = this.canvasHeightFront;
+    if(this.isMobile) {
+      secondaryCanvas.width = this.canvasWidthFrontMob;
+      secondaryCanvas.height = this.canvasHeightFrontMob;
+    } else {
+      secondaryCanvas.width = this.canvasWidthFront;
+      secondaryCanvas.height = this.canvasHeightFront;
+    }
     this.MainCanvasctx = mainCanvas.getContext('2d')!;
     this.ctx = secondaryCanvas.getContext('2d')!;
     this.drawImageOnCanvas(this.imageFrontSrc);
@@ -155,8 +187,13 @@ export class CanvasAreaComponent implements AfterViewInit{
   }
 
   handleFileChange(event: any,from = '') {
-    this.imageWidth = 100;
-    this.imageHeight = 150;
+    if(this.isMobile) {
+      this.imageWidth = 100;
+      this.imageHeight = 80;
+    } else {
+      this.imageWidth = 100;
+      this.imageHeight = 150;
+    }
     if(from == 'changeShirtSide'){
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -182,16 +219,16 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.image = img;
         if(this.shirtSideFront) {
           this.frontImgFormdata = new FormData();
-          this.frontImageName = event.target.files[0].name
+          this.frontImageName = Date.now() +  "_" + event.target.files[0].name;
           this.imageFrontGlobalStore = img;
           this.imageFrontGlobalTarget = event.target.files[0];
-          this.frontImgFormdata.append('image', this.imageFrontGlobalTarget,this.frontImageName + "_" + Date.now());
+          this.frontImgFormdata.append('image', this.imageFrontGlobalTarget,this.frontImageName );
         } else {
           this.backImgFormdata = new FormData();
-          this.backImageName = event.target.files[0].name
+          this.backImageName =  Date.now() + "_" + event.target.files[0].name;
           this.imageBackGlobalStore = img;
           this.imageBackGlobalTarget = event.target.files[0];
-          this.backImgFormdata.append('image', this.imageBackGlobalTarget,this.backImageName + "_" + Date.now());
+          this.backImgFormdata.append('image', this.imageBackGlobalTarget,this.backImageName );
         };
         this.updateImage();
       };
@@ -201,9 +238,9 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.isImgUploaded = true;
     setTimeout(() => {
       if(this.shirtSideFront) {
-        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png');
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',0.95);
       } else {
-        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png');
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95);
       }
     }, 1000);
   }
@@ -215,7 +252,7 @@ export class CanvasAreaComponent implements AfterViewInit{
     
     const newX = Math.max(0, Math.min(canvasWidth - this.imageWidth, this.imageOffsetX));
     const newY = Math.max(0, Math.min(canvasHeight - this.imageHeight, this.imageOffsetY));
-
+    console.log(this.imageWidth,this.imageHeight,canvasHeight,canvasWidth)
     //image update
     if(this.image != '') {
       this.ctx.drawImage(this.image, newX, newY, this.imageWidth, this.imageHeight);
@@ -224,9 +261,11 @@ export class CanvasAreaComponent implements AfterViewInit{
     if(this.shirtSideFront) {
       this.frontImageWidth = this.imageWidth;
       this.frontImageHeight = this.imageHeight;
+      this.calculateInches('front')
     } else {
       this.backImageWidth = this.imageWidth;
       this.backImageHeight = this.imageHeight;
+      this.calculateInches('back')
     }
     this.updateImageBase64(this.shirtSideFront)
   }
@@ -266,10 +305,34 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.designName = event.target.value;
   }
   
-  toggleShirtSide (string:any) {
-    if(string == 'front') this.shirtSideFront = true;
-    if(string == 'back') this.shirtSideFront = false;
-    this.updateBorder();
+  toggleShirtSide (string:any,operation:any=false) {
+    let frontRadio : any = document.querySelectorAll('#frontLabel');
+    let backRadio : any = document.querySelectorAll('#backLabel');
+    if(string == 'front') {
+      this.shirtSideFront = true;
+      frontRadio.forEach((item:any) => {
+        item.style.color = 'white';
+        item.style.backgroundColor = 'black';
+      })
+      backRadio.forEach((item:any) => {
+        item.style.color = 'black';
+        item.style.backgroundColor = 'transparent';
+      })
+    }
+    if(string == 'back'){
+       this.shirtSideFront = false;
+       backRadio.forEach((item:any) => {
+        item.style.color = 'white';
+        item.style.backgroundColor = 'black';
+      })
+      frontRadio.forEach((item:any) => {
+        item.style.color = 'black';
+        item.style.backgroundColor = 'transparent';
+      })
+    }
+    if (!operation) {
+      this.updateBorder();
+    }
   }
   
   updateBorder() {
@@ -280,16 +343,25 @@ export class CanvasAreaComponent implements AfterViewInit{
       if(this.imageFrontGlobalStore != '') {
         this.image = this.imageFrontGlobalStore;
         this.handleFileChange(event,'changeShirtSide');
-        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png');
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',0.95);
         this.updateImageBase64(true);
         this.isImgUploaded = true;
       }
       this.drawImageOnCanvas(this.imageFrontSrc);
-      let canvasStyle = document.querySelector('.canvas') as any
-      canvasStyle.style.marginTop  = 78 + 'px';
-      canvasStyle.style.marginLeft = 122 + 'px';
-      this.globalCanvas.height = this.canvasHeightFront;
-      this.globalCanvas.width = this.canvasWidthFront;
+      let canvasStyle = document.querySelector('.canvas') as any;
+      if(!this.isMobile ) {
+        canvasStyle.style.marginTop  = 77 + 'px';
+        canvasStyle.style.marginLeft = 120 + 'px';
+        this.globalCanvas.height = this.canvasHeightFront;
+        this.globalCanvas.width = this.canvasWidthFront;
+      } else {
+        canvasStyle.style.marginTop = 154 + 'px';
+        canvasStyle.style.marginLeft = 103 + 'px';
+        canvasStyle.style.width = 155 + 'px';
+        canvasStyle.style.height = 202 + 'px';
+        this.globalCanvas.height = this.canvasHeightFrontMob;
+        this.globalCanvas.width = this.canvasWidthFrontMob;
+      }
       this.imageOffsetX = this.frontImageOffsetX;
       this.imageOffsetY = this.frontImageOffsetY;
       this.imageWidth = this.frontImageWidth;
@@ -298,27 +370,32 @@ export class CanvasAreaComponent implements AfterViewInit{
       this.currentSide = 'back';
       this.isImgUploaded = false;
       if(this.imageBackGlobalStore != '' ) {
-        this.image = this.imageBackGlobalStore
+        this.image = this.imageBackGlobalStore;
         this.handleFileChange(event,'changeShirtSide');
         this.updateImageBase64(false);
         this.isImgUploaded = true;
-        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png');
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95);
       } 
       this.drawImageOnCanvas(this.imageBackSrc);
-      let canvasStyle = document.querySelector('.canvas') as any
-      canvasStyle.style.marginTop  = 88 + 'px';
-      canvasStyle.style.marginLeft = 109 + 'px';
-      this.globalCanvas.height = this.canvasHeightBack;
-      this.globalCanvas.width = this.canvasWidthBack;
+      let canvasStyle = document.querySelector('.canvas') as any;
+      if(!this.isMobile ) {
+        canvasStyle.style.marginTop  = 88 + 'px';
+        canvasStyle.style.marginLeft = 108 + 'px';
+        this.globalCanvas.height = this.canvasHeightBack;
+        this.globalCanvas.width = this.canvasWidthBack;
+      } else {
+        canvasStyle.style.marginTop = 163 + 'px';
+        canvasStyle.style.marginLeft = 94 + 'px';
+        canvasStyle.style.width = 172 + 'px';
+        canvasStyle.style.height = 235 + 'px';
+        this.globalCanvas.height = this.canvasHeightBackMob;
+        this.globalCanvas.width = this.canvasWidthBackMob;
+      }
       this.imageOffsetX = this.backImageOffsetX;
       this.imageOffsetY = this.backImageOffsetY;
       this.imageWidth = this.backImageWidth;
       this.imageHeight = this.backImageHeight;
     }
-    const borderSize = 5;
-    this.ctx.lineWidth = borderSize;
-    this.ctx.strokeStyle = 'black';
-    this.ctx.strokeRect(borderSize / 2, borderSize / 2, this.globalCanvas.width - borderSize, this.globalCanvas.height - borderSize); 
   }
   
   clearFiles() {
@@ -334,11 +411,17 @@ export class CanvasAreaComponent implements AfterViewInit{
       this.frontImageOffsetX;
       this.frontImageOffsetY;
       this.frontImgFormdata = new FormData();
+      this.frontHeightInches = 0;
+      this.frontWidthInches = 0;
+      this.base64DataFrontSide = '';
     } else {
       this.imageBackGlobalStore = '';      
       this.backImageOffsetX;
       this.backImageOffsetY;
       this.backImgFormdata = new FormData();
+      this.backHeightInches = 0;
+      this.backWidthInches  = 0;
+      this.base64DataBackSide = '';
     }
   }
   
@@ -347,7 +430,7 @@ export class CanvasAreaComponent implements AfterViewInit{
   }
 
   updateImageBase64(side:any){
-    side ? this.base64DataFrontSide= this.globalCanvas.toDataURL('image/png'): this.base64DataBackSide = this.globalCanvas.toDataURL('image/png')
+    side ? this.base64DataFrontSide= this.globalCanvas.toDataURL('image/png',0.95): this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95)
   }
 
   uploadFile(side:any) {
@@ -365,15 +448,20 @@ export class CanvasAreaComponent implements AfterViewInit{
   uploadImage() : any{
     const data = {
         userId :  this.userData._id,
-        price : this.teeDetailForm.value.price,
-        teeName : this.teeDetailForm.value.teeName,
+        price : this.priceRange,
+        teeName : this.designName,
         frontBase64 :  this.base64DataFrontSide,
         backbase64 : this.base64DataBackSide,
         role : this.userData.user_Role,
         frontUrl : this.imageFrontGlobalStore != '' ? this.frontImageName : '' ,
         backUrl : this.imageBackGlobalStore != '' ? this.backImageName : '',
-        teeColor : this.imageColor
+        teeColor : this.imageColor,
+        frontHeightInches : this.frontHeightInches,
+        frontWidthInches : this.frontWidthInches,
+        backHeightInches : this.backHeightInches,
+        backWidthInches : this.backWidthInches,
     }
+    console.log(data);
     if(this.frontImgFormdata) {
       this.uploadFile('front');
     }
@@ -390,8 +478,7 @@ export class CanvasAreaComponent implements AfterViewInit{
     );
   }
 
-  changeImage(index:any) {
-    this.imageFrontSrc = this.imageFrontUrls[index];
+  changeImage(index:any) {    this.imageFrontSrc = this.imageFrontUrls[index];
     this.imageBackSrc = this.imageBackUrls[index];
     if (this.currentSide == 'front') {
       this.drawImageOnCanvas(this.imageFrontSrc);
@@ -434,17 +521,71 @@ export class CanvasAreaComponent implements AfterViewInit{
     }
   }
 
-  validatePrice (event: any){
-    const input = event.target as HTMLInputElement;
-    let value = parseInt(input.value, 10);
-  
-    if (isNaN(value) || value < 550) {
-      value = 550; // Set to minimum if input is below range or invalid
-    } else if (value > 1550) {
-      value = 1550; // Set to maximum if input exceeds range
+  openModal(fromHelper:any = false){
+    let width : any ;
+    if(window.innerWidth > 600) {
+      width = "30%";
+    } else {
+      width = "80%";
     }
-    input.value = value.toString(); // Update the input value
-    this.priceRange = value;
+    let data = {
+      isMerch : this.userData.user_Role,
+      finalPrice : this.priceRange,
+      teeName : this.teeDetailForm.value.teeName,
+      fromHelper : fromHelper
+    }
+    this.modalDialog = this.matDialog.open(SaveTeeModalComponent,{
+      width: width,
+      height: 'auto',
+      data: data,
+    });
+
+    this.modalDialog.afterClosed().subscribe((result : any) => {
+      console.log('The dialog was closed', result);
+      if(result) {
+        this.uploadImage();
+      }
+    });
+  }
+
+  calculateInches(side:any) {
+    let heightppi : any;
+    let widthppi : any;
+    if(this.isMobile) {
+      if(side == 'front') {
+        heightppi = 11.21;
+        widthppi = 18.36;
+      } else {
+        heightppi = 14.69;
+        widthppi = 14.33;
+      }
+    } else {
+      if(side == 'front') {
+        heightppi = 19.29;
+        widthppi = 19;
+      } else {
+        heightppi = 19.5;
+        widthppi = 19.16;
+      }
+    }
+    if(this.isMobile) {
+      if(side == 'front') {        
+        this.frontHeightInches = (this.frontImageHeight / heightppi).toFixed(2);
+        this.frontWidthInches = (this.frontImageWidth / widthppi).toFixed(2);
+      } else {
+        this.backHeightInches = (this.backImageHeight / heightppi).toFixed(2);
+        this.backWidthInches = (this.backImageWidth / widthppi).toFixed(2);
+      }
+    } else {
+      if(side == 'front') {        
+        this.frontHeightInches = (this.frontImageHeight / heightppi).toFixed(2);
+        this.frontWidthInches = (this.frontImageWidth / widthppi).toFixed(2);
+      } else {
+        this.backHeightInches = (this.backImageHeight / heightppi).toFixed(2);
+        this.backWidthInches = (this.backImageWidth / widthppi).toFixed(2);
+      }
+    }
+    console.log(this.frontHeightInches,this.frontWidthInches,this.backHeightInches,this.backWidthInches)
   }
   
   ngOnDestroy() {

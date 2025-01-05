@@ -6,7 +6,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { WindowRefService } from '../window-ref.service';
 import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrderStepperComponent } from '../order-stepper/order-stepper.component';
 import { ReferralPageComponent } from '../referral-page/referral-page.component';
 
@@ -26,7 +26,6 @@ export class BuyPageComponent implements OnInit  {
   imageSideFront :any = true;
   tshirtId: any;
   data : any;
-  dialogConfig = new MatDialogConfig();
   activeColorBtn : any = 'white';
   activeSizeBtn : any = 'S';
   openCouponInput : any = false;
@@ -35,6 +34,25 @@ export class BuyPageComponent implements OnInit  {
   discountedPrice : any = '';
   modalDialog: MatDialogRef<OrderStepperComponent, any> | undefined;
   modalDialogforReferral: MatDialogRef<ReferralPageComponent,any> | undefined;
+  @ViewChild('mainCanvas', { static: false })
+  canvasRef_for_Bg!: ElementRef<HTMLCanvasElement>;
+  currentMainCanvas : any;
+  public MainCanvasctx: any;
+  imageFrontSrc = 'assets/display-tees/front-black.png';
+  imageBackSrc = 'assets/display-tees/back-black.png';
+  imageFrontUrls = [ 
+    {key : 'Onyx black', value : 'assets/display-tees/front-black.png'},
+    {key : 'Pearl white', value : 'assets/display-tees/front-white.png'},
+    {key : 'Sapphire blue', value : 'assets/display-tees/front-blue.png'},
+    {key : 'Ruby maroon', value : 'assets/display-tees/front-maroon.png'},    
+  ];
+  imageBackUrls = [
+    {key : 'Onyx black', value : 'assets/display-tees/back-black.png'},
+    {key : 'Pearl white', value : 'assets/display-tees/back-white.png'},
+    {key : 'Sapphire blue', value : 'assets/display-tees/back-blue.png'},
+    {key : 'Ruby maroon', value : 'assets/display-tees/back-maroon.png'},
+  ];
+
   constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog) {
     
   }
@@ -45,6 +63,24 @@ export class BuyPageComponent implements OnInit  {
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.globalctx= this.globalCanvas.getContext("2d");
     this.getTee();
+  }
+
+  ngAfterViewInit() {
+    this.drawImageOnCanvas(this.imageFrontSrc);
+  }
+
+  drawImageOnCanvas(image:any): void {
+    const canvas = this.canvasRef_for_Bg?.nativeElement;
+    let cavn= document.getElementById('mainTeeData') as HTMLCanvasElement;
+    const ctx : any= cavn.getContext('2d');
+
+    canvas.width = 175; // You can adjust the width
+    canvas.height = 150; // You can adjust the height
+    const img = new Image();
+    img.src = image;
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+    };    
   }
 
   changeColor(string: string) {
@@ -63,14 +99,16 @@ export class BuyPageComponent implements OnInit  {
     this.appservice.getOnetee(data).subscribe((result) => {
       if(result && result.data != null){
         this.data = result.data;
-        this.loadimage()
+        this.changeTshirtColor();
+        this.loadimage(true);
+        this.drawImageOnCanvas(this.imageFrontSrc);
       } else {
         this.router.navigate(['']);
       }
     })
   }
 
-  loadimage() {
+  loadimage(firstTime : boolean = false) {
     this.globalctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     const img = new Image();
     const boxWidth : number = this.globalCanvas.width;
@@ -83,29 +121,36 @@ export class BuyPageComponent implements OnInit  {
       newHeight = boxHeight;
       newWidth = boxHeight * 1;
     }
-    img.src = this.imageSideFront ? this.data?.teeName_frontsideImg: this.data?.teeName_backsideImg;
+    if(!this.data?.tee_frontsideImg && firstTime) {
+      this.changeSide(true)
+    }
+    img.src = this.imageSideFront ? this.data?.tee_frontsideImg: this.data?.tee_backsideImg;
     img.onload = () => {
       this.globalctx.drawImage(img, 0, 0, newWidth, newHeight);
     }
   }
   
-  changeSide(){
-    let canvasStyle = document.querySelector('canvas') as any;
+  changeSide(firstTime : boolean = false) {
+    let canvasStyle = document.querySelector('#canvas') as any;
     if(this.imageSideFront) {
       canvasStyle.classList.remove('canvasFront');
       canvasStyle.classList.add('canvasBack');
+      this.drawImageOnCanvas(this.imageBackSrc);
       this.imageSideFront = false;
     } else {
       canvasStyle.classList.remove('canvasBack');
       canvasStyle.classList.add('canvasFront');
+      this.drawImageOnCanvas(this.imageFrontSrc);
       this.imageSideFront = true;
     }
-    this.loadimage()
+    if(!firstTime) {
+      this.loadimage();
+    }
   }
 
   createRazorPayOrder () {
     const options:any = {
-      amount: this.data.teeName_Price,
+      amount: this.data.tee_Price,
       currency: 'INR',
       receipt: 'order_123456780',
     };
@@ -118,7 +163,7 @@ export class BuyPageComponent implements OnInit  {
   payWithRazor(order_id: any) {
     const options: any = {
       key: 'rzp_test_RbOpZbmihpoCFb',
-      amount: this.data.teeName_Price * 100, // amount should be in paisa
+      amount: this.data.tee_Price * 100, // amount should be in paisa
       currency: 'INR',
       name: 'Creatify',
       description: 'Test Transaction',
@@ -153,7 +198,7 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openModal(){
-    this.data.teeName_Price = this.couponData.couponAvailable == 0 ? this.data.teeName_Price : this.discountedPrice;
+    this.data.tee_Price = this.couponData.couponAvailable == 0 ? this.data.tee_Price : this.discountedPrice;
     this.data.size = this.activeSizeBtn;
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
       width: '510px',
@@ -178,7 +223,6 @@ export class BuyPageComponent implements OnInit  {
   showImage(){
     let imageSrc: string = '../../assets/sizeChart.jpg';
     window.open(imageSrc, '_blank');
-    // document.body.appendChild(image);
   }
 
   openRefferalModal(){
@@ -220,7 +264,7 @@ export class BuyPageComponent implements OnInit  {
           coupon_text: 'Coupon Applied',
           couponAvailable : true
         };
-        this.discountedPrice =this.data?.teeName_Price -  (this.data?.teeName_Price * this.couponData.coupon_Off) / 100;
+        this.discountedPrice =this.data?.tee_Price -  (this.data?.tee_Price * this.couponData.coupon_Off) / 100;
       } else{
         this.couponData = {
           coupon_text: 'Coupon Not Available',
@@ -228,5 +272,20 @@ export class BuyPageComponent implements OnInit  {
         };
       }
     });
+  }
+  changeTshirtColor () {
+    if(this.data){
+      this.imageFrontUrls.find((imageData: any) => {
+        if(imageData.key == this.data.tee_Color){
+          console.log(imageData)
+          this.imageFrontSrc = imageData.value
+        }
+      });
+      this.imageBackUrls.find((imageData: any) => {
+        if(imageData.key == this.data.tee_Color){
+          this.imageBackSrc = imageData.value
+        }
+      });
+    }
   }
 }
