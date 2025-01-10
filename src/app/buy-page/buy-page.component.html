@@ -11,16 +11,18 @@
       </div>
       <div class="right-side">
         <div class="sellerlabel">
-          Createefi
+          {{user_Id}}
         </div>
         <div class="tee-Name">
             {{data?.teeName_Name}}
         </div>
-        <div class="mb-2 borderBottom">
-          <p class="mb-0 price" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
-          <ng-template #elseBlockforPrice>
-            <s> Rs. {{data?.tee_Price}} </s> <p>Rs. {{discountedPrice}}</p>
-          </ng-template>
+        <div class="mb-2 borderBottom ">
+          <div class="d-flex">
+            <p class="mb-0 price mr-1" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
+            <ng-template #elseBlockforPrice>
+              <s style="margin-right: 5px;"> Rs. {{data?.tee_Price}} </s> <p>Rs. {{discountedPrice}}</p>
+            </ng-template>
+          </div>            
           <p class="h6"> Tax included.Shipping free on Online Payment!</p>
           <p class="h6"> Normal Delivery | 5-9 days</p>
         </div>
@@ -38,7 +40,7 @@
           <div class="borderBottom">
             <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
               <div *ngIf="couponData.length == 0; else elseBlock">
-                <button type="button" class="btn btn-dark" (click)="checkCoupon()" >Apply</button>
+                <button type="button" class="btn btn-dark" (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0">Apply</button>
               </div>
               <ng-template #elseBlock>
                 <div> {{couponData.coupon_text}}</div>
@@ -50,10 +52,15 @@
           </div>
           
 
-          <div class="ReferralSection borderBottom">
+          <div class="ReferralSection borderBottom" *ngIf="!visitor">
             <p>Refer & Earn</p>
             <p>You will get Rs.500 for every friend</p>
             <p style="color: blue;position: relative;z-index: 999; cursor: pointer;" (click)="openRefferalModal()">Refer Now</p>
+          </div>
+          <div class="ReferralSection borderBottom" *ngIf="visitor">
+            <p>Register & Earn</p>
+            <p>You will receive Rs. 500 upon registration.</p>
+            <p style="color: blue;position: relative;z-index: 999; cursor: pointer;" (click)="openSingup()">Register Now</p>
           </div>
 
           <div class="productDetails">

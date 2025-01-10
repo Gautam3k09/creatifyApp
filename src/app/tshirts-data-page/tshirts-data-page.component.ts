@@ -105,7 +105,7 @@ export class TshirtsDataPageComponent {
       let data : any;
       if(this.from == 'personal' && this.storedData.visitor == null) {
         data = {
-          id : this.userData._id,
+          id : this.userData.user_Name,
         }
         console.log('formher')
       } else {

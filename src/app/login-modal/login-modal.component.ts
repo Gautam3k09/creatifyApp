@@ -59,6 +59,16 @@ export class LoginModalComponent {
   }
 
   ngOnInit() {
+    if(this.data != '' && this.data != null) {
+      console.log(this.data ,'here')
+      const signUpTab = document.querySelector('#profile-tab') as HTMLButtonElement;
+      // Trigger the click event to activate the tab
+      if (signUpTab) {
+        signUpTab.click();
+      }
+      this.mySignupForm.controls['referral'].setValue(this.data);
+      this.verifyReferral(event);
+    }
   }
 
   @HostListener('input', ['$event']) onInput(event: Event) {
@@ -78,6 +88,9 @@ export class LoginModalComponent {
       this.myLoginForm.controls['number'].setErrors({
         "number": true
       });
+      if(this.mobileNumber.length < 10 ) {
+        this.regNumberExists = false;
+      }
       if(this.mobileNumber.length == 10 ) {
         this.verifyNumber(this.mobileNumber,login)
       }
@@ -88,7 +101,9 @@ export class LoginModalComponent {
       this.mySignupForm.controls['number'].setErrors({
         "number": true
       });
-      
+      if(this.mobileNumber.length < 10 ) {
+        this.regNumberExists = false;
+      }
       if(this.registerNumber.length == 10 ) {
         this.verifyNumber(this.registerNumber,login)
       }
@@ -200,7 +215,7 @@ export class LoginModalComponent {
 
   verifyReferral(event:any) {
     if(this.mySignupForm.value.referral.length >= 4 && this.mySignupForm.value.referral.length <= 12){
-      this.appservice.checkUserName({userName:this.mySignupForm.value.referral} ).subscribe( (response) => {
+      this.appservice.checkUserName({userName:this.mySignupForm.value.referral} ).subscribe( (response : any) => {
           if(response.status){
               this.mySignupForm.controls['referral'].setErrors({
                 "referralCode": false
@@ -210,7 +225,6 @@ export class LoginModalComponent {
             this.mySignupForm.controls['referral'].setErrors({
               "referralCode": true
             });
-            
           }
         },
         (error) => {

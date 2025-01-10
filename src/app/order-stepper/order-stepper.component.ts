@@ -73,7 +73,6 @@ export class OrderStepperComponent {
   }
 
   calculatePrice(){
-    console.log('here in calc')
     this.finalPrice = (this.buyPageData?.tee_Price * this.userQuantity) - this.userCoins
   }
 

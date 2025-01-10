@@ -43,8 +43,8 @@ export class SettingPageComponent {
 
   ngOnInit() {
     this.ngxLoader.start();
-    this.ngxLoader.stop();
-    this.merchAccount = this.userData.user_Role;
+    this.getUserData()
+    this.ngxLoader.stop();    
     this.myForm = this.fb.group({
       building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
       area: [this.userData.user_Address[0] ? this.userData.user_Address[0].area : ''],
@@ -52,6 +52,15 @@ export class SettingPageComponent {
       city: [this.userData.user_Address[0] ? this.userData.user_Address[0].city : ''],
       pincode: [this.userData.user_Address[0] ? this.userData.user_Address[0].pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     }); 
+  }
+
+  getUserData(){
+    this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
+      if(response && response.status){
+        this.userData = response.data[0];
+        this.merchAccount = this.userData.user_Role;
+      }
+    });
   }
  
 
@@ -118,7 +127,7 @@ export class SettingPageComponent {
         userId : this.userData._id 
       }
       this.appservice.getCoupon(data).subscribe((response) => {
-        if(response.status && response.data && response.data.length > 0) {
+        if(response.status && response.data && response.data.length > 0 && response.data[0].coupon_Active) {
           this.couponName = response.data[0].coupon_Name;
           this.couponOff = response.data[0].coupon_Off;
           this.couponAvailable = true;

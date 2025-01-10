@@ -23,6 +23,7 @@ export const routes: Routes = [
     { path: 'settings', component: SettingPageComponent},
     { path: 'buy/:userId', component: BuyPageComponent},
     { path: ':userName/merch/:userId',component: MerchHomePageComponent},
+    { path: 'refferedBy/:userName', component: HomeComponent},
 
     //admin
     { path: 'admin', component: AdminHomePageComponent },

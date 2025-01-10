@@ -51,12 +51,12 @@
       <div class="SignInContainer">
           <form [formGroup]="mySignupForm" (ngSubmit)="onSubmit(mySignupForm)" *ngIf="!otpPage; else otpPageSection">
             <div style="display: flex; justify-content: center;" >
-              <div data-mdb-input-init class="inputTagforSignup form-outline" style="margin-top: 25%;">
+              <div data-mdb-input-init class="inputTagforSignup form-outline" style="margin-top: 10%;">
                 <mat-form-field style="width: 100%">
                   <mat-label>Mobile Number</mat-label>
                    <input matInput onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1"  pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
                 </mat-form-field>
-                <p class="alert alert-danger" *ngIf="regNumberExists" style="padding: 0px; text-align: center;">
+                <p class="alert alert-danger" *ngIf="regNumberExists"  style="padding: 0px; text-align: center;">
                   Number already exists
                 </p>
               </div>

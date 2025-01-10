@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 // import { CanvasAreaComponent } from '../canvas-area/canvas-area.component';
 import { HeaderPageComponent } from '../header-page/header-page.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { localStorageService } from '../local-storage-service';
@@ -9,7 +9,7 @@ import { localStorageService } from '../local-storage-service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderPageComponent,LoginModalComponent],
+  imports: [HeaderPageComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -18,12 +18,17 @@ export class HomeComponent {
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
   isLogin : any = false;
   storedData:any;
-  constructor(private dialog: MatDialog,private router: Router,public localStorage: localStorageService) {
+  constructor(private dialog: MatDialog,private router: Router,public localStorage: localStorageService,route: ActivatedRoute) {
     this.storedData = localStorage.getUserLocalStorage();
     if(this.storedData && this.storedData.visitor == null) {
       this.isLogin = this.storedData.LoggedIn;
     } else {
       this.isLogin = false;
+      let userName = route.snapshot.params['userName'];
+      console.log(userName);
+      if(userName) {
+        this.openCanvas(userName);
+      }
     }
   }
   
@@ -33,18 +38,19 @@ export class HomeComponent {
       location.reload()
     }
   }
-  openCanvas() {
+  openCanvas(name:any='') {
     if(!this.isLogin) {
-      this.openModal();
+      this.openModal(name);
     } else{
       this.router.navigate(['/tees']);
     }
   }
 
-  openModal() {
+  openModal(name:any='') {
     this.dialogConfig.id = "projects-modal-component";
     this.dialogConfig.height = "500px";
     this.dialogConfig.width = "650px";
+    this.dialogConfig.data = name;
     this.modalDialog = this.dialog.open(LoginModalComponent, this.dialogConfig);
   }
 }

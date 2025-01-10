@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrderStepperComponent } from '../order-stepper/order-stepper.component';
 import { ReferralPageComponent } from '../referral-page/referral-page.component';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-buy-page',
@@ -52,9 +53,18 @@ export class BuyPageComponent implements OnInit  {
     {key : 'Sapphire blue', value : 'assets/display-tees/back-blue.png'},
     {key : 'Ruby maroon', value : 'assets/display-tees/back-maroon.png'},
   ];
-
-  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog) {
-    
+  user_Id : any;
+  teeName :any;
+  visitor : any;
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
+    const data = this.localStorage.getUserLocalStorage();
+    console.log(data);
+    if(data && data.userData && !data?.visitor){
+      this.user_Id = JSON.parse(data.userData).user_Name;
+      this.visitor = false;
+    } else {
+      this.visitor = true;
+    }
   }
   ngOnInit() {
     this.route.params.subscribe((params:any) => {
@@ -99,6 +109,7 @@ export class BuyPageComponent implements OnInit  {
     this.appservice.getOnetee(data).subscribe((result) => {
       if(result && result.data != null){
         this.data = result.data;
+        this.user_Id =  this.user_Id != this.data.user_Id ? this.data.user_Id :'CreateeFi';
         this.changeTshirtColor();
         this.loadimage(true);
         this.drawImageOnCanvas(this.imageFrontSrc);
@@ -230,7 +241,6 @@ export class BuyPageComponent implements OnInit  {
       width: '500px',
       height: '300px',
       // overflow: 'auto',
-      // data: this.data
     });
 
     this.modalDialogforReferral.afterClosed().subscribe(result => {
@@ -238,6 +248,13 @@ export class BuyPageComponent implements OnInit  {
       if(result == 'withdraw'){
       }
     });
+  }
+
+  openSingup(){
+    const newTab = window.open('http://localhost:4200', '_blank');
+    if (!newTab) {
+        console.error('Failed to open a new tab. Please check if popups are blocked.');
+    }
   }
 
   openCouponModal(){
@@ -265,6 +282,9 @@ export class BuyPageComponent implements OnInit  {
           couponAvailable : true
         };
         this.discountedPrice =this.data?.tee_Price -  (this.data?.tee_Price * this.couponData.coupon_Off) / 100;
+        if (!Number.isInteger(this.discountedPrice)) {
+          this.discountedPrice =  this.discountedPrice % 1 >= 0.5 ? Math.ceil(this.discountedPrice) : Math.floor(this.discountedPrice);
+        }
       } else{
         this.couponData = {
           coupon_text: 'Coupon Not Available',

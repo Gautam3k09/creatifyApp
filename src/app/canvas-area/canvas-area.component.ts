@@ -447,7 +447,7 @@ export class CanvasAreaComponent implements AfterViewInit{
   
   uploadImage() : any{
     const data = {
-        userId :  this.userData._id,
+        userId :  this.userData.user_Name,
         price : this.priceRange,
         teeName : this.designName,
         frontBase64 :  this.base64DataFrontSide,

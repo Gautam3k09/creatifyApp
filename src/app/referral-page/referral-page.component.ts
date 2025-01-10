@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { localStorageService } from '../local-storage-service';
 
 @Component({
   selector: 'app-referral-page',
@@ -8,10 +9,18 @@ import { Component } from '@angular/core';
   styleUrl: './referral-page.component.css'
 })
 export class ReferralPageComponent {
+  localData: any;
+  constructor(public localStorage: localStorageService) {
+    const data = this.localStorage.getUserLocalStorage();
+    if(data && data.userData){
+      this.localData = JSON.parse(data.userData).user_Name;
+    }
+
+  }
 
   copy(){
     const tempElement = document.createElement('textarea');
-    tempElement.value = 'text';
+    tempElement.value = 'https://localhost:4200/refferedBy/' + this.localData;
     document.body.appendChild(tempElement); 
     tempElement.select();
     document.execCommand('copy');
