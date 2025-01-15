@@ -34,6 +34,10 @@ export class AppServiceService {
     return this.http.post(`${this.serverUrl}/check-role`,data);
   }
 
+  getCoins(data:any):Observable<any> {
+    return this.http.post(`${this.serverUrl}/get-user-coins`,data);
+  }
+
   //bill api
   postImage(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/upload-print`,data);

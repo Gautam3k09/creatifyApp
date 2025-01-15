@@ -20,7 +20,6 @@ export class AdminOrderPageComponent {
 
   ngOnInit(){
     this.appservice.getAllOrder().subscribe((response: any) => {
-      console.log(response,'response');
       response.data.map((data: any) => {
         let address = data.order_address[0].building + ' ' + data.order_address[0].area + ' ' + data.order_address[0].landmark + ' ' + data.order_address[0].city + ' ' + data.order_address[0].pincode;
         let obj = {

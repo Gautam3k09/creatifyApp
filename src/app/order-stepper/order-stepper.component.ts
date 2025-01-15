@@ -22,7 +22,6 @@ import { localStorageService } from '../local-storage-service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    OrderPlacedComponent,
     CommonModule,
     MatIconModule
   ],
@@ -37,7 +36,6 @@ export class OrderStepperComponent {
   dialogConfig = new MatDialogConfig();
   @Input() data: any;
   userData: any;
-  userCoins: any = 100;
   userQuantity: any = 1;
   finalPrice:any;
   modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
@@ -45,7 +43,7 @@ export class OrderStepperComponent {
   verifyLabel:any = 'Verify & Proceed';
   storedData: any;
 
-  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,tee_Price:any,user_Id:any,_id:any,quantity:any,size:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
+  constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,price:any,user_Id:any,_id:any,quantity:any,size:any,coinsUsed:any,coupon:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
     this.storedData = this.localStorage.getUserLocalStorage();
     if(this.storedData && this.storedData.LoggedIn != null){
@@ -73,7 +71,7 @@ export class OrderStepperComponent {
   }
 
   calculatePrice(){
-    this.finalPrice = (this.buyPageData?.tee_Price * this.userQuantity) - this.userCoins
+    this.finalPrice = (this.buyPageData?.price * this.userQuantity)
   }
 
   createRazorPayOrder () {
@@ -135,15 +133,21 @@ export class OrderStepperComponent {
       buyPageData:this.buyPageData,
       userData: this.storedData.LoggedIn != null ? this.userData : this.secondFormGroup.value,
       finalPrice:this.finalPrice,
-      address: this.firstFormGroup.value
-      
+      address: this.firstFormGroup.value      
     }
-    this.modalDialog = this.matDialog.open(OrderPlacedComponent,  {
-      width: '50vw',
-      height: '45vh',
+    let width = window.innerWidth;
+    this.dialogConfig = {
       data: data,
       disableClose: true
-    });
+    }
+    if(width > 600) {
+      this.dialogConfig.width = "50vw";
+      this.dialogConfig.height = "45vh";
+    } else {
+      this.dialogConfig.width = "85%";
+      this.dialogConfig.height = "25vh";
+    }
+    this.modalDialog = this.matDialog.open(OrderPlacedComponent,this.dialogConfig);
 
     this.modalDialog.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
@@ -164,14 +168,16 @@ export class OrderStepperComponent {
       madeBy: this.buyPageData.user_Id,
       address: this.firstFormGroup.value,
       paymentMethod : 'ONLINE',
-      tshirtPrice : this.buyPageData.tee_Price,
-      quantity : this.userQuantity,
+      tshirtPrice : this.buyPageData.price,
+      // quantity : this.userQuantity,
       size : this.buyPageData.size,
+      coinsUsed : this.buyPageData.coinsUsed,
+      finalPrice : this.finalPrice,
+      coupon : this.buyPageData.coupon,
     }
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){
-        setTimeout(() => {
-          
+        setTimeout(() => {          
           this.openModal('paid');
         }, 1000);
       }

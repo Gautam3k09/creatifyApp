@@ -9,7 +9,7 @@
           <canvas #canvas class="canvasFront" id="canvas" ></canvas>
         </div>
       </div>
-      <div class="right-side">
+      <div class="right-side custom-scrollbar">
         <div class="sellerlabel">
           {{user_Id}}
         </div>
@@ -18,7 +18,7 @@
         </div>
         <div class="mb-2 borderBottom ">
           <div class="d-flex">
-            <p class="mb-0 price mr-1" *ngIf="!couponData.couponAvailable; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
+            <p class="mb-0 price mr-1" *ngIf="showContent; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
             <ng-template #elseBlockforPrice>
               <s style="margin-right: 5px;"> Rs. {{data?.tee_Price}} </s> <p>Rs. {{discountedPrice}}</p>
             </ng-template>
@@ -26,7 +26,7 @@
           <p class="h6"> Tax included.Shipping free on Online Payment!</p>
           <p class="h6"> Normal Delivery | 5-9 days</p>
         </div>
-          <div class="mb-3 borderBottom">
+          <div class="borderBottom">
           <div class="sizeDiv mb-0" >
             <div class="sizeTxt" (click)="showImage()">Size</div>
             <button type="button" style="width:15%;" class="btn btn-circle btn-light mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
@@ -37,14 +37,17 @@
           <p class="h6 d-flex justify-content-center"> Click on Size for Size Chart</p>
         </div>
           
-          <div class="borderBottom">
-            <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)">
-              <div *ngIf="couponData.length == 0; else elseBlock">
-                <button type="button" class="btn btn-dark" (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0">Apply</button>
-              </div>
-              <ng-template #elseBlock>
-                <div> {{couponData.coupon_text}}</div>
-              </ng-template>
+          <div class="mb-1 borderBottom">
+            <p>Coupon & Coins</p>
+            <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)" [disabled] = "isChecked">
+            <div class="d-flex justify-content-center" *ngIf="couponData.length == 0; else elseBlock">
+              <button type="button" class="btn btn-dark " (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0 || isChecked">Apply</button>
+            </div>
+            <ng-template #elseBlock>
+              <div> {{couponData.coupon_text}}</div>
+            </ng-template>
+            <input type="checkbox" style="transform: scale(1.5); margin-right: 10px;" [(ngModel)]="isChecked" (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99"/>
+            <label>Use Createefi Coins ({{coins}} available)</label>
           </div>
             
           <div class="buyButton">
@@ -78,7 +81,7 @@
               <p>WashCare</p> <p>Black</p>
             </div>
           </div>
-        </div>
+      </div>
     </div>
   </div>
   </body>

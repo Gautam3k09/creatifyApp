@@ -16,6 +16,7 @@ export class OrderPlacedComponent {
   fromCod = true;
   finalPrice = 0;
   storeData : any;
+  orderId : any;
   constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService) { 
     this.storeData = this.localStorage.getUserLocalStorage();
   }
@@ -50,13 +51,17 @@ export class OrderPlacedComponent {
       madeBy: this.data.buyPageData.user_Id,
       address: this.data.address,
       paymentMethod : 'COD',
-      tshirtPrice : this.data.buyPageData.tee_Price,
-      quantity : this.data.buyPageData.quantity,
+      tee_price : this.data.buyPageData.price,
+      finalPrice : this.finalPrice,
+      // quantity : this.data.buyPageData.quantity,
       size : this.data.buyPageData.size,
+      coinsUsed : this.data.buyPageData.coinsUsed,
+      coupon : this.data.buyPageData.coupon,
     };
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){
         this.fromCod = false;
+        this.orderId = result.data;
       }
     })
   }

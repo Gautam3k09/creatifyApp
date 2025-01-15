@@ -10,11 +10,12 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrderStepperComponent } from '../order-stepper/order-stepper.component';
 import { ReferralPageComponent } from '../referral-page/referral-page.component';
 import { localStorageService } from '../local-storage-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,OrderStepperComponent,ReferralPageComponent],
+  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,FormsModule],
   templateUrl: './buy-page.component.html',
   styleUrl: './buy-page.component.css',
   providers: [WindowRefService,AppServiceService],
@@ -56,6 +57,10 @@ export class BuyPageComponent implements OnInit  {
   user_Id : any;
   teeName :any;
   visitor : any;
+  isChecked : any= false;
+  coins : any;
+  showContent : boolean = true;
+
   constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
     const data = this.localStorage.getUserLocalStorage();
     console.log(data);
@@ -70,6 +75,7 @@ export class BuyPageComponent implements OnInit  {
     this.route.params.subscribe((params:any) => {
       this.tshirtId = params['userId'];
     });
+    this.getCoins()
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
     this.globalctx= this.globalCanvas.getContext("2d");
     this.getTee();
@@ -209,12 +215,13 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openModal(){
-    this.data.tee_Price = this.couponData.couponAvailable == 0 ? this.data.tee_Price : this.discountedPrice;
+    this.data.coupon = this.couponData.couponAvailable ?  this.couponData.coupon_id : '';
+    this.data.price = this.showContent  ? this.data.tee_Price : this.discountedPrice;
     this.data.size = this.activeSizeBtn;
+    this.data.coinsUsed = this.isChecked;
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
       width: '510px',
       height: '475px',
-      // overflow: 'auto',
       data: this.data
     });
 
@@ -268,19 +275,31 @@ export class BuyPageComponent implements OnInit  {
     this.enteredCouponInput = event.target.value;
   }
   
-  checkCoupon() {
+  checkCoupon(forCoupon : any = true) {
+    console.log(this.isChecked,'discounted');
+    if(!forCoupon && !this.isChecked){
+      this.discountedPrice = this.data?.tee_Price - 100;
+      this.showContent = false;
+      return;
+    } 
+    if(!forCoupon && this.isChecked) {
+      this.showContent = true
+      return;
+    }
     let data ={
       text : this.enteredCouponInput,
       using : 'text'
     }
     this.appservice.getCoupon(data).subscribe((response) => {
-      if(response.status && response.data && response.data.length > 0) {
+      if(response.status && response.data && response.data.length > 0 && response.data[0].coupon_Active) {
         this.couponData = {
+          coupon_id : response.data[0]._id,
           coupon_Name: response.data[0].coupon_Name,
           coupon_Off: response.data[0].coupon_Off,
           coupon_text: 'Coupon Applied',
           couponAvailable : true
         };
+        this.showContent = false;
         this.discountedPrice =this.data?.tee_Price -  (this.data?.tee_Price * this.couponData.coupon_Off) / 100;
         if (!Number.isInteger(this.discountedPrice)) {
           this.discountedPrice =  this.discountedPrice % 1 >= 0.5 ? Math.ceil(this.discountedPrice) : Math.floor(this.discountedPrice);
@@ -290,6 +309,7 @@ export class BuyPageComponent implements OnInit  {
           coupon_text: 'Coupon Not Available',
           couponAvailable : false
         };
+        this.showContent = true
       }
     });
   }
@@ -307,5 +327,13 @@ export class BuyPageComponent implements OnInit  {
         }
       });
     }
+  }
+
+  getCoins() {
+    this.appservice.getCoins({userName : this.user_Id}).subscribe((response) => {
+      if(response.status && response.data ) {
+        this.coins = response.data;
+      }
+    });
   }
 }

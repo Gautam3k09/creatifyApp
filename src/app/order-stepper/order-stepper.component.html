@@ -1,6 +1,6 @@
   <mat-stepper [linear]="true" #stepper style="height: 420px; width: 100%;">
     <mat-step [stepControl]="firstFormGroup">
-      <form [formGroup]="firstFormGroup">
+      <form [formGroup]="firstFormGroup" style="margin-top: 5%;">
         <ng-template matStepLabel class="mobileFontSize">Address</ng-template>
         <div>
           <mat-form-field style="width: 100%">
@@ -82,9 +82,9 @@
             <div class="orderTshirtName">Price Details</div>
             <div class="detailsFlex">
               <div class="detailsFlexContainer">Price </div>
-              <div class="detailsFlexContainer">₹{{buyPageData.tee_Price}}</div>
+              <div class="detailsFlexContainer">₹{{buyPageData.price}}</div>
             </div>
-            <div class="detailsFlex">
+            <!-- <div class="detailsFlex">
               <div class="detailsFlexContainer">Quantity</div>
               <div class="detailsFlexContainer">
                 <select [(ngModel)]="userQuantity" (change)="calculatePrice()">
@@ -96,10 +96,10 @@
                 </select>
                 
               </div>
-            </div>
+            </div> -->
             <div class="detailsFlex">
-              <div class="detailsFlexContainer">coins used </div>
-              <div class="detailsFlexContainer">₹{{userQuantity}}</div>
+              <div class="detailsFlexContainer">Size</div>
+              <div class="detailsFlexContainer">{{buyPageData.size}}</div>
             </div>
             <div class="detailsFlex">
               <div class="detailsFlexContainer">Delivery Charges(applicable for COD)</div>

@@ -53,8 +53,6 @@ export class HeaderPageComponent {
 
   openModal() {
     let width = window.innerWidth;
-    let height = window.innerHeight;
-    console.log(width,height,'asd')
     if(width > 600) {
       this.dialogConfig.width = "30%";
     } else {

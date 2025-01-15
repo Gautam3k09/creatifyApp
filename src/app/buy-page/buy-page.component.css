@@ -40,8 +40,8 @@ body {
 
 .canvas-container {
   position: relative;
-  width: 175px; /* Adjust to the width of your canvas */
-  height: 150px; /* Adjust to the height of your canvas */
+  width: 175px;
+  height: 150px;
 }
 
 .canvas-container canvas {
@@ -79,13 +79,14 @@ body {
 
 .right-side {
   margin-top: 2%;
-  background: transparent;
   width: 30%;
-  height: auto;
+  height: 70vh;
   margin-left: 5%;
   font-size: larger;
   font-weight: 600;
-
+  overflow: auto;
+  padding: 5px;
+  
   .sellerlabel{
     font-weight: 600;
   }
@@ -229,7 +230,8 @@ body {
   .right-side {
     margin-top: 50%;
     width: 90vw;
-    float: none;   
+    float: none;
+    padding: 0px;
   }
 
   .left-side{
@@ -280,7 +282,8 @@ body {
 
   .borderBottom{
     border-bottom: 5px solid #d0cfcf;
-    padding-bottom: 8px;
+    /* padding-bottom: 8px; */
+    padding: 5px;
   }
   .icon-style {
     border: 1px solid black;
@@ -292,4 +295,27 @@ body {
     position: absolute;
     z-index: 999;
   }
+}
+
+
+/* scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Style the scrollbar track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: none;
+  border-radius: 10px;
+}
+
+/* Style the scrollbar thumb */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+/* Style the thumb on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #999; 
 }

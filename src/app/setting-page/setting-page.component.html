@@ -9,6 +9,7 @@
                 <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')">Profile</button>
                 <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('merch')">Merch</button>
                 <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('help')">Need help?</button>
+                <button class="nav-link sideButton " id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('order')">Orders</button>
                 <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-selected="false" (click)="logout()">Logout</button>
               </div>
             </div>
@@ -145,9 +146,6 @@
                           <!-- <div class="text-center mobileWidth">
                             <input [(ngModel)]="upiId" placeholder="Enter upi Id" [ngModelOptions]="{standalone: true}">
                           </div> -->
-                          <div class="text-center mobileWidth">
-                              Total Earnings : 10000
-                          </div>
                           <div class="withdraw-btn text-center mt-2 mobileWidth">
                             <button class="btn btn-dark" type="submit" [disabled]="upiId.length < 15" (click)="withdraw()">withdraw</button> 
                           </div>
@@ -171,6 +169,52 @@
                     </div>
                   </div>
                 </div>
+                <div *ngIf="this.activeTab == 'order'" class="orderDiv">
+                  <!-- <div class="orderBox">
+                    <div>
+                      TeeName
+                    </div>
+                  </div> -->
+                  <div class="order-summary hideOnMobile">
+                    <div class="order-details">
+                        <div><strong>ORDER PLACED</strong><br>29 December 2024</div>
+                        <div><strong>ORDER STATUS</strong><br>Not delivered</div>
+                        <div><strong>TOTAL</strong><br>₹1,099.00</div>
+                        <div><strong>TEE NAME</strong><br>Monti</div>
+                    </div>
+                    <div class="order-actions">
+                        <div><strong>ORDER # 408-0980803-9294713</strong></div>
+                        <div>
+                            <a href="#">View order details</a>
+                            <!-- <a href="#">Invoice</a> -->
+                        </div>
+                    </div>
+                  </div>
+                  <div class="booking-card hideOnDesktop">
+                    <div class="date">Wed 22 Jan - Not Delivered</div>
+                    <div class="title">Monti</div>
+                    <div class="details">
+                      <span>
+                        ₹1,099.00
+                      </span>
+                      <span>
+                        # 408-0980803-9294713
+                      </span>
+                    </div>
+                  </div>
+                  <div class="booking-card hideOnDesktop">
+                    <div class="date">Wed 22 Jan - Not Delivered</div>
+                    <div class="title">Monti</div>
+                    <div class="details">
+                      <span>
+                        $1,099.00
+                      </span>
+                      <span>
+                        # 408-0980803-9294713
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -186,6 +230,9 @@
                 </div>
                 <div>
                   <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('help')"><i class="fa fa-question-circle" aria-hidden="true"></i><p class="textTag">Help?</p></button>
+                </div>
+                <div>
+                  <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('order')"><i class="fa fa-cart-shopping" aria-hidden="true"></i><p class="textTag">Orders</p></button>
                 </div>
                 <div>
                   <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab" aria-selected="false" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i><p class="textTag">Logout</p></button>
