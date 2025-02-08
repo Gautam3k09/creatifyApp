@@ -21,7 +21,7 @@ export class AppComponent {
     }
     // this.localStorage.setUserLocalStorage(localData);
   }
-  ngonInit(){
+  ngOnInit(){
     
   }
 }

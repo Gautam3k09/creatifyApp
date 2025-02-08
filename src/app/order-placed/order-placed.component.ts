@@ -4,30 +4,37 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppServiceService } from '../app-service.service';
 import { localStorageService } from '../local-storage-service';
+import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
   selector: 'app-order-placed',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgxUiLoaderModule],
   templateUrl: './order-placed.component.html',
   styleUrl: './order-placed.component.css'
 })
 export class OrderPlacedComponent {
-  fromCod = true;
+  fromCod :any = false;
   finalPrice = 0;
   storeData : any;
   orderId : any;
-  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService) { 
+  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any,rpData:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService,private ngxLoader: NgxUiLoaderService,) { 
+    this.ngxLoader.start();
     this.storeData = this.localStorage.getUserLocalStorage();
+    
   }
-
+  
   ngOnInit(){
-    this.finalPrice = this.data.finalPrice + 59 ;
     if(this.data.from == 'cod') {
       this.fromCod = true;
+      this.finalPrice = this.data.finalPrice + 59;
     } else {
       this.fromCod = false;
+      // this.placeOrder();
+      console.log(this.data,this.data.rpData,'here')
     }
+    // this.ngxLoader.start();
+    this.ngxLoader.stop();
   }
 
   closeModal(string:any){
@@ -50,8 +57,8 @@ export class OrderPlacedComponent {
       by:  this.storeData.visitor == null ?this.data.userData.user_Name : this.data.userData.phoneNumber,
       madeBy: this.data.buyPageData.user_Id,
       address: this.data.address,
-      paymentMethod : 'COD',
-      tee_price : this.data.buyPageData.price,
+      paymentMethod : this.fromCod ? 'COD' : 'ONLINE',
+      tshirtPrice : this.data.buyPageData.price,
       finalPrice : this.finalPrice,
       // quantity : this.data.buyPageData.quantity,
       size : this.data.buyPageData.size,
@@ -60,10 +67,11 @@ export class OrderPlacedComponent {
     };
     this.appservice.postOrder(data).subscribe((result)=> {
       if(result.status){
-        this.fromCod = false;
         this.orderId = result.data;
+        this.fromCod = false;
       }
-    })
+    });
+    
   }
 
 }

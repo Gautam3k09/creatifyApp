@@ -63,6 +63,9 @@ export class AppServiceService {
   createOrder(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/paymentOrder`,data);
   }
+  verify(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/verify-payment`,data);
+  }
 
   // coupon api
   createCoupon(data:any): Observable<any> {

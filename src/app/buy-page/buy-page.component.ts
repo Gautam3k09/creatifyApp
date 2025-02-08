@@ -165,54 +165,54 @@ export class BuyPageComponent implements OnInit  {
     }
   }
 
-  createRazorPayOrder () {
-    const options:any = {
-      amount: this.data.tee_Price,
-      currency: 'INR',
-      receipt: 'order_123456780',
-    };
-    this.appservice.createOrder(options).subscribe((result)=> {
-      const order_id = result.offer_id;
-      this.payWithRazor(order_id);
-    })
-  }
+  // createRazorPayOrder () {
+  //   const options:any = {
+  //     amount: this.data.tee_Price,
+  //     currency: 'INR',
+  //     receipt: 'order_123456780',
+  //   };
+  //   this.appservice.createOrder(options).subscribe((result)=> {
+  //     const order_id = result.offer_id;
+  //     this.payWithRazor(order_id);
+  //   })
+  // }
 
-  payWithRazor(order_id: any) {
-    const options: any = {
-      key: 'rzp_test_RbOpZbmihpoCFb',
-      amount: this.data.tee_Price * 100, // amount should be in paisa
-      currency: 'INR',
-      name: 'Creatify',
-      description: 'Test Transaction',
-      order_id: order_id,
-      image: 'assets/blue-purple.jpg',
-      modal:{
-        escape:false
-      },
+  // payWithRazor(order_id: any) {
+  //   const options: any = {
+  //     key: 'rzp_test_RbOpZbmihpoCFb',
+  //     amount: this.data.tee_Price * 100, // amount should be in paisa
+  //     currency: 'INR',
+  //     name: 'Creatify',
+  //     description: 'Test Transaction',
+  //     order_id: order_id,
+  //     image: 'assets/blue-purple.jpg',
+  //     modal:{
+  //       escape:false
+  //     },
       
-      prefill: {
-        name: 'Monti',
-        email: 'monti@example.com',
-        contact: '9511830363',
-      },
-      notes: {
-        teeName: this.data?.teeName_Name,
-      },
-      theme: {
-        color: '#3399cc',
-      },
-    };
-    options.handler = (response:any) => {
-      console.log(response,'response');
-      // After successful payment, make a request to your server to verify the transaction
-    };
-    options.modal.ondismiss = ()=>{
-      console.log('payment cancelled');
-      // Handle the cancellation of the payment
-    }
-    const rzp = this.winRef.nativeWindow.Razorpay(options);
-    rzp.open();
-  }
+  //     prefill: {
+  //       name: 'Monti',
+  //       email: 'monti@example.com',
+  //       contact: '9511830363',
+  //     },
+  //     notes: {
+  //       teeName: this.data?.teeName_Name,
+  //     },
+  //     theme: {
+  //       color: '#3399cc',
+  //     },
+  //   };
+  //   options.handler = (response:any) => {
+  //     console.log(response,'response');
+  //     // After successful payment, make a request to your server to verify the transaction
+  //   };
+  //   options.modal.ondismiss = ()=>{
+  //     console.log('payment cancelled');
+  //     // Handle the cancellation of the payment
+  //   }
+  //   const rzp = this.winRef.nativeWindow.Razorpay(options);
+  //   rzp.open();
+  // }
 
   openModal(){
     this.data.coupon = this.couponData.couponAvailable ?  this.couponData.coupon_id : '';

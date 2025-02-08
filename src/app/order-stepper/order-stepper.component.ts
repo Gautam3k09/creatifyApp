@@ -76,21 +76,20 @@ export class OrderStepperComponent {
 
   createRazorPayOrder () {
     const options:any = {
-      amount: 500,
+      amount: this.buyPageData?.price * 100,
       currency: 'INR',
-      receipt: 'order_123456780',
+      // receipt: 'order_123456780',
     };
     this.appservice.createOrder(options).subscribe((result)=> {
-      console.log(result,'result');
-      const order_id = result.offer_id;
+      const order_id = result.id;
       this.payWithRazor(order_id);
     })
   }
 
   payWithRazor(order_id: any) {
     const options: any = {
-      key: 'rzp_test_RbOpZbmihpoCFb',
-      amount:500 * 100, // amount should be in paisa
+      key: 'rzp_test_TbWyYgkbb7t7xX',
+      amount: this.buyPageData?.price * 100, // amount should be in paisa
       currency: 'INR',
       name: 'Creatify',
       description: 'Test Transaction',
@@ -101,9 +100,9 @@ export class OrderStepperComponent {
       },
       
       prefill: {
-        name: 'Monti',
+        name: this.userData.user_Name,
         email: 'monti@example.com',
-        contact: '9511830363',
+        // contact: '9511830363',
       },
       notes: {
         teeName: 'this.data.teeName_Name',
@@ -114,9 +113,12 @@ export class OrderStepperComponent {
     };
     options.handler = (response:any) => {
       console.log(response,'response');
-      if(response.razorpay_payment_id){
-        this.placeOrder();        
-      }
+      this.verifyOrder(response);
+      // if(response.razorpay_payment_id){
+        // this.placeOrder();   
+        // setTimeout(() => {          
+        // }, 1000);
+      // }
     };
     options.modal.ondismiss = ()=>{
       console.log('payment cancelled');
@@ -126,14 +128,15 @@ export class OrderStepperComponent {
     rzp.open();
   }
 
-  openModal(string:any){
+  openModal(string:any,rpData:any=''){
     this.buyPageData.quantity = this.userQuantity;
     let data = {
       from : string,
       buyPageData:this.buyPageData,
       userData: this.storedData.LoggedIn != null ? this.userData : this.secondFormGroup.value,
       finalPrice:this.finalPrice,
-      address: this.firstFormGroup.value      
+      address: this.firstFormGroup.value,
+      rpData : rpData
     }
     let width = window.innerWidth;
     this.dialogConfig = {
@@ -145,7 +148,7 @@ export class OrderStepperComponent {
       this.dialogConfig.height = "45vh";
     } else {
       this.dialogConfig.width = "85%";
-      this.dialogConfig.height = "25vh";
+      this.dialogConfig.height = "65vh";
     }
     this.modalDialog = this.matDialog.open(OrderPlacedComponent,this.dialogConfig);
 
@@ -176,12 +179,19 @@ export class OrderStepperComponent {
       coupon : this.buyPageData.coupon,
     }
     this.appservice.postOrder(data).subscribe((result)=> {
-      if(result.status){
-        setTimeout(() => {          
-          this.openModal('paid');
-        }, 1000);
+      if(result.status && result.data){
+        const orderId = result.data;
+        this.openModal('paid');
       }
     })
+  }
+
+  verifyOrder(data:any){
+    this.appservice.verify(data).subscribe((result)=> {
+      if(result.paid){
+        this.openModal('paid',data);
+      }
+    }) 
   }
 
   moveToNextInputReg(event:any){
