@@ -55,7 +55,7 @@ export class SettingPageComponent {
   }
 
   getUserData(){
-    this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
+    this.appservice.postUserCheck({data:this.userData.user_Email}).subscribe((response) => {
       if(response && response.status){
         this.userData = response.data[0];
         this.merchAccount = this.userData.user_Role;
@@ -88,7 +88,7 @@ export class SettingPageComponent {
   }
   
   updateLocalStorage(){
-    this.appservice.postUserCheck({data:this.userData.user_Number}).subscribe((response) => {
+    this.appservice.postUserCheck({data:this.userData.user_Email}).subscribe((response) => {
       let localData : any = {
         LoggedIn : true,
         userData : JSON.stringify(response.data[0])

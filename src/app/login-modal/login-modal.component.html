@@ -13,11 +13,11 @@
             <div  style="display: flex; justify-content: center;" >
               <div data-mdb-input-init class="inputTag form-outline">
                 <mat-form-field style="width: 100%">
-                  <mat-label>Mobile Number</mat-label>
-                  <input matInput type="number"  placeholder="Mobile Number" maxlength="10" (keyup)="onkeyUp($event,true)" formControlName="number" required/>
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email"  placeholder="Email" (keyup)="onkeyUp($event,true)" formControlName="email" required/>
                 </mat-form-field>
-                <p class="alert alert-danger" *ngIf="numberExists" style="padding: 0px; text-align: center;">
-                  Number Doesnt exists
+                <p class="alert alert-danger" *ngIf="emailExists" style="padding: 0px; text-align: center;">
+                  User Email Doesnt exists
                 </p>
               </div>
             </div>
@@ -53,11 +53,12 @@
             <div style="display: flex; justify-content: center;" >
               <div data-mdb-input-init class="inputTagforSignup form-outline" style="margin-top: 10%;">
                 <mat-form-field style="width: 100%">
-                  <mat-label>Mobile Number</mat-label>
-                   <input matInput onKeyPress="if(this.value.length==10) return false;" type="number" (keyup)="onkeyUp($event,false)" id="form2Example1"  pattern="[0-9]*" placeholder="Mobile Number" formControlName="number"/>
+                  <mat-label>Email</mat-label>
+                  <!-- onKeyPress="if(this.value.length==10) return false;" for mobile number -->
+                   <input matInput  type="email" (keyup)="onkeyUp($event,false)" id="form2Example1" placeholder="Email" formControlName="email"/>
                 </mat-form-field>
-                <p class="alert alert-danger" *ngIf="regNumberExists"  style="padding: 0px; text-align: center;">
-                  Number already exists
+                <p class="alert alert-danger" *ngIf="regEmailExists"  style="padding: 0px; text-align: center;">
+                  Email already exists
                 </p>
               </div>
             </div>
@@ -109,7 +110,7 @@
           <ng-template #otpPageSection>
             <div  style="display: flex; justify-content: center;" >
               <div data-mdb-input-init class="form-outline" style="width: 70%;">
-                <p> Otp sent on {{this.mySignupForm.value.number}}</p>
+                <p> Otp sent on {{this.mySignupForm.value.email}}</p>
               </div>
             </div>
 

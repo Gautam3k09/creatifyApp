@@ -24,13 +24,13 @@ export class LoginModalComponent {
   myLoginForm!: FormGroup;
   mySignupForm!: FormGroup;
   otpForm!: FormGroup;
-  mobileNumber: any ='';
-  registerNumber: any='';
+  mobileEmail: any ='';
+  registerEmail: any='';
   // mobileNumberVerified: boolean = false;g
   sendOtp :any = false;
   sendOtpForRegister: boolean = false;
-  numberExists: any ;
-  regNumberExists:any;
+  emailExists: any ;
+  regEmailExists:any;
   otpPage: any = false;
   showWrongOtpError: boolean = false;
   showWrongOtpErrorForRegister: boolean = false;
@@ -42,12 +42,13 @@ export class LoginModalComponent {
       otp2: ['', [Validators.required, Validators.pattern('[0-9]')] ],
       otp3: ['', [Validators.required, Validators.pattern('[0-9]')] ],
       otp4: ['', [Validators.required, Validators.pattern('[0-9]')] ],
-      number:  ['',[Validators.required,Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]')]],
+      // number:  ['',[Validators.required,Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]')]],
+      email : ['', [Validators.required, Validators.email]]
     });
     this.mySignupForm = this.fb.group({
       userName : ['',[Validators.required,Validators.minLength(4), Validators.maxLength(12)]],
       referral : ['',],
-      number:  ['',[Validators.required,Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]')]],
+      email:  ['', [Validators.required, Validators.email]],
     });
 
     this.otpForm = this.fb.group({
@@ -83,30 +84,30 @@ export class LoginModalComponent {
   onkeyUp(data:any,login:any){
     this.storeUserData = '';
     if(login){
-      this.mobileNumber = data.target.value;
+      this.mobileEmail = data.target.value;
       this.sendOtp = false;
-      this.myLoginForm.controls['number'].setErrors({
-        "number": true
+      this.myLoginForm.controls['email'].setErrors({
+        "email": true
       });
-      if(this.mobileNumber.length < 10 ) {
-        this.regNumberExists = false;
-      }
-      if(this.mobileNumber.length == 10 ) {
-        this.verifyNumber(this.mobileNumber,login)
-      }
+      // if(this.mobileEmail.length < 10 ) {
+      //   this.regEmailExists = false;
+      // }
+      // if(this.mobileEmail.length == 10 ) {
+      // }
+      this.verifyNumber(this.mobileEmail,login)
     } 
     if(!login) {
-      this.numberExists = false;
-      this.registerNumber = data.target.value;
-      this.mySignupForm.controls['number'].setErrors({
-        "number": true
-      });
-      if(this.mobileNumber.length < 10 ) {
-        this.regNumberExists = false;
+      this.emailExists = false;
+      this.registerEmail = data.target.value;
+      // this.mySignupForm.controls['email'].setErrors({
+      //   // "email": true
+      // });
+      if(this.mobileEmail.length < 10 ) {
+        this.regEmailExists = false;
       }
-      if(this.registerNumber.length == 10 ) {
-        this.verifyNumber(this.registerNumber,login)
-      }
+      // if(this.registerEmail.length == 10 ) {
+      this.verifyNumber(this.registerEmail,login)
+      // }
     }
   }
 
@@ -160,7 +161,7 @@ export class LoginModalComponent {
         }, 500);
       } else {
         const data = {
-          number : this.registerNumber,
+          Email : this.registerEmail,
           username : this.mySignupForm.value.userName,
           referral : this.mySignupForm.value.referral
         }
@@ -196,15 +197,15 @@ export class LoginModalComponent {
   verifyNumber(data:any,login:any){
     this.appservice.postUserCheck({data:data}).subscribe((response) => {
         if (!response.status && !login) {
-          this.regNumberExists = false;
-          this.mySignupForm.controls['number'].setErrors(null);
+          this.regEmailExists = false;
+          this.mySignupForm.controls['email'].setErrors(null);
         } else if(response.status && !login) { 
-          this.regNumberExists = true;
+          this.regEmailExists = true;
         } else if (!response.status && login) {
-          this.numberExists = true;
+          this.emailExists = true;
         } else {
-          this.myLoginForm.controls['number'].setErrors(null);
-          this.numberExists = false;
+          this.myLoginForm.controls['email'].setErrors(null);
+          this.emailExists = false;
           this.sendOtp = true;
           this.storeUserData = response.data[0];
         }
