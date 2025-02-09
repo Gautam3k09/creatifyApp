@@ -120,10 +120,10 @@ export class CanvasAreaComponent implements AfterViewInit{
   constructor(private router: Router,private fb: FormBuilder, private appservice:AppServiceService,public localStorage : localStorageService,public matDialog: MatDialog) {
     this.storedData = this.localStorage.getUserLocalStorage();
     this.isMobile = window.innerWidth > 500 ? false : true;
-    if(window.innerWidth < 372 || (window.innerHeight < 790 && window.innerWidth < 1200)) {
-      alert('Your device does not support this functionality. Please use a device with a larger screen.');
-      this.router.navigate(['/tees']);
-    }
+    // if(window.innerWidth < 372 || (window.innerHeight < 790 && window.innerWidth < 1200)) {
+    //   alert('Your device does not support this functionality. Please use a device with a larger screen.');
+    //   this.router.navigate(['/tees']);
+    // }
   }
   ngOnInit() {
     this.userData = this.storedData.userData;
