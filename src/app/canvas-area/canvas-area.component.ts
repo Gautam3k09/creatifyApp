@@ -120,10 +120,17 @@ export class CanvasAreaComponent implements AfterViewInit{
   constructor(private router: Router,private fb: FormBuilder, private appservice:AppServiceService,public localStorage : localStorageService,public matDialog: MatDialog) {
     this.storedData = this.localStorage.getUserLocalStorage();
     this.isMobile = window.innerWidth > 500 ? false : true;
-    // if(window.innerWidth < 372 || (window.innerHeight < 790 && window.innerWidth < 1200)) {
-    //   alert('Your device does not support this functionality. Please use a device with a larger screen.');
-    //   this.router.navigate(['/tees']);
     // }
+    if (window.innerWidth > 450 && window.innerWidth <= 1024) {
+      alert('Tablet view is not supported. Please use a mobile or desktop.');
+      this.router.navigate(['/tees']);
+    } else if (window.innerWidth <= 350 || window.innerHeight <= 600) {
+      alert('Your device does not meet the minimum height requirement.');
+      this.router.navigate(['/tees']);
+    } else {
+      // ✅ Allowed: Desktop or Mobile (Width > 350px & Height > 700px)
+      console.log('Allowed');
+    }
   }
   ngOnInit() {
     this.userData = this.storedData.userData;
@@ -136,6 +143,9 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.canvas.nativeElement.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.canvas.nativeElement.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.canvas.nativeElement.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    this.canvas.nativeElement.addEventListener('touchstart', this.handleTouchStart.bind(this));
+    this.canvas.nativeElement.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    this.canvas.nativeElement.addEventListener('touchmove', this.handleTouchMove.bind(this));
 
     this.teeDetailForm = this.fb.group({
       teeName : ['', [Validators.required]],
@@ -252,7 +262,7 @@ export class CanvasAreaComponent implements AfterViewInit{
     
     const newX = Math.max(0, Math.min(canvasWidth - this.imageWidth, this.imageOffsetX));
     const newY = Math.max(0, Math.min(canvasHeight - this.imageHeight, this.imageOffsetY));
-    console.log(this.imageWidth,this.imageHeight,canvasHeight,canvasWidth)
+    // console.log(this.imageWidth,this.imageHeight,canvasHeight,canvasWidth)
     //image update
     if(this.image != '') {
       this.ctx.drawImage(this.image, newX, newY, this.imageWidth, this.imageHeight);
@@ -288,19 +298,59 @@ export class CanvasAreaComponent implements AfterViewInit{
       this.imagestartYaxis = event.offsetY;
 
       // Update offset values considering canvas boundaries
-      this.imageOffsetX = Math.max(0, Math.min(this.imageOffsetX + deltaX, this.canvas.nativeElement.width - this.imageWidth));
-      this.imageOffsetY = Math.max(0, Math.min(this.imageOffsetY + deltaY, this.canvas.nativeElement.height - this.imageHeight));
-      if(this.shirtSideFront) {
-            this.frontImageOffsetX = this.imageOffsetX;
-            this.frontImageOffsetY = this.imageOffsetY;
-          } else {
-            this.backImageOffsetX = this.imageOffsetX;
-            this.backImageOffsetY = this.imageOffsetY;
-          }
-      this.updateImage();
+      this.updateImagePosition(deltaX, deltaY);
     }
   }
   
+  // Touch Event Handlers
+  handleTouchStart(event: TouchEvent) {
+    event.preventDefault(); // Prevents scrolling while dragging
+    this.isDragging = true;
+
+    const touch = event.touches[0];
+    const rect = this.canvas.nativeElement.getBoundingClientRect();
+
+    this.imagestartXaxis = touch.clientX - rect.left;
+    this.imagestartYaxis = touch.clientY - rect.top;
+  }
+
+  handleTouchMove(event: TouchEvent) {
+    if (!this.isDragging || !this.isImgUploaded) return;
+    event.preventDefault(); // Prevents scrolling while dragging
+
+    const touch = event.touches[0];
+    const rect = this.canvas.nativeElement.getBoundingClientRect();
+
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+    const deltaX = touchX - this.imagestartXaxis;
+    const deltaY = touchY - this.imagestartYaxis;
+
+    this.imagestartXaxis = touchX;
+    this.imagestartYaxis = touchY;
+
+    this.updateImagePosition(deltaX, deltaY);
+  }
+
+  handleTouchEnd() {
+    this.isDragging = false;
+  }
+
+  // Utility function for updating image position
+  updateImagePosition(deltaX: number, deltaY: number) {
+    this.imageOffsetX = Math.max(0, Math.min(this.imageOffsetX + deltaX, this.canvas.nativeElement.width - this.imageWidth));
+    this.imageOffsetY = Math.max(0, Math.min(this.imageOffsetY + deltaY, this.canvas.nativeElement.height - this.imageHeight));
+
+    if (this.shirtSideFront) {
+      this.frontImageOffsetX = this.imageOffsetX;
+      this.frontImageOffsetY = this.imageOffsetY;
+    } else {
+      this.backImageOffsetX = this.imageOffsetX;
+      this.backImageOffsetY = this.imageOffsetY;
+    }
+
+    this.updateImage();
+  }
   onKeyUp(event: any) { 
     this.designName = event.target.value;
   }
@@ -355,8 +405,8 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.globalCanvas.height = this.canvasHeightFront;
         this.globalCanvas.width = this.canvasWidthFront;
       } else {
-        canvasStyle.style.marginTop = 154 + 'px';
-        canvasStyle.style.marginLeft = 103 + 'px';
+        canvasStyle.style.marginTop = 118 + 'px';
+        canvasStyle.style.marginLeft = 102 + 'px';
         canvasStyle.style.width = 155 + 'px';
         canvasStyle.style.height = 202 + 'px';
         this.globalCanvas.height = this.canvasHeightFrontMob;
@@ -384,7 +434,7 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.globalCanvas.height = this.canvasHeightBack;
         this.globalCanvas.width = this.canvasWidthBack;
       } else {
-        canvasStyle.style.marginTop = 163 + 'px';
+        canvasStyle.style.marginTop = 127 + 'px';
         canvasStyle.style.marginLeft = 94 + 'px';
         canvasStyle.style.width = 172 + 'px';
         canvasStyle.style.height = 235 + 'px';
@@ -501,24 +551,25 @@ export class CanvasAreaComponent implements AfterViewInit{
     }
   }
   
-  validateHeight(event: any, boolean : any , number : any): void {
-    const input = event.target as HTMLInputElement;
-    let value = parseInt(input.value, 10);
-  
-    if (isNaN(value) || value < 1) {
-      value = 1; // Set to minimum if input is below range or invalid
-    } else if (value > number) {
-      value = number; // Set to maximum if input exceeds range
+  validateHeight(event: any, isWidth: boolean, maxValue: number): void {
+    const input : any = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+    let value = input.value.trim() === '' ? NaN : parseInt(input.value, 10);
+    if (isNaN(value)) {
+        return; // Allow empty input temporarily
     }
-  
-    input.value = value.toString(); // Update the input value
-    if(boolean ) {
-      input.value = value.toString();
-      this.imageWidth = value;
+    if (value < 1) {
+        value = 1;
+    } else if (value > maxValue) {
+        value = maxValue;
+    }
+    input.value = value.toString();
+    if (isWidth) {
+        this.imageWidth = value;
     } else {
-      input.value = value.toString();
-      this.imageHeight = value;
+        this.imageHeight = value;
     }
+    this.updateImage();
   }
 
   openModal(fromHelper:any = false){
@@ -585,7 +636,7 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.backWidthInches = (this.backImageWidth / widthppi).toFixed(2);
       }
     }
-    console.log(this.frontHeightInches,this.frontWidthInches,this.backHeightInches,this.backWidthInches)
+    // console.log(this.frontHeightInches,this.frontWidthInches,this.backHeightInches,this.backWidthInches)
   }
   
   ngOnDestroy() {

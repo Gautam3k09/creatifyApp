@@ -1,11 +1,6 @@
 <body>
   <app-header-page></app-header-page>
   <div class="container">
-    <div class="utilsforMobView">
-      <div class="mb-2 ">
-        <p class="d-flex justify-content-center" style="margin-left: -3%;"><textarea ng-model="name" (keyup)="onKeyUp($event)" style="width: 50%; padding-left: 12vw;" rows="1" cols="50" placeholder="Tee Name"></textarea></p>
-      </div>
-    </div>
     <div class="mainDiv">
       <canvas #mainCanvas class="mainCanvas" role="dialog" aria-hidden="false" tabindex="-1"></canvas>
       <canvas #canvas class="canvas" id="canvas" width="160" role="dialog" aria-hidden="false" tabindex="-1" ></canvas>
@@ -72,12 +67,12 @@
             <div *ngIf="currentSide == 'front'; else elseBlockFrontForInput">
               <div class="mt-4 mb-2">
                 <label for="width" class="mx-2">Width:&nbsp;</label>
-                <input type="number" id="width" class="mx-1" max="209" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,209)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="width" class="mx-1" max="209" [(ngModel)]="imageWidth" onkeyup="validateHeight($event,true,209)" (input)="validateHeight($event,true,209)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >range 1-209</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mr-1" max="270" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,270)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="height" class="mr-1" max="270" [(ngModel)]="imageHeight" onkeyup="validateHeight($event,true,270)" (input)="validateHeight($event,false,270)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >&nbsp;range 1-270</label>
               </div>
               <div class="RemoveBtn">
@@ -87,12 +82,12 @@
             <ng-template #elseBlockFrontForInput>
               <div class="mt-4 mb-2">
                 <label for="width" class="mx-2">Width:&nbsp;</label>
-                <input type="number" id="width" class="mx-1" max="230" [(ngModel)]="imageWidth" (input)="validateHeight($event,true,230)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="width" class="mx-1" max="230" [(ngModel)]="imageWidth" onkeyup="validateHeight($event,true,230)" (input)="validateHeight($event,true,230)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >range 1-230</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mr-1" max="312" [(ngModel)]="imageHeight" (input)="validateHeight($event,false,312)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="height" class="mr-1" max="312" [(ngModel)]="imageHeight" onkeyup="validateHeight($event,true,312)" (input)="validateHeight($event,false,312)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >&nbsp;range 1-312</label>
               </div>
               <div class="RemoveBtn">
@@ -118,6 +113,15 @@
       </div>
       <div class="utilsforMobView">
         <div class="whiteSpace">
+          <!-- <div class="utilsforMobView"> -->
+            <div class="mt-2" style="display: flex; align-items: center; gap: 10px;">
+              <div class="mb-0">Tee Name:</div>
+              <textarea ng-model="designName" 
+                        (keyup)="onKeyUp($event)" 
+                        style="width: 60%" 
+                        rows="1" cols="50" maxlength="16" formControlName="teeName">
+              </textarea>
+          </div>
           <div class="shirtOptionContainer" style="font-size: 17px; margin-top: 3px; font-weight: bold; ">
             Shirt Side
           </div>
@@ -192,7 +196,7 @@
             <label for="height" class="mx-2">Price : {{priceRange}}</label>
             <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
           </div>
-          <div class="saveButton d-flex mt-1">
+          <div class="saveButton d-flex mt-2 mb-3">
             <button class="btn btn-dark ms-2 p-2" [disabled]="designName == ''" (click)="openModal()">Continue</button>
           </div>
           <div id="stickyIcon" (click)="openModal(true)">
