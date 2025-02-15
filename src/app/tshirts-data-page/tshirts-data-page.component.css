@@ -122,9 +122,13 @@ body{
 @media(max-width:600px) {
   body{
     margin-top: 14%;
-    height: 84vh;
+    height: 80vh!important;
     margin-inline: 4%;
     padding: 25px 0px 75px 0px;
+  }
+
+  .bucket {
+    height: 69vh;
   }
 
   .loadMore{

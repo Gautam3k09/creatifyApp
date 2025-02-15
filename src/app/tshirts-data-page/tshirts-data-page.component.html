@@ -1,55 +1,57 @@
 <ngx-ui-loader ></ngx-ui-loader>
 <body>
-    <div class="container custom-scrollbar">
-        <div class="height row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 w-auto">
-            <div *ngFor="let teeData of teeDatas; let i = index" class="mainCard">
-                <div class="col" >
-                    <div class="card m-3 h-200 bg-transparent text-white w-auto" style="max-width: 540px; ">
-                        <div class="helperButton">
-                            <div class="delete" *ngIf="from == 'personal'">
-                                <i class="RotateBtn fa-solid fa-trash" title="Delete" type="button" (click)="deleteTees(teeData._id)" ></i>
+    <div class="bucket">
+        <div class="container custom-scrollbar">
+            <div class="height row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 w-auto">
+                <div *ngFor="let teeData of teeDatas; let i = index" class="mainCard">
+                    <div class="col" >
+                        <div class="card m-3 h-200 bg-transparent text-white w-auto" style="max-width: 540px; ">
+                            <div class="helperButton">
+                                <div class="delete" *ngIf="from == 'personal'">
+                                    <i class="RotateBtn fa-solid fa-trash" title="Delete" type="button" (click)="deleteTees(teeData._id)" ></i>
+                                </div>
+                                <div class="share">
+                                    <i class="RotateBtn fa-solid fa-share" title="Share" type="button" (click)="copytext(teeData._id)"></i>
+                                </div>
                             </div>
-                            <div class="share">
-                                <i class="RotateBtn fa-solid fa-share" title="Share" type="button" (click)="copytext(teeData._id)"></i>
-                            </div>
-                        </div>
-                        <div class="row g-0 canvas-container" style="margin-top: -10px; cursor: pointer;" (click)="navigateBuyPage(teeData)">
-                            <canvas #mainCanvas class="mainCanvas" [id]="'mainTeeData' + i" width="175" height="150"></canvas>
-                            <canvas #canvas class="canvas" [id]="'teeData' + i" width="175"></canvas>
-                            <div class="card-body text-center">
-                                <p class="card-text">{{teeData.teeName_Name}}</p>
-                                <p class="rupee-text" *ngIf="from != 'personal'">Rs. 550{{teeData.tee_Price}}</p>
+                            <div class="row g-0 canvas-container" style="margin-top: -10px; cursor: pointer;" (click)="navigateBuyPage(teeData)">
+                                <canvas #mainCanvas class="mainCanvas" [id]="'mainTeeData' + i" width="175" height="150"></canvas>
+                                <canvas #canvas class="canvas" [id]="'teeData' + i" width="175"></canvas>
+                                <div class="card-body text-center">
+                                    <p class="card-text">{{teeData.teeName_Name}}</p>
+                                    <p class="rupee-text" *ngIf="from != 'personal'">Rs. 550{{teeData.tee_Price}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="loadMore" *ngIf="from == 'common' && !DataFetched && !hideLoadbtn; else normalTees">
-        <button type="button" class="btn btn-dark px-3 py-2" (click)="getTees()">Load more</button>
-    </div>
-    <ng-template #normalTees>
-        <div *ngIf="from != 'common'" >
-            <div *ngIf="from == 'personal' && !DataFetched && !hideLoadbtn && this.teeDatas.length != 0; else elseBlockfornoshirt">
-                <div  *ngIf="teeDatas.length > 3; else createBlockElse" style="display: flex; justify-content: center;" >
-                    <div class="create text-center">Tee design overload! Free up some space to unleash your creativity.</div>
+        <div class="loadMore" *ngIf="from == 'common' && !DataFetched && !hideLoadbtn; else normalTees">
+            <button type="button" class="btn btn-dark px-3 py-2" (click)="getTees()">Load more</button>
+        </div>
+        <ng-template #normalTees>
+            <div *ngIf="from != 'common'" >
+                <div *ngIf="from == 'personal' && !DataFetched && !hideLoadbtn && this.teeDatas.length != 0; else elseBlockfornoshirt">
+                    <div  *ngIf="teeDatas.length > 3; else createBlockElse" style="display: flex; justify-content: center;" >
+                        <div class="create text-center">Tee design overload! Free up some space to unleash your creativity.</div>
+                    </div>
+                    <ng-template #createBlockElse>
+                        <div class="loadMore">
+                            <button type="button" class="btn btn-dark px-3 py-2" (click)="openCanvas('canvas')">Create</button>
+                        </div>
+                    </ng-template>
                 </div>
-                <ng-template #createBlockElse>
-                    <div class="loadMore">
-                        <button type="button" class="btn btn-dark px-3 py-2" (click)="openCanvas('canvas')">Create</button>
+                
+                <ng-template #elseBlockfornoshirt>
+                    <div class="noTees">
+                        <div>You dont have any tshirt</div>
+                        <div>
+                            <button type="button" class="create btn btn-dark p-2" (click)="openCanvas('canvas')">Create</button>
+                        </div>
                     </div>
                 </ng-template>
             </div>
-            
-            <ng-template #elseBlockfornoshirt>
-                <div class="noTees">
-                    <div>You dont have any tshirt</div>
-                    <div>
-                        <button type="button" class="create btn btn-dark p-2" (click)="openCanvas('canvas')">Create</button>
-                    </div>
-                </div>
-            </ng-template>
-        </div>
-    </ng-template>
+        </ng-template>
+    </div>
 </body>
