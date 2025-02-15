@@ -102,11 +102,17 @@ body {
 }
 
 @media(max-width:600px) {
+    .container {
+        height: 88%;
+        overflow: auto;
+        margin-top: 13%;
+    
+    }
     .section1{
         display: contents;
     }
     .create1 {
-        padding: 4%;
+        padding: 0 4% 4% 4%;
         font-size: 35px;
         margin: 0;
         animation: fadeIn 1s forwards;
