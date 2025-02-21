@@ -9,12 +9,12 @@ import { AppServiceService } from '../app-service.service';
 import { MatDialogConfig, MatDialogRef,MatDialog } from '@angular/material/dialog';
 import { ConfirmationBoxComponent } from '../confirmation-box/confirmation-box.component';
 import { localStorageService } from '../local-storage-service';
+import moment from "moment-timezone";
 
 @Component({
   selector: 'app-setting-page',
   standalone: true,
-  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,FormsModule,NgxUiLoaderModule,ConfirmationBoxComponent],
-  // providers: [AppServiceService],
+  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,FormsModule,NgxUiLoaderModule],
   templateUrl: './setting-page.component.html',
   styleUrl: './setting-page.component.css'
 })
@@ -33,6 +33,7 @@ export class SettingPageComponent {
   queryQuetions: any = '';
   upiId:string ='';
   storedData:any;
+  orderData : any = [];
 
   constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog,public localStorage : localStorageService) {
     this.storedData = this.localStorage.getUserLocalStorage();
@@ -136,6 +137,19 @@ export class SettingPageComponent {
         }
       });
     }
+    if(this.activeTab == 'order') {
+      let data = {
+        name : this.userData.user_Name 
+      }
+      this.appservice.getOrder(data).subscribe((response) => {
+        if(response.data && response.data.length > 0) {
+          this.orderData = response.data;
+          this.convertTime();
+        } else{
+          this.orderData = [];
+        }
+      });
+    }
   }
   
   updateMerch(){
@@ -148,6 +162,7 @@ export class SettingPageComponent {
   }
   
   addCoupon(){
+    alert('Discounted amount will be split in a 60:40 ratio, where you cover 60%, and Createefi covers 40%.');
     let data = {
       name : this.couponName,
       off: this.couponOff,
@@ -247,6 +262,13 @@ export class SettingPageComponent {
     this.openModal(data);
   }
 
-
+  convertTime() {
+    this.orderData.forEach((element: any) => {
+      element.createdAt = moment(element.createdAt).tz('Asia/Kolkata').format('DD MMMM YYYY');
+      if(element.tee_from == element.orderBys){
+        element.tee_from = 'You';
+      }
+    });
+  }
 }
   

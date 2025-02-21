@@ -12,6 +12,7 @@ body {
   background-repeat: no-repeat;
   margin: 0;
   width: 100%;
+  overflow-y: hidden;
 }
 
 .container {
@@ -123,7 +124,6 @@ textarea {
   cursor: grabbing;
 }
 
-/* fileupload */
 .fileUpload {
 	background: #000000;
 	-webkit-border-radius: 15px;
@@ -132,9 +132,9 @@ textarea {
 	color: #fff;
 	font-size: 1em;
 	font-weight: bold;
-	margin: 1.25em auto;/*20px/16px 0*/
+	margin: 1.25em auto;
 	overflow: hidden;
-	padding: 0.875em;/*14px/16px*/
+	padding: 0.875em;
 	position: relative;
 	text-align: center;
 	width: 120px;
@@ -194,7 +194,6 @@ input[type="file"] {
     overflow: hidden;
 
     .mainCanvas{
-      /* margin-top: -40px; */
       display: block;
       position: fixed;
       top: 95px;
@@ -237,7 +236,7 @@ input[type="file"] {
     position: relative;
     margin-left: auto;
     z-index: 999;
-    margin-top: -9px;
+    margin-top: -40px;
 
     .shirtOptionContainer{
       display: flex;
@@ -361,20 +360,29 @@ input[type="file"] {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow */
     cursor: pointer; /* Pointer cursor on hover */
     z-index: 1000; /* Ensures it appears above other elements */
+  }
+
+  #stickyIcon i {
+      font-size: 24px; /* Size of the icon */
+  }
+
+  #stickyIcon:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow */
+  }
 }
 
-/* Icon Style */
-#stickyIcon i {
-    font-size: 24px; /* Size of the icon */
-}
 
-/* Hover Effect */
-#stickyIcon:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow */
+/* ==============for mobile ================= */
+@media(max-height: 640px) {
+  .canvas {
+    margin-top: 126.2px !important;
+  }
 }
-
- 
+@media(max-height: 670px) {
+  .canvas {
+    margin-top: 123px !important;
+  }
 }
 
 @media only screen and (min-width: 601px) and (max-width: 1024px) {

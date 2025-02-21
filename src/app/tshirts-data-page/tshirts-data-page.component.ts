@@ -99,6 +99,11 @@ export class TshirtsDataPageComponent {
             this.hideLoadbtn = true;
           }
           this.teeDatas = this.teeDatas == '' ? result.data : this.teeDatas.concat(result.data);
+          setTimeout(() => {
+            if(this.teeDatas.length > 0){
+                this.loopIterator()
+              }
+          }, 1500);
         }
       })
     } else  {
@@ -116,16 +121,17 @@ export class TshirtsDataPageComponent {
       this.appservice.getTees(data).subscribe((result)=> {
         if(result){
           this.teeDatas =  result.data;
+          setTimeout(() => {
+            if(this.teeDatas.length > 0){
+                this.loopIterator()
+              } else {
+                this.ngxLoader.stop();
+              }
+          }, 1500);
         }
       });
     }
-    setTimeout(() => {
-      if(this.teeDatas.length > 0){
-          this.loopIterator()
-        } else {
-          this.ngxLoader.stop();
-        }
-    }, 1500);
+    
     this.pageCount = this.pageCount + 1
   }
 
@@ -186,6 +192,8 @@ export class TshirtsDataPageComponent {
     
     img.onload = () => {
       if(this.ctx){
+        this.ctx.imageSmoothingEnabled = true;
+        this.ctx.imageSmoothingQuality = 'high'; 
         this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
         this.currentIndex = this.currentIndex + 1;
         this.loopIterator();

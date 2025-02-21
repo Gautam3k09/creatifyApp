@@ -89,6 +89,11 @@ export class AppServiceService {
   postOrder(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/place-order`,data);
   }
+
+  getOrder(data:any): Observable<any> {
+    return this.http.post(`${this.serverUrl}/orders`,data);
+  }
+
   // s3 api
   postImageToS3(data:any): Observable<any> {
     return this.http.post(`${this.serverUrl}/upload-image`,data);

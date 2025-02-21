@@ -120,7 +120,6 @@ export class CanvasAreaComponent implements AfterViewInit{
   constructor(private router: Router,private fb: FormBuilder, private appservice:AppServiceService,public localStorage : localStorageService,public matDialog: MatDialog) {
     this.storedData = this.localStorage.getUserLocalStorage();
     this.isMobile = window.innerWidth > 500 ? false : true;
-    // }
     if (window.innerWidth > 450 && window.innerWidth <= 1024) {
       alert('Tablet view is not supported. Please use a mobile or desktop.');
       this.router.navigate(['/tees']);
@@ -248,9 +247,9 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.isImgUploaded = true;
     setTimeout(() => {
       if(this.shirtSideFront) {
-        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',0.95);
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',1.0);
       } else {
-        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95);
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',1.0);
       }
     }, 1000);
   }
@@ -262,9 +261,10 @@ export class CanvasAreaComponent implements AfterViewInit{
     
     const newX = Math.max(0, Math.min(canvasWidth - this.imageWidth, this.imageOffsetX));
     const newY = Math.max(0, Math.min(canvasHeight - this.imageHeight, this.imageOffsetY));
-    // console.log(this.imageWidth,this.imageHeight,canvasHeight,canvasWidth)
-    //image update
+
     if(this.image != '') {
+      this.ctx.imageSmoothingEnabled = true;
+      this.ctx.imageSmoothingQuality = 'high';    
       this.ctx.drawImage(this.image, newX, newY, this.imageWidth, this.imageHeight);
     }
 
@@ -393,7 +393,7 @@ export class CanvasAreaComponent implements AfterViewInit{
       if(this.imageFrontGlobalStore != '') {
         this.image = this.imageFrontGlobalStore;
         this.handleFileChange(event,'changeShirtSide');
-        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',0.95);
+        this.base64DataFrontSide = this.globalCanvas.toDataURL('image/png',1.0);
         this.updateImageBase64(true);
         this.isImgUploaded = true;
       }
@@ -405,7 +405,11 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.globalCanvas.height = this.canvasHeightFront;
         this.globalCanvas.width = this.canvasWidthFront;
       } else {
-        canvasStyle.style.marginTop = 118 + 'px';
+        if(window.innerWidth < 670) {
+          canvasStyle.setAttribute("style", "margin-top: 123px !important;");
+        } else {
+          canvasStyle.style.marginTop = 118 + 'px';
+        }
         canvasStyle.style.marginLeft = 102 + 'px';
         canvasStyle.style.width = 155 + 'px';
         canvasStyle.style.height = 202 + 'px';
@@ -424,7 +428,7 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.handleFileChange(event,'changeShirtSide');
         this.updateImageBase64(false);
         this.isImgUploaded = true;
-        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95);
+        this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',1.0);
       } 
       this.drawImageOnCanvas(this.imageBackSrc);
       let canvasStyle = document.querySelector('.canvas') as any;
@@ -434,7 +438,11 @@ export class CanvasAreaComponent implements AfterViewInit{
         this.globalCanvas.height = this.canvasHeightBack;
         this.globalCanvas.width = this.canvasWidthBack;
       } else {
-        canvasStyle.style.marginTop = 127 + 'px';
+        if(window.innerWidth < 670) {
+          canvasStyle.setAttribute("style", "margin-top: 130px !important;");
+        } else {
+          canvasStyle.style.marginTop = 127 + 'px';
+        }
         canvasStyle.style.marginLeft = 94 + 'px';
         canvasStyle.style.width = 172 + 'px';
         canvasStyle.style.height = 235 + 'px';
@@ -480,7 +488,7 @@ export class CanvasAreaComponent implements AfterViewInit{
   }
 
   updateImageBase64(side:any){
-    side ? this.base64DataFrontSide= this.globalCanvas.toDataURL('image/png',0.95): this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',0.95)
+    side ? this.base64DataFrontSide= this.globalCanvas.toDataURL('image/png',1.0): this.base64DataBackSide = this.globalCanvas.toDataURL('image/png',1.0)
   }
 
   uploadFile(side:any) {
@@ -566,7 +574,7 @@ export class CanvasAreaComponent implements AfterViewInit{
     input.value = value.toString();
     if (isWidth) {
         this.imageWidth = value;
-    } else {
+      } else {
         this.imageHeight = value;
     }
     this.updateImage();
@@ -644,4 +652,11 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.canvas.nativeElement.removeEventListener('mouseup', this.handleMouseUp);
     this.canvas.nativeElement.removeEventListener('mousemove', this.handleMouseMove);
   }
+
+  preventEnter(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents new lines
+    }
+  }
+  
 }

@@ -1,3 +1,4 @@
+<ngx-ui-loader ></ngx-ui-loader>
 <body>
   <app-header-page></app-header-page>
   <div class="mainBox">
@@ -39,15 +40,17 @@
           
           <div class="mb-1 borderBottom">
             <p>Coupon & Coins</p>
-            <input type="text" class="form-control mb-1" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)" [disabled] = "isChecked">
+            <input type="text" class="form-control mb-1" style="height: 30px;padding: 10px;" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)" [disabled] = "isChecked">
             <div class="d-flex justify-content-center" *ngIf="couponData.length == 0; else elseBlock">
-              <button type="button" class="btn btn-dark " (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0 || isChecked">Apply</button>
+              <button type="button" class="btn btn-dark" style="padding: 6px;padding-inline: 16px;" (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0 || isChecked">Apply</button>
             </div>
             <ng-template #elseBlock>
               <div> {{couponData.coupon_text}}</div>
             </ng-template>
-            <input type="checkbox" style="transform: scale(1.5); margin-right: 10px;" [(ngModel)]="isChecked" (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99"/>
-            <label>Use Createefi Coins ({{coins}} available)</label>
+            <div style="font-size: 16px;">
+              <input type="checkbox" style="transform: scale(1.5); margin-right: 10px;" [(ngModel)]="isChecked" (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99"/>
+              <label>Use Createefi Coins ({{coins}} available)</label>
+            </div>
           </div>
             
           <div class="buyButton">
@@ -69,16 +72,16 @@
           <div class="productDetails">
             <div class="productTitle">Product Details</div>
             <div class="productChild">
-              <p>Color</p><p>Black</p>
+              <p>Color</p><p>{{data?.tee_Color}}</p>
             </div>
             <div class="productChild">
-              <p>Fabric</p> <p>Black</p>
+              <p>Fabric</p> <p>Cotton</p>
             </div>
             <div class="productChild">
-              <p>Ocassion</p> <p>Baalack</p>
+              <p>Streetwear</p> <p>Yes</p>
             </div>
             <div class="productChild">
-              <p>WashCare</p> <p>Black</p>
+              <p>CollegeWear</p> <p>Yes</p>
             </div>
           </div>
       </div>

@@ -11,11 +11,13 @@ import { OrderStepperComponent } from '../order-stepper/order-stepper.component'
 import { ReferralPageComponent } from '../referral-page/referral-page.component';
 import { localStorageService } from '../local-storage-service';
 import { FormsModule } from '@angular/forms';
+import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
+import {environment} from '../../../environment';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,FormsModule],
+  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,FormsModule,NgxUiLoaderModule],
   templateUrl: './buy-page.component.html',
   styleUrl: './buy-page.component.css',
   providers: [WindowRefService,AppServiceService],
@@ -61,7 +63,7 @@ export class BuyPageComponent implements OnInit  {
   coins : any;
   showContent : boolean = true;
 
-  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService,private ngxLoader: NgxUiLoaderService) {
     const data = this.localStorage.getUserLocalStorage();
     console.log(data);
     if(data && data.userData && !data?.visitor){
@@ -72,6 +74,7 @@ export class BuyPageComponent implements OnInit  {
     }
   }
   ngOnInit() {
+    this.ngxLoader.start();
     this.route.params.subscribe((params:any) => {
       this.tshirtId = params['userId'];
     });
@@ -119,6 +122,7 @@ export class BuyPageComponent implements OnInit  {
         this.changeTshirtColor();
         this.loadimage(true);
         this.drawImageOnCanvas(this.imageFrontSrc);
+        this.ngxLoader.stop();
       } else {
         this.router.navigate(['']);
       }
@@ -165,55 +169,6 @@ export class BuyPageComponent implements OnInit  {
     }
   }
 
-  // createRazorPayOrder () {
-  //   const options:any = {
-  //     amount: this.data.tee_Price,
-  //     currency: 'INR',
-  //     receipt: 'order_123456780',
-  //   };
-  //   this.appservice.createOrder(options).subscribe((result)=> {
-  //     const order_id = result.offer_id;
-  //     this.payWithRazor(order_id);
-  //   })
-  // }
-
-  // payWithRazor(order_id: any) {
-  //   const options: any = {
-  //     key: 'rzp_test_RbOpZbmihpoCFb',
-  //     amount: this.data.tee_Price * 100, // amount should be in paisa
-  //     currency: 'INR',
-  //     name: 'Creatify',
-  //     description: 'Test Transaction',
-  //     order_id: order_id,
-  //     image: 'assets/blue-purple.jpg',
-  //     modal:{
-  //       escape:false
-  //     },
-      
-  //     prefill: {
-  //       name: 'Monti',
-  //       email: 'monti@example.com',
-  //       contact: '9511830363',
-  //     },
-  //     notes: {
-  //       teeName: this.data?.teeName_Name,
-  //     },
-  //     theme: {
-  //       color: '#3399cc',
-  //     },
-  //   };
-  //   options.handler = (response:any) => {
-  //     console.log(response,'response');
-  //     // After successful payment, make a request to your server to verify the transaction
-  //   };
-  //   options.modal.ondismiss = ()=>{
-  //     console.log('payment cancelled');
-  //     // Handle the cancellation of the payment
-  //   }
-  //   const rzp = this.winRef.nativeWindow.Razorpay(options);
-  //   rzp.open();
-  // }
-
   openModal(){
     this.data.coupon = this.couponData.couponAvailable ?  this.couponData.coupon_id : '';
     this.data.price = this.showContent  ? this.data.tee_Price : this.discountedPrice;
@@ -228,12 +183,7 @@ export class BuyPageComponent implements OnInit  {
     this.modalDialog.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if(result == 'withdraw'){
-        // let upiData = {
-        //   id: this.userData._id,
-        //   question: this.upiId,
-        //   from: 'withdraw'
-        // } 
-        // this.postQuestionApi(upiData);
+        
       }
     });
   }
@@ -247,7 +197,6 @@ export class BuyPageComponent implements OnInit  {
     this.modalDialogforReferral = this.matDialog.open(ReferralPageComponent,  {
       width: '500px',
       height: '300px',
-      // overflow: 'auto',
     });
 
     this.modalDialogforReferral.afterClosed().subscribe(result => {
@@ -258,7 +207,7 @@ export class BuyPageComponent implements OnInit  {
   }
 
   openSingup(){
-    const newTab = window.open('http://localhost:4200', '_blank');
+    const newTab = window.open(`${environment.frontend}`, '_blank');
     if (!newTab) {
         console.error('Failed to open a new tab. Please check if popups are blocked.');
     }

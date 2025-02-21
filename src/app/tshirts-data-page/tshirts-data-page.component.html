@@ -19,7 +19,7 @@
                                 <canvas #canvas class="canvas" [id]="'teeData' + i" width="175"></canvas>
                                 <div class="card-body text-center">
                                     <p class="card-text">{{teeData.teeName_Name}}</p>
-                                    <p class="rupee-text" *ngIf="from != 'personal'">Rs. 550{{teeData.tee_Price}}</p>
+                                    <p class="rupee-text" *ngIf="from != 'personal'">Rs. {{teeData.tee_Price}}</p>
                                 </div>
                             </div>
                         </div>

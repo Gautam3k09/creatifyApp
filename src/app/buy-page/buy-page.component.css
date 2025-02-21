@@ -70,7 +70,6 @@ body {
 .imgTag {
   margin-left: 10%;
   height: 80vh;
-  /* right: 20; */
   img{
     border: solid;
     height: 100%;
@@ -88,10 +87,12 @@ body {
   padding: 5px;
   
   .sellerlabel{
+    padding-inline : 5px;
     font-weight: 600;
   }
 
   .tee-Name{
+    padding-inline : 5px;
     font-weight: 400;
   }
 
@@ -184,15 +185,20 @@ body {
   z-index: 999;
 }
 @media(max-width:600px) {
+  .mainBox{
+    margin-top:0;
+  }
+
   .container{
     position: relative;
-    height: auto;
+    height: 142vh;
     display: block;
     justify-content: center;
     margin: auto;
     color: black;
-    border-radius: 30px;
+    border-radius: 0px;
     padding-bottom: 12%;
+    margin-bottom: 12%;
   }
   .mainCanvas{
     height: 320px;
@@ -228,10 +234,13 @@ body {
   }
 
   .right-side {
+    height: auto;
     margin-top: 50%;
-    width: 90vw;
+    width: auto;
     float: none;
     padding: 0px;
+    margin-left: 3%;
+    overflow: hidden;
   }
 
   .left-side{
@@ -266,8 +275,9 @@ body {
     background-color: black;
     z-index: 9999;
     button{
-      height: 5vh;
-      width: 100% !important;
+      height: 42px;
+      /* height: 5vh; */
+      width: 105% !important;
     }
   }
 
@@ -282,7 +292,6 @@ body {
 
   .borderBottom{
     border-bottom: 5px solid #d0cfcf;
-    /* padding-bottom: 8px; */
     padding: 5px;
   }
   .icon-style {
@@ -294,6 +303,10 @@ body {
     margin-left: 5px !important;
     position: absolute;
     z-index: 999;
+  }
+
+  .productDetails{
+    padding-inline: 10px;
   }
 }
 

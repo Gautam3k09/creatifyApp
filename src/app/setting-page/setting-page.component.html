@@ -14,7 +14,7 @@
               </div>
             </div>
              <!-- content from here  -->
-            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" style="margin-bottom: 50px; margin-left: -6vw;">
+            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" style="margin-top: -50px; margin-left: -6vw;">
               <div class="content-container">
                 <div *ngIf="this.activeTab == 'profile'">
                   <div class="profile-title">
@@ -117,12 +117,12 @@
                                 Coupon name <input type="text" placeholder="Monti20" [(ngModel)]="couponName" [ngModelOptions]="{standalone: true}">
                               </div>
                                <div>
-                                Coupon off <input onkeyup="if(this.value > 20) this.value = null; if(this.value < 0) this.value = null" type="number" min="5" max="20" [(ngModel)]="couponOff" [ngModelOptions]="{standalone: true}">
+                                Coupon off <input onkeyup="if(this.value > 15) this.value = null; if(this.value < 0) this.value = null" type="number" min="5" max="15" [(ngModel)]="couponOff" [ngModelOptions]="{standalone: true}">
                                </div>
                             </div>   
                             <div class="flexdivformerchlable mobileWidth">
                               <div>
-                                Discount range from 5% to 20%
+                                Discount range from 5% to 15%
                               </div>
                             </div> 
                             <div class="couponBtn" >
@@ -170,47 +170,32 @@
                   </div>
                 </div>
                 <div *ngIf="this.activeTab == 'order'" class="orderDiv">
-                  <!-- <div class="orderBox">
-                    <div>
-                      TeeName
-                    </div>
-                  </div> -->
-                  <div class="order-summary hideOnMobile">
-                    <div class="order-details">
-                        <div><strong>ORDER PLACED</strong><br>29 December 2024</div>
-                        <div><strong>ORDER STATUS</strong><br>Not delivered</div>
-                        <div><strong>TOTAL</strong><br>₹1,099.00</div>
-                        <div><strong>TEE NAME</strong><br>Monti</div>
+                  <div class="order-summary hideOnMobile mb-2"  *ngFor="let orders of orderData; let i = index">
+                    <div class="order-details" >
+                        <div><strong>ORDER PLACED</strong><br>{{orders.createdAt}}</div>
+                        <div><strong>ORDER STATUS</strong><br>{{orders.order_status}}</div>
+                        <div><strong>TOTAL</strong><br>₹{{orders.order_price}}</div>
+                        <div *ngIf="orders.tee_from != 'You'"><strong>Made By</strong><br>c/{{orders.tee_from}}</div>
+                        <div *ngIf="orders.tee_from == 'You'"><strong>Made By</strong><br>{{orders.tee_from}}</div>
+
                     </div>
                     <div class="order-actions">
-                        <div><strong>ORDER # 408-0980803-9294713</strong></div>
+                        <div><strong>ORDER # {{orders.order_Id}}</strong></div>
                         <div>
                             <a href="#">View order details</a>
-                            <!-- <a href="#">Invoice</a> -->
                         </div>
                     </div>
                   </div>
-                  <div class="booking-card hideOnDesktop">
-                    <div class="date">Wed 22 Jan - Not Delivered</div>
-                    <div class="title">Monti</div>
+                  <div class="booking-card hideOnDesktop" *ngFor="let orders of orderData; let i = index">
+                    <div class="date">{{orders.createdAt}} - {{orders.order_status}}</div>
+                    <div class="title" *ngIf="orders.tee_from != 'You'">c/{{orders.tee_from}}</div>
+                    <div class="title" *ngIf="orders.tee_from == 'You'">{{orders.tee_from}}</div>
                     <div class="details">
                       <span>
-                        ₹1,099.00
+                        ₹{{orders.order_price}}
                       </span>
                       <span>
-                        # 408-0980803-9294713
-                      </span>
-                    </div>
-                  </div>
-                  <div class="booking-card hideOnDesktop">
-                    <div class="date">Wed 22 Jan - Not Delivered</div>
-                    <div class="title">Monti</div>
-                    <div class="details">
-                      <span>
-                        $1,099.00
-                      </span>
-                      <span>
-                        # 408-0980803-9294713
+                        # {{orders.order_Id}}
                       </span>
                     </div>
                   </div>
@@ -219,7 +204,7 @@
             </div>
           </div>
           <div class="hideOnDesktop">
-            <div class="nav flex-column nav-pills me-3 tablist" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="nav flex-column nav-pills me-3 tablist" style=" padding-inline: 10px;" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <div class="buttonDiv">
                 <div>
                   <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" (click)="changeTab('profile')"><i class="fa fa-user" aria-hidden="true"></i><p class="textTag">Profile</p></button>

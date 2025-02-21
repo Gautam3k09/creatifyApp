@@ -77,6 +77,7 @@
 
   .addressForm{
     margin-left: 3vw;
+    overflow: auto;
   }
 
   .input{
@@ -100,7 +101,6 @@
     display: none
   }
 
-  /* merch css */
   .flexdivformerch{
     display: flex;
     justify-content: space-evenly;
@@ -163,8 +163,9 @@
   }
   
   .orderDiv{
-    height: 70vh;
+    height: 50vh;
     width: 90vw;
+    overflow: auto;
   }
 
   .order-summary {
@@ -196,8 +197,7 @@
 
   .booking-card {
     background-color: #ffffff;
-    width: 300px;
-    /* border: 1px solid #ddd; */
+    width: 85%;
     border-top: 1px solid #8d8d8d; /* Top border */
     border-bottom: 1px solid #8d8d8d; /* Bottom border */
     border-left: none; /* No left border */
@@ -250,7 +250,7 @@
   }
 
   .main-container{
-    height: 80vh;
+    height: 70vh;
     justify-content: center;
   }
 
@@ -268,7 +268,7 @@
     border-radius: 37px;
     margin-left: 5%;
     color: rgb(0, 0, 0);
-    width: 95%;
+    width: 85vw;
   }
 
   .profile-title {
@@ -282,6 +282,7 @@
 
   .profile-title-coupon{
     width: 80%;
+    font-size: 24px !important;
   }
 
   .InfoForm{
@@ -296,7 +297,13 @@
   .hideOnDesktop{
     display: flex;
     justify-content: center;
-    box-shadow: 0px -11px 20px 0px rgb(85 83 83);
+    box-shadow: 4px 5px 20px 20px rgb(85 83 83);
+  }
+
+  .addressForm{
+    margin-left: 3vw;
+    height: 22vh;
+    overflow: auto;
   }
 
   .hideOnMobile{
@@ -306,12 +313,14 @@
   .buttonDiv{
     width: 90vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    font-size: 14px;
   }
 
   .textTag{
     margin-bottom: 0px;
     margin-top: -5px;
+    margin-left: -3px;
   }
 
   .flexdivformerch{
@@ -326,7 +335,7 @@
   }
 
   .merch-container{
-    width: 80vw;
+    width: 100vw;
   }
 
   .flexdivformerchlable{
@@ -343,7 +352,7 @@
 
   .mobileWidth{
     width: 74%;
-    font-size: 16px !important;
+    font-size: 16px ;
   }
 
   .couponBtn{

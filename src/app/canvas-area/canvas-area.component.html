@@ -3,7 +3,7 @@
   <div class="container">
     <div class="mainDiv">
       <canvas #mainCanvas class="mainCanvas" role="dialog" aria-hidden="false" tabindex="-1"></canvas>
-      <canvas #canvas class="canvas" id="canvas" width="160" role="dialog" aria-hidden="false" tabindex="-1" ></canvas>
+      <canvas #canvas class="canvas" id="canvas" width="10000" height="10000" role="dialog" aria-hidden="false" tabindex="-1" ></canvas>
     </div>
     <div class="tipDiv">
       <div>
@@ -35,8 +35,8 @@
           <p class="mb-0">Tee Name:</p>
           <textarea ng-model="designName" (keyup)="onKeyUp($event)"  rows="1" cols="50" formControlName="teeName"></textarea>
         </div>
-        <div class="mb-4">
-          <p class="mb-0">Color: {{imageColor}}</p>
+        <div class="mb-4" >
+          <p class="mb-0">Color : {{imageColor}}</p>
           <button type="button" class="btn btn-circle mx-2 btnColorWhite" (click)="changeImage(1)"></button>
           <button type="button" class="btn btn-circle mx-2 btnColorBlue" (click)="changeImage(2)"></button>
           <button type="button" class="btn btn-circle mx-2 btnColorMaroon" (click)="changeImage(3)"></button>
@@ -67,12 +67,12 @@
             <div *ngIf="currentSide == 'front'; else elseBlockFrontForInput">
               <div class="mt-4 mb-2">
                 <label for="width" class="mx-2">Width:&nbsp;</label>
-                <input type="number" id="width" class="mx-1" max="209" [(ngModel)]="imageWidth" onkeyup="validateHeight($event,true,209)" (input)="validateHeight($event,true,209)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="width" class="mx-1" max="209" [(ngModel)]="imageWidth" (onkeyup)="validateHeight($event,true,209)" (input)="validateHeight($event,true,209)"  (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >range 1-209</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mr-1" max="270" [(ngModel)]="imageHeight" onkeyup="validateHeight($event,true,270)" (input)="validateHeight($event,false,270)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="height" class="mr-1" max="270" [(ngModel)]="imageHeight" (onkeyup)="validateHeight($event,true,270)" (input)="validateHeight($event,false,270)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >&nbsp;range 1-270</label>
               </div>
               <div class="RemoveBtn">
@@ -82,12 +82,12 @@
             <ng-template #elseBlockFrontForInput>
               <div class="mt-4 mb-2">
                 <label for="width" class="mx-2">Width:&nbsp;</label>
-                <input type="number" id="width" class="mx-1" max="230" [(ngModel)]="imageWidth" onkeyup="validateHeight($event,true,230)" (input)="validateHeight($event,true,230)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="width" class="mx-1" max="230" [(ngModel)]="imageWidth" (onkeyup)="validateHeight($event,true,230)" (input)="validateHeight($event,true,230)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >range 1-230</label>
               </div>
               <div>
                 <label for="height" class="mx-2">Height:</label>
-                <input type="number" id="height" class="mr-1" max="312" [(ngModel)]="imageHeight" onkeyup="validateHeight($event,true,312)" (input)="validateHeight($event,false,312)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
+                <input type="number" id="height" class="mr-1" max="312" [(ngModel)]="imageHeight" (onkeyup)="validateHeight($event,true,312)" (input)="validateHeight($event,false,312)" (change)="updateImage()" [ngModelOptions]="{standalone: true}">
                 <label for="customRange2" class="form-label" >&nbsp;range 1-312</label>
               </div>
               <div class="RemoveBtn">
@@ -101,7 +101,6 @@
           <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
         </div>
         <ng-template #elseBlockForprice>
-          <!-- <div> {{couponData.coupon_text}}</div> -->
           <div class="d-flex justify-content-center ms-2">Price will be 649</div> 
 
         </ng-template>
@@ -113,12 +112,11 @@
       </div>
       <div class="utilsforMobView">
         <div class="whiteSpace">
-          <!-- <div class="utilsforMobView"> -->
-            <div class="mt-2" style="display: flex; align-items: center; gap: 10px;">
+          <div class="mt-2 mx-2" style="display: flex; align-items: center; gap: 10px;">
               <div class="mb-0">Tee Name:</div>
-              <textarea ng-model="designName" 
+              <textarea ng-model="designName" (keydown)="preventEnter($event)"
                         (keyup)="onKeyUp($event)" 
-                        style="width: 60%" 
+                        style="width: 65%" 
                         rows="1" cols="50" maxlength="16" formControlName="teeName">
               </textarea>
           </div>
@@ -134,8 +132,8 @@
               <label class="btn btn-outline-dark sideLabel" id="backLabel" for="btnradio2" (click)="toggleShirtSide('back')">Back</label>
             </div>
           </div>
-          <div class="my-2 d-flex justify-content-center">
-            <p class="mx-2" style="font-size: 16px; margin-top: 3px; font-weight: bold; ">Color: {{imageColor}}</p>
+          <div class="my-2 d-flex justify-content-center" style="width: 100%;">
+            <p class="mx-2" style="font-size: 16px; margin-top: 3px; font-weight: bold; ">{{imageColor}}</p>
             <button type="button" class="btn btn-circle mx-2 btnColorWhite" (click)="changeImage(1)"></button>
             <button type="button" class="btn btn-circle mx-2 btnColorBlue" (click)="changeImage(2)"></button>
             <button type="button" class="btn btn-circle mx-2 btnColorMaroon" (click)="changeImage(3)"></button>
