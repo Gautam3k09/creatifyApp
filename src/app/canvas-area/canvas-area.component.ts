@@ -71,7 +71,8 @@ export class CanvasAreaComponent implements AfterViewInit{
   designName : any = "";
   teeSize : any = 'S';
   priceRange : any = 649;
-  rotationAngle = 0;
+  startDistance = 0;
+  scale = 1;
   // for sides
   shirtSideFront: boolean = true;
   shirtPreferencesPersonal: boolean = true;
@@ -114,6 +115,7 @@ export class CanvasAreaComponent implements AfterViewInit{
   //for mobile
   isMobile : boolean = false;
   
+  
   modalDialog: MatDialogRef<SaveTeeModalComponent, any> | undefined;
   dialogConfig = new MatDialogConfig();
 
@@ -136,15 +138,59 @@ export class CanvasAreaComponent implements AfterViewInit{
     this.userData = JSON.parse(this.userData);
     console.log(this.userData.user_Role);
     this.priceRange = this.userData?.user_Role == 'Merch' ? 549 : 649;
-    //declared canvas globally for common front and back rendering
     this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
-    //Added listener for image move
     this.canvas.nativeElement.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.canvas.nativeElement.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.canvas.nativeElement.addEventListener('mousemove', this.handleMouseMove.bind(this));
     this.canvas.nativeElement.addEventListener('touchstart', this.handleTouchStart.bind(this));
     this.canvas.nativeElement.addEventListener('touchend', this.handleTouchEnd.bind(this));
     this.canvas.nativeElement.addEventListener('touchmove', this.handleTouchMove.bind(this));
+    this.canvas.nativeElement.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        this.startDistance = this.getDistance(e.touches);
+      }
+    }, false);
+
+    this.canvas.nativeElement.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 2) {    
+        e.preventDefault();
+        const currentDistance = this.getDistance(e.touches);
+        const zoomStep = 1.0005;
+        const zoomFactor = currentDistance > this.startDistance ? zoomStep : 1 / zoomStep;
+        const newScale = Math.max(0.5, Math.min(2, this.scale * zoomFactor));
+        if (newScale === this.scale) return;
+        this.scale = newScale;
+        if(this.isMobile) {
+          if(this.shirtSideFront) {
+            this.imageWidth = Math.round(Math.max(50, Math.min(this.canvasWidthFrontMob,this.imageWidth * this.scale)));
+            this.imageHeight = Math.round(Math.max(50, Math.min(this.canvasHeightFrontMob,this.imageHeight * this.scale)));
+          } else {
+            this.imageWidth = Math.round(Math.max(50, Math.min(this.canvasWidthBackMob,this.imageWidth * this.scale)));
+            this.imageHeight = Math.round(Math.max(50, Math.min(this.canvasHeightBackMob,this.imageHeight * this.scale)));
+          }
+        }
+        this.updateImage();
+      }
+    }, false);
+
+    this.canvas.nativeElement.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const zoomStep = 1.0005;
+        const zoomFactor = e.deltaY < 0 ? zoomStep : 1 / zoomStep;
+        const newScale = Math.max(0.5, Math.min(2, this.scale * zoomFactor));
+        if (newScale === this.scale) return;
+        this.scale = newScale;
+        if(this.isMobile) {
+          if(this.shirtSideFront) {
+            this.imageWidth = Math.round(Math.max(50, Math.min(this.canvasWidthFrontMob,this.imageWidth * this.scale)));
+            this.imageHeight = Math.round(Math.max(50, Math.min(this.canvasHeightFrontMob,this.imageHeight * this.scale)));
+          } else {
+            this.imageWidth = Math.round(Math.max(50, Math.min(this.canvasWidthBackMob,this.imageWidth * this.scale)));
+            this.imageHeight = Math.round(Math.max(50, Math.min(this.canvasHeightBackMob,this.imageHeight * this.scale)));
+          }
+        }
+        this.updateImage();
+    }, false);
 
     this.teeDetailForm = this.fb.group({
       teeName : ['', [Validators.required]],
@@ -331,12 +377,17 @@ export class CanvasAreaComponent implements AfterViewInit{
 
     this.updateImagePosition(deltaX, deltaY);
   }
+  getDistance(touches: TouchList) {
+    const dx = touches[0].pageX - touches[1].pageX;
+    const dy = touches[0].pageY - touches[1].pageY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
 
   handleTouchEnd() {
     this.isDragging = false;
   }
 
-  // Utility function for updating image position
   updateImagePosition(deltaX: number, deltaY: number) {
     this.imageOffsetX = Math.max(0, Math.min(this.imageOffsetX + deltaX, this.canvas.nativeElement.width - this.imageWidth));
     this.imageOffsetY = Math.max(0, Math.min(this.imageOffsetY + deltaY, this.canvas.nativeElement.height - this.imageHeight));
@@ -655,7 +706,7 @@ export class CanvasAreaComponent implements AfterViewInit{
 
   preventEnter(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      event.preventDefault(); // Prevents new lines
+      event.preventDefault(); 
     }
   }
   
