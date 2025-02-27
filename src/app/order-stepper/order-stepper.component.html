@@ -25,7 +25,7 @@
           </mat-form-field>
           <mat-form-field style="width: 50%;">
             <mat-label class="mobileFontSize">Pincode</mat-label>
-            <input matInput placeholder="Pincode" formControlName="pincode" required>
+            <input matInput placeholder="Pincode" formControlName="pincode"  [(ngModel)]="pincode" (input)="fetchAddress()" required>
           </mat-form-field>
         </div>
         <div style="text-align: center;">

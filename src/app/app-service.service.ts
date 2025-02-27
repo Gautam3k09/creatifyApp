@@ -103,4 +103,9 @@ export class AppServiceService {
   getAllOrder() {
     return this.http.get(`${this.serverUrl}/orderAll`);
   };
+
+  // pincode apis
+  getAddressByPincode(pincode: string): Observable<any> {
+    return this.http.get(` https://api.postalpincode.in/pincode/${pincode}`);
+  }
 }

@@ -42,6 +42,7 @@ export class OrderStepperComponent {
   numberVerified = true;
   verifyLabel:any = 'Verify & Proceed';
   storedData: any;
+  pincode: any;
 
   constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,price:any,user_Id:any,_id:any,quantity:any,size:any,coinsUsed:any,coupon:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
@@ -54,7 +55,7 @@ export class OrderStepperComponent {
       building: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.building : '' ],
       area: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.area : ''],
       landmark: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.landmark : ''],
-      city: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.city : ''],
+      city: [{value : this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.city : '',disabled: true}],
       pincode: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     });
     this.secondFormGroup = this.fb.group({
@@ -223,4 +224,21 @@ export class OrderStepperComponent {
     this.secondFormGroup.enable();
   }
 
+  
+  fetchAddress() {
+    console.log(this.pincode.toString().length)
+    if (this.pincode.toString().length == 6) {
+      this.appservice.getAddressByPincode(this.pincode).subscribe((data) => {
+        if (data[0]?.Status === 'Success') {
+          this.firstFormGroup.controls['city'].setValue(data[0].PostOffice[0].State);
+        } else {
+          this.firstFormGroup.controls['city'].setValue('');
+          window.alert('Invalid Pincode');
+        };
+      },(error) => {
+        console.error('Error fetching address:', error);
+        this.firstFormGroup.controls['city'].setValue('');
+      });
+    }
+  }
 }

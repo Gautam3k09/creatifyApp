@@ -22,7 +22,7 @@ nav ul{
 
 nav li{
     font-size: 24px;
-    color: white;
+    color: black;
     height: 8vh;
 }
 
@@ -32,12 +32,11 @@ nav li{
     text-decoration: none;
     display: flex;
     align-items: center;
-    color: black;
     cursor: pointer;
 }
 
 .tabs:hover{
-    background-color: black;
+    background-color: #e5e5e5;
 }
 
 nav li:first-child {
@@ -57,10 +56,7 @@ nav li:first-child {
     flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
-    background-image: url('../../assets/black-bgg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: white;
     margin: 0;
     overflow: hidden;
     color: white;

@@ -34,6 +34,7 @@ export class SettingPageComponent {
   upiId:string ='';
   storedData:any;
   orderData : any = [];
+  pincode: any;
 
   constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog,public localStorage : localStorageService) {
     this.storedData = this.localStorage.getUserLocalStorage();
@@ -50,7 +51,7 @@ export class SettingPageComponent {
       building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
       area: [this.userData.user_Address[0] ? this.userData.user_Address[0].area : ''],
       landmark: [this.userData.user_Address[0] ? this.userData.user_Address[0].landmark : ''],
-      city: [this.userData.user_Address[0] ? this.userData.user_Address[0].city : ''],
+      city: [{value : this.userData.user_Address[0] ? this.userData.user_Address[0].city : '', disabled: true}],
       pincode: [this.userData.user_Address[0] ? this.userData.user_Address[0].pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     }); 
   }
@@ -96,9 +97,9 @@ export class SettingPageComponent {
       };
       localData = JSON.stringify(localData)
       this.localStorage.setUserLocalStorage(localData);
-    })
-    
+    });
   }
+  
   AddOrUpdateAddress() { 
     this.ngxLoader.start();
     let data = {
@@ -269,6 +270,23 @@ export class SettingPageComponent {
         element.tee_from = 'You';
       }
     });
+  }
+
+  fetchAddress() {
+    console.log(this.pincode.toString().length)
+    if (this.pincode.toString().length == 6) {
+      this.appservice.getAddressByPincode(this.pincode).subscribe((data) => {
+        if (data[0]?.Status === 'Success') {
+          this.myForm.controls['city'].setValue(data[0].PostOffice[0].State);
+        } else {
+          this.myForm.controls['city'].setValue('');
+          window.alert('Invalid Pincode');
+        };
+      },(error) => {
+        console.error('Error fetching address:', error);
+        this.myForm.controls['city'].setValue('');
+      });
+    }
   }
 }
   
