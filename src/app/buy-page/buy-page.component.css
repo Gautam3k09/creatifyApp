@@ -5,13 +5,10 @@
   
 body {
   height: 100vh;
-  background-image: url('../../assets/black-bgg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #ffffff;
   margin: 0;
   overflow: auto;
-  color: white;
+  color: black;
   position: fixed;
   width: 100vw;
   overflow-x: hidden;

@@ -13,8 +13,8 @@ body {
 
 .container {
   height: 80%;
-  margin: auto;
-  margin-top: 2%;
+    width: 100vw;
+    margin-top: 3%;
 }
 
 .create{

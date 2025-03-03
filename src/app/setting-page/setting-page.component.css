@@ -8,13 +8,10 @@
     margin-top: 10vh;
   }
 
-  .buttonList {
-    
-  }
-
   .nav-link{
     color: rgb(0, 0, 0);
   }
+
   .nav-link.active{
     background-color: rgb(0, 0, 0) !important;
     border-color: black;
@@ -23,7 +20,6 @@
 
   .content-container {
     padding: 4%;
-    background-color: rgb(235, 235, 235);
     border-radius: 37px;
     margin-left: 20%;
     color: black;
@@ -94,7 +90,7 @@
   }
 
   .hideOnDesktop{
-    display: none
+    display: none;
   }
 
   .flexdivformerch{
@@ -121,8 +117,7 @@
     border-radius: 10px;
     width: auto;
     padding-left: 1%;
-    margin-left: 1vw;
-    
+    margin-left: 1vw;    
   }
 
   .deleteBtn{
@@ -253,7 +248,7 @@
   }
 
   .main-container{
-    height: 70vh;
+    height: 65vh;
     justify-content: center;
     align-items: normal;
   }
@@ -267,17 +262,13 @@
     display: ruby;
   }
   .content-container {
-    height: auto;
-    background: white;
-    border-radius: 37px;
     margin-left: 5%;
     color: rgb(0, 0, 0);
     width: 85vw;
   }
 
   .profile-title {
-    margin-bottom: 0;
-    
+    margin-bottom: 0;    
   }
 
   .profile-title-merch{
@@ -287,6 +278,19 @@
   .profile-title-coupon{
     width: 80%;
     font-size: 24px !important;
+  }
+
+  
+  .merch-container{
+    width: 100vw;
+    margin-left: -4%;    
+    margin-top: 8%;
+  }
+
+  .profile {
+    height: 60vh;
+    overflow: auto;
+    margin-top: 8%;
   }
 
   .InfoForm{
@@ -302,12 +306,12 @@
     display: flex;
     justify-content: center;
     box-shadow: 4px 5px 20px 20px rgb(85 83 83);
+    z-index: 9;
+    background: white;
   }
 
   .addressForm{
     margin-left: 3vw;
-    /* height: 22vh;
-    overflow: auto; */
   }
 
   .hideOnMobile{
@@ -338,10 +342,6 @@
     }
   }
 
-  .merch-container{
-    width: 100vw;
-  }
-
   .flexdivformerchlable{
     width: auto;
     font-size: 16px;
@@ -366,7 +366,9 @@
   }
 
   .helpDiv{
-    width: 90vw;
+    justify-content: center; 
+    margin-top: 26vh;
+    height: 100vh;
   }
    
   .help{

@@ -20,7 +20,7 @@ export const routes: Routes = [
     { path: 'tees', component: YourTeesComponent},
     { path: 'test', component:  TestPageComponent},
     { path: 'canvas',component: CanvasAreaComponent},
-    { path: 'settings', component: SettingPageComponent},
+    { path: 'account', component: SettingPageComponent},
     { path: 'buy/:userId', component: BuyPageComponent},
     { path: ':userName/merch/:userId',component: MerchHomePageComponent},
     { path: 'refferedBy/:userName', component: HomeComponent},

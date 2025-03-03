@@ -155,7 +155,7 @@ export class CanvasAreaComponent implements AfterViewInit{
       if (e.touches.length === 2) {    
         e.preventDefault();
         const currentDistance = this.getDistance(e.touches);
-        const zoomStep = 1.0005;
+        const zoomStep = 1.0009;
         const zoomFactor = currentDistance > this.startDistance ? zoomStep : 1 / zoomStep;
         const newScale = Math.max(0.5, Math.min(2, this.scale * zoomFactor));
         if (newScale === this.scale) return;
@@ -323,7 +323,7 @@ export class CanvasAreaComponent implements AfterViewInit{
       this.backImageHeight = this.imageHeight;
       this.calculateInches('back')
     }
-    this.updateImageBase64(this.shirtSideFront)
+    this.updateImageBase64(this.shirtSideFront);
   }
 
   handleMouseDown(event: MouseEvent) {

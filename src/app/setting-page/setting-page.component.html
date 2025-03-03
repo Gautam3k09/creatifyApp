@@ -16,7 +16,7 @@
              <!-- content from here  -->
             <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" style="margin-top: -50px; margin-left: 3vw;width: 100%;">
               <div class="content-container">
-                <div *ngIf="this.activeTab == 'profile'">
+                <div class="profile" *ngIf="this.activeTab == 'profile'">
                   <div class="profile-title">
                     Profile Information
                   </div>
@@ -80,8 +80,7 @@
                     </form>
                   </div>
                 </div>
-                <div *ngIf="this.activeTab == 'merch'" class="merch-container">
-                  
+                <div *ngIf="this.activeTab == 'merch'" class="merch-container">                  
                   <div *ngIf="this.merchAccount == 'Normal';else merchArea">
                     <div class="tab-pane fade show active " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                       <div class="addressArea">
@@ -169,7 +168,7 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="this.activeTab == 'order' && orderData.length > 0;" class="orderDiv">
+                <div class="order" *ngIf="this.activeTab == 'order' && orderData.length > 0;" class="orderDiv">
                   <div class="order-summary hideOnMobile mb-2"  *ngFor="let orders of orderData; let i = index">
                     <div class="order-details" >
                         <div><strong>ORDER PLACED</strong><br>{{orders.createdAt}}</div>
@@ -197,9 +196,9 @@
                     </div>
                   </div>                    
                 </div>
-                  <div class="noOrderText" style="height: 450px;" *ngIf="this.activeTab == 'order' && orderData.length == 0;">
-                    No orders yet! Your next favorite outfit is just a click away.
-                  </div>
+                <div class="noOrderText" style="height: 450px;" *ngIf="this.activeTab == 'order' && orderData.length == 0;">
+                  No orders yet! Your next favorite outfit is just a click away.
+                </div>
               </div>
             </div>
           </div>

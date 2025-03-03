@@ -73,14 +73,13 @@ export class TshirtsDataPageComponent {
   }
 
   drawImageOnCanvas(image : any): void {
-    const canvas = this.canvasRef_for_Bg?.nativeElement;
     const ctx = this.currentMainCanvas.getContext('2d');
-    canvas.width = 175; // You can adjust the width
-    canvas.height = 150; // You can adjust the height
+    this.currentMainCanvas.width = 175; // You can adjust the width
+    this.currentMainCanvas.height = 150; // You can adjust the height
     const img = new Image();
     img.src = image;
     img.onload = () => {
-      ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0,this.currentMainCanvas.width, this.currentMainCanvas.height);
     };    
   }
 
@@ -142,7 +141,6 @@ export class TshirtsDataPageComponent {
       this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
       this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
       this.drawImageOnCanvas(this.imageFrontSrc);
-      
       let teeDataId = 'teeData' + this.currentIndex;
       this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
       this.ctx = this.currentCanvas?.getContext("2d");
@@ -165,7 +163,7 @@ export class TshirtsDataPageComponent {
       const screenWidth = window.innerWidth;
       if(screenWidth > 800) {
         this.currentCanvas .style.height = '268px';
-        this.currentCanvas .style.marginTop = '-64%';
+        this.currentCanvas .style.marginTop = '-71.5%';
         this.currentCanvas .style.marginLeft = '30%';
         this.currentCanvas .style.width = '230px';
       } else {
@@ -245,7 +243,7 @@ export class TshirtsDataPageComponent {
       }else {
         this.imageFrontUrls.find((imageData: any) => {
           if(imageData.key == data.tee_Color){
-            this.imageFrontSrc = imageData.value
+            this.imageFrontSrc = imageData.value;
           }
         })
       }

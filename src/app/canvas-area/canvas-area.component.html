@@ -5,17 +5,6 @@
       <canvas #mainCanvas class="mainCanvas" role="dialog" aria-hidden="false" tabindex="-1"></canvas>
       <canvas #canvas class="canvas" id="canvas" width="10000" height="10000" role="dialog" aria-hidden="false" tabindex="-1" ></canvas>
     </div>
-    <div class="tipDiv">
-      <div>
-        Useful Tools/AI
-      </div>
-      <div>
-        Use <strong><a href="https://www.textstudio.com/" target="_blank" style="color: #FF4500;">TEXTSTUDIO</a></strong> for text to image
-      </div>
-      <div>
-        Use <strong><a href="https://pixlr.com/" target="_blank" style="color: #FF4500;">PIXLR</a></strong> for Editing/Creating Image
-      </div>
-    </div>
     
     <form [formGroup]="teeDetailForm" (ngSubmit)="onSubmit(teeDetailForm)">
       <div class="utils">
@@ -42,9 +31,9 @@
           <button type="button" class="btn btn-circle mx-2 btnColorMaroon" (click)="changeImage(3)"></button>
           <button type="button" class="btn btn-circle mx-2 btnColorBlack" (click)="changeImage(0)"></button>
         </div>
-        <div class="colorNote">
+        <!-- <div class="colorNote">
           Attention: The displayed colors of tees are approximate and may not exactly match the final product
-        </div>
+        </div> -->
         <div class="mb-2">
           <div *ngIf="currentSide == 'front'; else elseBlockFront">      
             <div *ngIf="isImgUploaded == false;">
@@ -96,14 +85,13 @@
             </ng-template>
           </div>
         </div>
-        <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'; else elseBlockForprice">
+        <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'">
           <label for="height" class="mx-2">Price : {{priceRange}}</label>
           <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
         </div>
-        <ng-template #elseBlockForprice>
+        <!-- <ng-template #elseBlockForprice>
           <div class="d-flex justify-content-center ms-2">Price will be 649</div> 
-
-        </ng-template>
+        </ng-template> -->
         <div class="saveButton hideforMobile">
           <p>
             <button class="btn btn-dark ms-2 p-2" [disabled]="teeDetailForm.invalid" (click)="openModal()">Continue</button>
@@ -190,17 +178,17 @@
               </ng-template>
             </div>
           </div>
-          <div class="d-flex">
+          <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'">
             <label for="height" class="mx-2">Price : {{priceRange}}</label>
             <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
           </div>
           <div class="saveButton d-flex mt-2 mb-3">
             <button class="btn btn-dark ms-2 p-2" [disabled]="designName == ''" (click)="openModal()">Continue</button>
           </div>
-          <div id="stickyIcon" (click)="openModal(true)">
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
-          </div>
         </div>
+      </div>
+      <div id="stickyIcon" (click)="openModal(true)">
+        <i class="fa fa-question-circle" aria-hidden="true"></i>
       </div>
     </form>
   </div>

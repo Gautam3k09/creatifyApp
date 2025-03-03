@@ -5,11 +5,8 @@
 
 body {
   height: 100%;
-  color: white;
-  background-image: url('../../assets/black-bgg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  color: black;
+  background-color: #ffffff;
   margin: 0;
   width: 100%;
   overflow-y: hidden;
@@ -25,9 +22,11 @@ body {
       margin-left: 120px;
     }
     .mainCanvas{
+      background:  linear-gradient(180deg, #d0d0d0, rgb(124, 124, 124));
       display: block;
       position: fixed;
       top: 10vh;
+      border-radius: 12px;
     }
     
     .imgContainer{
@@ -41,12 +40,9 @@ body {
 
     .utils {
       position: fixed;
-      padding: 3%;
-      background-color: #dfdfdf;
       border-radius: 6%;
-      top: 15%;
-      right: 5%;
-      box-shadow: #333;
+      top: 11%;
+      right: 15%;
       color: black;
 
       .shirtOptionContainer{ 
@@ -174,8 +170,8 @@ input[type="file"] {
   background-color: black;
 }
 .btnColorWhite{
-  background-color: white;
-  border-color: black;
+  background-color: #ffffff;
+  border-color: #000000;
 }
 .btnColorBlue{
   background-color: rgba(0,0,57,255);
@@ -183,7 +179,32 @@ input[type="file"] {
 .btnColorMaroon{
   background-color: rgba(74,0,0,255)
 }
+#stickyIcon {
+  position: fixed; /* Sticks the icon in place */
+  bottom: 4px; /* Distance from the bottom edge */ 
+  left: 6px; /* Distance from the left edge */
+  width: 50px;
+  height: 50px;
+  background-color: #000000; /* Background color (e.g., blue) */
+  color: #ffffff; /* Icon color */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center the icon vertically */
+  justify-content: center; /* Center the icon horizontally */
+  border-radius: 50%; /* Makes it circular */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  z-index: 1000; /* Ensures it appears above other elements */
+}
 
+#stickyIcon i {
+    font-size: 24px; /* Size of the icon */
+}
+
+#stickyIcon:hover {
+    color: black;
+    background-color: #e5e5e5; /* Darker blue on hover */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow */
+}
 @media(max-width:600px) {
   .container {
     position: relative;
@@ -254,6 +275,7 @@ input[type="file"] {
     color: black;
     height: 30vh;
     overflow: auto;
+    border-radius: 12px;
   }
 
   .btnColorBlack{
@@ -345,31 +367,7 @@ input[type="file"] {
       display: none;
     }
   }
-  #stickyIcon {
-    position: fixed; /* Sticks the icon in place */
-    bottom: 4px; /* Distance from the bottom edge */ 
-    left: 6px; /* Distance from the left edge */
-    width: 50px;
-    height: 50px;
-    background-color: #000000; /* Background color (e.g., blue) */
-    color: #ffffff; /* Icon color */
-    display: flex; /* Flexbox for centering */
-    align-items: center; /* Center the icon vertically */
-    justify-content: center; /* Center the icon horizontally */
-    border-radius: 50%; /* Makes it circular */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow */
-    cursor: pointer; /* Pointer cursor on hover */
-    z-index: 1000; /* Ensures it appears above other elements */
-  }
-
-  #stickyIcon i {
-      font-size: 24px; /* Size of the icon */
-  }
-
-  #stickyIcon:hover {
-      background-color: #0056b3; /* Darker blue on hover */
-      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow */
-  }
+ 
 }
 
 
