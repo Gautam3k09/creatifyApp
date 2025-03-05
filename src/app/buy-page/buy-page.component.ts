@@ -176,7 +176,7 @@ export class BuyPageComponent implements OnInit  {
     this.data.coinsUsed = this.isChecked;
     this.modalDialog = this.matDialog.open(OrderStepperComponent,  {
       width: '510px',
-      height: '475px',
+      height: '495px',
       data: this.data
     });
 
@@ -195,8 +195,8 @@ export class BuyPageComponent implements OnInit  {
 
   openRefferalModal(){
     this.modalDialogforReferral = this.matDialog.open(ReferralPageComponent,  {
-      width: '500px',
-      height: '300px',
+      width: 'auto',
+      height: 'auto',
     });
 
     this.modalDialogforReferral.afterClosed().subscribe(result => {
@@ -245,7 +245,7 @@ export class BuyPageComponent implements OnInit  {
           coupon_id : response.data[0]._id,
           coupon_Name: response.data[0].coupon_Name,
           coupon_Off: response.data[0].coupon_Off,
-          coupon_text: 'Coupon Applied',
+          coupon_text: 'Coupon Applied ✅',
           couponAvailable : true
         };
         this.showContent = false;
@@ -255,13 +255,20 @@ export class BuyPageComponent implements OnInit  {
         }
       } else{
         this.couponData = {
-          coupon_text: 'Coupon Not Available',
+          coupon_text: 'Coupon Not Available ❌',
           couponAvailable : false
         };
         this.showContent = true
       }
     });
   }
+
+  removeCoupon() {
+    this.couponData = [];
+    this.showContent = true;
+    this.discountedPrice = '';
+  }
+
   changeTshirtColor () {
     if(this.data){
       this.imageFrontUrls.find((imageData: any) => {

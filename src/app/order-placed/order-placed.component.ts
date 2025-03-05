@@ -30,10 +30,7 @@ export class OrderPlacedComponent {
       this.finalPrice = this.data.finalPrice + 59;
     } else {
       this.fromCod = false;
-      // this.placeOrder();
-      console.log(this.data,this.data.rpData,'here')
     }
-    // this.ngxLoader.start();
     this.ngxLoader.stop();
   }
 

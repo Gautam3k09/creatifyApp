@@ -12,43 +12,138 @@
   padding: 10px;
 }
 
-.orderTshirtHeader{
+.orderTshirtHeader {
   display: flex;
   justify-content: center;
+  align-items: center;
+  font-family: Oswald, sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #007bff;
+  padding: 10px 15px;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 8px;
 }
 
-.orderTshirtName{
-  font-weight: bolder;
+.orderTshirtTitle {
+  font-family: Merriweather, serif;
   font-size: 20px;
-  margin-top: -2px;
+  font-weight: normal;
+  color: #333;
 }
 
-.detailsFlex{
+.orderTshirtName {
+  font-family: Merriweather, serif;
+  font-weight: bold;
+  font-size: 22px;
+  margin-left: 5px;
+}
+
+.orderSummaryContainer {
+  max-width: 400px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.priceHeader {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: Oswald, sans-serif;
+  color: #000;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.detailsFlex {
   display: flex;
   justify-content: space-between;
+  font-family: Merriweather, serif;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
 }
 
-.detailsFlexContainer{
-  display: inline;
-}
-
-.buttonContainer{
+.detailsFlexContainer {
   display: flex;
-  height: 8vh;
-  padding-top: 18px;
-  justify-content: space-around;
+  align-items: center;
 }
 
-.btnBack{
-  width: auto;
+.totalAmount {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #007bff;
 }
 
-.btnCod{
-  width: auto;
+.totalAmount .orderTshirtName {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
 }
 
-.btnOnline{
-  width: auto;
+.address {
+  font-family: Oswald, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 5px;
+}
+
+.addressContainer {
+  font-family: Merriweather, serif;
+  font-size: 16px;
+  color: #333;
+  background: #f8f8f8;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #007bff;
+  max-width: 400px;
+}
+
+.addressContainer div {
+  margin-bottom: 3px;
+}
+
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btnAction {
+  font-family: Oswald, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: #007bff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+.btnAction:hover {
+  background: #0056b3;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.btnBack {
+  background: #dc3545;
+}
+
+.btnBack:hover {
+  background: #dc3545;
+}
+
+.btnCod, .btnOnline {
+  background: #007bff;
 }
 
 .otpButton{
@@ -59,41 +154,69 @@
   width: 10px;
 }
 
+.nextButton {
+  font-size: 18px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  background: linear-gradient(135deg, #0056b3, #003f80);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Button Hover Effect */
+.nextButton:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 86, 179, 0.5);
+}
+
+/* Click Effect */
+.nextButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 8px rgba(0, 86, 179, 0.3);
+}
+
+/* Disabled Button Styling */
+.nextButton:disabled , .btnOnline:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 @media(max-width:600px) {
   .mat-step-text-label {
     text-overflow: ellipsis;
-    overflow: hidden;
     font-size: 12px;
   }
 
-  .btnBack{
-    button{
-      font-size: 12px;
-    }
+  .buttonContainer {
+    gap: 8px; 
   }
-  .btnCod{
-    height: 4vh;
-    button{
-      font-size: 12px;
-      height: 100%;
-      padding: 2px;
-    }
-  }
-  .btnOnline{
-    height: 4vh;
-    button{
-      font-size: 12px;
-      height: 100%;
-      padding: 2px;
-    }
+
+  .btnAction {
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 6px; 
   }
 
   .mobileFontSize{
     font-size: 10px;
   }
-  
-}
 
+  .nextButton {
+    font-size: 16px;
+    padding: 10px 24px;
+  }
+}
 /* Style the scrollbar track */
 .containerAddressGroup::-webkit-scrollbar-track {
 background: none;

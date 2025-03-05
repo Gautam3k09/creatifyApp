@@ -1,31 +1,27 @@
 <ngx-ui-loader ></ngx-ui-loader>
 <body>
-    <div class="confirmContainer" *ngIf="fromCod != false; else orderPlaced">
-        <div class="d-flex justify-content-center">
-            Proceeding payment with cash on delivery will add extra ₹59 ,which will cost you ₹{{finalPrice}}
+    <div class="confirm-container" *ngIf="fromCod != false; else orderPlaced">
+        <div class="confirm-message">
+            Proceeding with cash on delivery will add an extra ₹59, making the total ₹{{finalPrice}}.
         </div>
-        <div class="d-flex justify-content-around mt-4">
-            <div>
-                <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" (click)="placeOrder()">Proceed</button>
-            </div>
-            <div>
-                <button type="button" class="RotateBtn btn btn-circle btn-danger mx-0" (click)="closeModal('back')">Back</button>
-            </div>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn proceed-btn" (click)="placeOrder()">Proceed</button>
+            <button type="button" class="confirm-btn back-btn" (click)="closeModal('back')">Back</button>
         </div>
     </div>
+    
     <ng-template #orderPlaced>
         <div class="success-container">
-            <h1 class="monserrat-font" style="color: Grey">Thank you for your order</h1>
-            <br>
-            <div class="confirm-green-box">
-                <br>
+            <h1 class="success-title">Thank you for your order</h1>
+            
+            <div class="confirm-box">
                 <h5>ORDER CONFIRMATION</h5>
-                <p>Your order #{{orderId}} has been Placed!</p>
-                <p>Thank you for choosing CreateeFi.</p>
+                <p>Your order #{{orderId}} has been placed!</p>
+                <p>Thank you for choosing Createefi.</p>
             </div>
-            <br>
-            <div class="d-flex justify-content-center">
-                <button type="button" class="RotateBtn btn btn-circle btn-warning" (click)="redirectShop()">Back to shop</button>
+        
+            <div class="confirm-actions">
+                <button type="button" class="confirm-btn back-shop-btn" (click)="redirectShop()">Back to Shop</button>
             </div>
         </div>
     </ng-template>

@@ -1,4 +1,4 @@
-  <mat-stepper [linear]="true" #stepper style="height: 420px; width: 100%;">
+  <mat-stepper [linear]="false" #stepper style="height: 420px; width: 100%;">
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup" style="margin-top: 5%;">
         <ng-template matStepLabel class="mobileFontSize">Address</ng-template>
@@ -29,7 +29,7 @@
           </mat-form-field>
         </div>
         <div style="text-align: center;">
-          <button type="button" style="width: auto" class="RotateBtn btn btn-circle btn-primary mx-0" [disabled]="firstFormGroup.invalid" matStepperNext>Next</button>
+          <button type="button"  class="nextButton" [disabled]="firstFormGroup.invalid || !this.state" matStepperNext>Next</button>
         </div>
       </form>
     </mat-step>
@@ -43,7 +43,6 @@
             <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
               <mat-icon>close</mat-icon>
             </button>
-            <!-- <mat-error *ngIf="secondFormGroup.invalid">{{secondFormGroup.invalid}}</mat-error> -->
           </mat-form-field>
         </div>
         <div class="d-flex justify-content-around" *ngIf="secondFormGroup.value.phoneNumber.length == 10">
@@ -62,74 +61,54 @@
           
         </div>
         <div class="buttonContainer">
-          <div class="btnBack">
-            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" matStepperPrevious>{{numberVerified}}</button>
-          </div>
-          <div class="btnOnline">
-            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" [disabled]="secondFormGroup.invalid" matStepperNext (click)="verify()">{{verifyLabel}}</button>
-          </div>
+          <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
+          <button type="button" class="btnAction btnOnline" matStepperNext [disabled]="secondFormGroup.invalid" (click)="verify()">{{verifyLabel}}</button>
         </div>
       </form>
     </mat-step>
     <mat-step label="Order Summary">      
-        <div class="containerAddressGroup">
-          <div class="orderTshirtHeader">
-            <div> Buying : </div>
-            <div class="orderTshirtName">&nbsp;{{buyPageData.teeName_Name}}</div>
+      <div class="containerAddressGroup">
+        <div class="orderTshirtHeader">
+          <div class="orderTshirtTitle">Buying:</div>
+          <div class="orderTshirtName">{{buyPageData.teeName_Name}}</div>
+        </div>
+
+        <div class="orderSummaryContainer">
+          <div class="orderTshirtName priceHeader">Price Details</div>
+        
+          <div class="detailsFlex">
+            <div class="detailsFlexContainer">Price</div>
+            <div class="detailsFlexContainer">₹{{buyPageData.price}}</div>
           </div>
-          <hr>
-          <div>
-            <div class="orderTshirtName">Price Details</div>
-            <div class="detailsFlex">
-              <div class="detailsFlexContainer">Price </div>
-              <div class="detailsFlexContainer">₹{{buyPageData.price}}</div>
-            </div>
-            <!-- <div class="detailsFlex">
-              <div class="detailsFlexContainer">Quantity</div>
-              <div class="detailsFlexContainer">
-                <select [(ngModel)]="userQuantity" (change)="calculatePrice()">
-                  <option value="1" selected >1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-                
-              </div>
-            </div> -->
-            <div class="detailsFlex">
-              <div class="detailsFlexContainer">Size</div>
-              <div class="detailsFlexContainer">{{buyPageData.size}}</div>
-            </div>
-            <div class="detailsFlex">
-              <div class="detailsFlexContainer">Delivery Charges(applicable for COD)</div>
-              <div class="detailsFlexContainer">₹59</div>
-            </div>
-            <hr>
-            <div class="detailsFlex">
-              <div class="detailsFlexContainer orderTshirtName">Total Amount</div>
-              <div class="detailsFlexContainer orderTshirtName">₹{{finalPrice}}</div>
-            </div>
+        
+          <div class="detailsFlex">
+            <div class="detailsFlexContainer">Size</div>
+            <div class="detailsFlexContainer">{{buyPageData.size}}</div>
           </div>
-          <hr>
-          <div>
-            <div class="orderTshirtName">Deliver To :</div>
-              <div> {{firstFormGroup.value.building}} </div>
-              <div> {{firstFormGroup.value.area}} &nbsp; {{firstFormGroup.value.landmark}} </div>
-              <div> {{firstFormGroup.value.city}} &nbsp; {{firstFormGroup.value.pincode}}</div>
-          </div>
-           
-        </div> 
-        <div class="buttonContainer">
-          <div class="btnBack">
-            <button type="button" class="RotateBtn btn btn-circle btn-primary mx-0" matStepperPrevious>Back</button>
-          </div>
-          <div class="btnCod">
-            <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" matStepperNext (click)="openModal('cod')">Proceed with COD</button>
-          </div>
-          <div class="btnOnline">
-            <button type="button" class="RotateBtn btn btn-circle btn-warning mx-0" matStepperNext (click)="createRazorPayOrder()">Instant Pay</button>
+        
+          <div class="detailsFlex">
+            <div class="detailsFlexContainer">Delivery Charges (applicable for COD)</div>
+            <div class="detailsFlexContainer">₹59</div>
+          </div>        
+          <div class="detailsFlex totalAmount">
+            <div class="detailsFlexContainer orderTshirtName">Total Amount</div>
+            <div class="detailsFlexContainer orderTshirtName">₹{{finalPrice}}</div>
           </div>
         </div>
+
+        <div class="addressContainer">
+          <div class="address">Deliver To :</div>
+          <div>{{firstFormGroup.value.building}}</div>
+          <div>{{firstFormGroup.value.area}} &nbsp; {{firstFormGroup.value.landmark}}</div>
+          <div>{{firstFormGroup.value.city}} &nbsp; {{firstFormGroup.value.pincode}}</div>
+        </div>
+          
+      </div>
+      <div class="buttonContainer">
+        <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
+        <button type="button" class="btnAction btnCod" matStepperNext (click)="openModal('cod')">Pay on Delivery</button>
+        <button type="button" class="btnAction btnOnline" matStepperNext (click)="createRazorPayOrder()">Pay Now</button>
+      </div>
+      
     </mat-step>
   </mat-stepper>

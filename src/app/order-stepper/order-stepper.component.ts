@@ -43,6 +43,7 @@ export class OrderStepperComponent {
   verifyLabel:any = 'Verify & Proceed';
   storedData: any;
   pincode: any;
+  state : any = false
 
   constructor(private fb: FormBuilder,private winRef : WindowRefService,private appservice: AppServiceService,public matDialog: MatDialog,@Inject(MAT_DIALOG_DATA) public buyPageData: {teeName_Name: any,price:any,user_Id:any,_id:any,quantity:any,size:any,coinsUsed:any,coupon:any},public dialogRef: MatDialogRef<OrderStepperComponent>,public localStorage:localStorageService){
 
@@ -52,10 +53,10 @@ export class OrderStepperComponent {
     }
         
     this.firstFormGroup = this.fb.group({
-      building: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.building : '' ],
-      area: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.area : ''],
+      building: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.building : '',Validators.required ],
+      area: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.area : '',Validators.required],
       landmark: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.landmark : ''],
-      city: [{value : this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.city : '',disabled: true}],
+      city: [{value : this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.city : '',disabled: true},Validators.required],
       pincode: [this.userData?.user_Address[0] ? this.userData?.user_Address[0]?.pincode : '',[Validators.required,Validators.minLength(6),Validators.maxLength(6)]],
     });
     this.secondFormGroup = this.fb.group({
@@ -145,11 +146,11 @@ export class OrderStepperComponent {
       disableClose: true
     }
     if(width > 600) {
-      this.dialogConfig.width = "50vw";
-      this.dialogConfig.height = "45vh";
+      this.dialogConfig.width = "auto";
+      this.dialogConfig.height = "auto";
     } else {
-      this.dialogConfig.width = "85%";
-      this.dialogConfig.height = "65vh";
+      this.dialogConfig.width = "auto";
+      this.dialogConfig.height = "auto";
     }
     this.modalDialog = this.matDialog.open(OrderPlacedComponent,this.dialogConfig);
 
@@ -231,12 +232,15 @@ export class OrderStepperComponent {
       this.appservice.getAddressByPincode(this.pincode).subscribe((data) => {
         if (data[0]?.Status === 'Success') {
           this.firstFormGroup.controls['city'].setValue(data[0].PostOffice[0].State);
+          this.state = true;
         } else {
           this.firstFormGroup.controls['city'].setValue('');
+          this.state = false;
           window.alert('Invalid Pincode');
         };
       },(error) => {
         console.error('Error fetching address:', error);
+        this.state = false;
         this.firstFormGroup.controls['city'].setValue('');
       });
     }
