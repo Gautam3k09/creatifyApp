@@ -56,7 +56,7 @@ export class HomeComponent {
     if(!this.isLogin) {
       this.openModal(name);
     } else{
-      this.router.navigate(['/tees']);
+      this.router.navigate(['/create']);
     }
   }
 
