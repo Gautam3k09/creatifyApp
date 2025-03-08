@@ -17,7 +17,7 @@ export const routes: Routes = [
     // { path: '', component: HeaderPageComponent},
     { path: '', component: HomeComponent},
     { path: 'shop', component: CommonShopComponent},
-    { path: 'tees', component: YourTeesComponent},
+    { path: 'create', component: YourTeesComponent},
     { path: 'test', component:  TestPageComponent},
     { path: 'canvas',component: CanvasAreaComponent},
     { path: 'account', component: SettingPageComponent},

@@ -1,21 +1,21 @@
 <body>
-    <nav *ngIf="!merchPage && (visitor == '' || visitor == null); else merchHeader">
-        <ul class="sidebar">
-            <li class="tabs1" (click)="showSidebar('string')">x</li>
+    <nav *ngIf="!merchPage && (visitor == '' || visitor == null); else merchHeader" [ngStyle]="fromHome ? {'color': 'red'} : {'background-color': 'white'}">
+        <ul class="sidebar" [ngStyle]="fromHome ? {'background-color': '#1f1f21'} : {'background-color': 'white'}">
+            <li class="tabs1"  style="text-transform: lowercase;" (click)="showSidebar('string')">x</li>
             <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
-            <li class="tabs1" (click)="onDivClick('/tees')">tees</li>
+            <li class="tabs1" (click)="onDivClick('/create')">create</li>
             <li class="tabs1 " (click)="onDivClick('/account')">account</li>
         </ul>
-        <ul>
-            <li class="tabs" (click)="onDivClick('')">CreaTeeFi</li>
+        <ul >
+            <li class="tabs" (click)="onDivClick('')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">CreaTeeFi</li>
             <div class="login" *ngIf="!isLoggedIn; else elseBlock">
                 <li class="tabs " (click)="openModal()"><i class="fa fa-sign-in" aria-hidden="true"></i></li>
             </div>
             <ng-template #elseBlock>
-                <li class="tabs hideOnMobile" (click)="onDivClick('/shop')">Shop</li>
-                <li class="tabs hideOnMobile" (click)="onDivClick('/tees')">tees</li>
-                <li class="tabs hideOnDesktop" (click)="showSidebar('string')"><i class="fa fa-bars" aria-hidden="true"></i></li>
-                <li class="tabs hideOnMobile" (click)="onDivClick('/account')"><i class="fa fa-cog" aria-hidden="true"></i></li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/shop')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">Shop</li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/create')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">create</li>
+                <li class="tabs hideOnDesktop" (click)="showSidebar('string')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}"><i class="fa fa-bars" aria-hidden="true"></i></li>
+                <li class="tabs hideOnMobile" (click)="onDivClick('/account')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}"><i class="fa fa-user" aria-hidden="true"></i></li>
             </ng-template>
         </ul>
     </nav>

@@ -13,6 +13,7 @@ import { localStorageService } from '../local-storage-service';
   styleUrl: './header-page.component.css'
 })
 export class HeaderPageComponent {
+  @Input() fromHome :any ;
   sidebarClose : any = false;
   isLoggedIn : any ;
   dialogConfig = new MatDialogConfig();

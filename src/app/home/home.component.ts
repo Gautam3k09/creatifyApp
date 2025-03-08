@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-// import { CanvasAreaComponent } from '../canvas-area/canvas-area.component';
 import { HeaderPageComponent } from '../header-page/header-page.component';
+import { FooterComponent } from '../footer/footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
@@ -9,7 +9,7 @@ import { localStorageService } from '../local-storage-service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderPageComponent],
+  imports: [HeaderPageComponent,FooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -37,6 +37,20 @@ export class HomeComponent {
       this.localStorage.removeUserLocalStorage();
       location.reload()
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const video: HTMLVideoElement | null = document.getElementById("myVideo") as HTMLVideoElement;
+      
+      if (video) {
+          // video.muted = true; 
+          // video.src = "../../assets/createefi-trial0000-0250.mp4"; 
+          // video.load();
+          // video.play().catch(error => console.error("Video play failed:", error));
+      } else {
+          // window.location.reload();
+          console.error("Video element not found!");
+      }
+  });
   }
   openCanvas(name:any='') {
     if(!this.isLogin) {

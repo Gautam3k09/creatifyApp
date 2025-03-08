@@ -1,32 +1,26 @@
-<!-- <div class="uploadButton">
-    <button  (click)="openModal()">Open Canvas</button>
-</div> -->
 <body class="custom-scrollbar">
-    <app-header-page></app-header-page>
+    <app-header-page fromHome=true></app-header-page>
+    <div class="video-container">
+        <video id="myVideo" autoplay loop muted playsinline>
+            <source src="../../assets/createefi-trial0000-0250.mp4" type="video/mp4">
+            <!-- <source src="/assets/videos/my-video.mp4" type="video/mp4"> -->
+            video not wokring
+        </video>
+      </div>
     <div class="container">
+        <h1 class="heading">Stop Searching, Start Creating – Your Perfect Oversized Tee Awaits!</h1>
+        
         <div class="section1">
-            <div class="create1">
-                <span class="createSpan">Upload &centerdot; Wear &centerdot; Tee</span>
-                <div class="section1lines">Tired of searching for oversized tees with your favorite design? <br>Design your own!<br>Simply upload your artwork to Createefi and we'll handle the rest.</div>
-            </div>
-            
-            <img class="ImageSec1" src="../../assets/blackmodel.png">
-        </div>
-        <div class="section1Footer">
+            <div class="subtitle">Tired of searching for oversized tees with your favorite design?Design your own! Simply upload your artwork to Createefi and we'll handle the rest.</div>
             <button type="button" class="btn btn-secondary" (click)="openCanvas()">Create</button>
         </div>
-        <div class="section2">
-            <img class="ImageSec2" src="../../assets/blackmodel.png">
-            <div class="create2">
-                <span class="create2Span">Start Your OWN Store</span>
-                
-                <div class="section2headLine">Turn your designs into merch! Create your own store with Createefi. Just upload your designs and we'll handle the printing and fulfillment.</div>
-            </div>
-            
-        </div>
-        <div class="section2Footer">
+
+        <!-- <h1 class="heading">Launch Your Own Merch Store with Createefi!</h1>
+        <div class="section1">
             <button type="button" class="btn btn-secondary" (click)="openCanvas()">Get Started</button>
-        </div>
+            <div class="subtitle">Turn your designs into merch! Create your own store with Createefi. Just upload your designs and we'll handle the printing and fulfillment.</div>
+        </div> -->
     </div>
 </body>
+<app-footer></app-footer>
 
