@@ -44,7 +44,9 @@ body {
       top: 11%;
       right: 15%;
       color: black;
-
+      font-family: 'Merriweather', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
       .shirtOptionContainer{ 
         text-align:center;
         margin: auto;
@@ -121,20 +123,21 @@ textarea {
 }
 
 .fileUpload {
-	background: #000000;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	color: #fff;
-	font-size: 1em;
-	font-weight: bold;
 	margin: 1.25em auto;
 	overflow: hidden;
-	padding: 0.875em;
 	position: relative;
 	text-align: center;
-	width: 120px;
   cursor: pointer;
+  width: 42%;
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+  background-color: black;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
 }
 .fileUpload:hover, .fileUpload:active, .fileUpload:focus {
 	background: #000000;
@@ -258,6 +261,9 @@ input[type="file"] {
     margin-left: auto;
     z-index: 999;
     margin-top: -40px;
+    font-family: 'Merriweather', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
 
     .shirtOptionContainer{
       display: flex;

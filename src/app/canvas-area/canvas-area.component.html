@@ -39,7 +39,7 @@
             <div *ngIf="isImgUploaded == false;">
               <div class="fileUpload">
                 <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/*"/>
-                <span style="font-size: 12px;">UploadImage</span>
+                <span class="uploadButton" style="font-size: 12px;">UploadImage</span>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@
             <div *ngIf="isImgUploaded == false;">
               <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
                 <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/*"/>
-                <span style="font-size: 12px;">UploadImage</span>
+                <span class="uploadButton" style="font-size: 12px;">UploadImage</span>
               </div>
             </div>
           </ng-template>
@@ -80,14 +80,14 @@
                 <label for="customRange2" class="form-label" >&nbsp;range 1-312</label>
               </div>
               <div class="RemoveBtn">
-                <button class="btn btn-dark mx-2 p-2" (click)="clearFiles()" >RemoveBack</button>
+                <button class="btn btn-dark" (click)="clearFiles()" >RemoveBack</button>
               </div>
             </ng-template>
           </div>
         </div>
         <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'">
           <label for="height" class="mx-2">Price : {{priceRange}}</label>
-          <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
+          <input type="range" class="form-range" style="width: 67%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
         </div>
         <!-- <ng-template #elseBlockForprice>
           <div class="d-flex justify-content-center ms-2">Price will be 649</div> 
@@ -108,7 +108,7 @@
                         rows="1" cols="50" maxlength="16" formControlName="teeName">
               </textarea>
           </div>
-          <div class="shirtOptionContainer" style="font-size: 17px; margin-top: 3px; font-weight: bold; ">
+          <div class="shirtOptionContainer" style="font-size: 17px; margin-top: 3px; font-weight: bold;text-transform: uppercase; font-family: 'Oswald', sans-serif; ">
             Shirt Side
           </div>
           <div class="shirtOptionContainer">
@@ -132,7 +132,7 @@
               <div *ngIf="isImgUploaded == false;">
                 <div class="fileUpload">
                   <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)"  accept="image/*"/>
-                  <span style="font-size: 15px;">UploadImage</span>
+                  <span class="uploadButton" style="font-size: 15px;">UploadImage</span>
                 </div>
               </div>
             </div>
@@ -140,7 +140,7 @@
               <div *ngIf="isImgUploaded == false;">
                 <div class="fileUpload" *ngIf="!isImgUploaded" else #uploadBack>
                   <input #imageInput class="file" type="file" class="upload" (change)="handleFileChange($event)" accept="image/*"/>
-                  <span style="font-size: 15px;">UploadImage</span>
+                  <span class="uploadButton" style="font-size: 15px;">UploadImage</span>
                 </div>
               </div>
             </ng-template>
@@ -180,7 +180,7 @@
           </div>
           <div class="d-flex" *ngIf="this.userData.user_Role == 'Merch'">
             <label for="height" class="mx-2">Price : {{priceRange}}</label>
-            <input type="range" class="form-range" style="width: 70%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
+            <input type="range" class="form-range" style="width: 67%;" [(ngModel)]="priceRange" min="549" max="999" step="10" id="customRange3"  [ngModelOptions]="{standalone: true}">
           </div>
           <div class="saveButton d-flex mt-2 mb-3">
             <button class="btn btn-dark ms-2 p-2" [disabled]="designName == ''" (click)="openModal()">Continue</button>

@@ -1,10 +1,10 @@
 <body>
     <nav *ngIf="!merchPage && (visitor == '' || visitor == null); else merchHeader" [ngStyle]="fromHome ? {'color': 'red'} : {'background-color': 'white'}">
-        <ul class="sidebar" [ngStyle]="fromHome ? {'background-color': '#1f1f21'} : {'background-color': 'white'}">
-            <li class="tabs1"  style="text-transform: lowercase;" (click)="showSidebar('string')">x</li>
-            <li class="tabs1" (click)="onDivClick('/shop')">Shop</li>
-            <li class="tabs1" (click)="onDivClick('/create')">create</li>
-            <li class="tabs1 " (click)="onDivClick('/account')">account</li>
+        <ul class="sidebar" [ngStyle]="fromHome ? {'background-color': '#1f1f21'} : {'background-color': 'white','color': 'black'}">
+            <li class="tabs1"  style="text-transform: lowercase;" (click)="showSidebar('string')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">x</li>
+            <li class="tabs1" (click)="onDivClick('/shop')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">Shop</li>
+            <li class="tabs1" (click)="onDivClick('/create')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">create</li>
+            <li class="tabs1 " (click)="onDivClick('/account')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">account</li>
         </ul>
         <ul >
             <li class="tabs" (click)="onDivClick('')" [ngStyle]="fromHome ? {'color': 'white'} :{'color': 'black'}">CreaTeeFi</li>

@@ -38,19 +38,6 @@ export class HomeComponent {
       location.reload()
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const video: HTMLVideoElement | null = document.getElementById("myVideo") as HTMLVideoElement;
-      
-      if (video) {
-          // video.muted = true; 
-          // video.src = "../../assets/createefi-trial0000-0250.mp4"; 
-          // video.load();
-          // video.play().catch(error => console.error("Video play failed:", error));
-      } else {
-          // window.location.reload();
-          console.error("Video element not found!");
-      }
-  });
   }
   openCanvas(name:any='') {
     if(!this.isLogin) {

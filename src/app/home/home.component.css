@@ -57,8 +57,10 @@ body {
         font-family: 'Oswald', sans-serif;
         font-size: 16px;
         font-weight: 700;
-        color: #fff;
-        background: linear-gradient(135deg, #222, #000);
+        /* color: #fff;
+        background: linear-gradient(135deg, #222, #000); */
+        background: #ffffff;
+        color: black;
         padding: 8px 16px;
         border-radius: 5px;
         text-transform: uppercase;
@@ -147,8 +149,8 @@ body {
             font-family: 'Oswald', sans-serif;
             font-size: 16px;
             font-weight: 700;
-            color: #fff;
-            background: linear-gradient(135deg, #222, #000);
+            background: #ffffff;
+            color: black;
             padding: 8px 16px;
             border-radius: 5px;
             text-transform: uppercase;
