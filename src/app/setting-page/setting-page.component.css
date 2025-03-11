@@ -1,8 +1,7 @@
 
   body {
-    color: black;
-    background-color: #ffffff;
     overflow: hidden;
+    height: auto;
   }
   .container{
     margin-top: 10vh;
@@ -21,37 +20,20 @@
   .content-container {
     padding: 4%;
     border-radius: 37px;
-    margin-left: 20%;
     color: black;
-    width: 60vw;
+    /* width: 60vw; */
     height: 70vh;
   }
 
   .profile-title {
-    font-weight: 800;
-    font-size: 24px;
+    font-family: "Oswald", sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     text-align: center;
-    margin-bottom: 3vh;
-  }
-
-  .profile-title-merch{
-    font-weight: 800;
-    font-size: 24px;
-    text-align: center;
-  }
-
-  .profile-title-coupon{
-    font-weight: 800;
-    font-size: 24px;
-    text-align: center;
-    margin-right: 10px;
-  }
-
-  .profile-title-help{
-    font-weight: 800;
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 3vh;
+    margin-bottom: 1rem;
   }
 
   .main-container{
@@ -60,29 +42,324 @@
     align-items: center;
   }
 
-  .InfoForm{
-    margin-left: 3vw;
-    .labels{
-      margin-top: 2%;
-    }
+  .InfoForm {
+    display: grid;
+    gap: 8px;
+    font-family: "Merriweather", serif;
+    font-size: 1rem;
+    color: black;
+  }
+  
+  .InfoForm div {
+    display: grid;
+    grid-template-columns: 100px auto;
+    align-items: center;
+  }
+  
+  .InfoForm div::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: right;
+  }
+  
+  .InfoForm div span {
+    padding-left: 10px;
   }
 
-  .addressForm{
-    margin-left: 3vw;
-    overflow: auto;
+  .addressForm {
+    font-family: "Merriweather", serif;
+    color: #000;
+    max-width: 600px;
+    margin: auto;
   }
-
-  .input{
-    input{
-      width: 90%;
-    }
+  
+  .form-group {
+    margin-bottom: 15px;
   }
-
-  .flexdiv{
+  
+  .form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .form-group input:focus,
+  .form-group input:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+  
+  .flex-group {
     display: flex;
-    justify-content: space-around;
-    width: 47vw;
+    gap: 20px;
+    justify-content: space-between;
   }
+  
+  .half-width {
+    flex: 1;
+  }
+  
+  .btn-container {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .addressBtn {
+    background-color: black !important;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .addressBtn:hover {
+    background-color: black !important;
+  }
+
+.upgradeContainer {
+  font-family: "Merriweather", serif;
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+  max-width: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.upgradeText {
+  font-size: 1rem;
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Button Container */
+.btnContainer {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Black Button Styling */
+.btn-black {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-black:hover {
+  background-color: #333;
+}
+
+
+.statsContainer {
+  font-family: "Merriweather", serif;
+  padding: 20px;
+}
+
+/* Section Title */
+.sectionTitle {
+  font-family: "Oswald", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+  text-align: center;
+  border-bottom: 2px solid #000;
+  padding-bottom: 5px;
+}
+
+/* Merch Statistics */
+.statsItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding: 5px 0;
+}
+
+.statsLabel {
+  font-weight: bold;
+  color: #000;
+}
+
+.statsValue {
+  color: #000;
+}
+
+/* Coupon Form */
+.couponForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.couponForm label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.couponForm input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+/* Input Highlight */
+.couponForm input:focus,
+.couponForm input:hover {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+.discountRange {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Black Buttons */
+.btn-black {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.btn-black:hover {
+  background-color: #333;
+}
+
+/* Active Coupon */
+.activeCoupon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f1f1f1;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.activeCouponValue {
+  font-weight: bold;
+  color: #000;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.deleteBtn:hover {
+  color: darkred;
+}
+
+.withdrawContainer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.withdrawBtn {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.withdrawBtn:hover {
+  background-color: #333;
+}
+
+.profile-title-help {
+  font-family: 'Oswald', sans-serif;
+  font-size: 24px;
+  color: black;
+  border-bottom: 2px solid black;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+}
+
+.helpForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.help textarea {
+  width: 100%;
+  font-family: 'Merriweather', serif;
+  padding: 10px;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  outline: none;
+  resize: none;
+}
+
+.note-text {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+  font-family: 'Merriweather', serif;
+}
+
+.raiseBtn button {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Oswald', sans-serif;
+  font-weight: bold;
+}
+
+.raiseBtn button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 
   .addressArea{
     text-align: center;
@@ -93,25 +370,6 @@
     display: none;
   }
 
-  .flexdivformerch{
-    display: flex;
-    justify-content: space-evenly;
-    font-size: 24px;
-  }
-
-  .flexdivformerchlable{
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-  }
-
-  .couponBtn{
-    text-align: center; 
-    width: 100%;
-    margin-bottom: 2vh;
-    margin-top: 1vh;
-  }
-
   .border{
     border:1px solid rgba(0, 0, 0, 0.633) !important;
     border-radius: 10px;
@@ -120,42 +378,13 @@
     margin-left: 1vw;    
   }
 
-  .deleteBtn{
-      width: 25px;
-      height: 25px;
-      border-radius: 10px;
-      i{
-        vertical-align: middle;
-        position: relative;
-        top: -44%;
-        margin-left: -2px;
-      }
-  }
-
-  .withdraw{
-    input{
-      margin-right: 1rem;
-    }
-  }
-
-  .help{
-    display: flex;
-    justify-content: center;
-  }
-
-  .raiseBtn{
-    display: flex;
-    justify-content: center;
-    margin-top: 3vh;
-  } 
-
   .hideOnMobile{
     z-index: 99;
   }
   
   .orderDiv{
-    height: 50vh;
-    width: 90vw;
+    margin-top: 6vh;
+    width: 100vw;
     overflow: auto;
   }
 
@@ -188,11 +417,10 @@
 
   .booking-card {
     background-color: #ffffff;
-    width: 85%;
-    border-top: 1px solid #8d8d8d; /* Top border */
-    border-bottom: 1px solid #8d8d8d; /* Bottom border */
-    border-left: none; /* No left border */
-    border-right: none; /* No right border */
+    border-top: 1px solid #8d8d8d;
+    border-bottom: 1px solid #8d8d8d;
+    border-left: none;
+    border-right: none;
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
@@ -229,26 +457,34 @@
     fill: #555;
     margin-right: 5px;
   }
-  
-  .noOrderText{
-    text-align: center;
+
+  .empty-order-message {
+    height: 435px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    
-  }
+    justify-content: center;
+    font-family: 'Merriweather', serif;
+    font-size: 18px;
+    color: #000;
+    background-color: #f5f5f5;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 @media(max-width:600px) {
   body{
     width: 100vw !important;
+    height: 90%;
   }
 
   .container{
-    margin-top: 10vh;
+    margin-top: 6vh;
   }
 
   .main-container{
-    height: 65vh;
     justify-content: center;
     align-items: normal;
   }
@@ -262,24 +498,9 @@
     display: ruby;
   }
   .content-container {
-    margin-left: 5%;
     color: rgb(0, 0, 0);
-    width: 85vw;
+    width: 100vw;
   }
-
-  .profile-title {
-    margin-bottom: 0;    
-  }
-
-  .profile-title-merch{
-    width: 80%;
-  }
-
-  .profile-title-coupon{
-    width: 80%;
-    font-size: 24px !important;
-  }
-
   
   .merch-container{
     width: 100vw;
@@ -288,20 +509,11 @@
   }
 
   .profile {
-    height: 60vh;
+    height: 65vh;
     overflow: auto;
     margin-top: 8%;
   }
 
-  .InfoForm{
-    .labels{
-      margin-top: 10%;
-    }
-  }
-  .flexdiv{
-    display: block;
-    justify-content: space-around;
-  }
   .hideOnDesktop{
     display: flex;
     justify-content: center;
@@ -318,82 +530,63 @@
     display: none;
   }
 
-  .buttonDiv{
-    width: 90vw;
-    display: flex;
-    justify-content: space-evenly;
-    font-size: 14px;
-  }
-
-  .textTag{
-    margin-bottom: 0px;
-    margin-top: -5px;
-    margin-left: -3px;
-  }
-
-  .flexdivformerch{
-    width: 60vw;
-    font-size: 14px;
-    div:first-child{
-      width: 72%;
-    }
-    input{
-      width: 80%;
-    }
-  }
-
-  .flexdivformerchlable{
-    width: auto;
-    font-size: 16px;
-  }
-
-  .withdraw-btn{
-    display: flex;
-    justify-content: center;
-    width: 74%;
-    margin-top: 3vh;
-  }
-
-  .mobileWidth{
-    width: 74%;
-    font-size: 16px ;
-  }
-
-  .couponBtn{
-    text-align: center; 
-    width: 74%;
-    margin-bottom: 2vh;
-  }
-
   .helpDiv{
     justify-content: center; 
     margin-top: 26vh;
-    height: 100vh;
-  }
-   
-  .help{
-    width:74vw;
+    height: auto;
   }
 
-  .profile-title-help{
-    width: 90%;
-  }
-
-  .raiseBtn{
-    width: 86%;
-  }
-
-  .deleteBtn{
-    width: 18px;
-    height: 18px;
-    border-radius: 10px;
-  }
-
-  .noOrderText{
-    text-align: center;
+  .bottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  
+  .navButton {
+    background: none;
+    border: none;
+    font-family: "Merriweather", serif;
+    font-size: 0.9rem;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .navButton i {
+    font-size: 1.2rem;
+    margin-bottom: 3px;
+  }
+  
+  .navButton.active,
+  .navButton:hover {
+    color: #007bff;
+  }
+  
+  .navText {
+    font-size: 0.8rem;
+  }
+  .orderDiv{
+    width: auto;
+  }
+  .empty-order-message {
+    margin-top: 7vh;
+    height: 70vh;
+  }  
+}
+@media (min-width: 768px) {
+  .bottomNav {
+    display: none;
   }
 }
 

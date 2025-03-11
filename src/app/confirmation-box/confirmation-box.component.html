@@ -1,14 +1,11 @@
-<body>
-    <div class="title">
+<body class="modal-container">
+    <div class="modal-title">
         {{title}}
     </div>
-    <div class="message">
+    <div class="modal-message">
         {{message}}
     </div>
-    <div class="button">
-        <button type="button" class="btn btn-warning" mat-dialog-close (click)="closeModal()">Yes</button>
+    <div class="modal-actions">
+        <button type="button" class="btn-confirm" mat-dialog-close (click)="closeModal()">Yes</button>
     </div>
-
 </body>
-    
-

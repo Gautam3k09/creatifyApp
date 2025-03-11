@@ -25,7 +25,7 @@ export class SettingPageComponent {
   saveBtn:any = 'edit';
   activeTab : string = 'profile';
   merchAccount:string = 'Normal';
-  couponOff : number = 5;
+  couponOff : any = 5;
   couponName: string = '';
   couponAvailable : boolean = false;
   dialogConfig = new MatDialogConfig();
@@ -237,7 +237,8 @@ export class SettingPageComponent {
           if(textarea){
             textarea.value = '';
           } 
-          this.queryQuetions = ''
+          this.queryQuetions = '';
+          window.alert('Raised successfully');
         }
       } else{
 
