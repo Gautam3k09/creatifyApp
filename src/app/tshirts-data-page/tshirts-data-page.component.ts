@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 import { localStorageService } from '../local-storage-service';
 import { environment } from '../../../environment';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-tshirts-data-page',
   standalone: true,
-  imports: [CommonModule,NgxUiLoaderModule],
+  imports: [CommonModule,LoaderComponent],
   templateUrl: './tshirts-data-page.component.html',
   styleUrl: './tshirts-data-page.component.css'
 })
@@ -35,6 +35,7 @@ export class TshirtsDataPageComponent {
   canvasbackHeight = 120;
   storedData : any;
   hideLoadbtn : boolean = false;
+  isLoading = false;
 
   imageFrontSrc = 'assets/display-tees/front-black.png';
   imageFrontUrls = [ 
@@ -52,7 +53,7 @@ export class TshirtsDataPageComponent {
   ];
 
 
-  constructor( public appservice: AppServiceService,private router: Router,private ngxLoader: NgxUiLoaderService,public route : ActivatedRoute,public localstorage : localStorageService){
+  constructor( public appservice: AppServiceService,private router: Router,public route : ActivatedRoute,public localstorage : localStorageService){
     this.userId = route.snapshot.params['userId'];
     this.storedData = this.localstorage.getUserLocalStorage();
     if(this.storedData && this.storedData.LoggedIn != null){
@@ -61,7 +62,7 @@ export class TshirtsDataPageComponent {
   }
 
   ngOnInit(){
-    this.ngxLoader.start();
+    this.isLoading = true;
     this.getTees();
     
   }
@@ -124,7 +125,7 @@ export class TshirtsDataPageComponent {
             if(this.teeDatas.length > 0){
                 this.loopIterator()
               } else {
-                this.ngxLoader.stop();
+                this.isLoading = false;
               }
           }, 1500);
         }
@@ -152,7 +153,7 @@ export class TshirtsDataPageComponent {
       this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
       this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
       this.drawImageOnCanvas(this.imageFrontSrc);
-      this.ngxLoader.stop();
+      this.isLoading = false;
     }
   }
 

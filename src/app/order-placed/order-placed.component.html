@@ -1,4 +1,4 @@
-<ngx-ui-loader ></ngx-ui-loader>
+<app-loader *ngIf="isLoading"></app-loader>
 <body>
     <div class="confirm-container" *ngIf="fromCod != false; else orderPlaced">
         <div class="confirm-message">

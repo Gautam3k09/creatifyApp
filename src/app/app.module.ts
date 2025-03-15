@@ -8,7 +8,6 @@ import { BuyPageComponent } from './buy-page/buy-page.component';
 import { YourTeesComponent } from './your-tees/your-tees.component';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgxUiLoaderModule } from "ngx-ui-loader";
 import { RouterModule,Routes } from '@angular/router';
 import { routes } from './app.routes';
 
@@ -17,7 +16,6 @@ import { routes } from './app.routes';
     imports:[CommonModule,AngularResizeEventModule,BrowserModule,FormsModule,YourTeesComponent,BuyPageComponent,
     ModalModule.forRoot(),
     MatFormFieldModule,
-    NgxUiLoaderModule,
     RouterModule.forRoot(routes)
     ],
     providers:[BsModalService ]

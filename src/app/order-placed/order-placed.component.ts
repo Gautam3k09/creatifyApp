@@ -4,12 +4,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppServiceService } from '../app-service.service';
 import { localStorageService } from '../local-storage-service';
-import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-order-placed',
   standalone: true,
-  imports: [CommonModule,NgxUiLoaderModule],
+  imports: [CommonModule,LoaderComponent],
   templateUrl: './order-placed.component.html',
   styleUrl: './order-placed.component.css'
 })
@@ -18,8 +18,9 @@ export class OrderPlacedComponent {
   finalPrice = 0;
   storeData : any;
   orderId : any;
-  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any,rpData:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService,private ngxLoader: NgxUiLoaderService,) { 
-    this.ngxLoader.start();
+  isLoading = false;
+  constructor(private router: Router,@Inject(MAT_DIALOG_DATA) public data: {from: any,buyPageData:any,userData:any,finalPrice:any,address:any,rpData:any},public dialogRef: MatDialogRef<OrderPlacedComponent> , private appservice : AppServiceService,private localStorage: localStorageService) { 
+    this.isLoading = true;
     this.storeData = this.localStorage.getUserLocalStorage();
     
   }
@@ -31,7 +32,7 @@ export class OrderPlacedComponent {
     } else {
       this.fromCod = false;
     }
-    this.ngxLoader.stop();
+    this.isLoading = false;
   }
 
   closeModal(string:any){

@@ -4,17 +4,17 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, Validators } from '@a
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
 import { AppServiceService } from '../app-service.service';
 import { MatDialogConfig, MatDialogRef,MatDialog } from '@angular/material/dialog';
 import { ConfirmationBoxComponent } from '../confirmation-box/confirmation-box.component';
 import { localStorageService } from '../local-storage-service';
+import { LoaderComponent } from '../loader/loader.component';
 import moment from "moment-timezone";
 
 @Component({
   selector: 'app-setting-page',
   standalone: true,
-  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,FormsModule,NgxUiLoaderModule],
+  imports: [HeaderPageComponent,ReactiveFormsModule,CommonModule,FormsModule,LoaderComponent],
   templateUrl: './setting-page.component.html',
   styleUrl: './setting-page.component.css'
 })
@@ -35,8 +35,9 @@ export class SettingPageComponent {
   storedData:any;
   orderData : any = [];
   pincode: any;
+  isLoading = false;
 
-  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,private ngxLoader: NgxUiLoaderService,public matDialog: MatDialog,public localStorage : localStorageService) {
+  constructor(private appservice : AppServiceService,private fb: FormBuilder,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
     this.storedData = this.localStorage.getUserLocalStorage();
     if(this.storedData ){
       this.userData = JSON.parse(this.storedData.userData);
@@ -44,9 +45,9 @@ export class SettingPageComponent {
   }
 
   ngOnInit() {
-    this.ngxLoader.start();
+    this.isLoading = true;
     this.getUserData()
-    this.ngxLoader.stop();    
+    this.isLoading = false;  
     this.myForm = this.fb.group({
       building: [this.userData.user_Address[0] ? this.userData.user_Address[0].building : '' ],
       area: [this.userData.user_Address[0] ? this.userData.user_Address[0].area : ''],
@@ -101,7 +102,7 @@ export class SettingPageComponent {
   }
   
   AddOrUpdateAddress() { 
-    this.ngxLoader.start();
+    this.isLoading = true;
     let data = {
       area : this.myForm.value.area,
       building : this.myForm.value.building,
@@ -113,8 +114,8 @@ export class SettingPageComponent {
     this.appservice.addUpdateAdress(data).subscribe((response) => {
       if(response && response.status) {
         window.localStorage.removeItem('userId');
-        this.updateLocalStorage()
-        this.ngxLoader.stop();
+        this.updateLocalStorage();
+        this.isLoading = false;
       } else {
         console.log('Address not updated');
       }

@@ -11,13 +11,13 @@ import { OrderStepperComponent } from '../order-stepper/order-stepper.component'
 import { ReferralPageComponent } from '../referral-page/referral-page.component';
 import { localStorageService } from '../local-storage-service';
 import { FormsModule } from '@angular/forms';
-import { NgxUiLoaderModule, NgxUiLoaderService } from "ngx-ui-loader";
+import { LoaderComponent } from '../loader/loader.component';
 import {environment} from '../../../environment';
 
 @Component({
   selector: 'app-buy-page',
   standalone: true,
-  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,FormsModule,NgxUiLoaderModule],
+  imports: [CommonModule,HeaderPageComponent,ReactiveFormsModule,FormsModule,LoaderComponent],
   templateUrl: './buy-page.component.html',
   styleUrl: './buy-page.component.css',
   providers: [WindowRefService,AppServiceService],
@@ -62,8 +62,9 @@ export class BuyPageComponent implements OnInit  {
   isChecked : any= false;
   coins : any;
   showContent : boolean = true;
+  isLoading : boolean = false;
 
-  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService,private ngxLoader: NgxUiLoaderService) {
+  constructor(public bsModalRef: BsModalRef,private winRef : WindowRefService,private appservice: AppServiceService,private route: ActivatedRoute,private router: Router,public matDialog: MatDialog,public localStorage : localStorageService) {
     const data = this.localStorage.getUserLocalStorage();
     console.log(data);
     if(data && data.userData && !data?.visitor){
@@ -74,7 +75,7 @@ export class BuyPageComponent implements OnInit  {
     }
   }
   ngOnInit() {
-    this.ngxLoader.start();
+    this.isLoading = true;
     this.route.params.subscribe((params:any) => {
       this.tshirtId = params['userId'];
     });
@@ -122,7 +123,7 @@ export class BuyPageComponent implements OnInit  {
         this.changeTshirtColor();
         this.loadimage(true);
         this.drawImageOnCanvas(this.imageFrontSrc);
-        this.ngxLoader.stop();
+        this.isLoading = false;
       } else {
         this.router.navigate(['']);
       }
