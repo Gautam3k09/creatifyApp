@@ -1,80 +1,151 @@
-.tabs {
-    align-self: center;
-    margin-top: 4%;
-}
-
-.tab-content {
-    padding: 50px;
-    background: #2b2b2b;
-    color: white;
-    height: 80%;
-    margin-inline: 10%;
-    margin-top: 2%;
-    border-radius: 15px;
-    margin-bottom: 2%;
-}
-
-.inputTag{
-    width: 70%;
-}
-.inputTagforSignup{
-    width: 70%;
-}
-
-.otp-letter-input{
-    max-width: 85%;
-    height: 45px;
-    border-radius: 10px;
-    color: #5a5aff;
-    font-size: 36px;
-    text-align: center;
-    font-weight: bold;
-}
-.btn{
-    height: 50px;
-}
-
-/* mobile size */
-
-@media(max-width:600px) {
-    .tab-content {
-        padding: 0px;
-        background: #2b2b2b;
-        color: white;
-        height: 80%;
-        margin-inline: 10%;
-        margin-top:5%;
-        border-radius: 15px;
-    }
-    .inputTag{
-        margin-top: 25%;
-        width: 70%;
-    }
-    .inputTagforSignup{
-        margin-top: 5%;
-        width: 70%;
-    }
-
-    .otp-letter-input {
-        max-width: 75%;
-        height: 30px;
-        border-radius: 10px;
-        color: #5a5aff;
-        font-size: 18px;
-        text-align: center;
-        font-weight: bold;
-    }
-    .otpClassFormobile{
-        margin-left: 0;
-    }
-
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+body {
+    font-family: 'Merriweather', serif;
+    background-color: #ffffff;
+    color: #000000;
     margin: 0;
+    padding: 0;
 }
-input[type=number]{
-  -moz-appearance: textfield;
+
+/* Common Container */
+.SignInContainer,
+.SignUpContainer {
+    max-width: 400px;
+    padding: 30px;
+    border: 2px solid #000;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/* Input Group */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    outline: none;
+    font-family: 'Merriweather', serif;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+/* Error Message */
+.alert {
+    background-color: transparent;
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+/* OTP Container */
+.otp-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.otp-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.otp-inputs input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
+
+.otp-inputs input:focus {
+    border-color: #007bff;
+}
+
+/* Buttons */
+.btn,
+.btn-create-account {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+}
+
+.btn:hover,
+.btn-create-account:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 86, 179, 0.5);
+}
+
+/* Back Button */
+.back-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.back-button i {
+    margin-right: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .SignInContainer,
+    .SignUpContainer {
+        padding: 20px;
+    }
+
+    .otp-inputs input {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .btn,
+    .btn-create-account {
+        padding: 10px;
+    }
+
+    .alert {
+        font-size: 10px;
+    }
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff; /* Blue color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    justify-self: anchor-center;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

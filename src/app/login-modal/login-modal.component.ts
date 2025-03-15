@@ -1,5 +1,5 @@
 import { Component, HostListener, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,12 +10,13 @@ import { localStorageService } from '../local-storage-service';
 import {MatInputModule} from '@angular/material/input';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
+import { DebounceUtil } from './debounce.utils';
 
 @Component({
   selector: 'app-login-modal',
   standalone: true,
   providers: [AppServiceService],
-  imports: [ReactiveFormsModule,CommonModule,MatFormFieldModule,MatDialogTitle,MatInputModule,MatStepperModule,MatButtonModule],
+  imports: [ReactiveFormsModule,CommonModule,MatFormFieldModule,MatInputModule,MatStepperModule,MatButtonModule],
   templateUrl: './login-modal.component.html',
   styleUrl: './login-modal.component.css'
 })
@@ -26,7 +27,6 @@ export class LoginModalComponent {
   otpForm!: FormGroup;
   mobileEmail: any ='';
   registerEmail: any='';
-  // mobileNumberVerified: boolean = false;g
   sendOtp :any = false;
   sendOtpForRegister: boolean = false;
   emailExists: any ;
@@ -35,6 +35,10 @@ export class LoginModalComponent {
   showWrongOtpError: boolean = false;
   showWrongOtpErrorForRegister: boolean = false;
   storeUserData :any;
+  loginPage: boolean = true;
+  btnLoader: boolean = false;
+  onkeyUp = DebounceUtil.debounce('onkeyUp', (data: any,login:any) => this.processOnKeyUp(data,login));
+  onkeyUpName = DebounceUtil.debounce('onkeyUpName', (data: any) => this.processOnKeyUpName(data));
 
   constructor(public dialogRef: MatDialogRef<LoginModalComponent>,private appservice : AppServiceService,private fb: FormBuilder,private router: Router,@Inject(MAT_DIALOG_DATA) public data: any,public localStorage: localStorageService) {
     this.myLoginForm = this.fb.group({
@@ -61,14 +65,13 @@ export class LoginModalComponent {
 
   ngOnInit() {
     if(this.data != '' && this.data != null) {
-      console.log(this.data ,'here')
       const signUpTab = document.querySelector('#profile-tab') as HTMLButtonElement;
       // Trigger the click event to activate the tab
       if (signUpTab) {
         signUpTab.click();
       }
       this.mySignupForm.controls['referral'].setValue(this.data);
-      this.verifyReferral(event);
+      this.processVerifyReferral();
     }
   }
 
@@ -77,11 +80,7 @@ export class LoginModalComponent {
     inputElement.value = inputElement.value.replace(/\s/g, '');
   }
 
-  onSubmit(form: FormGroup) {
-
-  }
-
-  onkeyUp(data:any,login:any){
+  processOnKeyUp(data:any,login:any){
     this.storeUserData = '';
     if(login){
       this.mobileEmail = data.target.value;
@@ -89,34 +88,20 @@ export class LoginModalComponent {
       this.myLoginForm.controls['email'].setErrors({
         "email": true
       });
-      // if(this.mobileEmail.length < 10 ) {
-      //   this.regEmailExists = false;
-      // }
-      // if(this.mobileEmail.length == 10 ) {
-      // }
       this.verifyNumber(this.mobileEmail,login)
     } 
     if(!login) {
-      this.emailExists = false;
       this.registerEmail = data.target.value;
-      // this.mySignupForm.controls['email'].setErrors({
-      //   // "email": true
-      // });
-      if(this.mobileEmail.length < 10 ) {
-        this.regEmailExists = false;
-      }
-      // if(this.registerEmail.length == 10 ) {
-      this.verifyNumber(this.registerEmail,login)
-      // }
+      this.verifyNumber(this.registerEmail,login);
     }
   }
 
-  onkeyUpName(data:any){
+  processOnKeyUpName(data:any){
     data = {
       userName: this.mySignupForm.value.userName
     };
     if(this.mySignupForm.value.userName.length >= 4 && this.mySignupForm.value.userName.length <= 12){
-      this.appservice.checkUserName(data ).subscribe( (response) => {
+      this.appservice.checkUserName(data).subscribe( (response) => {
           if(response.status){
               this.mySignupForm.controls['userName'].setErrors({
                 "usernameAlreadyExist": true
@@ -148,49 +133,14 @@ export class LoginModalComponent {
       this.showWrongOtpErrorForRegister = false;
       userOtp = this.otpForm.value.rOtp1 + this.otpForm.value.rOtp2 + this.otpForm.value.rOtp3 + this.otpForm.value.rOtp4;
     }
-    if(userOtp === '0000') {
-      if(boolean){
-        let localData : any = {
-          LoggedIn : true,
-          userData : JSON.stringify(this.storeUserData)
-        }
-        localData = JSON.stringify(localData)
-        this.localStorage.setUserLocalStorage(localData);
-        setTimeout(() => {
-          location.reload();
-        }, 500);
-      } else {
-        const data = {
-          Email : this.registerEmail,
-          username : this.mySignupForm.value.userName,
-          referral : this.mySignupForm.value.referral
-        }
-        this.appservice.postUserDataForRegister(data).subscribe(
-          (response) => {
-            let localData : any = {
-              LoggedIn : true,
-              userData : JSON.stringify(response.data)
-            };
-            localData = JSON.stringify(localData)
-            this.localStorage.setUserLocalStorage(localData);
-            setTimeout(() => {
-              location.reload();
-            }, 500);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      
-    }else{
-      this.showWrongOtpError = true;
-    }
-   
+    this.verifyOtp(boolean,userOtp);   
   }
 
   Proceed(action:any){
-    if (action === 'proceed') this.otpPage = true;
+    if (action === 'proceed') {
+      this.btnLoader = true;
+      this.sendOtpUser(false);
+    }
     if (action === 'back') this.otpPage = false;
   }
 
@@ -203,18 +153,94 @@ export class LoginModalComponent {
           this.regEmailExists = true;
         } else if (!response.status && login) {
           this.emailExists = true;
-        } else {
-          this.myLoginForm.controls['email'].setErrors(null);
-          this.emailExists = false;
-          this.sendOtp = true;
+        } else if (response.status && login) {
+          this.btnLoader = true;
+          this.sendOtpUser(login);          
           this.storeUserData = response.data[0];
         }
       },
       (error) => { console.log(error); }
     );
   }
+  
+  sendOtpUser(login : any) {
+    let email : any;
+    if(login){
+      email = this.mobileEmail;
+    } else {
+      email = this.registerEmail;
+    }
+    this.appservice.sendOtp(email).subscribe({
+      next: () => {
+        console.log('otp sent')
+        if(login){
+          this.myLoginForm.controls['email'].setErrors(null);
+          this.emailExists = false;
+          this.sendOtp = true;
+        } else {
+          this.otpPage = true;
+        }
+        this.btnLoader = false;
+        
+        // this.message = 'OTP sent successfully! Check your email.';
+        // this.showOtpInput = true;
+      },
+      // error: () => this.message = 'Failed to send OTP. Try again.'
+    });
+  }
 
-  verifyReferral(event:any) {
+  verifyOtp(login:any,otp:any) {
+    let email : any;
+    if(login){
+      email = this.mobileEmail;
+    } else {
+      email = this.registerEmail;
+    }
+    this.appservice.verifyOtp(email,otp).subscribe({
+      next: () => {
+        if(login){  
+          let localData : any = {
+            LoggedIn : true,
+            userData : JSON.stringify(this.storeUserData)
+          }
+          localData = JSON.stringify(localData)
+          this.localStorage.setUserLocalStorage(localData);
+          setTimeout(() => {
+            location.reload();
+          }, 500);
+        } else {
+          this.postVerifyOtpForRegister();
+        }
+      },
+      error: () => {console.log('otp not verified'); this.showWrongOtpError = true;}
+    });
+  }
+
+  postVerifyOtpForRegister() {
+    const data = {
+      Email : this.registerEmail,
+      username : this.mySignupForm.value.userName,
+      referral : this.mySignupForm.value.referral
+    }
+    this.appservice.postUserDataForRegister(data).subscribe(
+      (response) => {
+        let localData : any = {
+          LoggedIn : true,
+          userData : JSON.stringify(response.data)
+        };
+        localData = JSON.stringify(localData)
+        this.localStorage.setUserLocalStorage(localData);
+        setTimeout(() => {
+          location.reload();
+        }, 500);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  processVerifyReferral() {
     if(this.mySignupForm.value.referral.length >= 4 && this.mySignupForm.value.referral.length <= 12){
       this.appservice.checkUserName({userName:this.mySignupForm.value.referral} ).subscribe( (response : any) => {
           if(response.status){
@@ -260,8 +286,18 @@ export class LoginModalComponent {
     } 
   }
 
-  otpCheck(){
-
+  navigateToLogin() {
+    if(this.loginPage) {
+      this.myLoginForm.reset();
+      this.sendOtp = false;
+      this.showWrongOtpError = false;
+    } else {
+      this.mySignupForm.reset();
+      this.sendOtpForRegister = false;
+      this.showWrongOtpErrorForRegister = false;
+    }
+    this.btnLoader = false;
+    this.loginPage = !this.loginPage;
   }
 
 

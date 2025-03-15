@@ -108,4 +108,13 @@ export class AppServiceService {
   getAddressByPincode(pincode: string): Observable<any> {
     return this.http.get(` https://api.postalpincode.in/pincode/${pincode}`);
   }
+
+  // otp apis
+  sendOtp(email: string) {
+    return this.http.post(`${this.serverUrl}/send-otp`, { email });
+  }
+
+  verifyOtp(email: string, otp: string) {
+    return this.http.post(`${this.serverUrl}/verify-otp`, { email, otp });
+  }
 }
