@@ -250,6 +250,7 @@ export class SettingPageComponent {
   postQuestion(){
     let data = {
       id: this.userData._id,
+      email: this.userData.user_Email,
       question: this.queryQuetions,
       from: 'questions'
     }
