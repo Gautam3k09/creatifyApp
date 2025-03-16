@@ -193,7 +193,7 @@ export class SettingPageComponent {
   openModal(data:any){
     this.modalDialog = this.matDialog.open(ConfirmationBoxComponent,  {
       width: '350px',
-      height: '200px',
+      height: 'auto',
       data: data
     });
 

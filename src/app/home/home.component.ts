@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { localStorageService } from '../local-storage-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderPageComponent,FooterComponent],
+  imports: [HeaderPageComponent,FooterComponent,CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -18,6 +19,12 @@ export class HomeComponent {
   modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
   isLogin : any = false;
   storedData:any;
+  images: string[] = [
+    'assets/home-page-display/untitled.png',
+    'assets/home-page-display/white-createefi.png',
+  ];
+  currentSlide: number = 0;
+
   constructor(private dialog: MatDialog,private router: Router,public localStorage: localStorageService,route: ActivatedRoute) {
     this.storedData = localStorage.getUserLocalStorage();
     if(this.storedData && this.storedData.visitor == null) {
@@ -33,6 +40,7 @@ export class HomeComponent {
   }
   
   ngOnInit(){
+    this.startAutoSlide();
     if(this.storedData && this.storedData.visitor != null){
       this.localStorage.removeUserLocalStorage();
       location.reload()
@@ -54,4 +62,15 @@ export class HomeComponent {
     this.dialogConfig.data = name;
     this.modalDialog = this.dialog.open(LoginModalComponent, this.dialogConfig);
   }
+
+  startAutoSlide(): void {
+    setInterval(() => {
+      this.currentSlide = (this.currentSlide + 1) % this.images.length;
+    }, 2000); // Change every 3 seconds
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlide = index;
+  }
+
 }

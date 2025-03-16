@@ -1,10 +1,21 @@
 <body class="custom-scrollbar">
     <app-header-page fromHome=true></app-header-page>
-    <div class="video-container">
-        <video id="myVideo" autoplay loop muted playsinline>
-            <source src="../../assets/c-w.mp4" type="video/mp4">
-            video not wokring
-        </video>
+    <div class="slider-container">
+        <div class="slides">
+          <img *ngFor="let image of images; let i = index" 
+               [src]="image" 
+               [class.active]="i === currentSlide"
+               class="slide"
+               alt="Slide">
+        </div>
+      
+        <!-- Dots for Navigation -->
+        <div class="dots-container">
+          <span *ngFor="let image of images; let i = index"
+                class="dot"
+                [class.active]="i === currentSlide"
+                (click)="goToSlide(i)"></span>
+        </div>
       </div>
     <div class="container">
         <h1 class="heading">Stop Searching, Start Creating – Your Perfect Oversized Tee Awaits!</h1>
