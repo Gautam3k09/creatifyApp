@@ -1,31 +1,28 @@
 import { Injectable } from '@angular/core';
 
-
-
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class localStorageService {
-    constructor(){}
+    constructor() {}
     // localdata structure ->
     // LoggedIn Or Visitor
-    // userData 
+    // userData
 
-    setUserLocalStorage(data: any){
+    setUserLocalStorage(data: any) {
         localStorage.setItem('whoAmI', data);
     }
 
-    getUserLocalStorage(): any{
-        let data : any = localStorage.getItem('whoAmI');
+    getUserLocalStorage(): any {
+        let data: any = localStorage.getItem('whoAmI');
         data = JSON.parse(data);
         return data;
     }
-    removeUserLocalStorage(){
+    removeUserLocalStorage() {
         localStorage.removeItem('whoAmI');
     }
 
-    clearUserLocalStorage(){
+    clearUserLocalStorage() {
         localStorage.clear();
     }
- 
 }

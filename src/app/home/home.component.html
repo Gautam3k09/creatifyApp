@@ -1,27 +1,34 @@
 <body class="custom-scrollbar">
-    <app-header-page fromHome=true></app-header-page>
+    <app-header-page fromHome="true"></app-header-page>
     <div class="slider-container">
         <div class="slides">
-          <img *ngFor="let image of images; let i = index" 
-               [src]="image" 
-               [class.active]="i === currentSlide"
-               class="slide"
-               alt="Slide">
+            <img
+                *ngFor="let image of images; let i = index"
+                [src]="image"
+                [class.active]="i === currentSlide"
+                class="slide"
+                alt="Slide"
+            />
         </div>
-      
+
         <!-- Dots for Navigation -->
         <div class="dots-container">
-          <span *ngFor="let image of images; let i = index"
+            <span
+                *ngFor="let image of images; let i = index"
                 class="dot"
                 [class.active]="i === currentSlide"
-                (click)="goToSlide(i)"></span>
+                (click)="goToSlide(i)"
+            ></span>
         </div>
-      </div>
+    </div>
     <div class="container">
         <h1 class="heading">Stop Searching, Start Creating – Your Perfect Oversized Tee Awaits!</h1>
-        
+
         <div class="section1">
-            <div class="subtitle">Tired of searching for oversized tees with your favorite design?Design your own! Simply upload your artwork to Createefi and we'll handle the rest.</div>
+            <div class="subtitle">
+                Tired of searching for oversized tees with your favorite design?Design your own!
+                Simply upload your artwork to Createefi and we'll handle the rest.
+            </div>
             <button type="button" class="btn btn-secondary" (click)="openCanvas()">Create</button>
         </div>
 
@@ -33,4 +40,3 @@
     </div>
 </body>
 <app-footer></app-footer>
-

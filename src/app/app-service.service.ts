@@ -4,117 +4,117 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class AppServiceService {
-  constructor(private http:HttpClient) { }
-  private serverUrl:string=environment.backend;
+    constructor(private http: HttpClient) {}
+    private serverUrl: string = environment.backend;
 
-  //usr api
-  postUserDataForRegister(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/sign-up`,data);
-  };
+    //usr api
+    postUserDataForRegister(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/sign-up`, data);
+    }
 
-  postUserCheck(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/checkUser`,data);
-  }
+    postUserCheck(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/checkUser`, data);
+    }
 
-  checkUserName(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/checkUserName`,data);
-  }
-  
-  addUpdateAdress(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/add-update-address`,data);
-  }
+    checkUserName(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/checkUserName`, data);
+    }
 
-  updateRole(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/update-role`,data);
-  }
-  checkRole(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/check-role`,data);
-  }
+    addUpdateAdress(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/add-update-address`, data);
+    }
 
-  getCoins(data:any):Observable<any> {
-    return this.http.post(`${this.serverUrl}/get-user-coins`,data);
-  }
+    updateRole(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/update-role`, data);
+    }
+    checkRole(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/check-role`, data);
+    }
 
-  //bill api
-  postImage(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/upload-print`,data);
-  }
+    getCoins(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/get-user-coins`, data);
+    }
 
-  getTees(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/fetch-tees`,data);
-  }
+    //bill api
+    postImage(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/upload-print`, data);
+    }
 
-  deleteTees(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/delete-tees/`+data,data);
-  }
-  
-  getAlltees(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/get-all-tees`,data);
-  }
+    getTees(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/fetch-tees`, data);
+    }
 
-  getOnetee(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/get-one-tee`,data);
-  }
+    deleteTees(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/delete-tees/` + data, data);
+    }
 
-  // razor api
-  createOrder(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/paymentOrder`,data);
-  }
-  verify(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/verify-payment`,data);
-  }
+    getAlltees(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/get-all-tees`, data);
+    }
 
-  // coupon api
-  createCoupon(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/create-coupon`,data);
-  }
+    getOnetee(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/get-one-tee`, data);
+    }
 
-  getCoupon(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/get-coupon`,data);
-  }
+    // razor api
+    createOrder(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/paymentOrder`, data);
+    }
+    verify(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/verify-payment`, data);
+    }
 
-  deleteCoupon(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/delete-coupon/`,data);
-  }
+    // coupon api
+    createCoupon(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/create-coupon`, data);
+    }
 
-  //help api
-  postQuestion(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/post-question`,data);
-  }
+    getCoupon(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/get-coupon`, data);
+    }
 
-  // order api
-  postOrder(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/place-order`,data);
-  }
+    deleteCoupon(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/delete-coupon/`, data);
+    }
 
-  getOrder(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/orders`,data);
-  }
+    //help api
+    postQuestion(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/post-question`, data);
+    }
 
-  // s3 api
-  postImageToS3(data:any): Observable<any> {
-    return this.http.post(`${this.serverUrl}/upload-image`,data);
-  }
+    // order api
+    postOrder(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/place-order`, data);
+    }
 
-  // admin apis
-  getAllOrder() {
-    return this.http.get(`${this.serverUrl}/orderAll`);
-  };
+    getOrder(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/orders`, data);
+    }
 
-  // pincode apis
-  getAddressByPincode(pincode: string): Observable<any> {
-    return this.http.get(` https://api.postalpincode.in/pincode/${pincode}`);
-  }
+    // s3 api
+    postImageToS3(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/upload-image`, data);
+    }
 
-  // otp apis
-  sendOtp(email: string) {
-    return this.http.post(`${this.serverUrl}/send-otp`, { email });
-  }
+    // admin apis
+    getAllOrder() {
+        return this.http.get(`${this.serverUrl}/orderAll`);
+    }
 
-  verifyOtp(email: string, otp: string) {
-    return this.http.post(`${this.serverUrl}/verify-otp`, { email, otp });
-  }
+    // pincode apis
+    getAddressByPincode(pincode: string): Observable<any> {
+        return this.http.get(` https://api.postalpincode.in/pincode/${pincode}`);
+    }
+
+    // otp apis
+    sendOtp(email: string) {
+        return this.http.post(`${this.serverUrl}/send-otp`, { email });
+    }
+
+    verifyOtp(email: string, otp: string) {
+        return this.http.post(`${this.serverUrl}/verify-otp`, { email, otp });
+    }
 }

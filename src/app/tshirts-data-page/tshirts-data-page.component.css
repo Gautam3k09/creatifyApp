@@ -1,219 +1,207 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-body{
-  width: 100vw;
+body {
+    width: 100vw;
 }
 
 .container {
-    height:90vh;
+    height: 90vh;
     width: 100%;
     overflow-y: auto;
     overflow-x: auto;
     margin-top: 4%;
 }
 .container {
-  margin: auto;
-  margin-top: 2%;
+    margin: auto;
+    margin-top: 2%;
 }
 
-.noTees{
-  position: fixed;
-  inset: 0px;
-  width: 65vw;
-  height: 5rem;
-  margin: auto;
+.noTees {
+    position: fixed;
+    inset: 0px;
+    width: 65vw;
+    height: 5rem;
+    margin: auto;
 }
 
 .shop-modal {
-  right: 2%;
-  width: 95vw;
+    right: 2%;
+    width: 95vw;
 }
 
 .RotateBtn {
-  padding: 5px;
-  margin-left: 3%;
-  margin-top: 3%;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 5px;
+    padding: 5px;
+    margin-left: 3%;
+    margin-top: 3%;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
 }
-  
+
 .tshirtDiv {
-  margin-top: -3%;
-  cursor: pointer;
+    margin-top: -3%;
+    cursor: pointer;
 }
 
 .exceedText {
-  margin: 3%;
-  text-align: center
+    margin: 3%;
+    text-align: center;
 }
 
 .imageContainer {
-  img {
-    height: 50%;
-  }
-}
-
-#BackImage {
-  height: 275px;
-  background-image: url('../../assets/tshirt.png');
-  background-repeat: round;
+    img {
+        height: 50%;
+    }
 }
 
 .canvas {
-  height: 242px;
-  margin-top: -68%;
-  margin-left: 29%;
-  width: 280px;
+    height: 242px;
+    margin-top: -68%;
+    margin-left: 29%;
+    width: 280px;
 }
-.card{
-  background:  linear-gradient(180deg, #d0d0d0, rgb(124, 124, 124));
-  border-radius: 0;
-  border: none;
-}
-
-.NameText{
-  color: black;
-  font-weight: bolder;
-  text-transform: uppercase;
+.card {
+    background: linear-gradient(180deg, #d0d0d0, rgb(124, 124, 124));
+    border-radius: 0;
+    border: none;
 }
 
-.loadMore{
-  display: flex;
-  justify-content: center;
-}
-
-.helperButton{
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  .delete{
-    margin-inline: 4%;
-    margin-top: 4%;
-    margin-bottom: -3%;
-    color: red;
-  }
-  .share{
-    margin-inline: 2%;
-    margin-top: 4%;
-    margin-bottom: -3%;    
+.NameText {
     color: black;
-  }
+    font-weight: bolder;
+    text-transform: uppercase;
 }
 
-.card-text{
-  color: #000;
-}
-.tee-text{
-  color: #000;
-}
-
-.rupee-text{
-  color: #000;
-}
-
-.create{
-  justify-content: center;
-}
-
-.card-body{
-  margin-left: 5%;
-  margin-bottom: 5%;
-  text-transform: capitalize;
-}
-
-@media(max-width:600px) {
-  body{
-    margin-top: 10%;
-    margin-inline: 0;
-    padding: 20px 0px 75px 0px;
-  }
-
-  .bucket {
-    height: 69vh;
-  }
-
-  .container {
-    height: 72vh;
-  }
-
-  .loadMore{
+.loadMore {
     display: flex;
     justify-content: center;
-    margin-top: 5%;
-    margin-right: 10px;
-  }
-  .mainCard{
-    width: 50%;
-  }
+}
 
-  #BackImage {
-    height: 26vh;
-    background-image: url('../../assets/tshirt.png');
-    background-repeat: round;
-  }
-  
-  .canvas-container{
-    position: relative;
-    height: 260px;
-    margin-top: -10px;
-  }
-
-  canvas{
-    margin-top: 20px;
-    margin-left: 0;
-    height: 180px;
-    position: absolute;
-  }
-
-  .canvas{
-    height: 140px;
-    margin-top: 54px;
-    margin-left: 29%;
-    width: 110px;
-  }
-
-  .card-body{
-    margin-top: 5px;
-    font-size: 10px;
-  }
-
-  .card-text{
-    margin-top: 197px;
-  }
-
-  .helperButton{
+.helperButton {
     z-index: 99;
     display: flex;
-    
-    .share{
-      margin-inline: 2%;
-      margin-bottom: -3%;
+    align-items: center;
+    .delete {
+        margin-inline: 4%;
+        margin-top: 4%;
+        margin-bottom: -3%;
+        color: red;
     }
-  }
+    .share {
+        margin-inline: 2%;
+        margin-top: 4%;
+        margin-bottom: -3%;
+        color: black;
+    }
+}
+
+.card-text {
+    color: #000;
+}
+.tee-text {
+    color: #000;
+}
+
+.rupee-text {
+    color: #000;
+}
+
+.create {
+    justify-content: center;
+}
+
+.card-body {
+    margin-left: 5%;
+    margin-bottom: 5%;
+    text-transform: capitalize;
+}
+
+@media (max-width: 600px) {
+    body {
+        margin-top: 10%;
+        margin-inline: 0;
+        padding: 20px 0px 75px 0px;
+    }
+
+    .bucket {
+        height: 69vh;
+    }
+
+    .container {
+        height: 72vh;
+    }
+
+    .loadMore {
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+        margin-right: 10px;
+    }
+    .mainCard {
+        width: 50%;
+    }
+
+    .canvas-container {
+        position: relative;
+        height: 260px;
+        margin-top: -10px;
+    }
+
+    canvas {
+        margin-top: 20px;
+        margin-left: 0;
+        height: 180px;
+        position: absolute;
+    }
+
+    .canvas {
+        height: 140px;
+        margin-top: 54px;
+        margin-left: 29%;
+        width: 110px;
+    }
+
+    .card-body {
+        margin-top: 5px;
+        font-size: 10px;
+    }
+
+    .card-text {
+        margin-top: 197px;
+    }
+
+    .helperButton {
+        z-index: 99;
+        display: flex;
+
+        .share {
+            margin-inline: 2%;
+            margin-bottom: -3%;
+        }
+    }
 }
 
 /* scroll bar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 /* Style the scrollbar track */
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: none;
-  border-radius: 10px;
+    background: none;
+    border-radius: 10px;
 }
 
 /* Style the scrollbar thumb */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 10px;
+    background: #c1c1c1;
+    border-radius: 10px;
 }
 
 /* Style the thumb on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-background: #999;
+    background: #999;
 }

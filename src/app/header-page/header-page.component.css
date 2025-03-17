@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
@@ -15,7 +15,7 @@ nav {
     box-shadow: -1px -4px 20px 3px rgb(104 104 104);
 }
 
-nav ul{
+nav ul {
     width: 100%;
     list-style: none;
     display: flex;
@@ -23,13 +23,13 @@ nav ul{
     align-items: center;
 }
 
-nav li{
+nav li {
     font-size: 24px;
     color: white;
     height: 8vh;
 }
 
-.tabs{
+.tabs {
     height: 100%;
     padding: 0 30px;
     text-decoration: none;
@@ -38,8 +38,7 @@ nav li{
     cursor: pointer;
 }
 
-.tabs:hover{
-    
+.tabs:hover {
 }
 
 nav li:first-child {
@@ -47,7 +46,7 @@ nav li:first-child {
     margin-left: 5%;
 }
 
-.sidebar{
+.sidebar {
     position: fixed !important;
     top: 0 !important;
     right: 0 !important;
@@ -64,10 +63,10 @@ nav li:first-child {
     overflow: hidden;
     color: white;
     text-align: center;
-    animation: bottomToUp 0.4s forwards;    
+    animation: bottomToUp 0.4s forwards;
 }
 
-.sidebar li{
+.sidebar li {
     width: 100% !important;
 }
 
@@ -76,30 +75,33 @@ nav li:first-child {
     font-size: 5vh;
 }
 
-.tabsM{
+.tabsM {
     width: 100% !important;
 }
 
-@media(max-width:600px) {
-    .hideOnMobile{
+@media (max-width: 600px) {
+    .hideOnMobile {
         display: none;
     }
 }
-
 
 @media only screen and (min-width: 601px) and (max-width: 1024px) {
-    .hideOnMobile{
+    .hideOnMobile {
         display: none;
     }
 }
 
-@media(min-width:1025px) {
-    .hideOnDesktop{
+@media (min-width: 1025px) {
+    .hideOnDesktop {
         display: none;
     }
 }
 
-@keyframes bottomToUp{
-    from {margin-right: -200px;}
-    to { margin-right: 0;}
+@keyframes bottomToUp {
+    from {
+        margin-right: -200px;
+    }
+    to {
+        margin-right: 0;
+    }
 }

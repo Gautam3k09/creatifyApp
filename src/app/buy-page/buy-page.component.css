@@ -1,655 +1,657 @@
-*{
+* {
     margin: 0;
     padding: 0;
-  }
-  
-body {
-  height: 100vh;
-  margin: 0;
-  overflow: auto;
-  color: black;
-  position: fixed;
-  width: 100vw;
-  overflow-x: hidden;
 }
 
-.mainBox{
-  margin-top: 6vh;
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: auto;
+    color: black;
+    position: fixed;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.mainBox {
+    margin-top: 6vh;
 }
 
 .container {
-  position: relative;
-  height: 80vh;
-  display: flex;
-  justify-content: space-around;
-  margin: auto;
-  color: black;
-  border-radius: 30px;
-
+    position: relative;
+    height: 80vh;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+    color: black;
+    border-radius: 30px;
 }
-.mainCanvas{
-  height: 350px;
-  margin-left: 60%;
-  margin-top: 40%;
+.mainCanvas {
+    height: 350px;
+    margin-left: 60%;
+    margin-top: 40%;
 }
 
 .canvas-container {
-  position: relative;
-  width: 175px;
-  height: 150px;
+    position: relative;
+    width: 175px;
+    height: 150px;
 }
 
 .canvas-container canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.canvasFront {
-  height: 190px;
-  position: absolute;
-  margin-top: 145px;
-  margin-left: 225px;
-  width: 340px;
-}
-
-.canvasBack {
-  height: 220px;
-  position: absolute;
-  margin-top: 153px;
-  margin-left: 225px;
-  width: 340px;
-}
-
-.imgTag {
-  margin-left: 10%;
-  height: 80vh;
-  img{
-    border: solid;
-    height: 100%;
-  }
-}
-
-.right-side {
-  margin-top: 2%;
-  width: 30%;
-  height: 70vh;
-  margin-left: 5%;
-  overflow: auto;
-  padding: 5px;
-  font-weight: 600;
-  
-  .sellerlabel{
-    padding-inline : 5px;
-    padding-inline: 5px;
-    font-weight: 700;
-    font-size: 38px;
-    text-transform: uppercase;
-    font-family: 'Oswald', sans-serif;
-  }
-
-  .price {
-    font-family: 'Merriweather', serif;
-    font-weight: 700;  /* Bold for emphasis */
-    font-style: italic; /* Slightly stylish */
-    font-size: 20px;  /* Adjust as needed */
-    color: #222;
-  }
-  .old-price {
-    font-family: 'Merriweather', serif;
-    font-weight: 400;
-    font-size: 18px;
-    text-decoration: line-through;
-    color: #888;
-  }
-
-  .delivery{
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: #555; 
-  }
-
-  .tee-Name{
-    padding-inline : 5px;
-    font-family: 'Merriweather', serif;
-    font-weight: 400;
-    line-height: 1.6;    
-    text-transform: uppercase;
-  }
-
-  .buyButton{
-    text-align: center;
-    button{
-      width: 60%;
-      font-family: 'Merriweather', serif;
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: white;
-      background-color: #0056b3;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-    }
-  }
-}
-
-.colorBtn{
-  border : 2px solid black;
-  height: 25px;
-  width: 25px;
-  border-radius: 50px;
-}
-
-.colorDiv{
-  display: flex;
-}
-
-.colorBtnDiv{
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  
-}
-.active{
-  border: 3px solid #0056b3  !important;
-}
-
-.sizeLabel {
-  display: flex;
-  justify-content: space-between;
-  padding-inline: 10px;
-  font-family: 'Merriweather', serif;
-  font-weight: 600;
-  font-size: 16px;
-  color: #333;
-}
-
-.chartText {
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #0056b3; 
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-}
-
-.chartText::after {
-  content: '📏';
-  font-size: 14px;
-}
-
-.chartText:hover {
-  color: #0056b3;
-}
-
-.sizeDiv{
-  position: relative;
-  z-index: 9999;
-  display: flex;
-  justify-content: space-between;
-  color: #0056b3;
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  transition: all 0.3s ease;
-  button{
-    z-index: 99;
-    font-weight: 600;
-    width: 15%;   
-    border: 1px solid #ccc;
-    padding: 6px 12px;
-    border-radius: 5px;
-  }
-}
-
-.couponLabel{
-  font-family: 'Merriweather', serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #555;
-  text-transform: capitalize;
-}
-
-.input-container {
-  position: relative;
-  display: inline-block;
-}
-
-input {
-  width: 320px;
-  padding: 8px 35px 8px 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: none;
-}
-
-.clear-btn {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 18px;
-  font-weight: bold;
-  color: #888;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-}
-
-.clear-btn:hover {
-  color: #333;
-}
-
-.couponInput {
-  height: 40px;
-  font-size: 14px;
-  font-family: 'Merriweather', serif;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: white;
-  color: #333;
-  transition: all 0.3s ease-in-out;
-  width: 320px;
-  padding: 8px 35px 8px 10px;
-  outline: none;
-
-}
-
-.couponInput:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px #0056b3;
-  outline: none;
-}
-
-.couponInput:disabled {
-  background-color: #f8f9fa;
-  color: #888;
-  border-color: #ddd;
-  cursor: not-allowed;
-}
-
-.btn-apply {
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 6px 16px;
-  border-radius: 5px;
-  background-color: black;
-  color: white;
-  border: none;
-  transition: all 0.3s ease-in-out;
-}
-
-.btn-apply:hover {
-  background-color: #0056b3;
-  color: #fff;
-}
-
-.btn-apply:disabled {
-  background-color: #777;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.coupon-applied {
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #28a745;
-  background-color: #eaf8ed;
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: inline-block;
-  border: 1px solid #28a745;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-  
-  position: relative;
-}
-
-.coupon-applied.show {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.coupon-not-applied {
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #E63946;
-  background: rgba(230, 57, 70, 0.1);
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: 5px;
-  text-align: center;
-}
-
-.coupon-box {
-  position: relative;
-  background: #f8f9fa;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 250px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  background: none;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  color: #28a745;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: #155724;
-}
-
-.coins {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.createefi-checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: #222;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.createefi-coins{
-  font-family: 'Oswald', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #222;
-}
-
-.refer-title {
-  font-family: 'Oswald', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #222;
-  letter-spacing: 1px;
-}
-
-.refer-text {
-  font-family: 'Merriweather', serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #444;
-  line-height: 1.5;
-}
-
-.refer-now {
-  font-family: 'Oswald', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #222, #000);
-  padding: 8px 16px;
-  border-radius: 5px;
-  text-transform: uppercase;
-  text-align: center;
-  display: inline-block;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.refer-now:hover {
-  background: linear-gradient(135deg, #000, #444);
-  transform: scale(1.05);
-}
-
-.refer-now:active {
-  transform: scale(0.95);
-}
-
-.productTitle{
-  display: flex;
-  justify-content: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: #222;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #000;
-}
-
-.product-container {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  align-content: stretch;
-  flex-wrap: nowrap;
-  flex-direction: column;
-}
-
-.productChild {
-  flex: 1 1 calc(33.33% - 12px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  background: #f8f8f8;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-family: 'Merriweather', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #222;
-}
-
-.borderTop{
-  border-top: 4px solid #d9d9d9;
-}
-.hr{  
-  height: 5px;
-  border-bottom: 4px solid #d9d9d9;
-}
-
-.checkoutText{
-  position: relative;
-  z-index: 999;
-  color: blue;
-  cursor: pointer;
-}
-
-.icon-style {
-  border: 1px solid black;
-  padding: 5px;
-  border-radius: 10px;
-  margin: 50px;
-  cursor: pointer;
-  margin-left: 75px !important;
-  position: absolute;
-  z-index: 999;
-}
-
-@media(max-width:600px) {
-  .mainBox{
-    margin-top:0;
-  }
-
-  .container{
-    position: relative;
-    height: 142vh;
-    display: block;
-    justify-content: center;
-    margin: auto;
-    color: black;
-    border-radius: 0px;
-    padding-bottom: 12%;
-    margin-bottom: 12%;
-  }
-  .mainCanvas{
-    height: 320px;
-    margin-left: 4px;
-    margin-top: 16px;
-  }
-  
-  .canvas-container {
-    position: relative;
-    width: 175px; /* Adjust to the width of your canvas */
-    height: 150px; /* Adjust to the height of your canvas */
-  }
-  
-  .canvas-container canvas {
     position: absolute;
     top: 0;
     left: 0;
-  }
-  .canvasFront {
+}
+.canvasFront {
     height: 190px;
     position: absolute;
-    margin-top: 80px;
-    margin-left: 104px;
+    margin-top: 145px;
+    margin-left: 225px;
     width: 340px;
-  }
-  
-  .canvasBack {
+}
+
+.canvasBack {
     height: 220px;
     position: absolute;
-    margin-top:80px;
-    margin-left: 109px;
+    margin-top: 153px;
+    margin-left: 225px;
     width: 340px;
-  }
+}
 
-  .right-side {
-    height: auto;
-    margin-top: 50%;
-    width: auto;
-    float: none;
-    padding: 0px;
-    margin-left: 3%;
-    overflow: hidden;
-  }
-
-  .left-side{
-    margin-top: 6%;
-    width: 80vw;
-    margin-left: 0%;
-    padding: 1% 2% 1% 2%;
-    border-radius: 6%;
-  }
-  .imgTag {
-    height: auto;
-    img{
-      border: solid;
-      height: 56vh;
-      width: 80vw;
+.imgTag {
+    margin-left: 10%;
+    height: 80vh;
+    img {
+        border: solid;
+        height: 100%;
     }
-  }
+}
 
-  .colorBtn{
-    border : 2px solid black;
+.right-side {
+    margin-top: 2%;
+    width: 30%;
+    height: 70vh;
+    margin-left: 5%;
+    overflow: auto;
+    padding: 5px;
+    font-weight: 600;
+
+    .sellerlabel {
+        padding-inline: 5px;
+        padding-inline: 5px;
+        font-weight: 700;
+        font-size: 38px;
+        text-transform: uppercase;
+        font-family: 'Oswald', sans-serif;
+    }
+
+    .price {
+        font-family: 'Merriweather', serif;
+        font-weight: 700; /* Bold for emphasis */
+        font-style: italic; /* Slightly stylish */
+        font-size: 20px; /* Adjust as needed */
+        color: #222;
+    }
+    .old-price {
+        font-family: 'Merriweather', serif;
+        font-weight: 400;
+        font-size: 18px;
+        text-decoration: line-through;
+        color: #888;
+    }
+
+    .delivery {
+        font-family: 'Merriweather', serif;
+        font-style: italic;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .tee-Name {
+        padding-inline: 5px;
+        font-family: 'Merriweather', serif;
+        font-weight: 400;
+        line-height: 1.6;
+        text-transform: uppercase;
+    }
+
+    .buyButton {
+        text-align: center;
+        button {
+            width: 60%;
+            font-family: 'Merriweather', serif;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+    }
+}
+
+.colorBtn {
+    border: 2px solid black;
     height: 25px;
     width: 25px;
     border-radius: 50px;
-  }
+}
 
-  .buyButton{
-    position: fixed;
-    bottom: 0;
-    width: 100% !important;
-    text-align: center;
-    margin-left: -5%;
-    background-color: black;
+.colorDiv {
+    display: flex;
+}
+
+.colorBtnDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.active {
+    border: 3px solid #0056b3 !important;
+}
+
+.sizeLabel {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 10px;
+    font-family: 'Merriweather', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+.chartText {
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0056b3;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.chartText::after {
+    content: '📏';
+    font-size: 14px;
+}
+
+.chartText:hover {
+    color: #0056b3;
+}
+
+.sizeDiv {
+    position: relative;
     z-index: 9999;
-    button{
-      height: 42px;
-      /* height: 5vh; */
-      width: 105% !important;
+    display: flex;
+    justify-content: space-between;
+    color: #0056b3;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.3s ease;
+    button {
+        z-index: 99;
+        font-weight: 600;
+        width: 15%;
+        border: 1px solid #ccc;
+        padding: 6px 12px;
+        border-radius: 5px;
     }
-  }
+}
 
-  .checkoutText{
+.couponLabel {
+    font-family: 'Merriweather', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    text-transform: capitalize;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+input {
+    width: 320px;
+    padding: 8px 35px 8px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.clear-btn:hover {
+    color: #333;
+}
+
+.couponInput {
+    height: 40px;
+    font-size: 14px;
+    font-family: 'Merriweather', serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    transition: all 0.3s ease-in-out;
+    width: 320px;
+    padding: 8px 35px 8px 10px;
+    outline: none;
+}
+
+.couponInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px #0056b3;
+    outline: none;
+}
+
+.couponInput:disabled {
+    background-color: #f8f9fa;
+    color: #888;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+.btn-apply {
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-apply:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+.btn-apply:disabled {
+    background-color: #777;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.coupon-applied {
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #28a745;
+    background-color: #eaf8ed;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px solid #28a745;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+
+    position: relative;
+}
+
+.coupon-applied.show {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.coupon-not-applied {
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e63946;
+    background: rgba(230, 57, 70, 0.1);
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.coupon-box {
+    position: relative;
+    background: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #155724;
+}
+
+.coins {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.createefi-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #222;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.createefi-coins {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+.refer-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #222;
+    letter-spacing: 1px;
+}
+
+.refer-text {
+    font-family: 'Merriweather', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.5;
+}
+
+.refer-now {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #222, #000);
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.refer-now:hover {
+    background: linear-gradient(135deg, #000, #444);
+    transform: scale(1.05);
+}
+
+.refer-now:active {
+    transform: scale(0.95);
+}
+
+.productTitle {
+    display: flex;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #000;
+}
+
+.product-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.productChild {
+    flex: 1 1 calc(33.33% - 12px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f8f8f8;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+}
+
+.borderTop {
+    border-top: 4px solid #d9d9d9;
+}
+.hr {
+    height: 5px;
+    border-bottom: 4px solid #d9d9d9;
+}
+
+.checkoutText {
     position: relative;
     z-index: 999;
-    font-size: 18px;
-    margin-bottom: 3%;
+    color: blue;
     cursor: pointer;
-    margin-top: -5px;
-  }
+}
 
-  .icon-style {
+.icon-style {
     border: 1px solid black;
     padding: 5px;
     border-radius: 10px;
-    margin: 5px;
+    margin: 50px;
     cursor: pointer;
-    margin-left: 5px !important;
+    margin-left: 75px !important;
     position: absolute;
     z-index: 999;
-  }
-
-  .productDetails{
-    padding-inline-end: 10px;
-  }
 }
 
+@media (max-width: 600px) {
+    .mainBox {
+        margin-top: 0;
+    }
+
+    .container {
+        position: relative;
+        height: 142vh;
+        display: block;
+        justify-content: center;
+        margin: auto;
+        color: black;
+        border-radius: 0px;
+        padding-bottom: 12%;
+        margin-bottom: 12%;
+    }
+    .mainCanvas {
+        height: 320px;
+        margin-left: 4px;
+        margin-top: 16px;
+    }
+
+    .canvas-container {
+        position: relative;
+        width: 175px; /* Adjust to the width of your canvas */
+        height: 150px; /* Adjust to the height of your canvas */
+    }
+
+    .canvas-container canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .canvasFront {
+        height: 190px;
+        position: absolute;
+        margin-top: 80px;
+        margin-left: 104px;
+        width: 340px;
+    }
+
+    .canvasBack {
+        height: 220px;
+        position: absolute;
+        margin-top: 80px;
+        margin-left: 109px;
+        width: 340px;
+    }
+
+    .right-side {
+        height: auto;
+        margin-top: 50%;
+        width: auto;
+        float: none;
+        padding: 0px;
+        margin-left: 3%;
+        overflow: hidden;
+    }
+
+    .left-side {
+        margin-top: 6%;
+        width: 80vw;
+        margin-left: 0%;
+        padding: 1% 2% 1% 2%;
+        border-radius: 6%;
+    }
+    .imgTag {
+        height: auto;
+        img {
+            border: solid;
+            height: 56vh;
+            width: 80vw;
+        }
+    }
+
+    .colorBtn {
+        border: 2px solid black;
+        height: 25px;
+        width: 25px;
+        border-radius: 50px;
+    }
+
+    .buyButton {
+        position: fixed;
+        bottom: 0;
+        width: 100% !important;
+        text-align: center;
+        margin-left: -5%;
+        background-color: black;
+        z-index: 9999;
+        button {
+            height: 42px;
+            /* height: 5vh; */
+            width: 105% !important;
+        }
+    }
+
+    .checkoutText {
+        position: relative;
+        z-index: 999;
+        font-size: 18px;
+        margin-bottom: 3%;
+        cursor: pointer;
+        margin-top: -5px;
+    }
+
+    .icon-style {
+        border: 1px solid black;
+        padding: 5px;
+        border-radius: 10px;
+        margin: 5px;
+        cursor: pointer;
+        margin-left: 5px !important;
+        position: absolute;
+        z-index: 999;
+    }
+
+    .productDetails {
+        padding-inline-end: 10px;
+    }
+}
 
 @media (max-width: 480px) {
-  .chartText {
-    font-size: 13px;
-    gap: 4px;
-  }
+    .chartText {
+        font-size: 13px;
+        gap: 4px;
+    }
 }
 
 @media (max-width: 768px) {
-  .product-container {
-    flex-direction: column;
-  }
-  .productChild {
-    flex: 1 1 100%;
-  }
+    .product-container {
+        flex-direction: column;
+    }
+    .productChild {
+        flex: 1 1 100%;
+    }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* scroll bar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 /* Style the scrollbar track */
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: none;
-  border-radius: 10px;
+    background: none;
+    border-radius: 10px;
 }
 
 /* Style the scrollbar thumb */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 10px;
+    background: #c1c1c1;
+    border-radius: 10px;
 }
 
 /* Style the thumb on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #999; 
+    background: #999;
 }

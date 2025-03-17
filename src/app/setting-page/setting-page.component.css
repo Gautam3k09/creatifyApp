@@ -1,32 +1,31 @@
-
-  body {
+body {
     overflow: hidden;
     height: auto;
-  }
-  .container{
+}
+.container {
     margin-top: 10vh;
-  }
+}
 
-  .nav-link{
+.nav-link {
     color: rgb(0, 0, 0);
-  }
+}
 
-  .nav-link.active{
+.nav-link.active {
     background-color: rgb(0, 0, 0) !important;
     border-color: black;
     color: white;
-  }
+}
 
-  .content-container {
+.content-container {
     padding: 4%;
     border-radius: 37px;
     color: black;
     /* width: 60vw; */
     height: 70vh;
-  }
+}
 
-  .profile-title {
-    font-family: "Oswald", sans-serif;
+.profile-title {
+    font-family: 'Oswald', sans-serif;
     font-size: 1.7rem;
     font-weight: 700;
     color: black;
@@ -34,87 +33,87 @@
     letter-spacing: 1px;
     text-align: center;
     margin-bottom: 1rem;
-  }
+}
 
-  .main-container{
+.main-container {
     height: 82vh;
     display: flex;
     align-items: center;
-  }
+}
 
-  .InfoForm {
+.InfoForm {
     display: grid;
     gap: 8px;
-    font-family: "Merriweather", serif;
+    font-family: 'Merriweather', serif;
     font-size: 1rem;
     color: black;
-  }
-  
-  .InfoForm div {
+}
+
+.InfoForm div {
     display: grid;
     grid-template-columns: 100px auto;
     align-items: center;
-  }
-  
-  .InfoForm div::before {
+}
+
+.InfoForm div::before {
     content: attr(data-label);
     font-weight: 600;
     text-align: right;
-  }
-  
-  .InfoForm div span {
-    padding-left: 10px;
-  }
+}
 
-  .addressForm {
-    font-family: "Merriweather", serif;
+.InfoForm div span {
+    padding-left: 10px;
+}
+
+.addressForm {
+    font-family: 'Merriweather', serif;
     color: #000;
     max-width: 600px;
     margin: auto;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 15px;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     font-weight: 600;
     display: block;
     margin-bottom: 5px;
-  }
-  
-  .form-group input {
+}
+
+.form-group input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
     transition: all 0.3s ease-in-out;
-  }
-  
-  .form-group input:focus,
-  .form-group input:hover {
+}
+
+.form-group input:focus,
+.form-group input:hover {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
-  }
-  
-  .flex-group {
+}
+
+.flex-group {
     display: flex;
     gap: 20px;
     justify-content: space-between;
-  }
-  
-  .half-width {
+}
+
+.half-width {
     flex: 1;
-  }
-  
-  .btn-container {
+}
+
+.btn-container {
     text-align: center;
     margin-top: 10px;
-  }
-  
-  .addressBtn {
+}
+
+.addressBtn {
     background-color: black !important;
     border: none;
     padding: 10px 20px;
@@ -124,271 +123,269 @@
     color: #fff;
     cursor: pointer;
     transition: 0.3s;
-  }
-  
-  .addressBtn:hover {
+}
+
+.addressBtn:hover {
     background-color: black !important;
-  }
+}
 
 .upgradeContainer {
-  font-family: "Merriweather", serif;
-  background: #fff;
-  padding: 20px;
-  text-align: center;
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 50vh;
+    font-family: 'Merriweather', serif;
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
 }
 
 .upgradeText {
-  font-size: 1rem;
-  color: #000;
-  font-weight: bold;
-  margin-bottom: 20px;
+    font-size: 1rem;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 /* Button Container */
 .btnContainer {
-  margin-top: 10px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 /* Black Button Styling */
 .btn-black {
-  background-color: #000;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  transition: 0.3s;
-  border: none;
-  cursor: pointer;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-black:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
-
 .statsContainer {
-  font-family: "Merriweather", serif;
-  padding: 20px;
+    font-family: 'Merriweather', serif;
+    padding: 20px;
 }
 
 /* Section Title */
 .sectionTitle {
-  font-family: "Oswald", sans-serif;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 10px;
-  text-align: center;
-  border-bottom: 2px solid #000;
-  padding-bottom: 5px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
 }
 
 /* Merch Statistics */
 .statsItem {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    padding: 5px 0;
 }
 
 .statsLabel {
-  font-weight: bold;
-  color: #000;
+    font-weight: bold;
+    color: #000;
 }
 
 .statsValue {
-  color: #000;
+    color: #000;
 }
 
 /* Coupon Form */
 .couponForm {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
 }
 
 .couponForm label {
-  font-size: 0.9rem;
-  font-weight: bold;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .couponForm input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  transition: 0.3s;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: 0.3s;
 }
 
 /* Input Highlight */
 .couponForm input:focus,
 .couponForm input:hover {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
 }
 
 .discountRange {
-  font-size: 0.85rem;
-  color: #555;
-  text-align: center;
-  margin-bottom: 10px;
+    font-size: 0.85rem;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 /* Black Buttons */
 .btn-black {
-  background-color: #000;
-  color: #fff;
-  border-radius: 5px;
-  padding: 8px 15px;
-  font-size: 0.9rem;
-  transition: 0.3s;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    transition: 0.3s;
 }
 
 .btn-black:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
 /* Active Coupon */
 .activeCoupon {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background: #f1f1f1;
-  border-radius: 5px;
-  margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .activeCouponValue {
-  font-weight: bold;
-  color: #000;
+    font-weight: bold;
+    color: #000;
 }
 
 .deleteBtn {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 1rem;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
 .deleteBtn:hover {
-  color: darkred;
+    color: darkred;
 }
 
 .withdrawContainer {
-  text-align: center;
-  margin-top: 10px;
+    text-align: center;
+    margin-top: 10px;
 }
 
 .withdrawBtn {
-  background-color: #000;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  transition: 0.3s;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    transition: 0.3s;
 }
 
 .withdrawBtn:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
 .profile-title-help {
-  font-family: 'Oswald', sans-serif;
-  font-size: 24px;
-  color: black;
-  border-bottom: 2px solid black;
-  margin-bottom: 15px;
-  padding-bottom: 5px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    color: black;
+    border-bottom: 2px solid black;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
 }
 
 .helpForm {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
 }
 
 .help textarea {
-  width: 100%;
-  font-family: 'Merriweather', serif;
-  padding: 10px;
-  border: 2px solid #007bff;
-  border-radius: 6px;
-  outline: none;
-  resize: none;
+    width: 100%;
+    font-family: 'Merriweather', serif;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    outline: none;
+    resize: none;
 }
 
 .note-text {
-  margin-top: 5px;
-  font-size: 14px;
-  color: #666;
-  font-family: 'Merriweather', serif;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+    font-family: 'Merriweather', serif;
 }
 
 .raiseBtn button {
-  width: 100%;
-  padding: 10px 0;
-  background-color: #000;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: 'Oswald', sans-serif;
-  font-weight: bold;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
 }
 
 .raiseBtn button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
-
-  .addressArea{
+.addressArea {
     text-align: center;
     margin-top: 20vh;
-  }
+}
 
-  .hideOnDesktop{
+.hideOnDesktop {
     display: none;
-  }
+}
 
-  .border{
-    border:1px solid rgba(0, 0, 0, 0.633) !important;
+.border {
+    border: 1px solid rgba(0, 0, 0, 0.633) !important;
     border-radius: 10px;
     width: auto;
     padding-left: 1%;
-    margin-left: 1vw;    
-  }
+    margin-left: 1vw;
+}
 
-  .hideOnMobile{
+.hideOnMobile {
     z-index: 99;
-  }
-  
-  .orderDiv{
+}
+
+.orderDiv {
     margin-top: 6vh;
     width: 100vw;
     overflow: auto;
-  }
+}
 
-  .order-summary {
+.order-summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -399,23 +396,22 @@
     text-align: center;
     width: 62%;
 }
-  .order-details {
+.order-details {
     display: contents;
-  }
-  .order-details div {
-      margin: 3px 0;
-  }
-  .order-actions a {
-      text-decoration: none;
-      color: #0073bb;
-      margin-left: 10px;
-  }
-  .order-actions a:hover {
-      text-decoration: underline;
-  }
+}
+.order-details div {
+    margin: 3px 0;
+}
+.order-actions a {
+    text-decoration: none;
+    color: #0073bb;
+    margin-left: 10px;
+}
+.order-actions a:hover {
+    text-decoration: underline;
+}
 
-
-  .booking-card {
+.booking-card {
     background-color: #ffffff;
     border-top: 1px solid #8d8d8d;
     border-bottom: 1px solid #8d8d8d;
@@ -426,39 +422,38 @@
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
     margin-bottom: 2vh;
     flex-direction: column-reverse;
+}
 
-  }
-
-  .date {
+.date {
     color: #16a34a;
     font-weight: bold;
     margin-bottom: 10px;
-  }
+}
 
-  .title {
+.title {
     font-size: 18px;
     font-weight: bold;
-  }
+}
 
-  .details {
+.details {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #555;
-  }
+}
 
-  .details span {
+.details span {
     margin-right: 10px;
-  }
+}
 
-  .details svg {
+.details svg {
     width: 14px;
     height: 14px;
     fill: #555;
     margin-right: 5px;
-  }
+}
 
-  .empty-order-message {
+.empty-order-message {
     height: 435px;
     display: flex;
     align-items: center;
@@ -474,120 +469,122 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media(max-width:600px) {
-  body{
-    width: 100vw !important;
-    height: 90%;
-  }
+@media (max-width: 600px) {
+    body {
+        width: 100vw !important;
+        height: 90%;
+    }
 
-  .container{
-    margin-top: 6vh;
-  }
+    .container {
+        margin-top: 6vh;
+    }
 
-  .main-container{
-    justify-content: center;
-    align-items: normal;
-  }
+    .main-container {
+        justify-content: center;
+        align-items: normal;
+    }
 
-  .buttonList{
-    display: grid;
-    justify-content: center;
-    margin-bottom: 50px;
-  }
-  .tablist{
-    display: ruby;
-  }
-  .content-container {
-    color: rgb(0, 0, 0);
-    width: 100vw;
-  }
-  
-  .merch-container{
-    width: 100vw;
-    margin-left: -4%;    
-    margin-top: 8%;
-  }
+    .buttonList {
+        display: grid;
+        justify-content: center;
+        margin-bottom: 50px;
+    }
+    .tablist {
+        display: ruby;
+    }
+    .content-container {
+        color: rgb(0, 0, 0);
+        width: 100vw;
+    }
 
-  .profile {
-    height: 65vh;
-    overflow: auto;
-    margin-top: 8%;
-  }
+    .merch-container {
+        width: 100vw;
+        margin-left: -4%;
+        margin-top: 8%;
+    }
 
-  .hideOnDesktop{
-    display: flex;
-    justify-content: center;
-    box-shadow: 4px 5px 20px 20px rgb(85 83 83);
-    z-index: 9;
-    background: white;
-  }
+    .profile {
+        height: 65vh;
+        overflow: auto;
+        margin-top: 8%;
+    }
 
-  .addressForm{
-    margin-left: 3vw;
-  }
+    .hideOnDesktop {
+        display: flex;
+        justify-content: center;
+        box-shadow: 4px 5px 20px 20px rgb(85 83 83);
+        z-index: 9;
+        background: white;
+    }
 
-  .hideOnMobile{
-    display: none;
-  }
+    .addressForm {
+        margin-left: 3vw;
+    }
 
-  .helpDiv{
-    justify-content: center; 
-    margin-top: 26vh;
-    height: auto;
-  }
+    .hideOnMobile {
+        display: none;
+    }
 
-  .bottomNav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 0;
-    z-index: 1000;
-  }
-  
-  .navButton {
-    background: none;
-    border: none;
-    font-family: "Merriweather", serif;
-    font-size: 0.9rem;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-  
-  .navButton i {
-    font-size: 1.2rem;
-    margin-bottom: 3px;
-  }
-  
-  .navButton.active,
-  .navButton:hover {
-    color: #007bff;
-  }
-  
-  .navText {
-    font-size: 0.8rem;
-  }
-  .orderDiv{
-    width: auto;
-  }
-  .empty-order-message {
-    margin-top: 7vh;
-    height: 70vh;
-  }  
+    .helpDiv {
+        justify-content: center;
+        margin-top: 26vh;
+        height: auto;
+    }
+
+    .bottomNav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    .navButton {
+        background: none;
+        border: none;
+        font-family: 'Merriweather', serif;
+        font-size: 0.9rem;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .navButton i {
+        font-size: 1.2rem;
+        margin-bottom: 3px;
+    }
+
+    .navButton.active,
+    .navButton:hover {
+        color: #007bff;
+    }
+
+    .navText {
+        font-size: 0.8rem;
+    }
+    .orderDiv {
+        width: auto;
+    }
+    .empty-order-message {
+        margin-top: 7vh;
+        height: 70vh;
+    }
 }
 @media (min-width: 768px) {
-  .bottomNav {
-    display: none;
-  }
+    .bottomNav {
+        display: none;
+    }
 }
 
-textarea { resize: none; }
+textarea {
+    resize: none;
+}

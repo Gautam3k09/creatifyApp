@@ -1,101 +1,182 @@
 <app-loader *ngIf="isLoading"></app-loader>
 <body>
-  <app-header-page></app-header-page>
-  <div class="mainBox">
-    <div class="container">
-      <div class="left-side">
-        <i class="fa-solid fa-rotate icon-style" (click)="changeSide()"></i>
-        <div class="canvas-container">
-          <canvas #mainCanvas class="mainCanvas" [id]="'mainTeeData'" width="175" height="150"></canvas>
-          <canvas #canvas class="canvasFront" id="canvas" ></canvas>
-        </div>
-      </div>
-      <div class="right-side custom-scrollbar">
-        <div class="sellerlabel">
-          {{user_Id}}
-        </div>
-        <div class="tee-Name">
-            {{data?.teeName_Name}}
-        </div>
-        <div class="mb-2">
-          <div class="d-flex">
-            <p class="mb-0 price mr-1" *ngIf="showContent; else elseBlockforPrice">Rs. {{data?.tee_Price}}</p>
-            <ng-template #elseBlockforPrice>
-              <s style="margin-right: 5px;" class="old-price"> Rs. {{data?.tee_Price}} </s> <p class="price">Rs. {{discountedPrice}}</p>
-            </ng-template>
-          </div>            
-          <p class="delivery"> Tax included.Shipping free on Online Payment!</p>
-          <p class="delivery"> Normal Delivery | 5-9 days</p>
-        </div>
-        <div class="mb-1">
-          <div class="sizeLabel mb-1">
-            <div class="sizeText">Size</div>
-            <div class="chartText" (click)="showImage()">Size Chart</div>
-          </div>
-          <div class="sizeDiv mb-2" >
-            <button type="button" style="width:15%;" class="btn mx-2" [ngClass]="{'active': activeSizeBtn === 'S'}" (click)="changeSize('S')">S</button>
-            <button type="button" style="width:15%;" class="btn mx-2" [ngClass]="{'active': activeSizeBtn === 'M'}" (click)="changeSize('M')">M</button>
-            <button type="button" style="width:15%;" class="btn mx-2" [ngClass]="{'active': activeSizeBtn === 'L'}" (click)="changeSize('L')">L</button>
-            <button type="button" style="width:15%;" class="btn mx-2" [ngClass]="{'active': activeSizeBtn === 'XL'}" (click)="changeSize('XL')">XL</button>
-          </div>
-        </div>
-          
-          <div class="mb-2">
-            <p class="couponLabel mb-1">Coupon & Coins</p>
-            <div class="input-container">
-              <input type="text" class="couponInput form-control mb-2" style="height: 30px;padding: 10px;" placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)" [disabled] = "couponData.couponAvailable || isChecked">
-              <button *ngIf="couponData.couponAvailable" class="clear-btn" (click)="removeCoupon()">×</button>
+    <app-header-page></app-header-page>
+    <div class="mainBox">
+        <div class="container">
+            <div class="left-side">
+                <i class="fa-solid fa-rotate icon-style" (click)="changeSide()"></i>
+                <div class="canvas-container">
+                    <canvas
+                        #mainCanvas
+                        class="mainCanvas"
+                        [id]="'mainTeeData'"
+                        width="175"
+                        height="150"
+                    ></canvas>
+                    <canvas #canvas class="canvasFront" id="canvas"></canvas>
+                </div>
             </div>
-            <div class="d-flex justify-content-center" *ngIf="couponData.length == 0; else elseBlock">
-              <button type="button" class="btn btn-apply" (click)="checkCoupon()" [disabled]="this.enteredCouponInput.length == 0 || isChecked"> Apply </button>
-            </div>
-            <ng-template #elseBlock>
-              <div class="coupon-applied">
-                <!-- <button class="close-btn" >×</button> -->
-                <div class="" *ngIf="couponData.couponAvailable; else couponBlock"> {{couponData.coupon_text}}</div>
-                <ng-template #couponBlock>
-                  <div class="coupon-not-applied"> {{couponData.coupon_text}}</div>
-                </ng-template>
-              </div>
-            </ng-template>
-            <div class="coins-container mt-2">
-              <input class="createefi-checkbox" type="checkbox" [(ngModel)]="isChecked" (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99"/>
-              <span class="createefi-coins">Use Createefi Coins ({{coins}} available)</span>
-            </div>
-          </div>
-            
-          <div class="buyButton">
-            <button type="button" class="btn btn-circle btn-dark" (click)="openModal()">Buy Now</button>
-          </div>
-          
+            <div class="right-side custom-scrollbar">
+                <div class="sellerlabel">
+                    {{ user_Id }}
+                </div>
+                <div class="tee-Name">
+                    {{ data?.teeName_Name }}
+                </div>
+                <div class="mb-2">
+                    <div class="d-flex">
+                        <p class="mb-0 price mr-1" *ngIf="showContent; else elseBlockforPrice">
+                            Rs. {{ data?.tee_Price }}
+                        </p>
+                        <ng-template #elseBlockforPrice>
+                            <s style="margin-right: 5px" class="old-price">
+                                Rs. {{ data?.tee_Price }}
+                            </s>
+                            <p class="price">Rs. {{ discountedPrice }}</p>
+                        </ng-template>
+                    </div>
+                    <p class="delivery">Tax included.Shipping free on Online Payment!</p>
+                    <p class="delivery">Normal Delivery | 5-9 days</p>
+                </div>
+                <div class="mb-1">
+                    <div class="sizeLabel mb-1">
+                        <div class="sizeText">Size</div>
+                        <div class="chartText" (click)="showImage()">Size Chart</div>
+                    </div>
+                    <div class="sizeDiv mb-2">
+                        <button
+                            type="button"
+                            style="width: 15%"
+                            class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'S' }"
+                            (click)="changeSize('S')"
+                        >
+                            S
+                        </button>
+                        <button
+                            type="button"
+                            style="width: 15%"
+                            class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'M' }"
+                            (click)="changeSize('M')"
+                        >
+                            M
+                        </button>
+                        <button
+                            type="button"
+                            style="width: 15%"
+                            class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'L' }"
+                            (click)="changeSize('L')"
+                        >
+                            L
+                        </button>
+                        <button
+                            type="button"
+                            style="width: 15%"
+                            class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'XL' }"
+                            (click)="changeSize('XL')"
+                        >
+                            XL
+                        </button>
+                    </div>
+                </div>
 
-          <div class="ReferralSection " *ngIf="!visitor">
-            <h2 class="refer-title mb-1">Refer & Earn</h2>
-            <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
-            <label class="refer-now mb-1" (click)="openRefferalModal()">Refer Now</label>
-          </div>
-          <div class="ReferralSection " *ngIf="visitor">
-            <h2 class="refer-title mb-2">Refer & Earn</h2>
-            <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
-            <label  class="refer-now mb-1" (click)="openSingup()">Register Now</label>
-          </div>
+                <div class="mb-2">
+                    <p class="couponLabel mb-1">Coupon & Coins</p>
+                    <div class="input-container">
+                        <input
+                            type="text"
+                            class="couponInput form-control mb-2"
+                            style="height: 30px; padding: 10px"
+                            placeholder="Enter Coupon Code"
+                            (keyup)="onKeyUp($event)"
+                            [disabled]="couponData.couponAvailable || isChecked"
+                        />
+                        <button
+                            *ngIf="couponData.couponAvailable"
+                            class="clear-btn"
+                            (click)="removeCoupon()"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div
+                        class="d-flex justify-content-center"
+                        *ngIf="couponData.length == 0; else elseBlock"
+                    >
+                        <button
+                            type="button"
+                            class="btn btn-apply"
+                            (click)="checkCoupon()"
+                            [disabled]="this.enteredCouponInput.length == 0 || isChecked"
+                        >
+                            Apply
+                        </button>
+                    </div>
+                    <ng-template #elseBlock>
+                        <div class="coupon-applied">
+                            <!-- <button class="close-btn" >×</button> -->
+                            <div class="" *ngIf="couponData.couponAvailable; else couponBlock">
+                                {{ couponData.coupon_text }}
+                            </div>
+                            <ng-template #couponBlock>
+                                <div class="coupon-not-applied">{{ couponData.coupon_text }}</div>
+                            </ng-template>
+                        </div>
+                    </ng-template>
+                    <div class="coins-container mt-2">
+                        <input
+                            class="createefi-checkbox"
+                            type="checkbox"
+                            [(ngModel)]="isChecked"
+                            (click)="checkCoupon(false)"
+                            [disabled]="couponData.couponAvailable || coins < 99"
+                        />
+                        <span class="createefi-coins"
+                            >Use Createefi Coins ({{ coins }} available)</span
+                        >
+                    </div>
+                </div>
 
-          <div class="productTitle">Product Details</div>
-          <div class="product-container mt-2">
-            <div class="productChild">
-              <p>Color</p><p>{{data?.tee_Color}}</p>
+                <div class="buyButton">
+                    <button type="button" class="btn btn-circle btn-dark" (click)="openModal()">
+                        Buy Now
+                    </button>
+                </div>
+
+                <div class="ReferralSection" *ngIf="!visitor">
+                    <h2 class="refer-title mb-1">Refer & Earn</h2>
+                    <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
+                    <label class="refer-now mb-1" (click)="openRefferalModal()">Refer Now</label>
+                </div>
+                <div class="ReferralSection" *ngIf="visitor">
+                    <h2 class="refer-title mb-2">Refer & Earn</h2>
+                    <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
+                    <label class="refer-now mb-1" (click)="openSingup()">Register Now</label>
+                </div>
+
+                <div class="productTitle">Product Details</div>
+                <div class="product-container mt-2">
+                    <div class="productChild">
+                        <p>Color</p>
+                        <p>{{ data?.tee_Color }}</p>
+                    </div>
+                    <div class="productChild">
+                        <p>Fabric</p>
+                        <p>Cotton</p>
+                    </div>
+                    <div class="productChild">
+                        <p>Streetwear</p>
+                        <p>Yes</p>
+                    </div>
+                    <div class="productChild">
+                        <p>CollegeWear</p>
+                        <p>Yes</p>
+                    </div>
+                </div>
             </div>
-            <div class="productChild">
-              <p>Fabric</p> <p>Cotton</p>
-            </div>
-            <div class="productChild">
-              <p>Streetwear</p> <p>Yes</p>
-            </div>
-            <div class="productChild">
-              <p>CollegeWear</p> <p>Yes</p>
-            </div>
-          </div>
-      </div>
+        </div>
     </div>
-  </div>
-  </body>
+</body>

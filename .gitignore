@@ -5,9 +5,16 @@
 /tmp
 /out-tsc
 /bazel-out
+dist/
+out/
+
+# IDE / Editor files
+.vscode/
+.idea/
 
 # Node
 /node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -40,3 +47,15 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Prettier files
+.prettierignore
+# .prettierrc
+.prettierrc.json
+.prettierrc.yml
+.prettierrc.toml
+.prettierrc.js
+.prettierrc.cjs
+.prettier.config.js
+.prettier.config.cjs
+

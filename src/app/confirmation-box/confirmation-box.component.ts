@@ -5,42 +5,42 @@ import { AppServiceService } from '../app-service.service';
 import { localStorageService } from '../local-storage-service';
 
 @Component({
-  selector: 'app-confirmation-box',
-  standalone: true,
-  imports: [],
-  templateUrl: './confirmation-box.component.html',
-  styleUrl: './confirmation-box.component.css'
+    selector: 'app-confirmation-box',
+    standalone: true,
+    imports: [],
+    templateUrl: './confirmation-box.component.html',
+    styleUrl: './confirmation-box.component.css',
 })
 export class ConfirmationBoxComponent {
-  
-  public title: any;
-  public message: any;
-  public for:any
-  constructor(private appservice : AppServiceService, private router: Router,@Inject(MAT_DIALOG_DATA) public data: {title: any,message:any,for:any ,input : any},public dialogRef: MatDialogRef<ConfirmationBoxComponent>,public localStorage: localStorageService) {
-  }
-  ngOnInit() {
-    this.title = this.data?.title;
-    this.message = this.data?.message;
-    this.for = this.data?.for;
-  }
-
-  closeModal() {
-    if (this.for == 'logout'){
-      this.localStorage.removeUserLocalStorage();
-      this.router.navigate(['']);
-      this.dialogRef.close();
+    public title: any;
+    public message: any;
+    public for: any;
+    constructor(
+        private appservice: AppServiceService,
+        private router: Router,
+        @Inject(MAT_DIALOG_DATA) public data: { title: any; message: any; for: any; input: any },
+        public dialogRef: MatDialogRef<ConfirmationBoxComponent>,
+        public localStorage: localStorageService
+    ) {}
+    ngOnInit() {
+        this.title = this.data?.title;
+        this.message = this.data?.message;
+        this.for = this.data?.for;
     }
-    if (this.for == 'withdraw') {
-      this.appservice.postQuestion(this.data.input).subscribe((response) => {
-        if(response){
-          this.dialogRef.close('withdraw');
-        } else{
-  
+
+    closeModal() {
+        if (this.for == 'logout') {
+            this.localStorage.removeUserLocalStorage();
+            this.router.navigate(['']);
+            this.dialogRef.close();
         }
-      });
-      
+        if (this.for == 'withdraw') {
+            this.appservice.postQuestion(this.data.input).subscribe((response) => {
+                if (response) {
+                    this.dialogRef.close('withdraw');
+                } else {
+                }
+            });
+        }
     }
-    
-  }
-
 }
