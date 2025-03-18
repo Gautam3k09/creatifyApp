@@ -1,27 +1,12 @@
 <body>
     <app-header-page></app-header-page>
-    <div class="canvas-containers">
-        <!-- <canvas #teeCanvas id="canvas" class="teeCanvas"></canvas> -->
-        <canvas #canvas id="canvas" class="canvas"></canvas>
+    <div class="container">
+        <div class="canvas-containers">
+            <canvas #canvas id="canvas"></canvas>
+        </div>
     </div>
     <div class="control-container">
-        <div class="shirtOptionContainer">
-            <div class="shirtOptionContainer1">Shirt Side</div>
-        </div>
-        <div class="shirtOptionContainer">
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
-                    [checked]="true" />
-                <label class="btn btn-outline-dark sideLabel" id="frontLabel" for="btnradio1">Front</label>
-                <!-- <label class="btn btn-outline-dark sideLabel" id="frontLabel" for="btnradio1" (click)="toggleShirtSide('front')">Front</label> -->
-
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" />
-                <label class="btn btn-outline-dark sideLabel" id="backLabel" for="btnradio2">Back</label>
-                <!-- <label class="btn btn-outline-dark sideLabel" id="backLabel" for="btnradio2" (click)="toggleShirtSide('back')">Back</label> -->
-            </div>
-        </div>
         <div class="icon-controls">
-            <!-- Image Upload with Icon -->
             <div class="image-upload-container">
                 <label for="imageInput" class="icon-input-label">
                     <i class="fas fa-image"></i> Add Image
@@ -33,11 +18,43 @@
             <button class="icon-btn" (click)="addText()">
                 <i class="fas fa-font"></i> Add Text
             </button>
-            <button class="icon-btn" (click)="undo()"><i class="fas fa-undo"></i> Undo</button>
-            <button class="icon-btn" (click)="redo()"><i class="fas fa-redo"></i> Redo</button>
-            <!-- <button class="icon-btn" (click)="previewDesign()">
-                   <i class="fas fa-eye"></i> Preview
-               </button> -->
+            <!-- <button class="icon-btn" (click)="undo()"><i class="fas fa-undo"></i> Undo</button>
+            <button class="icon-btn" (click)="redo()"><i class="fas fa-redo"></i> Redo</button> -->
+            <button class="icon-btn" (click)="downloadImage()">
+                <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="icon-btn" (click)="toggleCanvas()">
+                <i class="fas fa-eye"></i>
+                {{ isCanvas1Visible ? ' Show Second Canvas' : ' Show First Canvas' }}
+            </button>
+            <button *ngIf="selectedText" [cpOutputFormat]="'hex'" [(colorPicker)]="selectedTextColor"
+                [style.background-color]="selectedTextColor" class="icon-btn"
+                (colorPickerChange)="changeTextColor(selectedTextColor)">
+                🎨 Change Text Color
+            </button>
+            <select *ngIf="selectedText" [(ngModel)]="selectedFont" (change)="changeFont(selectedFont)"
+                class="font-dropdown">
+                <option *ngFor="let font of fontList" [value]="font">{{ font }}</option>
+            </select>
+            <button *ngIf="selectedText" class="icon-btn" [class.active]="isBold" (click)="toggleBold()">
+                <i class="fas fa-bold"></i> Bold
+            </button>
+        </div>
+        <div>
+            <ul #itemListRef class="item-list">
+                <li *ngFor="let item of itemList" [attr.data-id]="item.id">
+                    <span class="drag-icon">≡</span> <!-- Double line drag icon -->
+                    <span class="item-text" title="{{ item.name }}">
+                        {{ item.type === 'image' ? '🖼️' : '🔤' }} {{ item.name }}
+                    </span>
+                    <div class="icon-container">
+                        <button class="show-btn" (click)="toggleVisibility(item.id)">
+                            {{ item.visible ? '👁️' : '🚫' }}
+                        </button>
+                        <button class="delete-btn" (click)="deleteItem(item.id)">🗑️</button>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </body>

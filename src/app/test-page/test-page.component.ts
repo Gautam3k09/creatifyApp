@@ -29,44 +29,44 @@ export class TestPageComponent implements AfterViewInit {
     });
 
     // Add T-shirt Background
-    fabric.Image.fromURL(this.imageFrontSrc, (img) => {
-      img.set({
-        selectable: false, // Prevent interaction with T-shirt
-        evented: false, // Disable Fabric.js controls for background
-        scaleX: this.canvas.width! / img.width!,
-        scaleY: this.canvas.height! / img.height!,
-      });
-      this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
-    });
+    // fabric.Image.fromURL(this.imageFrontSrc, (img) => {
+    //   img.set({
+    //     selectable: false, // Prevent interaction with T-shirt
+    //     evented: false, // Disable Fabric.js controls for background
+    //     scaleX: this.canvas.width! / img.width!,
+    //     scaleY: this.canvas.height! / img.height!,
+    //   });
+    //   this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
+    // });
 
     // Add Design Area (Center Part)
-    const designArea = new fabric.Rect({
-      left: this.canvas.width! * 0.25, // Center alignment
-      top: this.canvas.height! * 0.3, // Positioned in the middle
-      width: this.canvas.width! * 0.5, // Design area width
-      height: this.canvas.height! * 0.4, // Design area height
-      fill: 'transparent',
-      stroke: '#007bff', // Design area border
-      strokeWidth: 2,
-      selectable: false, // Prevent accidental moves
-      evented: false,
-    });
+    // const designArea = new fabric.Rect({
+    //   left: this.canvas.width! * 0.25, // Center alignment
+    //   top: this.canvas.height! * 0.3, // Positioned in the middle
+    //   width: this.canvas.width! * 0.5, // Design area width
+    //   height: this.canvas.height! * 0.4, // Design area height
+    //   fill: 'transparent',
+    //   stroke: '#007bff', // Design area border
+    //   strokeWidth: 2,
+    //   selectable: false, // Prevent accidental moves
+    //   evented: false,
+    // });
 
-    this.canvas.add(designArea);
+    // this.canvas.add(designArea);
 
-    this.canvas.on('object:moving', (e) => {
-      const obj: any = e.target;
-      obj.set({
-        left: Math.max(
-          designArea.left!,
-          Math.min(obj.left!, designArea.left! + designArea.width! - obj.width!)
-        ),
-        top: Math.max(
-          designArea.top!,
-          Math.min(obj.top!, designArea.top! + designArea.height! - obj.height!)
-        ),
-      });
-    });
+    // this.canvas.on('object:moving', (e) => {
+    //   const obj: any = e.target;
+    //   obj.set({
+    //     left: Math.max(
+    //       designArea.left!,
+    //       Math.min(obj.left!, designArea.left! + designArea.width! - obj.width!)
+    //     ),
+    //     top: Math.max(
+    //       designArea.top!,
+    //       Math.min(obj.top!, designArea.top! + designArea.height! - obj.height!)
+    //     ),
+    //   });
+    // });
     this.saveState();
   }
 
