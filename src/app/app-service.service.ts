@@ -7,7 +7,7 @@ import { environment } from '../../environment';
     providedIn: 'root',
 })
 export class AppServiceService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
     private serverUrl: string = environment.backend;
 
     //usr api
@@ -92,11 +92,6 @@ export class AppServiceService {
 
     getOrder(data: any): Observable<any> {
         return this.http.post(`${this.serverUrl}/orders`, data);
-    }
-
-    // s3 api
-    postImageToS3(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/upload-image`, data);
     }
 
     // admin apis

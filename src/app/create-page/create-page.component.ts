@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { HeaderPageComponent } from '../header-page/header-page.component';
+import { localStorageService } from '../local-storage-service';
 import { fabric } from 'fabric';
 import { CommonModule } from '@angular/common';
 import Sortable from 'sortablejs';
@@ -7,6 +7,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { FormsModule } from '@angular/forms';
 import { titleTextTemplates, bodyTextTemplates } from '../../assets/text-template';
 import { AppServiceService } from '../app-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-page',
@@ -28,7 +29,7 @@ export class CreatePageComponent implements AfterViewInit {
   canvas1ItemList: any = [];
   canvas2ItemList: any = [];
   itemList: any = [];
-  activePanel: string = 'Text';
+  activePanel: string = 'Properties';
   tshirtName: string = '';
   showAddElementModal: boolean = false;
 
@@ -70,6 +71,16 @@ export class CreatePageComponent implements AfterViewInit {
   titletexttemplates = titleTextTemplates;
   bodytexttemplates = bodyTextTemplates;
 
+
+  // for image
+  selectedImage: any;
+  imgBrightness: any;
+  imgContrast: any;
+  imgSaturation: any;
+  imgHue: any;
+  imgBlur: any = 0;
+  imgNoise: any = 0;
+
   // for tee color
   imageFrontSrc = 'assets/Tees/white-f.png';
   imageFrontUrls = [
@@ -91,9 +102,25 @@ export class CreatePageComponent implements AfterViewInit {
   currentStateIndex: number = -1;
   selectedColor: string = '#000'; // Default color
 
-  constructor(private appservice: AppServiceService,) { }
+  userData: any;
+  priceRange: any = 549;
+  designName: any = 'Trial-Tee';
+  formDataFront = new FormData();
+  formDataBack = new FormData();
+  frontImgName: any;
+  BackImgName: any;
+
+  constructor(
+    private appservice: AppServiceService,
+    public localStorage: localStorageService,
+    private router: Router,) {
+
+    this.userData = this.localStorage.getUserLocalStorage();
+    this.userData = JSON.parse(this.userData.userData);
+  }
 
   ngAfterViewInit() {
+    fabric.Object.prototype.objectCaching = false;
     this.textTemplates = [...this.titletexttemplates, ...this.bodytexttemplates];
     this.canvas = new fabric.Canvas(this.canvasRef.nativeElement, {
       width: 195,
@@ -116,53 +143,31 @@ export class CreatePageComponent implements AfterViewInit {
       }
     });
 
-    // Initialize SortableJS for drag-and-drop reordering
     this.initSortable();
 
-    fabric.Object.prototype.objectCaching = false;
+
 
     // Track selected text
     this.canvas.on('selection:created', (event: any) => {
-      const activeObject = this.canvas.getActiveObject();
-      if (event.selected.length > 1) {
-        return;
-      }
-      if (activeObject && activeObject.type === 'text') {
-        this.selectedText = activeObject;
-        this.textcolor = this.selectedText.fill as string;
-        this.textfont = this.selectedText.fontFamily || 'Oswald';
-        this.isBold = this.selectedText.fontWeight === 'bold';
-        this.fontSize = this.selectedText.fontSize || 24;
-        this.textStrokeSize = this.selectedText.strokeWidth || 50;
-        this.shadowBlur = this.selectedText.shadow?.blur || 60;
-        this.shadowOffsetX = this.selectedText.shadow?.offsetX || 0;
-        this.shadowOffsetY = this.selectedText.shadow?.offsetY || 0;
-        this.shadowColor = this.selectedText.shadow?.color || '#000000';
-        this.hasFill = !this.selectedText.stroke;
-        this.opacity = this.selectedText.opacity ? this.selectedText.opacity * 100 : 1;
-        this.rotate = Math.round(this.selectedText.angle) || 0;
-        this.text = this.selectedText.text;
-        this.lineHeight = this.selectedText.lineHeight ? Math.round(this.selectedText.lineHeight) * 100 : 100;
-      } else if (activeObject && activeObject.type === 'image') {
-        this.togglePanel('Image');
-      } else {
-        this.selectedText = null;
-      }
-    });
-
-    this.canvas.on('selection:cleared', () => {
-      this.selectedText = null;
+      if (event.selected.length > 1) return;
+      this.checkSelectedObject()
     });
 
     this.canvas.on('object:modified', () => {
-      this.updateAngleValue();
+      this.checkSelectedObject();
+      // this.updateAngleValue();
       this.canvas.renderAll();
     });
 
     // Track selected text
-    // this.canvas.on('selection:created', () => this.checkSelectedObject());
-    this.canvas.on('selection:updated', () => this.checkSelectedObject());
-    this.canvas.on('selection:cleared', () => this.selectedText = null);
+    this.canvas.on('selection:updated', () => {
+      this.checkSelectedObject();
+    });
+    this.canvas.on('selection:cleared', () => {
+      this.selectedText = null
+      this.selectedImage = null;
+      this.togglePanel('Properties');
+    });
   }
 
   initializeCanvas1() {
@@ -372,17 +377,6 @@ export class CreatePageComponent implements AfterViewInit {
     if (this.selectedText) {
       this.selectedText.set('fill', color);
       this.canvas.renderAll();
-    }
-  }
-
-  checkSelectedObject(): void {
-    const activeObject = this.canvas.getActiveObject();
-    if (activeObject && activeObject.type === 'text') {
-      this.selectedText = activeObject as fabric.Textbox;
-      this.textfont = this.selectedText.fontFamily || 'Oswald';
-      this.isBold = this.selectedText.fontWeight === 'bold';
-    } else {
-      this.selectedText = null;
     }
   }
 
@@ -680,7 +674,6 @@ export class CreatePageComponent implements AfterViewInit {
   // Add Custom Text
   addCustomText() {
     this.addText(this.canvas, 'Text');
-    this.togglePanel('Text');
     this.showAddElementModal = false;
   }
 
@@ -714,6 +707,164 @@ export class CreatePageComponent implements AfterViewInit {
     reader.readAsDataURL(file);
     this.showAddElementModal = false;
   }
+
+  onBrightnessChange(event: any) {
+    this.imgBrightness = event.target.value
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;
+      const currentFilters = image.filters || [];
+      const brightnessFilterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'Brightness'
+      );
+
+      if (brightnessFilterIndex !== -1) {
+        currentFilters.splice(brightnessFilterIndex, 1); // Remove the existing brightness filter
+      }
+
+      // Add the new brightness filter
+      const brightnessFilter = new fabric.Image.filters.Brightness({
+        brightness: this.imgBrightness / 100, // Value between -1 (dark) and 1 (bright)
+      });
+      image.filters.push(brightnessFilter);
+      image.applyFilters();
+      this.canvas?.renderAll(); // Re-render the canvas to reflect the changes
+    }
+  }
+
+  onContrastChange(event: any) {
+    this.imgContrast = event.target.value
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;
+      const currentFilters = image.filters || [];
+      const filterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'Contrast'
+      );
+
+      if (filterIndex !== -1) {
+        currentFilters.splice(filterIndex, 1); // Remove the existing brightness filter
+      }
+
+      // Add the new brightness filter
+      const Filter = new fabric.Image.filters.Contrast({
+        contrast: this.imgContrast / 100, // Value between -1 (dark) and 1 (bright)
+      });
+      image.filters.push(Filter);
+      image.applyFilters();
+      this.canvas?.renderAll(); // Re-render the canvas to reflect the changes
+    }
+  }
+
+  onSaturationChange(event: any) {
+    this.imgSaturation = event.target.value
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;
+      const currentFilters = image.filters || [];
+      const filterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'Saturation'
+      );
+
+      if (filterIndex !== -1) {
+        currentFilters.splice(filterIndex, 1); // Remove the existing brightness filter
+      }
+
+      // Add the new brightness filter
+      const Filter = new fabric.Image.filters.Saturation({
+        saturation: this.imgSaturation / 100, // Value between -1 (dark) and 1 (bright)
+      });
+      image.filters.push(Filter);
+      image.applyFilters();
+      this.canvas?.renderAll(); // Re-render the canvas to reflect the changes
+    }
+  }
+
+  onHueChange(event: any) {
+    this.imgHue = event.target.value
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;
+      const currentFilters = image.filters || [];
+      const filterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'HueRotation'
+      );
+
+      if (filterIndex !== -1) {
+        currentFilters.splice(filterIndex, 1); // Remove the existing brightness filter
+      }
+
+      // Add the new brightness filter
+      const Filter = new fabric.Image.filters.HueRotation({
+        rotation: this.imgHue * 3.6, // Value between -1 (dark) and 1 (bright)
+      });
+      image.filters.push(Filter);
+      image.applyFilters();
+      this.canvas?.renderAll(); // Re-render the canvas to reflect the changes
+    }
+  }
+
+  onBlurChange(event: any) {
+    this.imgBlur = event.target.value;  // Get blur value from the slider
+
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;  // Get the selected image
+
+      // Get the current filters applied to the image
+      const currentFilters = image.filters || [];
+
+      // Check if the image already has a blur filter and remove it if exists
+      const filterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'Blur'
+      );
+
+      if (filterIndex !== -1) {
+        currentFilters.splice(filterIndex, 1); // Remove the existing blur filter
+      }
+
+      // Create the new blur filter with the current blur value
+      const blurFilter = new fabric.Image.filters.Blur({
+        blur: this.imgBlur / 100,  // Set the blur amount (value between 0 and 1)
+      });
+
+      // Push the new blur filter into the filters array
+      currentFilters.push(blurFilter);
+
+      // Apply the filters to the image
+      image.filters = currentFilters;
+      image.applyFilters();  // Apply the filters to the image
+      this.canvas?.renderAll();  // Re-render the canvas to reflect the changes
+    }
+  }
+
+  onNoiseChange(event: any) {
+    this.imgNoise = event.target.value;
+    if (this.selectedImage) {
+      const image: any = this.selectedImage;
+      const currentFilters = image.filters || [];
+      const filterIndex = currentFilters.findIndex(
+        (filter: any) => filter.type === 'Noise'
+      );
+
+      if (filterIndex !== -1) {
+        currentFilters.splice(filterIndex, 1);
+      }
+      const noiseFilter = new fabric.Image.filters.Noise({
+        noise: this.imgNoise * 10,
+      });
+      currentFilters.push(noiseFilter);
+      image.filters = currentFilters;
+      image.applyFilters();
+      this.canvas?.renderAll();
+    }
+  }
+
+
+  getFilterValue(filters: any[], type: any) {
+    const filter = filters.find(f => f.type === type);
+    if (filter) {
+      const value = Object.values(filter)[0]; // Get the second property (the value)
+      return typeof value === "number" ? value : 0; // Ensure it always returns a number
+    }
+    return 0; // Default value
+  }
+  // options for obj
 
   toggleVisibility(itemId: string): void {
     const target = this.canvas.getObjects().find((obj: any) => obj.id === itemId);
@@ -784,54 +935,45 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
 
-  saveCanvasDataToDB() {
+  async saveCanvasDataToDB(): Promise<void> {
     const scaleFactor = 3;
-    let formDataFront: any = new FormData();
-    let formDataBack: any = new FormData();
-    this.canvas?.getObjects().forEach((obj: any) => {
-      const frontCanvas = obj
-        ? this.canvas.toDataURL({
-          format: 'png',
-          multiplier: scaleFactor,
-          quality: 1.0,
-        })
-        : '';
-      this.convertToBlob(frontCanvas);
-    });
-    this.toggleCanvas();
-    setTimeout(() => {
-      this.canvas?.getObjects().forEach((obj: any) => {
-        console.log(obj, 'obj')
-        formDataBack = obj
-          ? this.canvas.toDataURL({
-            format: 'png',
-            multiplier: scaleFactor,
-            quality: 1.0,
-          })
-          : '';
-      });
 
-    }, 1000);
-  };
+    try {
+      await this.processCanvasObjects(scaleFactor);
+      await this.toggleCanvas();
+      await this.processCanvasObjects(scaleFactor);
+      await this.uploadImage();
+    } catch (error) {
+      console.error("Error saving canvas data:", error);
+    }
+  }
 
-  convertToBlob(formDataBack: any) {
+  private async processCanvasObjects(scaleFactor: number): Promise<void> {
+    const promises = this.canvas?.getObjects().map(async (obj: any) => {
+      let file = obj ? this.canvas.toDataURL({ format: 'png', multiplier: scaleFactor, quality: 1.0 }) : '';
+      return this.convertToBlob(file);
+    }) || [];
 
-    let formdAta: any = new FormData();
-    // Convert the data URL to a Blob
-    fetch(formDataBack)
-      .then((res) => res.blob())
-      .then((blob) => {
-        // Append the Blob to FormData
-        formdAta.append(
-          'image',
-          blob,
-          Date.now() + '_textssss.png'  // You can adjust the name as needed
-        );
-        this.uploadFile(formdAta,)
-      })
-      .catch((error) => {
-        console.error('Error converting canvas to Blob:', error);
-      });
+    await Promise.all(promises); // Wait for all blobs to be processed
+  }
+
+  async convertToBlob(formData: string): Promise<void> {
+    try {
+      const response: any = await fetch(formData);
+      const blob: any = await response.blob();
+
+      if (this.isCanvas1Visible) {
+        this.frontImgName = `${Date.now()}_${this.userData.user_Name}_front.png`
+        this.formDataFront.append('image', blob, this.frontImgName);
+      } else {
+        this.BackImgName = `${Date.now()}_${this.userData.user_Name}_back.png`
+        this.formDataBack.append('image', blob, this.BackImgName);
+      }
+
+      console.log(this.formDataBack, this.formDataFront);
+    } catch (error) {
+      console.error('Error converting canvas to Blob:', error);
+    }
   }
 
   togglePanel(panelType: string) {
@@ -844,18 +986,117 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
+
+  checkSelectedObject(): void {
+    const activeObject = this.canvas.getActiveObject();
+    if (activeObject && activeObject.type === 'text') {
+      this.selectedText = activeObject;
+      this.CurrentSelected('text');
+    } else if (activeObject && activeObject.type === 'image') {
+      this.selectedImage = activeObject;
+      this.CurrentSelected('image');
+    } else {
+      this.selectedText = null;
+      this.selectedImage = null;
+    }
+  }
+
+  CurrentSelected(type: any) {
+    if (type == 'text') {
+      this.textcolor = this.selectedText.fill as string;
+      this.textfont = this.selectedText.fontFamily || 'Oswald';
+      this.isBold = this.selectedText.fontWeight === 'bold';
+      this.fontSize = this.selectedText.fontSize || 24;
+      this.textStrokeSize = this.selectedText.strokeWidth || 50;
+      this.shadowBlur = this.selectedText.shadow?.blur || 60;
+      this.shadowOffsetX = this.selectedText.shadow?.offsetX || 0;
+      this.shadowOffsetY = this.selectedText.shadow?.offsetY || 0;
+      this.shadowColor = this.selectedText.shadow?.color || '#000000';
+      this.hasFill = !this.selectedText.stroke;
+      this.opacity = this.selectedText.opacity ? this.selectedText.opacity * 100 : 1;
+      this.rotate = Math.round(this.selectedText.angle) || 0;
+      this.text = this.selectedText.text;
+      this.lineHeight = this.selectedText.lineHeight ? Math.round(this.selectedText.lineHeight) * 100 : 100;
+      this.togglePanel('Text');
+    } else if (type == 'image') {
+      this.imgBlur = this.getFilterValue(this.selectedImage.filters, 'Blur') * 100;
+      this.imgBlur = Math.round(this.imgBlur);
+      this.imgBrightness = this.getFilterValue(this.selectedImage.filters, 'Brightness') * 100;
+      this.imgBrightness = Math.round(this.imgBrightness);
+      this.imgHue = this.getFilterValue(this.selectedImage.filters, 'HueRotation') / 3.6;
+      this.imgHue = Math.round(this.imgHue);
+      this.imgContrast = this.getFilterValue(this.selectedImage.filters, 'Contrast') * 100;
+      this.imgContrast = Math.round(this.imgContrast);
+      this.imgSaturation = this.getFilterValue(this.selectedImage.filters, 'Saturation') * 100;
+      this.imgSaturation = Math.round(this.imgSaturation);
+      this.imgNoise = this.getFilterValue(this.selectedImage.filters, 'Noise') / 10;
+      this.imgNoise = Math.round(this.imgNoise);
+      this.selectedText = null;
+      this.togglePanel('Image');
+    }
+  }
+
+
   toggleOpen() {
     this.isArcEnabled = !this.isArcEnabled;
   }
 
-  uploadFile(image: any) {
-    this.appservice.postImageToS3(image).subscribe(
+
+  uploadImage(): any {
+    const formData = new FormData();
+    formData.append('userId', this.userData.user_Name);
+    formData.append('price', this.priceRange);
+    formData.append('teeName', this.designName);
+    formData.append('role', this.userData.user_Role);
+    formData.append('frontUrl', this.frontImgName || '');
+    formData.append('backUrl', this.BackImgName || '');
+    formData.append('teeColor', this.imageColor);
+
+    // 🔹 Append image files to FormData
+    if (this.formDataFront) {
+      const frontImage = this.formDataFront.get('image');
+      if (frontImage) {
+        formData.append('frontImage', frontImage as Blob);
+      }
+    }
+    if (this.formDataBack) {
+      const backImage = this.formDataBack.get('image');
+      if (backImage) {
+        formData.append('backImage', backImage as Blob);
+      }
+    }
+    this.appservice.postImage(formData).subscribe(
       (response) => {
-        console.log(response);
+        console.log(response, 'response')
+        this.router.navigate(['/tees']);
       },
       (error) => {
         console.log(error);
       }
     );
   }
+
+  // changeImage(index: any) {
+  //   this.imageFrontSrc = this.imageFrontUrls[index];
+  //   this.imageBackSrc = this.imageBackUrls[index];
+  //   if (this.currentSide == 'front') {
+  //     this.drawImageOnCanvas(this.imageFrontSrc);
+  //   } else {
+  //     this.drawImageOnCanvas(this.imageBackSrc);
+  //   }
+  //   switch (index) {
+  //     case 0:
+  //       this.imageColor = 'Onyx black';
+  //       break;
+  //     case 1:
+  //       this.imageColor = 'Pearl white';
+  //       break;
+  //     case 2:
+  //       this.imageColor = 'Sapphire blue';
+  //       break;
+  //     case 3:
+  //       this.imageColor = 'Ruby maroon';
+  //       break;
+  //   }
+  // }
 }

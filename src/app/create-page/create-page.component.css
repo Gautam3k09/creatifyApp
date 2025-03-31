@@ -137,14 +137,14 @@ body {
             outline: none;
         }
 
-        .opacity-container {
+        .slider-container {
             align-items: center;
             justify-content: space-between;
             font-family: Merriweather, serif;
             font-size: 18px;
             font-weight: 500;
             color: #212529;   
-            .opacity-label {
+            .slider-label {
                 display: flex;
                 justify-content: space-between;
                 color: #212529; 

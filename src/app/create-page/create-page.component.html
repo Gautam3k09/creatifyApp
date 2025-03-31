@@ -14,200 +14,190 @@
             </div>
 
             <div *ngIf="activePanel === 'Text'" class="property-controls custom-scrollbar">
-                <div *ngIf="this.selectedText ; else textElsePart">
-                    <div class="text-control1">
-                        <div class="input-container">
-                            <label for="frame-name">Name</label>
-                            <input type="text" id="frame-name" [value]="text" (keyup)="updateText($event)" />
+                <div class="text-control1">
+                    <div class="input-container">
+                        <label for="frame-name">Name</label>
+                        <input type="text" id="frame-name" [value]="text" (keyup)="updateText($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Opacity</span>
+                            <span id="slider-value">{{opacity}}</span>
                         </div>
-                        <div class="opacity-container">
-                            <div class="opacity-label">
-                                <span>Opacity</span>
-                                <span id="opacity-value">{{opacity}}</span>
-                            </div>
-                            <input type="range" class="opacity-slider" min="0" max="100" [value]="opacity"
-                                (input)="updateOpacity($event)" />
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="opacity"
+                            (input)="updateOpacity($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Rotate</span>
+                            <span id="slider-value">{{rotate}}</span>
                         </div>
-                        <div class="opacity-container">
-                            <div class="opacity-label">
-                                <span>Rotate</span>
-                                <span id="opacity-value">{{rotate}}</span>
-                            </div>
-                            <input type="range" class="opacity-slider" min="0" max="360" [value]="rotate"
-                                (input)="updateAngle($event)" />
+                        <input type="range" class="opacity-slider" min="0" max="360" [value]="rotate"
+                            (input)="updateAngle($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Size</span>
+                            <span id="slider-value">{{fontSize}}</span>
                         </div>
-                        <div class="opacity-container">
-                            <div class="opacity-label">
-                                <span>Size</span>
-                                <span id="opacity-value">{{fontSize}}</span>
-                            </div>
-                            <input type="range" class="opacity-slider" min="0" max="500" [value]="fontSize"
-                                (input)="updateFontSize($event)" />
+                        <input type="range" class="opacity-slider" min="0" max="500" [value]="fontSize"
+                            (input)="updateFontSize($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Line Height</span>
+                            <span id="slider-value">{{lineHeight}}</span>
                         </div>
-                        <div class="opacity-container">
-                            <div class="opacity-label">
-                                <span>Line Height</span>
-                                <span id="opacity-value">{{lineHeight}}</span>
-                            </div>
-                            <input type="range" class="opacity-slider" min="-50" max="150" [value]="lineHeight"
-                                (input)="updateLineHeight($event)" />
+                        <input type="range" class="opacity-slider" min="-50" max="150" [value]="lineHeight"
+                            (input)="updateLineHeight($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Letter Spacing</span>
+                            <span id="slider-value">{{charSpacing}}</span>
                         </div>
-                        <div class="opacity-container">
-                            <div class="opacity-label">
-                                <span>Letter Spacing</span>
-                                <span id="opacity-value">{{charSpacing}}</span>
-                            </div>
-                            <input type="range" class="opacity-slider" min="0" max="100" [value]="charSpacing"
-                                (input)="updateCharSpacing($event)" />
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="charSpacing"
+                            (input)="updateCharSpacing($event)" />
 
+                    </div>
+                    <div class="font-container">
+                        <label for="font-family">Font Family</label>
+                        <select [(ngModel)]="textfont" (change)="changeFont(textfont)" class="icon-select"
+                            [ngStyle]="{'font-family': textfont}">
+                            <option *ngFor="let font of fontList" [ngValue]="font" [ngStyle]="{'font-family': font}">
+                                {{ font }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="text-color-container">
+                        <div class="slider-label">
+                            <span>Fill</span>
                         </div>
-                        <div class="font-container">
-                            <label for="font-family">Font Family</label>
-                            <select [(ngModel)]="textfont" (change)="changeFont(textfont)" class="icon-select"
-                                [ngStyle]="{'font-family': textfont}">
-                                <option *ngFor="let font of fontList" [ngValue]="font"
-                                    [ngStyle]="{'font-family': font}">
-                                    {{ font }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="text-color-container">
-                            <div class="opacity-label">
-                                <span>Fill</span>
-                            </div>
-                            <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="textcolor"
-                                [(colorPicker)]="textcolor" (colorPickerChange)="changeTextColor(textcolor)">
-                                <span class="tooltip">Text Color</span>
+                        <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="textcolor"
+                            [(colorPicker)]="textcolor" (colorPickerChange)="changeTextColor(textcolor)">
+                            <span class="tooltip">Text Color</span>
+                        </button>
+                    </div>
+                    <div class="style-container">
+                        <label>Style</label>
+                        <div class="style-buttons">
+                            <button [ngClass]="{'active': textStyles.uppercase}" (click)="toggleTextStyle('uppercase')">
+                                <i class="fa-solid fa-text-height"></i>
+                            </button>
+                            <button [ngClass]="{'active': textStyles.italic}" (click)="toggleTextStyle('italic')">
+                                <i class="fa-solid fa-italic"></i>
+                            </button>
+                            <button [ngClass]="{'active': textStyles.bold}" (click)="toggleTextStyle('bold')">
+                                <i class="fa-solid fa-bold"></i>
+                            </button>
+                            <button [ngClass]="{'active': textStyles.underline}" (click)="toggleTextStyle('underline')">
+                                <i class="fa-solid fa-underline"></i>
                             </button>
                         </div>
-                        <div class="style-container">
-                            <label>Style</label>
-                            <div class="style-buttons">
-                                <button [ngClass]="{'active': textStyles.uppercase}"
-                                    (click)="toggleTextStyle('uppercase')">
-                                    <i class="fa-solid fa-text-height"></i>
-                                </button>
-                                <button [ngClass]="{'active': textStyles.italic}" (click)="toggleTextStyle('italic')">
-                                    <i class="fa-solid fa-italic"></i>
-                                </button>
-                                <button [ngClass]="{'active': textStyles.bold}" (click)="toggleTextStyle('bold')">
-                                    <i class="fa-solid fa-bold"></i>
-                                </button>
-                                <button [ngClass]="{'active': textStyles.underline}"
-                                    (click)="toggleTextStyle('underline')">
-                                    <i class="fa-solid fa-underline"></i>
-                                </button>
-                            </div>
+                    </div>
+                    <div class="arch-container">
+                        <div class="toggle-header" (click)="resetPathforCurve()">
+                            <span class="arrow" [class.expanded]="isArcEnabled"> <i class="fa"
+                                    [ngClass]="isArcEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
+                            <label>Curve</label>
+                            <label class="switch">
+                                <input type="checkbox" [(ngModel)]="isArcEnabled" (change)="resetPathforCurve()" />
+                                <span class="slider"></span>
+                            </label>
                         </div>
-                        <div class="arch-container">
-                            <div class="toggle-header" (click)="resetPathforCurve()">
-                                <span class="arrow" [class.expanded]="isArcEnabled"> <i class="fa"
-                                        [ngClass]="isArcEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
-                                <label>Curve</label>
-                                <label class="switch">
-                                    <input type="checkbox" [(ngModel)]="isArcEnabled" (change)="resetPathforCurve()" />
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
 
-                            <div class="content" *ngIf="isArcEnabled">
-                                <div class="button-group">
-                                    <div class="button-group-div">
-                                        <button [class.active]="selectedCurve === 'arc'"
-                                            (click)="applyPathforCurve('arc',0)">Arc</button>
-                                        <button [class.active]="selectedCurve === 'circle'"
-                                            (click)="applyPathforCurve('arc',500)">Circle</button>
-                                        <button [class.active]="selectedCurve === 'half'"
-                                            (click)="applyPathforCurve('arc',250)">Half</button>
-                                    </div>
-                                    <div class="opacity-container">
-                                        <div class="opacity-label">
-                                            <span>Amount</span>
-                                            <span id="opacity-value">{{arcAmount}}</span>
-                                        </div>
-                                        <input type="range" class="opacity-slider" min="0" max="500" [value]="arcAmount"
-                                            (input)="changeArcRadius($event)" />
-                                    </div>
+                        <div class="content" *ngIf="isArcEnabled">
+                            <div class="button-group">
+                                <div class="button-group-div">
+                                    <button [class.active]="selectedCurve === 'arc'"
+                                        (click)="applyPathforCurve('arc',0)">Arc</button>
+                                    <button [class.active]="selectedCurve === 'circle'"
+                                        (click)="applyPathforCurve('arc',500)">Circle</button>
+                                    <button [class.active]="selectedCurve === 'half'"
+                                        (click)="applyPathforCurve('arc',250)">Half</button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="arch-container">
-                            <div class="toggle-header" (click)="resetTextStroke()">
-                                <span class="arrow" [class.expanded]="isTextStrokeEnabled"> <i class="fa"
-                                        [ngClass]="isTextStrokeEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
-                                <label>Outline</label>
-                                <label class="switch">
-                                    <input type="checkbox" [(ngModel)]="isTextStrokeEnabled"
-                                        (click)="resetTextStroke()" />
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="content" *ngIf="isTextStrokeEnabled">
-                                <div class="opacity-container">
-                                    <div class="opacity-label">
-                                        <span>Size</span>
-                                        <span id="opacity-value">{{textStrokeSize}}</span>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Amount</span>
+                                        <span id="slider-value">{{arcAmount}}</span>
                                     </div>
-                                    <input type="range" class="opacity-slider" min="0" max="100"
-                                        [value]="textStrokeSize" (input)="updateTextStroke($event,strokeColor)" />
-                                </div>
-                                <button class="text-color-btn" [cpOutputFormat]="'hex'"
-                                    [style.background-color]="strokeColor" [(colorPicker)]="strokeColor"
-                                    (colorPickerChange)="updateTextStroke(null,strokeColor)">
-                                    <span class="tooltip">Stroke Color</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="arch-container">
-                            <div class="toggle-header" (click)="resetTexShadow()">
-                                <span class="arrow" [class.expanded]="shadowEnabled"> <i class="fa"
-                                        [ngClass]="shadowEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
-                                <label>Shadow</label>
-                                <label class="switch">
-                                    <input type="checkbox" [(ngModel)]="shadowEnabled" (change)="resetTexShadow()" />
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="content" *ngIf="shadowEnabled">
-                                <button class="text-color-btn" [cpOutputFormat]="'hex'"
-                                    [style.background-color]="shadowColor" [(colorPicker)]="shadowColor"
-                                    (colorPickerChange)="updateTextShadow('color',shadowColor,null)">
-                                    <span class="tooltip">Shadow Color</span>
-                                </button>
-                                <div class="opacity-container">
-                                    <div class="opacity-label">
-                                        <span>Blur</span>
-                                        <span id="opacity-value">{{shadowBlur}}</span>
-                                    </div>
-                                    <input type="range" class="opacity-slider" min="0" max="100" [value]="shadowBlur"
-                                        (input)="updateTextShadow('blur',null,$event)" />
-                                </div>
-                                <div class="opacity-container">
-                                    <div class="opacity-label">
-                                        <span>x-axis</span>
-                                        <span id="opacity-value">{{shadowOffsetX}}</span>
-                                    </div>
-                                    <input type="range" class="opacity-slider" min="-50" max="50"
-                                        [value]="shadowOffsetX" (input)="updateTextShadow('x',null,$event)" />
-                                </div>
-                                <div class="opacity-container">
-                                    <div class="opacity-label">
-                                        <span>y-axis</span>
-                                        <span id="opacity-value">{{shadowOffsetY}}</span>
-                                    </div>
-                                    <input type="range" class="opacity-slider" min="-50" max="50"
-                                        [value]="shadowOffsetY" (input)="updateTextShadow('y',null,$event)" />
+                                    <input type="range" class="opacity-slider" min="0" max="500" [value]="arcAmount"
+                                        (input)="changeArcRadius($event)" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <ng-template #textElsePart>
-                    <div class="select-text-message">✨ Please Add/Select Text 📝</div>
-                </ng-template>
+                    <div class="arch-container">
+                        <div class="toggle-header" (click)="resetTextStroke()">
+                            <span class="arrow" [class.expanded]="isTextStrokeEnabled"> <i class="fa"
+                                    [ngClass]="isTextStrokeEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
+                            <label>Outline</label>
+                            <label class="switch">
+                                <input type="checkbox" [(ngModel)]="isTextStrokeEnabled" (click)="resetTextStroke()" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
 
+                        <div class="content" *ngIf="isTextStrokeEnabled">
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>Size</span>
+                                    <span id="slider-value">{{textStrokeSize}}</span>
+                                </div>
+                                <input type="range" class="opacity-slider" min="0" max="100" [value]="textStrokeSize"
+                                    (input)="updateTextStroke($event,strokeColor)" />
+                            </div>
+                            <button class="text-color-btn" [cpOutputFormat]="'hex'"
+                                [style.background-color]="strokeColor" [(colorPicker)]="strokeColor"
+                                (colorPickerChange)="updateTextStroke(null,strokeColor)">
+                                <span class="tooltip">Stroke Color</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="arch-container">
+                        <div class="toggle-header" (click)="resetTexShadow()">
+                            <span class="arrow" [class.expanded]="shadowEnabled"> <i class="fa"
+                                    [ngClass]="shadowEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
+                            <label>Shadow</label>
+                            <label class="switch">
+                                <input type="checkbox" [(ngModel)]="shadowEnabled" (change)="resetTexShadow()" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="content" *ngIf="shadowEnabled">
+                            <button class="text-color-btn" [cpOutputFormat]="'hex'"
+                                [style.background-color]="shadowColor" [(colorPicker)]="shadowColor"
+                                (colorPickerChange)="updateTextShadow('color',shadowColor,null)">
+                                <span class="tooltip">Shadow Color</span>
+                            </button>
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>Blur</span>
+                                    <span id="slider-value">{{shadowBlur}}</span>
+                                </div>
+                                <input type="range" class="opacity-slider" min="0" max="100" [value]="shadowBlur"
+                                    (input)="updateTextShadow('blur',null,$event)" />
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>x-axis</span>
+                                    <span id="slider-value">{{shadowOffsetX}}</span>
+                                </div>
+                                <input type="range" class="opacity-slider" min="-50" max="50" [value]="shadowOffsetX"
+                                    (input)="updateTextShadow('x',null,$event)" />
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>y-axis</span>
+                                    <span id="slider-value">{{shadowOffsetY}}</span>
+                                </div>
+                                <input type="range" class="opacity-slider" min="-50" max="50" [value]="shadowOffsetY"
+                                    (input)="updateTextShadow('y',null,$event)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div *ngIf="activePanel === 'Templates'" class="property-controls">
@@ -240,6 +230,62 @@
 
             <div *ngIf="activePanel === 'Shapes'" class="property-controls">
                 <p>Shape panel content</p>
+            </div>
+            <div *ngIf="activePanel === 'Image'" class="property-controls">
+                <div class="text-control1">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Brightness</span>
+                            <span id="slider-value">{{imgBrightness}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="-100" max="100" [value]="imgBrightness"
+                            (input)="onBrightnessChange($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Contrast</span>
+                            <span id="slider-value">{{imgContrast}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="-100" max="100" [value]="imgContrast"
+                            (input)="onContrastChange($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Saturation</span>
+                            <span id="slider-value">{{imgSaturation}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="-100" max="100" [value]="imgSaturation"
+                            (input)="onSaturationChange($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Hue</span>
+                            <span id="slider-value">{{imgHue}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="imgHue"
+                            (input)="onHueChange($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Blur</span>
+                            <span id="slider-value">{{imgBlur}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="imgBlur"
+                            (input)="onBlurChange($event)" />
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Noise</span>
+                            <span id="slider-value">{{imgNoise}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="imgNoise"
+                            (input)="onNoiseChange($event)" />
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="activePanel === 'Properties'" class="property-controls">
+                <p>✨ Please Add/Select Elements to view their properties! 📝</p>
             </div>
         </div>
 
@@ -277,9 +323,6 @@
     <div class="bottom-container">
         <button class="bottom-btn" (click)="toggleCanvas()">
             <i class="fas fa-times"></i> Flip
-        </button>
-        <button class="bottom-btn" (click)="togglePanel('Text')" title="Text">
-            <i class="fas fa-font"></i> Text
         </button>
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
             <i class="fas fa-shapes"></i> Templates

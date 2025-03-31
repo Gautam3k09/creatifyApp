@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TestPageComponent } from './test-page/test-page.component';
-import { CanvasAreaComponent } from './canvas-area/canvas-area.component';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { CommonShopComponent } from './common-shop/common-shop.component';
 import { YourTeesComponent } from './your-tees/your-tees.component';
@@ -17,9 +16,8 @@ export const routes: Routes = [
     { path: 'create', component: CreatePageComponent },
     { path: '', component: HomeComponent },
     { path: 'shop', component: CommonShopComponent },
-    { path: 'create', component: YourTeesComponent },
+    { path: 'tees', component: YourTeesComponent },
     { path: 'test', component: TestPageComponent },
-    { path: 'canvas', component: CanvasAreaComponent },
     { path: 'account', component: SettingPageComponent },
     { path: 'buy/:userId', component: BuyPageComponent },
     { path: ':userName/merch/:userId', component: MerchHomePageComponent },
@@ -36,4 +34,4 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
