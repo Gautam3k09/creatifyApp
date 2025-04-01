@@ -16,40 +16,25 @@ import { LoaderComponent } from '../loader/loader.component';
 export class TshirtsDataPageComponent {
     @Input() from: any;
     userId: any;
-    img: boolean = false;
     teeDatas: any = [];
-    currentIndex: number = 0;
-    currentCanvas: any;
-    currentMainCanvas: any;
-    public ctx: any;
-    public MainCanvasctx: any;
     commonShop: any = '';
     pageCount: number = 1;
-    @ViewChild('mainCanvas', { static: false })
-    canvasRef_for_Bg!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('canvas', { static: false })
-    canvasRef!: ElementRef<HTMLCanvasElement>;
     DataFetched: boolean = false;
     userData: any;
-    canvasfrontHeight = 100;
-    canvasbackHeight = 120;
     storedData: any;
     hideLoadbtn: boolean = false;
     isLoading = false;
-
-    imageFrontSrc = 'assets/display-tees/front-black.png';
     imageFrontUrls = [
-        { key: 'Onyx black', value: 'assets/display-tees/front-black.png' },
-        { key: 'Pearl white', value: 'assets/display-tees/front-white.png' },
-        { key: 'Sapphire blue', value: 'assets/display-tees/front-blue.png' },
-        { key: 'Ruby maroon', value: 'assets/display-tees/front-maroon.png' },
+        { key: 'Onyx black', value: 'assets/Tees/black-f.png' },
+        { key: 'Pearl white', value: 'assets/Tees/white-f.png' },
+        { key: 'Sapphire blue', value: 'assets/Tees/blue-f.png' },
+        { key: 'Ruby maroon', value: 'assets/Tees/maroon-f.png' },
     ];
-    imageBackSrc = 'assets/display-tees/back-black.png';
     imageBackUrls = [
-        { key: 'Onyx black', value: 'assets/display-tees/back-black.png' },
-        { key: 'Pearl white', value: 'assets/display-tees/back-white.png' },
-        { key: 'Sapphire blue', value: 'assets/display-tees/back-blue.png' },
-        { key: 'Ruby maroon', value: 'assets/display-tees/back-maroon.png' },
+        { key: 'Onyx black', value: 'assets/Tees/black.png-b' },
+        { key: 'Pearl white', value: 'assets/Tees/white.png-b' },
+        { key: 'Sapphire blue', value: 'assets/Tees/blue.png-b' },
+        { key: 'Ruby maroon', value: 'assets/Tees/maroon.png-b' },
     ];
 
     constructor(
@@ -65,34 +50,19 @@ export class TshirtsDataPageComponent {
         }
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.isLoading = true;
-        this.getTees();
+        await this.getTees();
     }
 
-    ngAfterViewInit() {
-        setTimeout(() => {
-            // this.loopIterator()
-        }, 1200);
-    }
+    async getTees() {
+        try {
+            if (this.from !== 'personal') {
+                const data = {
+                    pageNumber: this.pageCount,
+                };
 
-    drawImageOnCanvas(image: any): void {
-        const ctx = this.currentMainCanvas.getContext('2d');
-        this.currentMainCanvas.width = 175; // You can adjust the width
-        this.currentMainCanvas.height = 150; // You can adjust the height
-        const img = new Image();
-        img.src = image;
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, this.currentMainCanvas.width, this.currentMainCanvas.height);
-        };
-    }
-
-    getTees() {
-        if (this.from != 'personal') {
-            const data = {
-                pageNumber: this.pageCount,
-            };
-            this.appservice.getAlltees(data).subscribe((result) => {
+                const result = await this.appservice.getAlltees(data).toPromise();
                 if (result) {
                     if (result.data.length < 1) {
                         this.DataFetched = true;
@@ -101,109 +71,36 @@ export class TshirtsDataPageComponent {
                     if (result.data.length < 12) {
                         this.hideLoadbtn = true;
                     }
-                    this.teeDatas =
-                        this.teeDatas == '' ? result.data : this.teeDatas.concat(result.data);
-                    setTimeout(() => {
-                        if (this.teeDatas.length > 0) {
-                            this.loopIterator();
-                        }
-                    }, 1500);
+                    this.teeDatas = this.teeDatas === '' ? result.data : this.teeDatas.concat(result.data);
+                    if (this.teeDatas.length > 0) {
+                        // this.loopIterator();
+                        this.mapTeesData();
+                        this.isLoading = false;
+                    }
                 }
-            });
-        } else {
-            let data: any;
-            if (this.from == 'personal' && this.storedData.visitor == null) {
-                data = {
-                    id: this.userData.user_Name,
-                };
-                console.log('formher');
             } else {
-                data = {
-                    id: this.userId,
-                };
-            }
-            this.appservice.getTees(data).subscribe((result) => {
+                let data: any;
+                if (this.from === 'personal' && !this.storedData.visitor) {
+                    data = { id: this.userData.user_Name };
+                } else {
+                    data = { id: this.userId };
+                }
+
+                const result = await this.appservice.getTees(data).toPromise();
                 if (result) {
                     this.teeDatas = result.data;
-                    setTimeout(() => {
-                        if (this.teeDatas.length > 0) {
-                            this.loopIterator();
-                        } else {
-                            this.isLoading = false;
-                        }
-                    }, 1500);
+                    if (this.teeDatas.length > 0) {
+                        // this.loopIterator();
+                    } else {
+                        this.isLoading = false;
+                    }
                 }
-            });
-        }
-
-        this.pageCount = this.pageCount + 1;
-    }
-
-    loopIterator() {
-        if (this.teeDatas.length != this.currentIndex) {
-            this.changeTshirtColor(this.currentIndex);
-            let mainCanvas = 'mainTeeData' + this.currentIndex;
-            this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
-            this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
-            this.drawImageOnCanvas(this.imageFrontSrc);
-            let teeDataId = 'teeData' + this.currentIndex;
-            this.currentCanvas = document.getElementById(teeDataId) as HTMLCanvasElement;
-            this.ctx = this.currentCanvas?.getContext('2d');
-            this.loadimage(this.teeDatas[this.currentIndex]);
-        }
-        if (this.teeDatas.length >= this.currentIndex) {
-            this.changeTshirtColor(0);
-            let mainCanvas = 'mainTeeData' + 0;
-            this.currentMainCanvas = document.getElementById(mainCanvas) as HTMLCanvasElement;
-            this.MainCanvasctx = this.currentMainCanvas?.getContext('2d');
-            this.drawImageOnCanvas(this.imageFrontSrc);
-            this.isLoading = false;
-        }
-    }
-
-    loadimage(data: any) {
-        const img = new Image();
-        let boxHeight: any = '';
-        if (!data?.tee_frontsideImg) {
-            const screenWidth = window.innerWidth;
-            if (screenWidth > 800) {
-                this.currentCanvas.style.height = '268px';
-                this.currentCanvas.style.marginTop = '-71.5%';
-                this.currentCanvas.style.marginLeft = '30%';
-                this.currentCanvas.style.width = '230px';
-            } else {
-                this.currentCanvas.style.height = '145px';
-                this.currentCanvas.style.marginTop = '65px';
-                this.currentCanvas.style.marginLeft = '30%';
-                this.currentCanvas.style.width = '89px';
             }
-            boxHeight = this.canvasbackHeight;
-            img.src = data?.tee_backsideImg;
-        } else {
-            boxHeight = this.canvasfrontHeight;
-            img.src = data?.tee_frontsideImg;
-        }
-        const boxWidth: any = this.currentCanvas?.width;
-        let newWidth, newHeight;
-        if (1 > boxWidth / boxHeight) {
-            // Image is wider
-            newWidth = boxWidth;
-            newHeight = boxWidth / 1;
-        } else {
-            // Image is taller or square
-            newHeight = boxHeight;
-            newWidth = boxHeight * 1;
-        }
 
-        img.onload = () => {
-            if (this.ctx) {
-                this.ctx.imageSmoothingEnabled = true;
-                this.ctx.imageSmoothingQuality = 'high';
-                this.ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                this.currentIndex = this.currentIndex + 1;
-                this.loopIterator();
-            }
-        };
+            this.pageCount += 1;
+        } catch (error) {
+            console.error("Error fetching tees:", error);
+        }
     }
 
     deleteTees(data: any) {
@@ -235,22 +132,21 @@ export class TshirtsDataPageComponent {
         this.router.navigate([string]);
     }
 
-    changeTshirtColor(index: any) {
-        if (this.teeDatas.length > 0) {
-            let data = this.teeDatas[index];
-            if (!data.tee_frontsideImg) {
-                this.imageBackUrls.find((imageData: any) => {
-                    if (imageData.key == data.tee_Color) {
-                        this.imageFrontSrc = imageData.value;
-                    }
-                });
+    mapTeesData() {
+        this.teeDatas = this.teeDatas.map((item: any) => {
+            let url;
+            if (item.teeUrl_FrontsideImg != "") {
+                url = this.imageFrontUrls.find(img => img.key === item.tee_Color);
+                item.img = item.teeUrl_FrontsideImg;
+            } else if (item.teeUrl_BacksideImg != "") {
+                url = this.imageBackUrls.find(img => img.key === item.tee_Color);
+                item.img = item.teeUrl_BacksideImg;
             } else {
-                this.imageFrontUrls.find((imageData: any) => {
-                    if (imageData.key == data.tee_Color) {
-                        this.imageFrontSrc = imageData.value;
-                    }
-                });
+                url = this.imageFrontUrls.find(img => img.key === item.tee_Color);
+                item.img = ""
             }
-        }
+            item.teeSrc = url?.value || '';
+            return item;
+        });
     }
 }
