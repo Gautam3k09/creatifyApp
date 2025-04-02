@@ -207,7 +207,6 @@ export class LoginModalComponent {
         }
         this.appservice.sendOtp(email).subscribe({
             next: () => {
-                console.log('otp sent');
                 if (login) {
                     this.myLoginForm.controls['email'].setErrors(null);
                     this.emailExists = false;
@@ -248,7 +247,6 @@ export class LoginModalComponent {
                 }
             },
             error: () => {
-                console.log('otp not verified');
                 this.showWrongOtpError = true;
             },
         });

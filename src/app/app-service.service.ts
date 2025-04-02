@@ -48,7 +48,7 @@ export class AppServiceService {
     }
 
     deleteTees(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/delete-tees/` + data, data);
+        return this.http.post(`${this.serverUrl}/delete-tees`, data);
     }
 
     getAlltees(data: any): Observable<any> {

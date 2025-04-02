@@ -100,7 +100,7 @@ export class TshirtsDataPageComponent {
     }
 
     deleteTees(data: any) {
-        this.appservice.deleteTees(data).subscribe((res) => {
+        this.appservice.deleteTees({ _id: data }).subscribe((res) => {
             this.teeDatas.forEach((element: any, index: any) => {
                 if (element._id === data) this.teeDatas.splice(index, 1);
             });

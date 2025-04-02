@@ -294,7 +294,6 @@ export class SettingPageComponent {
     }
 
     fetchAddress() {
-        console.log(this.pincode.toString().length);
         if (this.pincode.toString().length == 6) {
             this.appservice.getAddressByPincode(this.pincode).subscribe(
                 (data) => {

@@ -154,7 +154,6 @@ export class BuyPageComponent implements OnInit {
     }
 
     checkCoupon(forCoupon: any = true) {
-        console.log(this.isChecked, 'discounted');
         if (!forCoupon && !this.isChecked) {
             this.discountedPrice = this.data?.tee_Price - 100;
             this.showContent = false;
@@ -219,7 +218,6 @@ export class BuyPageComponent implements OnInit {
             this.data.currentSide = img?.value;
             this.data.currentPrint = this.data.teeUrl_BacksideImg;
         }
-        console.log(this.data);
     }
 
     changeSide() {
@@ -235,7 +233,6 @@ export class BuyPageComponent implements OnInit {
             this.data.currentSide = img?.value;
             this.data.currentPrint = this.data.teeUrl_BacksideImg;
         }
-        console.log(img)
     }
 
     getCoins() {

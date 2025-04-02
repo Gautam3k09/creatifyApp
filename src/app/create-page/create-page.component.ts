@@ -969,8 +969,6 @@ export class CreatePageComponent implements AfterViewInit {
         this.BackImgName = `${Date.now()}_${this.userData.user_Name}_back.png`
         this.formDataBack.append('image', blob, this.BackImgName);
       }
-
-      console.log(this.formDataBack, this.formDataFront);
     } catch (error) {
       console.error('Error converting canvas to Blob:', error);
     }

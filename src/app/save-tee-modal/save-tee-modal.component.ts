@@ -21,7 +21,6 @@ export class SaveTeeModalComponent {
         this.helper = this.data.fromHelper;
     }
     ngOnInit() {
-        console.log(this.data);
         this.calculatePrice();
     }
 

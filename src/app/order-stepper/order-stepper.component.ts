@@ -262,7 +262,7 @@ export class OrderStepperComponent {
         }
     }
 
-    onkeyUp(data: any) {}
+    onkeyUp(data: any) { }
 
     verify() {
         this.numberVerified = true;
@@ -278,7 +278,6 @@ export class OrderStepperComponent {
     }
 
     fetchAddress() {
-        console.log(this.pincode.toString().length);
         if (this.pincode.toString().length == 6) {
             this.appservice.getAddressByPincode(this.pincode).subscribe(
                 (data) => {

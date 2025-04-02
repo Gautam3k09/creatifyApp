@@ -37,7 +37,6 @@ export class HomeComponent {
         } else {
             this.isLogin = false;
             let userName = route.snapshot.params['userName'];
-            console.log(userName);
             if (userName) {
                 this.openCanvas(userName);
             }

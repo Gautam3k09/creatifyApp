@@ -188,11 +188,10 @@ export class TestPageComponent implements AfterViewInit {
   // Save Design to Database (Mock Example)
   saveDesign(): void {
     const designData = this.canvas.toJSON();
-    console.log('Saved Design:', designData);
 
     // Mock API Call Example
     // this.http.post('/api/save-design', { design: designData }).subscribe(res => {
-    //   console.log('Design saved successfully!');
+
     // });
   }
 }
