@@ -73,7 +73,6 @@ export class TshirtsDataPageComponent {
                     }
                     this.teeDatas = this.teeDatas === '' ? result.data : this.teeDatas.concat(result.data);
                     if (this.teeDatas.length > 0) {
-                        // this.loopIterator();
                         this.mapTeesData();
                         this.isLoading = false;
                     }
@@ -89,11 +88,8 @@ export class TshirtsDataPageComponent {
                 const result = await this.appservice.getTees(data).toPromise();
                 if (result) {
                     this.teeDatas = result.data;
-                    if (this.teeDatas.length > 0) {
-                        // this.loopIterator();
-                    } else {
-                        this.isLoading = false;
-                    }
+                    this.mapTeesData();
+                    this.isLoading = false;
                 }
             }
 

@@ -2,6 +2,7 @@
 
 #e9ecef -- header
 #f8f9fa -- backgrounds
+#888 -- grey bg
 
 #d1d5db -- border
 

@@ -13,10 +13,12 @@ import { AppServiceService } from '../app-service.service';
 })
 export class AdminOrderPageComponent {
     @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-    displayedColumns: any = ['status', 'orderBy', 'address', 'type', 'price', 'quantity', 'size'];
+    displayedColumns: any = ['orderBy', 'address', 'type', 'price', 'quantity', 'size'];
     orderData: any = [];
     dataSource: any = new MatTableDataSource<any>(this.orderData);
-    constructor(public appservice: AppServiceService) {}
+    showAddElementModal: boolean = false;
+    currentRow: any;
+    constructor(public appservice: AppServiceService) { }
 
     ngOnInit() {
         this.appservice.getAllOrder().subscribe((response: any) => {
@@ -34,7 +36,6 @@ export class AdminOrderPageComponent {
                 let obj = {
                     orderBy: data.orderBys,
                     tshirtId: data.order_tshirtId,
-                    status: data.order_status,
                     address: address,
                     type: data.order_payment,
                     price: data.order_price,
@@ -53,5 +54,9 @@ export class AdminOrderPageComponent {
     ngAfterViewInit() {
         this.dataSource = new MatTableDataSource<any>(this.orderData);
         this.dataSource.paginator = this.paginator;
+    }
+
+    modalBox() {
+        this.showAddElementModal = !this.showAddElementModal;
     }
 }
