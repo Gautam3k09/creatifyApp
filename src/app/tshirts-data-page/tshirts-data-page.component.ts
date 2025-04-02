@@ -31,10 +31,10 @@ export class TshirtsDataPageComponent {
         { key: 'Ruby maroon', value: 'assets/Tees/maroon-f.png' },
     ];
     imageBackUrls = [
-        { key: 'Onyx black', value: 'assets/Tees/black.png-b' },
-        { key: 'Pearl white', value: 'assets/Tees/white.png-b' },
-        { key: 'Sapphire blue', value: 'assets/Tees/blue.png-b' },
-        { key: 'Ruby maroon', value: 'assets/Tees/maroon.png-b' },
+        { key: 'Onyx black', value: 'assets/Tees/black-b.png' },
+        { key: 'Pearl white', value: 'assets/Tees/white-b.png' },
+        { key: 'Sapphire blue', value: 'assets/Tees/blue-b.png' },
+        { key: 'Ruby maroon', value: 'assets/Tees/maroon-b.png' },
     ];
 
     constructor(

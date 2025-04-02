@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,14 +23,8 @@ import { environment } from '../../../environment';
     providers: [WindowRefService, AppServiceService],
 })
 export class BuyPageComponent implements OnInit {
-    @ViewChild('canvas', { static: true })
-    canvas!: ElementRef<HTMLCanvasElement>;
-    globalCanvas: any;
-    globalctx: any;
-    imageSideFront: any = true;
     tshirtId: any;
-    data: any;
-    activeColorBtn: any = 'white';
+    data: any = [];
     activeSizeBtn: any = 'S';
     openCouponInput: any = false;
     enteredCouponInput: any = '';
@@ -38,26 +32,20 @@ export class BuyPageComponent implements OnInit {
     discountedPrice: any = '';
     modalDialog: MatDialogRef<OrderStepperComponent, any> | undefined;
     modalDialogforReferral: MatDialogRef<ReferralPageComponent, any> | undefined;
-    @ViewChild('mainCanvas', { static: false })
-    canvasRef_for_Bg!: ElementRef<HTMLCanvasElement>;
-    currentMainCanvas: any;
-    public MainCanvasctx: any;
-    imageFrontSrc = 'assets/display-tees/front-black.png';
-    imageBackSrc = 'assets/display-tees/back-black.png';
     imageFrontUrls = [
-        { key: 'Onyx black', value: 'assets/display-tees/front-black.png' },
-        { key: 'Pearl white', value: 'assets/display-tees/front-white.png' },
-        { key: 'Sapphire blue', value: 'assets/display-tees/front-blue.png' },
-        { key: 'Ruby maroon', value: 'assets/display-tees/front-maroon.png' },
+        { key: 'Onyx black', value: 'assets/Tees/black-f.png' },
+        { key: 'Pearl white', value: 'assets/Tees/white-f.png' },
+        { key: 'Sapphire blue', value: 'assets/Tees/blue-f.png' },
+        { key: 'Ruby maroon', value: 'assets/Tees/maroon-f.png' },
     ];
     imageBackUrls = [
-        { key: 'Onyx black', value: 'assets/display-tees/back-black.png' },
-        { key: 'Pearl white', value: 'assets/display-tees/back-white.png' },
-        { key: 'Sapphire blue', value: 'assets/display-tees/back-blue.png' },
-        { key: 'Ruby maroon', value: 'assets/display-tees/back-maroon.png' },
+        { key: 'Onyx black', value: 'assets/Tees/black-b.png' },
+        { key: 'Pearl white', value: 'assets/Tees/white-b.png' },
+        { key: 'Sapphire blue', value: 'assets/Tees/blue-b.png' },
+        { key: 'Ruby maroon', value: 'assets/Tees/maroon-b.png' },
     ];
     user_Id: any;
-    teeName: any;
+    currentSide: any = 'front'
     visitor: any;
     isChecked: any = false;
     coins: any;
@@ -74,7 +62,6 @@ export class BuyPageComponent implements OnInit {
         public localStorage: localStorageService
     ) {
         const data = this.localStorage.getUserLocalStorage();
-        console.log(data);
         if (data && data.userData && !data?.visitor) {
             this.user_Id = JSON.parse(data.userData).user_Name;
             this.visitor = false;
@@ -88,33 +75,9 @@ export class BuyPageComponent implements OnInit {
             this.tshirtId = params['userId'];
         });
         this.getCoins();
-        this.globalCanvas = this.canvas.nativeElement as HTMLCanvasElement;
-        this.globalctx = this.globalCanvas.getContext('2d');
         this.getTee();
     }
 
-    ngAfterViewInit() {
-        this.drawImageOnCanvas(this.imageFrontSrc);
-    }
-
-    drawImageOnCanvas(image: any): void {
-        const canvas = this.canvasRef_for_Bg?.nativeElement;
-        let cavn = document.getElementById('mainTeeData') as HTMLCanvasElement;
-        const ctx: any = cavn.getContext('2d');
-
-        canvas.width = 175; // You can adjust the width
-        canvas.height = 150; // You can adjust the height
-        const img = new Image();
-        img.src = image;
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-    }
-
-    changeColor(string: string) {
-        console.log(string, 'string');
-        this.activeColorBtn = string;
-    }
 
     changeSize(string: string) {
         this.activeSizeBtn = string;
@@ -129,60 +92,11 @@ export class BuyPageComponent implements OnInit {
                 this.data = result.data;
                 this.user_Id = this.user_Id != this.data.user_Id ? this.data.user_Id : 'CreateeFi';
                 this.changeTshirtColor();
-                this.loadimage(true);
-                this.drawImageOnCanvas(this.imageFrontSrc);
                 this.isLoading = false;
             } else {
                 this.router.navigate(['']);
             }
         });
-    }
-
-    loadimage(firstTime: boolean = false) {
-        this.globalctx.clearRect(
-            0,
-            0,
-            this.canvas.nativeElement.width,
-            this.canvas.nativeElement.height
-        );
-        const img = new Image();
-        const boxWidth: number = this.globalCanvas.width;
-        const boxHeight: number = this.globalCanvas.height;
-        let newWidth, newHeight;
-        if (1 > boxWidth / boxHeight) {
-            // Image is wider
-            newWidth = boxWidth;
-            newHeight = boxWidth / 1;
-        } else {
-            // Image is taller or square
-            newHeight = boxHeight;
-            newWidth = boxHeight * 1;
-        }
-        if (!this.data?.tee_frontsideImg && firstTime) {
-            this.changeSide(true);
-        }
-        img.src = this.imageSideFront ? this.data?.tee_frontsideImg : this.data?.tee_backsideImg;
-        img.onload = () => {
-            this.globalctx.drawImage(img, 0, 0, newWidth, newHeight);
-        };
-    }
-
-    changeSide(firstTime: boolean = false) {
-        let canvasStyle = document.querySelector('#canvas') as any;
-        if (this.imageSideFront) {
-            canvasStyle.classList.remove('canvasFront');
-            canvasStyle.classList.add('canvasBack');
-            this.drawImageOnCanvas(this.imageBackSrc);
-            this.imageSideFront = false;
-        } else {
-            canvasStyle.classList.remove('canvasBack');
-            canvasStyle.classList.add('canvasFront');
-            this.drawImageOnCanvas(this.imageFrontSrc);
-            this.imageSideFront = true;
-        }
-        if (!firstTime) {
-            this.loadimage();
-        }
     }
 
     openModal() {
@@ -295,19 +209,33 @@ export class BuyPageComponent implements OnInit {
     }
 
     changeTshirtColor() {
-        if (this.data) {
-            this.imageFrontUrls.find((imageData: any) => {
-                if (imageData.key == this.data.tee_Color) {
-                    console.log(imageData);
-                    this.imageFrontSrc = imageData.value;
-                }
-            });
-            this.imageBackUrls.find((imageData: any) => {
-                if (imageData.key == this.data.tee_Color) {
-                    this.imageBackSrc = imageData.value;
-                }
-            });
+        let img;
+        if (this.data.teeUrl_FrontsideImg != "" || this.data.teeUrl_BacksideImg == "") {
+            img = this.imageFrontUrls.find(img => img.key === this.data.tee_Color);
+            this.data.currentSide = img?.value;
+            this.data.currentPrint = this.data.teeUrl_FrontsideImg;
+        } else {
+            img = this.imageBackUrls.find(img => img.key === this.data.tee_Color);
+            this.data.currentSide = img?.value;
+            this.data.currentPrint = this.data.teeUrl_BacksideImg;
         }
+        console.log(this.data);
+    }
+
+    changeSide() {
+        let img;
+        if (this.currentSide == 'back') {
+            this.currentSide = 'front';
+            img = this.imageFrontUrls.find(img => img.key === this.data.tee_Color);
+            this.data.currentSide = img?.value;
+            this.data.currentPrint = this.data.teeUrl_FrontsideImg;
+        } else {
+            this.currentSide = 'back';
+            img = this.imageBackUrls.find(img => img.key === this.data.tee_Color);
+            this.data.currentSide = img?.value;
+            this.data.currentPrint = this.data.teeUrl_BacksideImg;
+        }
+        console.log(img)
     }
 
     getCoins() {

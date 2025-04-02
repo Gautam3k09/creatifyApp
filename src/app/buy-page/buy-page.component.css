@@ -4,6 +4,7 @@
 }
 
 body {
+    background-color: #e9ecef;
     height: 100vh;
     margin: 0;
     overflow: auto;
@@ -25,6 +26,10 @@ body {
     margin: auto;
     color: black;
     border-radius: 30px;
+
+    .left-side{
+        width: 30vw;
+    }
 }
 .mainCanvas {
     height: 350px;
@@ -475,15 +480,36 @@ input {
 }
 
 .icon-style {
-    border: 1px solid black;
+    border: 1px solid #0056b3;
     padding: 5px;
     border-radius: 10px;
-    margin: 50px;
     cursor: pointer;
-    margin-left: 75px !important;
     position: absolute;
     z-index: 999;
 }
+
+.image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .parent-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .overlay-image {
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 55%;
+  }
 
 @media (max-width: 600px) {
     .mainBox {

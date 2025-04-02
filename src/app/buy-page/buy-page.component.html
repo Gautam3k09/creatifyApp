@@ -1,19 +1,14 @@
 <app-loader *ngIf="isLoading"></app-loader>
+
 <body>
     <app-header-page></app-header-page>
     <div class="mainBox">
         <div class="container">
             <div class="left-side">
                 <i class="fa-solid fa-rotate icon-style" (click)="changeSide()"></i>
-                <div class="canvas-container">
-                    <canvas
-                        #mainCanvas
-                        class="mainCanvas"
-                        [id]="'mainTeeData'"
-                        width="175"
-                        height="150"
-                    ></canvas>
-                    <canvas #canvas class="canvasFront" id="canvas"></canvas>
+                <div class="image-container">
+                    <img [src]="data.currentSide" class="parent-image">
+                    <img *ngIf="data.currentPrint" [src]=" data.currentPrint" class="overlay-image" alt="">
                 </div>
             </div>
             <div class="right-side custom-scrollbar">
@@ -44,40 +39,20 @@
                         <div class="chartText" (click)="showImage()">Size Chart</div>
                     </div>
                     <div class="sizeDiv mb-2">
-                        <button
-                            type="button"
-                            style="width: 15%"
-                            class="btn mx-2"
-                            [ngClass]="{ active: activeSizeBtn === 'S' }"
-                            (click)="changeSize('S')"
-                        >
+                        <button type="button" style="width: 15%" class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'S' }" (click)="changeSize('S')">
                             S
                         </button>
-                        <button
-                            type="button"
-                            style="width: 15%"
-                            class="btn mx-2"
-                            [ngClass]="{ active: activeSizeBtn === 'M' }"
-                            (click)="changeSize('M')"
-                        >
+                        <button type="button" style="width: 15%" class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'M' }" (click)="changeSize('M')">
                             M
                         </button>
-                        <button
-                            type="button"
-                            style="width: 15%"
-                            class="btn mx-2"
-                            [ngClass]="{ active: activeSizeBtn === 'L' }"
-                            (click)="changeSize('L')"
-                        >
+                        <button type="button" style="width: 15%" class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'L' }" (click)="changeSize('L')">
                             L
                         </button>
-                        <button
-                            type="button"
-                            style="width: 15%"
-                            class="btn mx-2"
-                            [ngClass]="{ active: activeSizeBtn === 'XL' }"
-                            (click)="changeSize('XL')"
-                        >
+                        <button type="button" style="width: 15%" class="btn mx-2"
+                            [ngClass]="{ active: activeSizeBtn === 'XL' }" (click)="changeSize('XL')">
                             XL
                         </button>
                     </div>
@@ -86,32 +61,16 @@
                 <div class="mb-2">
                     <p class="couponLabel mb-1">Coupon & Coins</p>
                     <div class="input-container">
-                        <input
-                            type="text"
-                            class="couponInput form-control mb-2"
-                            style="height: 30px; padding: 10px"
-                            placeholder="Enter Coupon Code"
-                            (keyup)="onKeyUp($event)"
-                            [disabled]="couponData.couponAvailable || isChecked"
-                        />
-                        <button
-                            *ngIf="couponData.couponAvailable"
-                            class="clear-btn"
-                            (click)="removeCoupon()"
-                        >
+                        <input type="text" class="couponInput form-control mb-2" style="height: 30px; padding: 10px"
+                            placeholder="Enter Coupon Code" (keyup)="onKeyUp($event)"
+                            [disabled]="couponData.couponAvailable || isChecked" />
+                        <button *ngIf="couponData.couponAvailable" class="clear-btn" (click)="removeCoupon()">
                             ×
                         </button>
                     </div>
-                    <div
-                        class="d-flex justify-content-center"
-                        *ngIf="couponData.length == 0; else elseBlock"
-                    >
-                        <button
-                            type="button"
-                            class="btn btn-apply"
-                            (click)="checkCoupon()"
-                            [disabled]="this.enteredCouponInput.length == 0 || isChecked"
-                        >
+                    <div class="d-flex justify-content-center" *ngIf="couponData.length == 0; else elseBlock">
+                        <button type="button" class="btn btn-apply" (click)="checkCoupon()"
+                            [disabled]="this.enteredCouponInput.length == 0 || isChecked">
                             Apply
                         </button>
                     </div>
@@ -127,16 +86,9 @@
                         </div>
                     </ng-template>
                     <div class="coins-container mt-2">
-                        <input
-                            class="createefi-checkbox"
-                            type="checkbox"
-                            [(ngModel)]="isChecked"
-                            (click)="checkCoupon(false)"
-                            [disabled]="couponData.couponAvailable || coins < 99"
-                        />
-                        <span class="createefi-coins"
-                            >Use Createefi Coins ({{ coins }} available)</span
-                        >
+                        <input class="createefi-checkbox" type="checkbox" [(ngModel)]="isChecked"
+                            (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99" />
+                        <span class="createefi-coins">Use Createefi Coins ({{ coins }} available)</span>
                     </div>
                 </div>
 

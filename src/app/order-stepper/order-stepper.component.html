@@ -1,30 +1,18 @@
-<mat-stepper [linear]="false" #stepper style="height: 420px; width: 100%">
+<mat-stepper [linear]="true" #stepper style="height: 420px; width: 100%">
     <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup" style="margin-top: 5%">
             <ng-template matStepLabel class="mobileFontSize">Address</ng-template>
             <div>
                 <mat-form-field style="width: 100%">
-                    <mat-label class="mobileFontSize"
-                        >Flat, House no., Building, Apartment , Street</mat-label
-                    >
-                    <input
-                        matInput
-                        placeholder="Flat, House no., Building, Apartment , Street"
-                        formControlName="building"
-                        required
-                        class="mobileFontSize"
-                    />
+                    <mat-label class="mobileFontSize">Flat, House no., Building, Apartment , Street</mat-label>
+                    <input matInput placeholder="Flat, House no., Building, Apartment , Street"
+                        formControlName="building" required class="mobileFontSize" />
                 </mat-form-field>
             </div>
             <div>
                 <mat-form-field style="width: 45%; margin-right: 5%">
                     <mat-label class="mobileFontSize">Area, Sector, town/city</mat-label>
-                    <input
-                        matInput
-                        placeholder="Area, Sector, town/city"
-                        formControlName="area"
-                        required
-                    />
+                    <input matInput placeholder="Area, Sector, town/city" formControlName="area" required />
                 </mat-form-field>
                 <mat-form-field style="width: 50%">
                     <mat-label class="mobileFontSize">Landmark</mat-label>
@@ -34,124 +22,58 @@
             <div>
                 <mat-form-field style="width: 45%; margin-right: 5%">
                     <mat-label class="mobileFontSize">State</mat-label>
-                    <input
-                        matInput
-                        placeholder="State"
-                        oninput="this.value = this.value.toUpperCase()"
-                        formControlName="city"
-                        required
-                    />
+                    <input matInput placeholder="State" oninput="this.value = this.value.toUpperCase()"
+                        formControlName="city" required />
                 </mat-form-field>
                 <mat-form-field style="width: 50%">
                     <mat-label class="mobileFontSize">Pincode</mat-label>
-                    <input
-                        matInput
-                        placeholder="Pincode"
-                        formControlName="pincode"
-                        [(ngModel)]="pincode"
-                        (input)="fetchAddress()"
-                        required
-                    />
+                    <input matInput placeholder="Pincode" formControlName="pincode" [(ngModel)]="pincode"
+                        (input)="fetchAddress()" required />
                 </mat-form-field>
             </div>
             <div style="text-align: center">
-                <button
-                    type="button"
-                    class="nextButton"
-                    [disabled]="firstFormGroup.invalid || !this.state"
-                    matStepperNext
-                >
+                <button type="button" class="nextButton" [disabled]="firstFormGroup.invalid || !this.state"
+                    matStepperNext>
                     Next
                 </button>
             </div>
         </form>
     </mat-step>
-    <mat-step
-        [stepControl]="secondFormGroup"
-        label="Verify User"
-        *ngIf="this.storedData?.visitor != null"
-    >
+    <mat-step [stepControl]="secondFormGroup" label="Verify User" *ngIf="this.storedData?.visitor != null">
         <form [formGroup]="secondFormGroup">
             <!-- <ng-template matStepLabel>Enter Mobile Number</ng-template> -->
             <div>
                 <mat-form-field style="width: 100%">
                     <mat-label class="mobileFontSize">Mobile Number</mat-label>
-                    <input
-                        matInput
-                        type="text"
-                        placeholder="Mobile Number"
-                        maxlength="10"
-                        formControlName="phoneNumber"
-                        required
-                        [disabled]="true"
-                    />
+                    <input matInput type="text" placeholder="Mobile Number" maxlength="10" formControlName="phoneNumber"
+                        required [disabled]="true" />
                     <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
             </div>
-            <div
-                class="d-flex justify-content-around"
-                *ngIf="secondFormGroup.value.phoneNumber.length == 10"
-            >
+            <div class="d-flex justify-content-around" *ngIf="secondFormGroup.value.phoneNumber.length == 10">
                 <mat-form-field style="width: 20%">
-                    <input
-                        class="otpButton"
-                        matInput
-                        placeholder=""
-                        [disabled]="numberVerified"
-                        formControlName="otp1"
-                        (keyup)="moveToNextInputReg($event)"
-                        maxlength="1"
-                        required
-                    />
+                    <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp1"
+                        (keyup)="moveToNextInputReg($event)" maxlength="1" required />
                 </mat-form-field>
                 <mat-form-field style="width: 20%">
-                    <input
-                        class="otpButton"
-                        matInput
-                        placeholder=""
-                        [disabled]="numberVerified"
-                        formControlName="otp2"
-                        (keyup)="moveToNextInputReg($event)"
-                        maxlength="1"
-                        required
-                    />
+                    <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp2"
+                        (keyup)="moveToNextInputReg($event)" maxlength="1" required />
                 </mat-form-field>
                 <mat-form-field style="width: 20%">
-                    <input
-                        class="otpButton"
-                        matInput
-                        placeholder=""
-                        [disabled]="numberVerified"
-                        formControlName="otp3"
-                        (keyup)="moveToNextInputReg($event)"
-                        maxlength="1"
-                        required
-                    />
+                    <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp3"
+                        (keyup)="moveToNextInputReg($event)" maxlength="1" required />
                 </mat-form-field>
                 <mat-form-field style="width: 20%">
-                    <input
-                        class="otpButton"
-                        matInput
-                        placeholder=""
-                        [disabled]="numberVerified"
-                        formControlName="otp4"
-                        (keyup)="moveToNextInputReg($event)"
-                        maxlength="1"
-                        required
-                    />
+                    <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp4"
+                        (keyup)="moveToNextInputReg($event)" maxlength="1" required />
                 </mat-form-field>
             </div>
             <div class="buttonContainer">
                 <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
-                <button
-                    type="button"
-                    class="btnAction btnOnline"
-                    matStepperNext
-                    [disabled]="secondFormGroup.invalid"
-                    (click)="verify()"
-                >
+                <button type="button" class="btnAction btnOnline" matStepperNext [disabled]="secondFormGroup.invalid"
+                    (click)="verify()">
                     {{ verifyLabel }}
                 </button>
             </div>
@@ -198,20 +120,10 @@
         </div>
         <div class="buttonContainer">
             <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
-            <button
-                type="button"
-                class="btnAction btnCod"
-                matStepperNext
-                (click)="openModal('cod')"
-            >
+            <button type="button" class="btnAction btnCod" matStepperNext (click)="openModal('cod')">
                 Pay on Delivery
             </button>
-            <button
-                type="button"
-                class="btnAction btnOnline"
-                matStepperNext
-                (click)="createRazorPayOrder()"
-            >
+            <button type="button" class="btnAction btnOnline" matStepperNext (click)="createRazorPayOrder()">
                 Pay Now
             </button>
         </div>
