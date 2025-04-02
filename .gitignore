@@ -60,5 +60,5 @@ Thumbs.db
 .prettier.config.cjs
 
 # private
-*./private.md
+.Private.md
 
