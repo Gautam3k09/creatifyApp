@@ -1,0 +1,39 @@
+.table-container {
+  max-height: 650px;  /* Set max height for scroll */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  display: block;
+}
+
+.layout {
+     display: flex;
+     height: 100vh;
+   
+     .sidebar {
+       width: 250px;
+       background: #222;
+       color: white;
+       padding: 20px;
+       display: flex;
+       flex-direction: column;
+       gap: 10px;
+   
+       button {
+         background: #444;
+         color: white;
+         border: none;
+         padding: 10px;
+         cursor: pointer;
+         text-align: left;
+       }
+   
+       button:hover {
+         background: #666;
+       }
+     }
+   
+     .content {
+       flex-grow: 1;
+       padding: 20px;
+     }
+   }
+   

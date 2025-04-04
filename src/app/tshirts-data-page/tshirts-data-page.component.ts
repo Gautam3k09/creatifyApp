@@ -53,6 +53,7 @@ export class TshirtsDataPageComponent {
     async ngOnInit() {
         this.isLoading = true;
         await this.getTees();
+        this.isLoading = false;
     }
 
     async getTees() {

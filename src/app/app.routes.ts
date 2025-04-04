@@ -10,7 +10,7 @@ import { BuyPageComponent } from './buy-page/buy-page.component';
 import { MerchHomePageComponent } from './merch-home-page/merch-home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
-import { AdminOrderPageComponent } from './admin-order-page/admin-order-page.component';
+import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 
 export const routes: Routes = [
     { path: 'create', component: CreatePageComponent },
@@ -25,7 +25,7 @@ export const routes: Routes = [
 
     //admin
     { path: 'admin', component: AdminHomePageComponent },
-    { path: 'order', component: AdminOrderPageComponent },
+    { path: 'order', component: VendorDashboardComponent },
 
     // end
     { path: '**', component: NotFoundComponent },

@@ -94,9 +94,11 @@ export class AppServiceService {
         return this.http.post(`${this.serverUrl}/orders`, data);
     }
 
-    // admin apis
-    getAllOrder() {
-        return this.http.get(`${this.serverUrl}/orderAll`);
+    getAllOrder(data: any) {
+        return this.http.post(`${this.serverUrl}/orderAll`, data);
+    }
+    updateOrder(data: any) {
+        return this.http.post(`${this.serverUrl}/update-order`, data);
     }
 
     // pincode apis
