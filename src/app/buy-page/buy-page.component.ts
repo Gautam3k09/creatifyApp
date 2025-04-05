@@ -217,6 +217,7 @@ export class BuyPageComponent implements OnInit {
             img = this.imageBackUrls.find(img => img.key === this.data.tee_Color);
             this.data.currentSide = img?.value;
             this.data.currentPrint = this.data.teeUrl_BacksideImg;
+            this.currentSide = 'back';
         }
     }
 

@@ -36,4 +36,72 @@
        padding: 20px;
      }
    }
-   
+   .back-button {
+    z-index: 999;
+    position: absolute;
+    top: 10px; /* Adjust if needed */
+    background-color: black;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    font-family: Oswald, sans-serif;
+  }
+  
+  .flip-button {
+    z-index: 999;
+    position: absolute;
+    top: 10px; /* Align with Back button */
+    left: 355px; /* Adjust space between buttons */
+    background-color: black;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    font-family: Oswald, sans-serif;
+  }
+  
+
+   .storage-table-container {
+    max-height: 400px; /* Enables scroll */
+    overflow: auto;
+    border: 1px solid #ddd;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+
+  .image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .parent-image {
+    width: 390px;
+    height: auto;
+  }
+  
+  .overlay-image {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 190px;
+    height: 35%;
+  }

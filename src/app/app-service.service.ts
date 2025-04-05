@@ -114,4 +114,9 @@ export class AppServiceService {
     verifyOtp(email: string, otp: string) {
         return this.http.post(`${this.serverUrl}/verify-otp`, { email, otp });
     }
+
+    //inventory apis
+    getInventory() {
+        return this.http.get(`${this.serverUrl}/get-inventory`);
+    }
 }
