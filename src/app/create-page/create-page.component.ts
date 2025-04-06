@@ -137,7 +137,7 @@ export class CreatePageComponent implements AfterViewInit {
 
     // Track text changes in real-time
     this.canvas.on('text:changed', (event) => {
-      const obj: any = event.target as fabric.Textbox;
+      const obj: any = event.target as fabric.IText;
       if (obj) {
         this.updateTextName(obj.id, obj.text);
       }
@@ -279,89 +279,92 @@ export class CreatePageComponent implements AfterViewInit {
         },
       ];
     }
+    elements.forEach((el: any, i: number) => {
+      const { type, ...elWithoutType } = el; // Safely remove type
+      const id = `${uniqueId}_${i}`;
 
-    elements.forEach((el: any, i: any) => {
-      if (el.type === 'rect') {
-        const rectObject = new fabric.Rect({
-          ...el,
-          left: el.left ? el.left : 0,
-          top: el.top ? el.top : 0,
-          fill: el.fill ? el.fill : '',
+      let object: fabric.Object;
+
+      if (type === 'rect') {
+        object = new fabric.Rect({
+          ...elWithoutType,
+          left: el.left || 0,
+          top: el.top || 0,
+          fill: el.fill || '',
           id: uniqueId,
         });
-        if (targetCanvas == this.canvas) {
 
+        if (targetCanvas === this.canvas) {
           this.itemList.unshift({ id: el.id, type: 'shape', name: el.text, visible: true });
         }
-        targetCanvas.add(rectObject);
-        if (targetCanvas == this.canvas) targetCanvas.setActiveObject(rectObject);
       } else {
-        const textObject = new fabric.IText(el.text, {
-          ...el,
-          left: el.left ? el.left : 0,
-          top: el.top ? el.top : 0,
-          id: uniqueId + "_" + i,
+        object = new fabric.IText(el.text, {
+          ...elWithoutType,
+          left: el.left || 0,
+          top: el.top || 0,
+          id,
         });
 
         if (el.effect === 'gradient') {
-          textObject.set('fill', new fabric.Gradient({
+          object.set('fill', new fabric.Gradient({
             type: 'linear',
-            coords: { x1: 0, y1: 0, x2: 0, y2: textObject.height! },
+            coords: { x1: 0, y1: 0, x2: 0, y2: (object as fabric.IText).height! },
             colorStops: [
               { offset: 0, color: 'red' },
               { offset: 1, color: 'yellow' },
             ],
           }));
         }
+
         if (el.effect === 'blockbuster') {
-          if (el.text === 'BLOCK') {
-            textObject.set({
-              skewX: -10, // Adjust skew for perspective
-            });
-          } else if (el.text === 'BUSTER') {
-            textObject.set({
-              skewX: -10, // Adjust skew for perspective
-              scaleX: 1.1, // Make the bottom slightly wider
-            });
-          }
-          textObject.set({
+          const skewX = el.text === 'BLOCK' || el.text === 'BUSTER' ? -10 : 0;
+          const scaleX = el.text === 'BUSTER' ? 1.1 : 1;
+
+          object.set({
+            skewX,
+            scaleX,
             fontFamily: 'Impact, sans-serif',
             fontWeight: 'bold',
             fill: 'yellow',
             stroke: 'black',
             strokeWidth: 2,
             shadow: '3px 3px 5px rgba(0, 0, 0, 0.5)',
-          })
+          });
         }
-        if (el.pattern && el.pattern.type === 'horizontal_stripes') {
+
+        if (el.pattern?.type === 'horizontal_stripes') {
+          const { stripeHeight, stripeSpacing, stripeColor, backgroundColor } = el.pattern;
           const patternCanvas = document.createElement('canvas');
           const ctx: any = patternCanvas.getContext('2d');
-          const stripeHeight = el.pattern.stripeHeight;
-          const stripeSpacing = el.pattern.stripeSpacing;
-          const stripeColor = el.pattern.stripeColor;
-          const backgroundColor = el.pattern.backgroundColor;
 
           patternCanvas.width = 1;
           patternCanvas.height = stripeHeight + stripeSpacing;
 
           ctx.fillStyle = stripeColor;
           ctx.fillRect(0, 0, 1, stripeHeight);
-
           ctx.fillStyle = backgroundColor;
           ctx.fillRect(0, stripeHeight, 1, stripeSpacing);
 
-          const pattern = ctx.createPattern(patternCanvas, 'repeat');
-          textObject.set('fill', pattern);
+          object.set('fill', ctx.createPattern(patternCanvas, 'repeat'));
         }
+
         if (this.canvas === targetCanvas) {
-          this.itemList.unshift({ id: uniqueId + "_" + i, type: 'texttemplate', name: el.text, visible: true });
+          this.itemList.unshift({ id, type: 'texttemplate', name: el.text, visible: true });
         }
-        targetCanvas.add(textObject);
-        if (targetCanvas == this.canvas && text) targetCanvas.setActiveObject(textObject);
+      }
+
+      // Store custom type if needed
+      console.log('Object Type:', type);
+      object.set({ objectType: type });
+
+      targetCanvas.add(object);
+      if (targetCanvas === this.canvas) {
+        targetCanvas.setActiveObject(object);
       }
     });
+
     this.reapplyObjectStyles();
-    this.saveState()
+    this.saveState();
     targetCanvas.renderAll();
   }
 
@@ -986,8 +989,9 @@ export class CreatePageComponent implements AfterViewInit {
 
 
   checkSelectedObject(): void {
-    const activeObject = this.canvas.getActiveObject();
-    if (activeObject && activeObject.type === 'text') {
+    const activeObject: any = this.canvas.getActiveObject();
+    if (activeObject && activeObject.text === 'Text') {
+      console.log(activeObject, 'activeObject')
       this.selectedText = activeObject;
       this.CurrentSelected('text');
     } else if (activeObject && activeObject.type === 'image') {
@@ -1000,6 +1004,7 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   CurrentSelected(type: any) {
+    console.log(type, 'type')
     if (type == 'text') {
       this.textcolor = this.selectedText.fill as string;
       this.textfont = this.selectedText.fontFamily || 'Oswald';
