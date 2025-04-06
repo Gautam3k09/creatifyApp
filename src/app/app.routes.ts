@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TestPageComponent } from './test-page/test-page.component';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { CommonShopComponent } from './common-shop/common-shop.component';
 import { YourTeesComponent } from './your-tees/your-tees.component';
@@ -17,7 +16,6 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'shop', component: CommonShopComponent },
     { path: 'tees', component: YourTeesComponent },
-    { path: 'test', component: TestPageComponent },
     { path: 'account', component: SettingPageComponent },
     { path: 'buy/:userId', component: BuyPageComponent },
     { path: ':userName/merch/:userId', component: MerchHomePageComponent },

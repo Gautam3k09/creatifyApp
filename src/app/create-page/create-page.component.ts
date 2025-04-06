@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { localStorageService } from '../local-storage-service';
-import { fabric } from 'fabric';
+import * as fabric from 'fabric';
 import { CommonModule } from '@angular/common';
 import Sortable from 'sortablejs';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -236,9 +236,9 @@ export class CreatePageComponent implements AfterViewInit {
 
   saveState() {
     if (this.isCanvas1Visible) {
-      this.canvasData1 = JSON.stringify(this.canvas.toJSON(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
+      this.canvasData1 = JSON.stringify(this.canvas.toJSON());
     } else {
-      this.canvasData2 = JSON.stringify(this.canvas.toJSON(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
+      this.canvasData2 = JSON.stringify(this.canvas.toJSON());
     }
   }
 
@@ -684,7 +684,7 @@ export class CreatePageComponent implements AfterViewInit {
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      fabric.Image.fromURL(e.target.result, (img: any) => {
+      fabric.Image.fromURL(e.target.result).then((img) => {
         img.scaleToWidth(200);
         const uniqueId = 'item_' + Date.now();
         img.set({
@@ -722,7 +722,7 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       // Add the new brightness filter
-      const brightnessFilter = new fabric.Image.filters.Brightness({
+      const brightnessFilter = new fabric.filters.Brightness({
         brightness: this.imgBrightness / 100, // Value between -1 (dark) and 1 (bright)
       });
       image.filters.push(brightnessFilter);
@@ -745,7 +745,7 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       // Add the new brightness filter
-      const Filter = new fabric.Image.filters.Contrast({
+      const Filter = new fabric.filters.Contrast({
         contrast: this.imgContrast / 100, // Value between -1 (dark) and 1 (bright)
       });
       image.filters.push(Filter);
@@ -768,7 +768,7 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       // Add the new brightness filter
-      const Filter = new fabric.Image.filters.Saturation({
+      const Filter = new fabric.filters.Saturation({
         saturation: this.imgSaturation / 100, // Value between -1 (dark) and 1 (bright)
       });
       image.filters.push(Filter);
@@ -791,7 +791,7 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       // Add the new brightness filter
-      const Filter = new fabric.Image.filters.HueRotation({
+      const Filter = new fabric.filters.HueRotation({
         rotation: this.imgHue * 3.6, // Value between -1 (dark) and 1 (bright)
       });
       image.filters.push(Filter);
@@ -819,7 +819,7 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       // Create the new blur filter with the current blur value
-      const blurFilter = new fabric.Image.filters.Blur({
+      const blurFilter = new fabric.filters.Blur({
         blur: this.imgBlur / 100,  // Set the blur amount (value between 0 and 1)
       });
 
@@ -845,7 +845,7 @@ export class CreatePageComponent implements AfterViewInit {
       if (filterIndex !== -1) {
         currentFilters.splice(filterIndex, 1);
       }
-      const noiseFilter = new fabric.Image.filters.Noise({
+      const noiseFilter = new fabric.filters.Noise({
         noise: this.imgNoise * 10,
       });
       currentFilters.push(noiseFilter);
