@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { titleTextTemplates, bodyTextTemplates } from '../../assets/text-template';
 import { AppServiceService } from '../app-service.service';
 import { Router } from '@angular/router';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @Component({
   selector: 'app-create-page',
   standalone: true,
-  imports: [CommonModule, ColorPickerModule, FormsModule],
+  imports: [CommonModule, ColorPickerModule, FormsModule, PopoverModule],
   providers: [AppServiceService],
   templateUrl: './create-page.component.html',
   styleUrl: './create-page.component.css',
@@ -982,8 +983,8 @@ export class CreatePageComponent implements AfterViewInit {
     if (panelType == 'Templates') {
       setTimeout(() => {
         this.renderPredefinedTemplates();
-      }, 300);
-      this.renderPredefinedTemplates();
+      }, 100);
+      // this.renderPredefinedTemplates();
     }
   }
 
@@ -1077,6 +1078,9 @@ export class CreatePageComponent implements AfterViewInit {
         console.log(error);
       }
     );
+  }
+
+  setColor(color: any) {
   }
 
   // changeImage(index: any) {

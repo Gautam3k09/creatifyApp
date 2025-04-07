@@ -327,9 +327,19 @@
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
             <i class="fas fa-shapes"></i> Templates
         </button>
-        <!-- <button class="bottom-btn" (click)="togglePanel('Shapes')" title="Shapes">
-            <i class="fas fa-image"></i>
-        </button> -->
+        <button type="button" class="btn btn-primary" [popover]="popoverContent" popoverTitle="T-Shirt Color"
+            [outsideClick]="true">
+            🎨 Change Color
+        </button>
+        <ng-template #popoverContent>
+            <div class="color-buttons">
+                <button class="color-btn blue" (click)="setColor('blue')"></button>
+                <button class="color-btn white" (click)="setColor('white')"></button>
+                <button class="color-btn black" (click)="setColor('black')"></button>
+                <button class="color-btn maroon" (click)="setColor('maroon')"></button>
+            </div>
+        </ng-template>
+
         <button class="bottom-btn" (click)="saveCanvasDataToDB()">
             <i class="fas fa-eye"></i>Save
         </button>
