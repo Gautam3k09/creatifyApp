@@ -15,6 +15,7 @@ import { localStorageService } from '../local-storage-service';
 export class HeaderPageComponent {
     @Input() fromHome: any;
     sidebarClose: any = false;
+    isMenuOpen = false;
     isLoggedIn: any;
     dialogConfig = new MatDialogConfig();
     modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
@@ -66,5 +67,9 @@ export class HeaderPageComponent {
         this.dialogConfig.id = 'projects-modal-component';
         this.dialogConfig.height = 'auto';
         this.modalDialog = this.matDialog.open(LoginModalComponent, this.dialogConfig);
+    }
+
+    openMobileHamburger() {
+        this.isMenuOpen = !this.isMenuOpen;
     }
 }

@@ -13,7 +13,7 @@
                 {{activePanel}}
             </div>
 
-            <div *ngIf="activePanel === 'Text'" class="property-controls custom-scrollbar">
+            <div *ngIf="activePanel === 'text'" class="property-controls custom-scrollbar">
                 <div class="text-control1">
                     <div class="input-container">
                         <label for="frame-name">Name</label>
@@ -108,14 +108,6 @@
 
                         <div class="content" *ngIf="isArcEnabled">
                             <div class="button-group">
-                                <div class="button-group-div">
-                                    <button [class.active]="selectedCurve === 'arc'"
-                                        (click)="applyPathforCurve('arc',0)">Arc</button>
-                                    <button [class.active]="selectedCurve === 'circle'"
-                                        (click)="applyPathforCurve('arc',500)">Circle</button>
-                                    <button [class.active]="selectedCurve === 'half'"
-                                        (click)="applyPathforCurve('arc',250)">Half</button>
-                                </div>
                                 <div class="slider-container">
                                     <div class="slider-label">
                                         <span>Amount</span>
@@ -231,6 +223,7 @@
             <div *ngIf="activePanel === 'Shapes'" class="property-controls">
                 <p>Shape panel content</p>
             </div>
+
             <div *ngIf="activePanel === 'Image'" class="property-controls">
                 <div class="text-control1">
                     <div class="slider-container">
@@ -322,7 +315,7 @@
 
     <div class="bottom-container">
         <button class="bottom-btn" (click)="toggleCanvas()">
-            <i class="fas fa-times"></i> Flip
+            🔄 Flip
         </button>
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
             <i class="fas fa-shapes"></i> Templates
@@ -333,10 +326,10 @@
         </button>
         <ng-template #popoverContent>
             <div class="color-buttons">
-                <button class="color-btn blue" (click)="setColor('blue')"></button>
-                <button class="color-btn white" (click)="setColor('white')"></button>
-                <button class="color-btn black" (click)="setColor('black')"></button>
-                <button class="color-btn maroon" (click)="setColor('maroon')"></button>
+                <button class="color-btn blue" (click)="setColor(2)"></button>
+                <button class="color-btn white" (click)="setColor(1)"></button>
+                <button class="color-btn black" (click)="setColor(0)"></button>
+                <button class="color-btn maroon" (click)="setColor(3)"></button>
             </div>
         </ng-template>
 

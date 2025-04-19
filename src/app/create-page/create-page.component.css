@@ -388,21 +388,34 @@ body {
 }
 
 .container {
-    background: #ffffff;
+    background: #f5f5f5;
+    background: linear-gradient(45deg, #ddd 25%, transparent 25%),
+              linear-gradient(-45deg, #ddd 25%, transparent 25%),
+              linear-gradient(45deg, transparent 75%, #ddd 75%),
+              linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-size: 20px 20px; /* Adjust square size */
+  background-color: #fff; /* Base color */
+
+
+
     .canvas-containers {
         margin-top: 3%;
+        /* background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, rgba(255, 255, 255, 0) 80%); */
         background-image: url('../../assets/Tees/white-f.png') ;
-        background-size: contain; /* Ensures the image covers the entire screen */
+        /* background-size: contain;  */
+        /* Ensures the image covers the entire screen */
+        background-size: cover;
+        background-blend-mode: multiply;
         background-position: center; /* Centers the image */
         background-repeat: no-repeat;
-        width: 40%;
-        height: 560px;
-        margin-left: 18.5vw;
+        width: 50%;
+        height: 500px;
+        margin-left: 16.5vw;
     }
     
     #canvas {
-        margin-left: 50.2%;
-        margin-top: 82%;
+        margin-left: 59.2%;
+        margin-top: 40%;
         border: 2px solid #ff0000; /* For visibility */
      }
 }

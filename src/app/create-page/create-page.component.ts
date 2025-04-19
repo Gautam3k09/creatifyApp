@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { localStorageService } from '../local-storage-service';
 import * as fabric from 'fabric';
 import { CommonModule } from '@angular/common';
@@ -39,7 +39,6 @@ export class CreatePageComponent implements AfterViewInit {
   text: any = '';
   textfont: string = 'Oswald';  // Default font
   textcolor: string = '#0056b3'; // Default color
-  isBold: boolean = false;
   hasFill: boolean = true;
   fontSize: number = 24;
   shadowEnabled: boolean = false;
@@ -111,6 +110,12 @@ export class CreatePageComponent implements AfterViewInit {
   frontImgName: any;
   BackImgName: any;
 
+  gridSize = 19;
+  guideLines: fabric.Line[] = [];
+  alignmentThreshold = 5; // Tolerance for snapping
+
+  canvasClicked = false;
+
   constructor(
     private appservice: AppServiceService,
     public localStorage: localStorageService,
@@ -124,52 +129,73 @@ export class CreatePageComponent implements AfterViewInit {
     fabric.Object.prototype.objectCaching = false;
     this.textTemplates = [...this.titletexttemplates, ...this.bodytexttemplates];
     this.canvas = new fabric.Canvas(this.canvasRef.nativeElement, {
-      width: 195,
-      height: 250,
+      width: 228,
+      height: 332,
       backgroundColor: 'transparent'
     });
 
     //for canvas margin
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
-    upperCanvas.style.left = 50.2 + '%';
-    upperCanvas.style.top = 64 + '%';
+    upperCanvas.style.left = 59.2 + '%';
+    upperCanvas.style.top = 28 + '%';
     this.saveState();
 
     // Track text changes in real-time
     this.canvas.on('text:changed', (event) => {
-      const obj: any = event.target as fabric.IText;
-      if (obj) {
-        this.updateTextName(obj.id, obj.text);
+      if (this.selectedText && this.selectedText.objectType === 'text') {
+        this.checkSelectedObject()
+        this.updateTextName(this.selectedText.id, this.selectedText.text);
+        this.reapplyObjectStyles();
       }
     });
 
     this.initSortable();
 
-
-
     // Track selected text
     this.canvas.on('selection:created', (event: any) => {
       if (event.selected.length > 1) return;
       this.checkSelectedObject()
+      this.reapplyObjectStyles();
     });
 
     this.canvas.on('object:modified', () => {
       this.checkSelectedObject();
-      // this.updateAngleValue();
-      this.canvas.renderAll();
+      this.removeGuideLines();
+      this.reapplyObjectStyles();
     });
 
     // Track selected text
     this.canvas.on('selection:updated', () => {
       this.checkSelectedObject();
+      this.reapplyObjectStyles();
     });
     this.canvas.on('selection:cleared', () => {
       this.selectedText = null
       this.selectedImage = null;
       this.togglePanel('Properties');
+      this.removeGuideLines();
     });
+
+    this.canvas.on('mouse:down', () => {
+      this.canvasClicked = true;
+    });
+
+    // Initialize Snap to Grid
+    this.initSnapToGrid();
   }
+
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    if (!this.canvasClicked) {
+      this.canvas.discardActiveObject();
+      this.canvas.requestRenderAll();
+      console.log('✅ Deselected because click was outside canvas');
+    }
+    this.canvasClicked = false;
+  }
+
 
   initializeCanvas1() {
     this.canvas.clear();
@@ -204,8 +230,8 @@ export class CreatePageComponent implements AfterViewInit {
       if (this.canvasData2) {
         this.canvas.loadFromJSON(this.canvasData2, () => {
           this.canvas.getObjects().forEach(obj => {
-            if (obj.type === "texttemplate") {
-              obj.set({ type: "textbox" }); // Convert to valid type
+            if (obj.type === "text") {
+              obj.set({ type: "text" }); // Convert to valid type
             }
           });
           this.canvas.renderAll();
@@ -237,10 +263,93 @@ export class CreatePageComponent implements AfterViewInit {
 
   saveState() {
     if (this.isCanvas1Visible) {
-      this.canvasData1 = JSON.stringify(this.canvas.toJSON());
+      this.canvasData1 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
     } else {
-      this.canvasData2 = JSON.stringify(this.canvas.toJSON());
+      this.canvasData2 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
     }
+  }
+
+  // Initialize Snap to Grid & Alignment
+  initSnapToGrid() {
+    this.canvas.on('object:moving', (event) => {
+      const obj = event.target;
+      if (!obj) return;
+      const objCenterX = obj.left! + obj.width! * obj.scaleX! / 2;
+      const objCenterY = obj.top! + obj.height! * obj.scaleY! / 2;
+      this.removeGuideLines();
+      let closestAlignment: any = this.findClosestAlignment(obj);
+      if (closestAlignment) {
+        obj.set(closestAlignment.position);
+        this.addGuideLine(closestAlignment.line[0], closestAlignment.line[1], closestAlignment.line[2], closestAlignment.line[3]);
+      } else {
+        let snapX = Math.round(objCenterX / this.gridSize) * this.gridSize;
+        let snapY = Math.round(objCenterY / this.gridSize) * this.gridSize;
+        if (Math.abs(objCenterX - snapX) < this.alignmentThreshold) {
+          this.addGuideLine(snapX, 0, snapX, this.canvas.height!);
+          obj.set({ left: snapX - obj.width! * obj.scaleX! / 2 });
+        }
+        if (Math.abs(objCenterY - snapY) < this.alignmentThreshold) {
+          this.addGuideLine(0, snapY, this.canvas.width!, snapY);
+          obj.set({ top: snapY - obj.height! * obj.scaleY! / 2 });
+        }
+      }
+      this.canvas.renderAll();
+    });
+  }
+
+  // Find closest object for alignment
+  findClosestAlignment(obj: fabric.Object) {
+    let closest = null;
+    let minDist = this.alignmentThreshold;
+
+    const objCenterX = obj.left! + obj.width! * obj.scaleX! / 2;
+    const objCenterY = obj.top! + obj.height! * obj.scaleY! / 2;
+
+    this.canvas.getObjects().forEach(other => {
+      if (other === obj) return;
+
+      const otherCenterX = other.left! + other.width! * other.scaleX! / 2;
+      const otherCenterY = other.top! + other.height! * other.scaleY! / 2;
+
+      let distX = Math.abs(objCenterX - otherCenterX);
+      let distY = Math.abs(objCenterY - otherCenterY);
+
+      if (distX < minDist) {
+        closest = {
+          position: { left: otherCenterX - obj.width! * obj.scaleX! / 2 },
+          line: [otherCenterX, 0, otherCenterX, this.canvas.height!]
+        };
+        minDist = distX;
+      }
+
+      if (distY < minDist) {
+        closest = {
+          position: { top: otherCenterY - obj.height! * obj.scaleY! / 2 },
+          line: [0, otherCenterY, this.canvas.width!, otherCenterY]
+        };
+        minDist = distY;
+      }
+    });
+
+    return closest;
+  }
+
+  // Function to create a guideline
+  addGuideLine(x1: number, y1: number, x2: number, y2: number) {
+    const line = new fabric.Line([x1, y1, x2, y2], {
+      stroke: 'red',
+      strokeWidth: 1,
+      selectable: false,
+      evented: false
+    });
+    this.canvas.add(line);
+    this.guideLines.push(line);
+  }
+
+  // Remove all guidelines
+  removeGuideLines() {
+    this.guideLines.forEach(line => this.canvas.remove(line));
+    this.guideLines = [];
   }
 
   openElementModal() {
@@ -350,12 +459,9 @@ export class CreatePageComponent implements AfterViewInit {
         }
 
         if (this.canvas === targetCanvas) {
-          this.itemList.unshift({ id, type: 'texttemplate', name: el.text, visible: true });
+          this.itemList.unshift({ id, type: 'text', name: el.text, visible: true });
         }
       }
-
-      // Store custom type if needed
-      console.log('Object Type:', type);
       object.set({ objectType: type });
 
       targetCanvas.add(object);
@@ -466,7 +572,7 @@ export class CreatePageComponent implements AfterViewInit {
 
   resetTexShadow() {
     if (this.shadowEnabled) {
-      if (this.selectedText && this.selectedText.type === 'text') {
+      if (this.selectedText && this.selectedText.objectType === 'text') {
         this.selectedText.set({
           shadow: null // Removes the shadow completely
         });
@@ -551,7 +657,8 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   toggleTextStyle(style: string) {
-    if (this.selectedText && this.selectedText.type === "text") {
+    console.log(this.selectedText, 'textt')
+    if (this.selectedText && this.selectedText.objectType === "text") {
       switch (style) {
         case 'uppercase':
           this.textStyles.uppercase = !this.textStyles.uppercase;
@@ -577,7 +684,7 @@ export class CreatePageComponent implements AfterViewInit {
   applyPathforCurve(string: any, radius: any) {
     this.selectedCurve = string;
     this.arcAmount = radius;
-    if (this.selectedText && this.selectedText.type === 'text') {
+    if (this.selectedText && this.selectedText.objectType === 'text') {
       let pathString = '';
       const fixedRadius = 40;
       const centerX = this.selectedText.left || 300; // Keep the center aligned
@@ -611,7 +718,7 @@ export class CreatePageComponent implements AfterViewInit {
 
   resetPathforCurve() {
     if (this.isArcEnabled) {
-      if (this.selectedText && this.selectedText.type === 'text') {
+      if (this.selectedText && this.selectedText.objectType === 'text') {
         this.selectedText.set({
           path: null, // Remove the path
           textAlign: "left", // Reset text alignment
@@ -677,7 +784,7 @@ export class CreatePageComponent implements AfterViewInit {
 
   // Add Custom Text
   addCustomText() {
-    this.addText(this.canvas, 'Text');
+    this.addText(this.canvas, 'text');
     this.showAddElementModal = false;
   }
 
@@ -688,29 +795,49 @@ export class CreatePageComponent implements AfterViewInit {
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      fabric.Image.fromURL(e.target.result).then((img) => {
-        img.scaleToWidth(200);
-        const uniqueId = 'item_' + Date.now();
-        img.set({
-          id: uniqueId,
-          left: 15,
-          top: 5,
-          selectable: true,
-          hasControls: true,
-          type: 'image',
+      const imgElement = new Image();
+      imgElement.src = e.target.result;
+
+      imgElement.onload = () => {
+        const MIN_WIDTH = 1920;
+        const MIN_HEIGHT = 1080;
+
+        if (imgElement.naturalWidth < MIN_WIDTH || imgElement.naturalHeight < MIN_HEIGHT) {
+          alert('Image must be at least 1920x1080 (1080p) for good print quality.');
+          return;
+        }
+
+        fabric.Image.fromURL(e.target.result).then((img) => {
+          img.scaleToWidth(200);
+          const uniqueId = 'item_' + Date.now();
+          img.set({
+            id: uniqueId,
+            left: 15,
+            top: 5,
+            selectable: true,
+            hasControls: true,
+            type: 'image',
+          });
+
+          this.canvas.add(img);
+          this.canvas.setActiveObject(img);
+          this.reapplyObjectStyles();
+          this.canvas.renderAll();
+          this.saveState();
+          this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
         });
 
-        this.canvas.add(img);
-        this.canvas.setActiveObject(img);
-        this.reapplyObjectStyles();
-        this.canvas.renderAll();
-        this.saveState()
-        this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
-      });
+        this.showAddElementModal = false;
+      };
+
+      imgElement.onerror = () => {
+        alert('Could not load the image.');
+      };
     };
+
     reader.readAsDataURL(file);
-    this.showAddElementModal = false;
   }
+
 
   onBrightnessChange(event: any) {
     this.imgBrightness = event.target.value
@@ -940,7 +1067,7 @@ export class CreatePageComponent implements AfterViewInit {
 
 
   async saveCanvasDataToDB(): Promise<void> {
-    const scaleFactor = 3;
+    const scaleFactor = 15.38;
 
     try {
       await this.processCanvasObjects(scaleFactor);
@@ -991,8 +1118,8 @@ export class CreatePageComponent implements AfterViewInit {
 
   checkSelectedObject(): void {
     const activeObject: any = this.canvas.getActiveObject();
-    if (activeObject && activeObject.text === 'Text') {
-      console.log(activeObject, 'activeObject')
+    console.log(activeObject, 'activeObject')
+    if (activeObject && activeObject.objectType === 'text') {
       this.selectedText = activeObject;
       this.CurrentSelected('text');
     } else if (activeObject && activeObject.type === 'image') {
@@ -1009,7 +1136,6 @@ export class CreatePageComponent implements AfterViewInit {
     if (type == 'text') {
       this.textcolor = this.selectedText.fill as string;
       this.textfont = this.selectedText.fontFamily || 'Oswald';
-      this.isBold = this.selectedText.fontWeight === 'bold';
       this.fontSize = this.selectedText.fontSize || 24;
       this.textStrokeSize = this.selectedText.strokeWidth || 50;
       this.shadowBlur = this.selectedText.shadow?.blur || 60;
@@ -1021,7 +1147,7 @@ export class CreatePageComponent implements AfterViewInit {
       this.rotate = Math.round(this.selectedText.angle) || 0;
       this.text = this.selectedText.text;
       this.lineHeight = this.selectedText.lineHeight ? Math.round(this.selectedText.lineHeight) * 100 : 100;
-      this.togglePanel('Text');
+      this.togglePanel('text');
     } else if (type == 'image') {
       this.imgBlur = this.getFilterValue(this.selectedImage.filters, 'Blur') * 100;
       this.imgBlur = Math.round(this.imgBlur);
@@ -1080,7 +1206,15 @@ export class CreatePageComponent implements AfterViewInit {
     );
   }
 
-  setColor(color: any) {
+  setColor(id: any) {
+    const canvasContainer = document.querySelector('.canvas-containers') as HTMLElement;
+    this.imageFrontSrc = this.imageFrontUrls[id];
+    this.imageBackSrc = this.imageBackUrls[id];
+    if (this.isCanvas1Visible) {
+      if (canvasContainer) canvasContainer.style.backgroundImage = `url(${this.imageFrontSrc})`;
+    } else {
+      if (canvasContainer) canvasContainer.style.backgroundImage = `url(${this.imageBackSrc})`;
+    }
   }
 
   // changeImage(index: any) {

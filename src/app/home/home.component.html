@@ -1,42 +1,78 @@
-<body class="custom-scrollbar">
-    <app-header-page fromHome="true"></app-header-page>
-    <div class="slider-container">
-        <div class="slides">
-            <img
-                *ngFor="let image of images; let i = index"
-                [src]="image"
-                [class.active]="i === currentSlide"
-                class="slide"
-                alt="Slide"
-            />
-        </div>
+<body>
+    <app-header-page></app-header-page>
 
-        <!-- Dots for Navigation -->
-        <div class="dots-container">
-            <span
-                *ngFor="let image of images; let i = index"
-                class="dot"
-                [class.active]="i === currentSlide"
-                (click)="goToSlide(i)"
-            ></span>
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>STOP SEARCHING. START CREATING.</h1>
+            <p>Your Dream Oversized Tee is Just a Click Away!</p>
+            <div class="text-container">
+                <div class="text-wrapper">
+                    <div class="sub-text desktop-buttons text-slide"
+                        [style.transform]="'translateY(-' + (currentIndex * 110) + '%)'"
+                        [style.transition]="currentIndex === 0 ? 'none' : '0.6s ease-in-out'">
+                        <p *ngFor="let sentence of sentence">{{ sentence }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons desktop-buttons">
+                <button class="btn btn-primary" (click)="openCreate()">Start Creating →</button>
+                <button class="btn btn-outline-light" (click)="openExplore()">Explore</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- <img src="../../assets/createefi/_Createefi_homepagevideo.webm" alt="Hero Image"> -->
+            <video #bgVideo muted loop playsinline style="width:100%">
+                <source src="../../assets/createefi/_Createefi_homepagevideo.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p class="sub-text mobile-buttons">
+            Why settle for someone else’s style? Upload your artwork, and let Createefi
+            turn your design into the perfect oversized tee.
+        </p>
+        <div class="buttons mobile-buttons">
+            <button class="btn btn-primary">Start Creating →</button>
+            <button class="btn btn-outline-light">Explore</button>
         </div>
     </div>
-    <div class="container">
-        <h1 class="heading">Stop Searching, Start Creating – Your Perfect Oversized Tee Awaits!</h1>
 
-        <div class="section1">
-            <div class="subtitle">
-                Tired of searching for oversized tees with your favorite design?Design your own!
-                Simply upload your artwork to Createefi and we'll handle the rest.
+    <div class="popular-designs">
+        <div class="section-header">
+            <div class="header-left">
+                <h2>Popular Designs</h2>
+                <p class="subtitle">Get inspired by our community’s creativity</p>
             </div>
-            <button type="button" class="btn btn-secondary" (click)="openCanvas()">Create</button>
+            <a href="#" class="view-all">View All <i class="fa fa-arrow-right"></i></a>
         </div>
 
-        <!-- <h1 class="heading">Launch Your Own Merch Store with Createefi!</h1>
-        <div class="section1">
-            <button type="button" class="btn btn-secondary" (click)="openCanvas()">Get Started</button>
-            <div class="subtitle">Turn your designs into merch! Create your own store with Createefi. Just upload your designs and we'll handle the printing and fulfillment.</div>
-        </div> -->
+        <div class="carousel-container">
+            <div class="carousel-wrapper" id="carousel">
+                <div class="card" *ngFor="let product of products">
+                    <img [src]="product.img" [alt]="product.alt">
+                    <div class="color-options">
+                        <span *ngFor="let color of colors" class="color" [class.active]="color === product.activeColor"
+                            [class.white]="color === 'white'" [class.black]="color === 'black'"
+                            [class.blue]="color === 'blue'" [class.maroon]="color === 'maroon'">
+                        </span>
+                    </div>
+
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.colorName }}</p>
+                    <p class="price">{{ product.price }}</p>
+                    <div class="buttons">
+                        <button class="btn btn-primary">Buy Now</button>
+                        <button class="btn btn-outline-dark">Add To Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicators -->
+        <div class="carousel-dots">
+            <span class="dot active" (click)="scrollToCard(0)"></span>
+            <span class="dot" (click)="scrollToCard(1)"></span>
+            <span class="dot" (click)="scrollToCard(2)"></span>
+            <span class="dot" (click)="scrollToCard(3)"></span>
+        </div>
     </div>
 </body>
-<app-footer></app-footer>
