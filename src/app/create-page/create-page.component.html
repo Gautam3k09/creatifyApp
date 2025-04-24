@@ -1,14 +1,9 @@
+<app-loader *ngIf="isLoading"></app-loader>
+
 <body>
-    <div class="header-container">
-        <button class="header-btn" (click)="togglePanel('text')">
-            <i class="">CREATEEFI</i>
-        </button>
-        <div class="add-text-input-group">
-            <input type="text" [(ngModel)]="tshirtName" placeholder="Enter tee name" class="add-text-input" />
-        </div>
-    </div>
+    <app-header-page [from]="'create'"></app-header-page>
     <div class="control-container">
-        <div class="property-container" [class.open]="activePanel !== ''">
+        <div class="property-container " [class.open]="activePanel !== ''" id='drawerContentSource'>
             <div class="property-header">
                 {{activePanel}}
             </div>
@@ -288,7 +283,9 @@
             </div>
         </div>
 
-        <div class="layers-container">
+
+
+        <div class="layers-container hideonmobile">
             <div class="layers-header">
                 Layers
             </div>
@@ -313,16 +310,26 @@
         </div>
     </div>
 
+
     <div class="bottom-container">
         <button class="bottom-btn" (click)="toggleCanvas()">
-            🔄 Flip
+            <i class="fa-solid fa-rotate"></i> Flip
+        </button>
+        <button class="bottom-btn" (click)="openElementModal()">
+            <i class="fa-solid fa-circle-plus"></i> Add
         </button>
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
-            <i class="fas fa-shapes"></i> Templates
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white">
+                <path
+                    d="M4 4h16a2 2 0 0 1 2 2v3H2V6a2 2 0 0 1 2-2zm16 7H4v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9zM7 14h5v2H7v-2z" />
+            </svg> Templates
         </button>
-        <button type="button" class="btn btn-primary" [popover]="popoverContent" popoverTitle="T-Shirt Color"
+        <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
+            <i class="fas fa-shapes"></i> Shapes
+        </button>
+        <button type="button" class="bottom-btn" [popover]="popoverContent" popoverTitle="T-Shirt Color"
             [outsideClick]="true">
-            🎨 Change Color
+            <i class="fa-solid fa-palette"></i>Tee Color
         </button>
         <ng-template #popoverContent>
             <div class="color-buttons">
@@ -334,7 +341,7 @@
         </ng-template>
 
         <button class="bottom-btn" (click)="saveCanvasDataToDB()">
-            <i class="fas fa-eye"></i>Save
+            <i class="fas fa-save"></i>Save
         </button>
     </div>
 
@@ -364,3 +371,14 @@
         </div>
     </div>
 </div>
+
+
+
+
+<div id="bottomDrawer" class="drawer">
+    <div class="drawer-content" id="drawerContent"></div>
+</div>
+
+<!-- <div id="drawerContentSource" style="display: none;">
+    <p>This is the bottom drawer content!</p>
+</div> -->

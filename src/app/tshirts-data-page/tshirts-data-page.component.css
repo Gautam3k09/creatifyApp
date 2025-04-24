@@ -138,11 +138,11 @@ body {
   
   .overlay-image {
     position: absolute;
-    bottom: 10vh;
-    left: 50%;
+    bottom: 8vh;
+    left: 50.5%;
     transform: translateX(-50%);
-    width: 50%;
-    height: 55%;
+    width: 48%;
+    height: 64%;
   }
 
 @media (max-width: 600px) {

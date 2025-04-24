@@ -11,8 +11,9 @@
   
   .logo {
     height: auto;
-  width: 205px; /* or whatever fits your design */
-  image-rendering: crisp-edges;
+    width: 205px; /* or whatever fits your design */
+    image-rendering: crisp-edges;
+    cursor: pointer;
   }
   
   .nav-left {

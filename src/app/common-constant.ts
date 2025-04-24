@@ -1,3 +1,17 @@
+export const imageFrontUrls = [
+  { key: 'Onyx black', value: 'assets/Tees/black-f.png' },
+  { key: 'Pearl white', value: 'assets/Tees/white-f.png' },
+  { key: 'Sapphire blue', value: 'assets/Tees/blue-f.png' },
+  { key: 'Ruby maroon', value: 'assets/Tees/maroon-f.png' },
+];
+export const imageBackUrls = [
+  { key: 'Onyx black', value: 'assets/Tees/black-b.png' },
+  { key: 'Pearl white', value: 'assets/Tees/white-b.png' },
+  { key: 'Sapphire blue', value: 'assets/Tees/blue-b.png' },
+  { key: 'Ruby maroon', value: 'assets/Tees/maroon-b.png' },
+];
+
+
 export const titleTextTemplates = [
   {
     id: 'createefi_fashion_express',

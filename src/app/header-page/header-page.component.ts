@@ -13,7 +13,7 @@ import { localStorageService } from '../local-storage-service';
     styleUrl: './header-page.component.css',
 })
 export class HeaderPageComponent {
-    @Input() fromHome: any;
+    @Input() from: any;
     sidebarClose: any = false;
     isMenuOpen = false;
     isLoggedIn: any;

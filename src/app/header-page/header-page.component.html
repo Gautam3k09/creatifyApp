@@ -1,16 +1,15 @@
-<header class="navbar">
+<header class="navbar" [ngClass]="{ 'bg-white ': from == 'create' }">
     <div class="nav-left">
         <button class="menu-btn" (click)="openMobileHamburger()">&#9776;</button>
-        <img src="../../assets/createefi/lgo.png" alt="CREATEEFI Logo" class="logo" />
+        <img src="../../assets/createefi/lgo.png" (click)="onDivClick('')" alt="CREATEEFI Logo" class="logo" />
     </div>
 
-    <nav class="nav-center" [ngClass]="{ 'show': isMenuOpen }">
-        <a href="#">Shop</a>
-        <a href="#">Create</a>
-        <!-- <a href="#">Contact</a> -->
+    <nav class="nav-center" [ngClass]="{ 'show': isMenuOpen}">
+        <a [ngClass]="{ 'text-dark' : from=='create' }" (click)="onDivClick('shop')">Shop</a>
+        <a [ngClass]="{ 'text-dark' : from == 'create'}" (click)="onDivClick('tees')">Create</a>
     </nav>
 
     <div class="nav-right">
-        <i class="icon">👤</i>
+        <i class="icon" (click)="onDivClick('account')">👤</i>
     </div>
 </header>

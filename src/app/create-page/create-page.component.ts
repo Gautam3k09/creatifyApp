@@ -5,15 +5,17 @@ import { CommonModule } from '@angular/common';
 import Sortable from 'sortablejs';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FormsModule } from '@angular/forms';
-import { titleTextTemplates, bodyTextTemplates } from '../../assets/text-template';
+import { titleTextTemplates, bodyTextTemplates, imageFrontUrls, imageBackUrls } from '../common-constant';
 import { AppServiceService } from '../app-service.service';
 import { Router } from '@angular/router';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { HeaderPageComponent } from "../header-page/header-page.component";
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-create-page',
   standalone: true,
-  imports: [CommonModule, ColorPickerModule, FormsModule, PopoverModule],
+  imports: [CommonModule, ColorPickerModule, FormsModule, PopoverModule, HeaderPageComponent, LoaderComponent],
   providers: [AppServiceService],
   templateUrl: './create-page.component.html',
   styleUrl: './create-page.component.css',
@@ -82,21 +84,11 @@ export class CreatePageComponent implements AfterViewInit {
   imgNoise: any = 0;
 
   // for tee color
-  imageFrontSrc = 'assets/Tees/white-f.png';
-  imageFrontUrls = [
-    'assets/Tees/black-f.png',
-    'assets/Tees/white-f.png',
-    'assets/Tees/blue-f.png',
-    'assets/Tees/maroon-f.png',
-  ];
-  imageBackSrc = 'assets/Tees/white-b.png';
-  imageBackUrls = [
-    'assets/Tees/black-b.png',
-    'assets/Tees/white-b.png',
-    'assets/Tees/blue-b.png',
-    'assets/Tees/maroon-b.png',
-  ];
-  imageColor: any = 'Onyx black';
+  imageFrontSrc: any = imageFrontUrls[1].value;
+  imageFrontUrls = imageFrontUrls;
+  imageBackSrc: any = imageBackUrls[1].value;
+  imageBackUrls = imageBackUrls;
+  imageColor: any = imageFrontUrls[1].key;
 
   state: any[] = [];
   currentStateIndex: number = -1;
@@ -115,6 +107,10 @@ export class CreatePageComponent implements AfterViewInit {
   alignmentThreshold = 5; // Tolerance for snapping
 
   canvasClicked = false;
+
+  isLoading = false;
+
+  //for zoom
 
   constructor(
     private appservice: AppServiceService,
@@ -139,6 +135,10 @@ export class CreatePageComponent implements AfterViewInit {
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
     upperCanvas.style.left = 59.2 + '%';
     upperCanvas.style.top = 28 + '%';
+
+    // left: 32.2%;
+    // top: 26%;
+
     this.saveState();
 
     // Track text changes in real-time
@@ -188,7 +188,12 @@ export class CreatePageComponent implements AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent) {
-    if (!this.canvasClicked) {
+    const clickedElement = event.target as HTMLElement;
+
+    // Check if the click was inside the properties panel
+    const isInsidePanel = clickedElement.closest('.property-controls');
+
+    if (!this.canvasClicked && !isInsidePanel) {
       this.canvas.discardActiveObject();
       this.canvas.requestRenderAll();
       console.log('✅ Deselected because click was outside canvas');
@@ -229,14 +234,8 @@ export class CreatePageComponent implements AfterViewInit {
     if (this.isCanvas1Visible) {
       if (this.canvasData2) {
         this.canvas.loadFromJSON(this.canvasData2, () => {
-          this.canvas.getObjects().forEach(obj => {
-            if (obj.type === "text") {
-              obj.set({ type: "text" }); // Convert to valid type
-            }
-          });
-          this.canvas.renderAll();
+          this.canvas.requestRenderAll();
         });
-
       } else {
         this.initializeCanvas2();
       }
@@ -247,8 +246,7 @@ export class CreatePageComponent implements AfterViewInit {
     } else {
       if (this.canvasData1) {
         this.canvas.loadFromJSON(this.canvasData1, () => {
-          this.reapplyObjectStyles();
-          this.canvas.renderAll();
+          this.canvas.requestRenderAll();
         });
       } else {
         this.initializeCanvas1();
@@ -258,14 +256,15 @@ export class CreatePageComponent implements AfterViewInit {
       this.itemList = this.canvas1ItemList;
       if (canvasContainer) canvasContainer.style.backgroundImage = `url(${this.imageFrontSrc})`;
     }
+    this.canvas.discardActiveObject();
     this.isCanvas1Visible = !this.isCanvas1Visible;
   }
 
   saveState() {
     if (this.isCanvas1Visible) {
-      this.canvasData1 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
+      this.canvasData1 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility', 'objectType']));
     } else {
-      this.canvasData2 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility']));
+      this.canvasData2 = JSON.stringify(this.canvas.toObject(['selectable', 'angle', 'scaleX', 'scaleY', 'top', 'left', 'id', 'type', 'name', 'visibility', 'objectType']));
     }
   }
 
@@ -465,14 +464,16 @@ export class CreatePageComponent implements AfterViewInit {
       object.set({ objectType: type });
 
       targetCanvas.add(object);
+      this.canvasClicked = true
       if (targetCanvas === this.canvas) {
+        console.log('here', object)
         targetCanvas.setActiveObject(object);
       }
     });
 
     this.reapplyObjectStyles();
     this.saveState();
-    targetCanvas.renderAll();
+    targetCanvas.requestRenderAll();
   }
 
   updateTextName(itemId: string, newText: string): void {
@@ -789,34 +790,50 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   // Add Image
-  addImage(event: any): void {
+  async addImage(event: any): Promise<void> {
     const file = event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e: any) => {
+
+    reader.onload = async (e: any) => {
       const imgElement = new Image();
       imgElement.src = e.target.result;
 
-      imgElement.onload = () => {
-        const MIN_WIDTH = 1920;
-        const MIN_HEIGHT = 1080;
+      imgElement.onload = async () => {
+        const MIN_WIDTH = 1620;
+        const MIN_HEIGHT = 880;
 
         if (imgElement.naturalWidth < MIN_WIDTH || imgElement.naturalHeight < MIN_HEIGHT) {
           alert('Image must be at least 1920x1080 (1080p) for good print quality.');
           return;
         }
 
-        fabric.Image.fromURL(e.target.result).then((img) => {
-          img.scaleToWidth(200);
+        try {
+          const img = await fabric.Image.fromURL(e.target.result, { crossOrigin: 'anonymous' });
+
+          const canvasWidth = this.canvas.getWidth();  // 228
+          const canvasHeight = this.canvas.getHeight(); // 228
+
+          const scaleX = canvasWidth / img.width;
+          const scaleY = canvasHeight / img.height;
+          const scale = Math.min(scaleX, scaleY);
+
+          const scaledWidth = img.width * scale;
+          const scaledHeight = img.height * scale;
+
           const uniqueId = 'item_' + Date.now();
+
           img.set({
-            id: uniqueId,
-            left: 15,
-            top: 5,
+            scaleX: scale,
+            scaleY: scale,
+            left: (canvasWidth - scaledWidth) / 2,
+            top: (canvasHeight - scaledHeight) / 2,
             selectable: true,
             hasControls: true,
+            id: uniqueId,
             type: 'image',
+            objectType: 'image',
           });
 
           this.canvas.add(img);
@@ -825,9 +842,12 @@ export class CreatePageComponent implements AfterViewInit {
           this.canvas.renderAll();
           this.saveState();
           this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
-        });
+          this.showAddElementModal = false;
 
-        this.showAddElementModal = false;
+        } catch (error) {
+          console.error('Image loading failed:', error);
+          alert('Failed to load image onto canvas.');
+        }
       };
 
       imgElement.onerror = () => {
@@ -837,6 +857,8 @@ export class CreatePageComponent implements AfterViewInit {
 
     reader.readAsDataURL(file);
   }
+
+
 
 
   onBrightnessChange(event: any) {
@@ -1067,14 +1089,16 @@ export class CreatePageComponent implements AfterViewInit {
 
 
   async saveCanvasDataToDB(): Promise<void> {
+    this.isLoading = true;
+    this.canvas.discardActiveObject();
     const scaleFactor = 15.38;
-
     try {
       await this.processCanvasObjects(scaleFactor);
       await this.toggleCanvas();
       await this.processCanvasObjects(scaleFactor);
       await this.uploadImage();
     } catch (error) {
+      this.isLoading = false;
       console.error("Error saving canvas data:", error);
     }
   }
@@ -1122,7 +1146,7 @@ export class CreatePageComponent implements AfterViewInit {
     if (activeObject && activeObject.objectType === 'text') {
       this.selectedText = activeObject;
       this.CurrentSelected('text');
-    } else if (activeObject && activeObject.type === 'image') {
+    } else if (activeObject && activeObject.objectType === 'image') {
       this.selectedImage = activeObject;
       this.CurrentSelected('image');
     } else {
@@ -1208,36 +1232,35 @@ export class CreatePageComponent implements AfterViewInit {
 
   setColor(id: any) {
     const canvasContainer = document.querySelector('.canvas-containers') as HTMLElement;
-    this.imageFrontSrc = this.imageFrontUrls[id];
-    this.imageBackSrc = this.imageBackUrls[id];
+    this.imageFrontSrc = this.imageFrontUrls[id].value;
+    this.imageBackSrc = this.imageBackUrls[id].value;
     if (this.isCanvas1Visible) {
       if (canvasContainer) canvasContainer.style.backgroundImage = `url(${this.imageFrontSrc})`;
+
     } else {
       if (canvasContainer) canvasContainer.style.backgroundImage = `url(${this.imageBackSrc})`;
     }
+    this.imageColor = this.imageFrontUrls[id].key
   }
 
-  // changeImage(index: any) {
-  //   this.imageFrontSrc = this.imageFrontUrls[index];
-  //   this.imageBackSrc = this.imageBackUrls[index];
-  //   if (this.currentSide == 'front') {
-  //     this.drawImageOnCanvas(this.imageFrontSrc);
-  //   } else {
-  //     this.drawImageOnCanvas(this.imageBackSrc);
-  //   }
-  //   switch (index) {
-  //     case 0:
-  //       this.imageColor = 'Onyx black';
-  //       break;
-  //     case 1:
-  //       this.imageColor = 'Pearl white';
-  //       break;
-  //     case 2:
-  //       this.imageColor = 'Sapphire blue';
-  //       break;
-  //     case 3:
-  //       this.imageColor = 'Ruby maroon';
-  //       break;
-  //   }
-  // }
+  onDivClick(string: any) {
+    this.router.navigate([string]);
+  }
+
+  toggleDrawer() {
+    const drawer = document.getElementById('bottomDrawer');
+    const content = document.getElementById('drawerContent');
+    const source = document.getElementById('drawerContentSource');
+    console.log('here')
+    if (drawer && content && source) {
+      // Load once
+      if (content.innerHTML.trim() === '') {
+        content.innerHTML = source.innerHTML;
+      }
+
+      drawer.classList.toggle('drawer-open');
+    }
+  }
+
+
 }
