@@ -25,6 +25,8 @@ export class CreatePageComponent implements AfterViewInit {
   @ViewChild('itemListRef', { static: false }) itemListRef!: ElementRef<HTMLUListElement>;
   @ViewChildren('templateCanvas') templateCanvasRefs!: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChild('imageInput') imageInput!: ElementRef;
+  @ViewChild('wrapper', { static: true }) wrapperRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   canvas!: fabric.Canvas;
   canvasData1: any = null;
   canvasData2: any | null = null;
@@ -111,6 +113,8 @@ export class CreatePageComponent implements AfterViewInit {
   isLoading = false;
 
   //for zoom
+  scale = 1;
+  lastTouchDistance = 0;
 
   constructor(
     private appservice: AppServiceService,
@@ -183,7 +187,48 @@ export class CreatePageComponent implements AfterViewInit {
 
     // Initialize Snap to Grid
     this.initSnapToGrid();
+
+
+    //for zoom
+    const wrapper = this.wrapperRef.nativeElement;
+    const container = this.containerRef.nativeElement;
+
+    wrapper.addEventListener('wheel', (e: WheelEvent) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+
+      const delta = e.deltaY * -0.0085;
+      this.scale = Math.min(Math.max(0.2, this.scale + delta), 5);
+
+      container.style.transform = `translate(-50%, -50%) scale(${this.scale})`;
+    }, { passive: false });
+
+    wrapper.addEventListener('touchstart', (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        this.lastTouchDistance = this.getTouchDistance(e);
+      }
+    });
+
+    wrapper.addEventListener('touchmove', (e: TouchEvent) => {
+      if (e.touches.length !== 2) return;
+      e.preventDefault();
+
+      const newDist = this.getTouchDistance(e);
+      const delta = (newDist - this.lastTouchDistance) * 0.0025;
+      this.lastTouchDistance = newDist;
+
+      this.scale = Math.min(Math.max(0.2, this.scale + delta), 5);
+      container.style.transform = `translate(-50%, -50%) scale(${this.scale})`;
+    }, { passive: false });
   }
+
+
+  getTouchDistance(e: TouchEvent): number {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
 
 
   @HostListener('document:click', ['$event'])
