@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { localStorageService } from '../local-storage-service';
 import * as fabric from 'fabric';
 import { CommonModule } from '@angular/common';
@@ -43,7 +43,7 @@ export class CreatePageComponent implements AfterViewInit {
   text: any = '';
   textfont: string = 'Oswald';  // Default font
   textcolor: string = '#0056b3'; // Default color
-  hasFill: boolean = true;
+  hasFill: any;
   fontSize: number = 24;
   shadowEnabled: boolean = false;
   shadowOffsetX: number = 0;
@@ -104,7 +104,7 @@ export class CreatePageComponent implements AfterViewInit {
   frontImgName: any;
   BackImgName: any;
 
-  gridSize = 19;
+  gridSize = 18;
   guideLines: fabric.Line[] = [];
   alignmentThreshold = 5; // Tolerance for snapping
 
@@ -115,6 +115,17 @@ export class CreatePageComponent implements AfterViewInit {
   //for zoom
   scale = 1;
   lastTouchDistance = 0;
+
+
+  // for drawer
+  isMobileView = true;
+  drawerHeight = window.innerHeight * 0.3;
+  minHeight = window.innerHeight * 0.2;
+  maxHeight = window.innerHeight * 0.9;
+  drawerOpen = false;
+
+  private dragging = false;
+  private animationFrameId: number | null = null;
 
   constructor(
     private appservice: AppServiceService,
@@ -129,19 +140,15 @@ export class CreatePageComponent implements AfterViewInit {
     fabric.Object.prototype.objectCaching = false;
     this.textTemplates = [...this.titletexttemplates, ...this.bodytexttemplates];
     this.canvas = new fabric.Canvas(this.canvasRef.nativeElement, {
-      width: 228,
-      height: 332,
+      width: 146,
+      height: 226,
       backgroundColor: 'transparent'
     });
-
     //for canvas margin
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
     upperCanvas.style.left = 59.2 + '%';
-    upperCanvas.style.top = 28 + '%';
-
-    // left: 32.2%;
-    // top: 26%;
+    upperCanvas.style.top = 26 + '%';
 
     this.saveState();
 
@@ -231,20 +238,21 @@ export class CreatePageComponent implements AfterViewInit {
 
 
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    const clickedElement = event.target as HTMLElement;
+  // @HostListener('document:click', ['$event'])
 
-    // Check if the click was inside the properties panel
-    const isInsidePanel = clickedElement.closest('.property-controls');
+  // onClick(event: MouseEvent) {
+  //   const clickedElement = event.target as HTMLElement;
 
-    if (!this.canvasClicked && !isInsidePanel) {
-      this.canvas.discardActiveObject();
-      this.canvas.requestRenderAll();
-      console.log('✅ Deselected because click was outside canvas');
-    }
-    this.canvasClicked = false;
-  }
+  //   // Check if the click was inside the properties panel
+  //   const isInsidePanel = clickedElement.closest('.property-controls');
+
+  //   if (!this.canvasClicked && !isInsidePanel) {
+  //     this.canvas.discardActiveObject();
+  //     this.canvas.requestRenderAll();
+  //     console.log('✅ Deselected because click was outside canvas');
+  //   }
+  //   this.canvasClicked = false;
+  // }
 
 
   initializeCanvas1() {
@@ -425,11 +433,11 @@ export class CreatePageComponent implements AfterViewInit {
           left: 62,
           top: 90,
           fontSize: 40,
+          fontFamily: 'Merriweather',
           fill: 'black',
-          fontFamily: 'Oswald',
+          type: 'text',
           selectable: targetCanvas === this.canvas,
           evented: targetCanvas === this.canvas,
-          type: 'text'
         },
       ];
     }
@@ -507,11 +515,10 @@ export class CreatePageComponent implements AfterViewInit {
         }
       }
       object.set({ objectType: type });
-
+      // object.scale(1 / (window.devicePixelRatio || 1));
       targetCanvas.add(object);
       this.canvasClicked = true
       if (targetCanvas === this.canvas) {
-        console.log('here', object)
         targetCanvas.setActiveObject(object);
       }
     });
@@ -529,7 +536,17 @@ export class CreatePageComponent implements AfterViewInit {
     this.text = newText;
   }
 
-  changeTextColor(color: string): void {
+  changefill() {
+    if (this.hasFill) {
+      this.hasFill = null;
+      this.changeTextColor(null);
+    } else {
+      this.hasFill = this.textcolor;
+      this.changeTextColor(this.textcolor);
+    }
+  }
+
+  changeTextColor(color: any): void {
     if (this.selectedText) {
       this.selectedText.set('fill', color);
       this.canvas.renderAll();
@@ -866,7 +883,6 @@ export class CreatePageComponent implements AfterViewInit {
 
           const scaledWidth = img.width * scale;
           const scaledHeight = img.height * scale;
-
           const uniqueId = 'item_' + Date.now();
 
           img.set({
@@ -1201,17 +1217,16 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   CurrentSelected(type: any) {
-    console.log(type, 'type')
     if (type == 'text') {
       this.textcolor = this.selectedText.fill as string;
       this.textfont = this.selectedText.fontFamily || 'Oswald';
       this.fontSize = this.selectedText.fontSize || 24;
-      this.textStrokeSize = this.selectedText.strokeWidth || 50;
+      this.textStrokeSize = this.selectedText.strokeWidth * 20 || 50;
       this.shadowBlur = this.selectedText.shadow?.blur || 60;
       this.shadowOffsetX = this.selectedText.shadow?.offsetX || 0;
       this.shadowOffsetY = this.selectedText.shadow?.offsetY || 0;
       this.shadowColor = this.selectedText.shadow?.color || '#000000';
-      this.hasFill = !this.selectedText.stroke;
+      this.hasFill = this.selectedText.fill;
       this.opacity = this.selectedText.opacity ? this.selectedText.opacity * 100 : 1;
       this.rotate = Math.round(this.selectedText.angle) || 0;
       this.text = this.selectedText.text;
@@ -1293,18 +1308,38 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   toggleDrawer() {
-    const drawer = document.getElementById('bottomDrawer');
-    const content = document.getElementById('drawerContent');
-    const source = document.getElementById('drawerContentSource');
-    console.log('here')
-    if (drawer && content && source) {
-      // Load once
-      if (content.innerHTML.trim() === '') {
-        content.innerHTML = source.innerHTML;
-      }
+    this.drawerOpen = !this.drawerOpen;
+  }
 
-      drawer.classList.toggle('drawer-open');
+
+  startDrag(event: TouchEvent) {
+    this.dragging = true;
+    event.preventDefault();
+  }
+
+  onDrag(event: TouchEvent) {
+    if (!this.dragging) return;
+
+    const touchY = event.touches[0].clientY;
+    const targetHeight = window.innerHeight - touchY;
+    const clampedHeight = Math.max(this.minHeight, Math.min(this.maxHeight, targetHeight));
+
+    // cancel any previous animation frame
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
     }
+
+    // schedule height update in next frame
+    this.animationFrameId = requestAnimationFrame(() => {
+      this.drawerHeight = clampedHeight;
+    });
+  }
+
+  endDrag() {
+
+    this.dragging = false;
+    this.animationFrameId && cancelAnimationFrame(this.animationFrameId);
+    this.animationFrameId = null;
   }
 
 
