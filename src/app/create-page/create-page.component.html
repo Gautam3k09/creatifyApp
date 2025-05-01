@@ -3,7 +3,7 @@
 <body>
     <app-header-page [from]="'create'"></app-header-page>
     <div class="control-container">
-        <div class="property-container hideonmobile" *ngIf="isMobileView" [class.open]="activePanel !== ''"
+        <div class="property-container hideonmobile" *ngIf="!isMobileView" [class.open]="activePanel !== ''"
             id='drawerContentSource'>
             <div class="property-header hideonmobile">
                 {{activePanel}}
@@ -30,7 +30,7 @@
                         class="element-item">
                         <span class="drag-handle">⠿</span>
                         <span class="element-name" title="{{ item.name }}">
-                            {{ item.type === 'texttemplate' ? '🔤' : '🖼️' }} {{ item.name }}
+                            {{ item.type === 'text' ? '🔤' : '🖼️' }} {{ item.name }}
                         </span>
                         <div class="element-controls">
                             <button class="visibility-btn" (click)="toggleVisibility(item.id)">
@@ -99,7 +99,7 @@
                 <div class="layer-item" (click)="triggerFileInput()">
                     <div class="icon">🖼️</div>
                     <span>Image</span>
-                    <input #imageInput id="imageInput" type="file" class="file" (change)="addImage($event)"
+                    <input #imageInput id="imageInput" type="file" class="file" (change)="addElement($event)"
                         accept="image/*" />
                 </div>
                 <div class="layer-item" (click)="addCustomText()">
@@ -326,7 +326,7 @@
                 <h2 class="section-header">Title Text Templates</h2>
                 <div class="scroll-container">
                     <div class="template-list">
-                        <div *ngFor="let template of titletexttemplates" class="template-box"
+                        <div *ngFor="let template of shapeTemplates" class="template-box"
                             (click)="addPredefinedText(template)">
                             <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
                         </div>

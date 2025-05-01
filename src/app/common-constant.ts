@@ -167,3 +167,47 @@ export const bodyTextTemplates = [
     ]
   }
 ]
+
+export const shapeTemplates = [
+  {
+    id: 'basic_rect',
+    elements: [{
+      type: 'shape',
+      objectType: 'rect',
+      left: 50,
+      top: 20,
+      width: 10,
+      height: 10,
+      fill: '#FF6F61',
+      stroke: '#333',
+      strokeWidth: 0,
+    }]
+  },
+  {
+    id: 'basic_circle',
+    elements: [{
+      type: 'shape',
+      objectType: 'circle',
+      left: 50,
+      top: 20,
+      radius: 5,
+      fill: '#6B5B95',
+      stroke: '#333',
+      strokeWidth: 0,
+    }],
+  },
+  {
+    id: 'basic_triangle',
+    elements: [{
+      type: 'shape',
+      objectType: 'triangle',
+      left: 50,
+      top: 20,
+      width: 10,
+      height: 10,
+      fill: '#88B04B',
+      stroke: '#333',
+      strokeWidth: 0,
+    }],
+  }
+];
