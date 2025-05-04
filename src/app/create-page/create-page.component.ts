@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import Sortable from 'sortablejs';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FormsModule } from '@angular/forms';
-import { shapeTemplates, titleTextTemplates, bodyTextTemplates, imageFrontUrls, imageBackUrls } from '../common-constant';
+import { titleTextTemplates, imageFrontUrls, imageBackUrls } from '../common-constant';
 import { AppServiceService } from '../app-service.service';
 import { Router } from '@angular/router';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -34,9 +34,10 @@ export class CreatePageComponent implements AfterViewInit {
   canvas1ItemList: any = [];
   canvas2ItemList: any = [];
   itemList: any = [];
-  activePanel: string = 'Properties';
+  activePanel: string = 'Svg';
   tshirtName: string = '';
   showAddElementModal: boolean = false;
+  mobilePropertyButton: any = 'Text Properties';
 
   // text
   selectedText: any;
@@ -61,6 +62,13 @@ export class CreatePageComponent implements AfterViewInit {
   textStrokeSize = 0;
   strokeColor: string = '#9d9d9d';
 
+  //shape
+  selectedShape: any;
+  shapeFill: string = '#000000'; // Default fill color
+  isShapeStrokeEnabled = false;
+  shapeStrokeSize = 0;
+  shapeStrokeColor: string = '#9d9d9d';
+
   textStyles = {
     uppercase: false,
     italic: false,
@@ -72,8 +80,7 @@ export class CreatePageComponent implements AfterViewInit {
     'DASHER', 'GEMSEAtrial', 'NekoNeco', 'Supernova', 'NCLBroesq', 'StarKillers'
   ];
   textTemplates: any = [];
-  shapeTemplates = shapeTemplates;
-  bodytexttemplates = bodyTextTemplates;
+  titleTextTemplates: any = titleTextTemplates;
 
 
   // for image
@@ -123,6 +130,8 @@ export class CreatePageComponent implements AfterViewInit {
   minHeight = window.innerHeight * 0.2;
   maxHeight = window.innerHeight * 0.9;
   drawerOpen = false;
+  htmlSvg = '<svg>'
+  svgData: any;
 
   private dragging = false;
   private animationFrameId: number | null = null;
@@ -139,7 +148,8 @@ export class CreatePageComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     fabric.Object.prototype.objectCaching = false;
-    this.textTemplates = [...this.shapeTemplates, ...this.bodytexttemplates];
+    this.titleTextTemplates = [...titleTextTemplates];
+    this.textTemplates = [...this.titleTextTemplates];
     this.canvas = new fabric.Canvas(this.canvasRef.nativeElement, {
       width: 584,   // logical width
       height: 904,  // logical height
@@ -193,6 +203,7 @@ export class CreatePageComponent implements AfterViewInit {
     this.canvas.on('selection:cleared', () => {
       this.selectedText = null
       this.selectedImage = null;
+      this.selectedShape = null;
       this.togglePanel('Properties');
       this.removeGuideLines();
     });
@@ -281,9 +292,10 @@ export class CreatePageComponent implements AfterViewInit {
       obj.set({
         borderColor: '#0056b3',
         cornerColor: '#0056b3',
-        cornerSize: 20,
+        cornerSize: 25,
         transparentCorners: false,
-        selectionBackgroundColor: 'rgba(129, 129, 129, 0.3)'
+        selectionBackgroundColor: 'rgba(129, 129, 129, 0.3)',
+        borderScaleFactor: 5
       });
       obj.setCoords();
     });
@@ -485,6 +497,46 @@ export class CreatePageComponent implements AfterViewInit {
       return;
     }
 
+    if (this.svgData?.startsWith('<svg')) {
+      try {
+        const svgObj = await fabric.loadSVGFromString(this.svgData);
+        console.log('SVG options:', svgObj);
+        const objects = svgObj.objects.map((obj: any) => {
+          obj.set({
+            selectable: true,
+            hasControls: true,
+            id: 'item_' + Date.now(),
+            objectType: 'svg',
+          });
+          return obj;
+        });
+        const svgGroup = fabric.util.groupSVGElements(objects, svgObj.options);
+        const uniqueId = 'item_' + Date.now();
+
+        svgGroup.set({
+          left: this.canvas.getWidth() / 2 - (svgGroup.width ?? 0) / 2,
+          top: this.canvas.getHeight() / 2 - (svgGroup.height ?? 0) / 2,
+          scaleX: this.isMobileView ? 1 : 2,
+          scaleY: this.isMobileView ? 1 : 2,
+          selectable: true,
+          hasControls: true,
+          id: uniqueId,
+          objectType: 'svg'
+        });
+
+        this.canvas.add(svgGroup);
+        this.canvas.setActiveObject(svgGroup);
+        this.itemList.unshift({ id: uniqueId, type: 'svg', name: 'SVG Object', visible: true });
+        this.reapplyObjectStyles();
+        this.canvas.renderAll();
+        this.saveState();
+      } catch (err) {
+        console.error('Error loading SVG:', err);
+        alert('Could not load SVG.');
+      }
+      return;
+    }
+
     // TEXT OR SHAPE MODE
     const targetCanvas = eventOrCanvas;
     const uniqueId = 'item_' + Date.now();
@@ -493,7 +545,6 @@ export class CreatePageComponent implements AfterViewInit {
     if (templateId) {
       const template = this.textTemplates.find((t: any) => t.id === templateId);
       if (!template) return;
-      console.log('templateId', template.elements, templateId);
 
       elements = template.elements.map((el: any, index: number) => ({
         ...el,
@@ -518,23 +569,29 @@ export class CreatePageComponent implements AfterViewInit {
       const el = elements[i];
       const id = `${uniqueId}_${i}`;
       let object: fabric.Object;
-
-      if (el.type === 'shape') {
-        switch (el.objectType) {
+      if (el.objectType === 'shape') {
+        switch (el.type) {
           case 'rect':
             object = new fabric.Rect({
-              left: el.left ?? 0,
-              top: el.top ?? 0,
-              width: el.width ?? 100,
-              height: el.height ?? 100,
+              left: this.isMobileView ? 50 : el.left,
+              top: this.isMobileView ? 22 : el.top,
+              width: this.isMobileView ? 2 : el.width,
+              height: this.isMobileView ? 2 : el.height,
               fill: el.fill ?? 'black',
               stroke: el.stroke,
               strokeWidth: el.strokeWidth,
               selectable: el.selectable,
               evented: el.evented,
               id,
-              objectType: 'rect',
+              type: 'rect',
+              objectType: 'shape',
             });
+            if (targetCanvas === this.canvas) {
+              object.height = 100;
+              object.width = 100;
+              object.left = 170;
+              object.top = 350;
+            }
             break;
 
           case 'circle':
@@ -548,7 +605,7 @@ export class CreatePageComponent implements AfterViewInit {
               selectable: el.selectable,
               evented: el.evented,
               id,
-              objectType: 'circle',
+              type: 'circle',
             });
             break;
 
@@ -564,17 +621,17 @@ export class CreatePageComponent implements AfterViewInit {
               selectable: el.selectable,
               evented: el.evented,
               id,
-              objectType: 'triangle',
+              type: 'triangle',
             });
             break;
 
           default:
-            console.warn('Unsupported shape type:', el.objectType);
+            console.warn('Unsupported shape type:', el.type);
             return;
         }
 
         if (targetCanvas === this.canvas) {
-          this.itemList.unshift({ id, type: 'shape', name: el.objectType, visible: true });
+          this.itemList.unshift({ id, type: 'shape', name: el.type, visible: true });
         }
 
       } else {
@@ -894,6 +951,46 @@ export class CreatePageComponent implements AfterViewInit {
 
   // text ends
 
+
+  //shape
+
+
+  updateShapeStroke(event: any = null, stroke: any = null) {
+    if (event) {
+      const target = event.target as HTMLInputElement;
+      this.shapeStrokeSize = Number(target.value);
+    }
+    if (stroke) {
+      this.shapeStrokeColor = stroke
+    }
+    if (this.selectedShape) {
+      this.selectedShape.set({
+        strokeWidth: event ? this.shapeStrokeSize / 20 : this.shapeStrokeSize / 20,
+        stroke: stroke ? stroke : 'red'
+      });
+      this.reapplyObjectStyles();
+      this.canvas.renderAll();
+    }
+  }
+
+  resetShapeStroke() {
+    if (this.isShapeStrokeEnabled) {
+      if (this.selectedShape) {
+        this.selectedShape.set({
+          strokeWidth: 0,
+          stroke: 'none'
+        });
+        this.canvas.renderAll();
+        this.isShapeStrokeEnabled = false;
+      }
+    } else {
+      this.isShapeStrokeEnabled = true;
+      this.updateShapeStroke(null, this.strokeColor)
+    }
+  }
+
+  //shape ends
+
   renderPredefinedTemplates(): void {
     if (!this.templateCanvasRefs || this.templateCanvasRefs.length === 0) {
       console.warn("No template canvas references available.");
@@ -926,6 +1023,7 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   addPredefinedText(template: any) {
+    console.log('template', template);
     this.addElement(this.canvas, template.text, template.id);
   }
 
@@ -1204,10 +1302,11 @@ export class CreatePageComponent implements AfterViewInit {
 
   togglePanel(panelType: string) {
     this.activePanel = panelType; // Open new panel
-    if (panelType == 'Templates') {
+    if (panelType == 'Templates' || panelType == 'Shapes' || panelType == 'Svg') {
+      this.toggleDrawer()
       setTimeout(() => {
         this.renderPredefinedTemplates();
-      }, 100);
+      }, 1000);
       // this.renderPredefinedTemplates();
     }
   }
@@ -1215,13 +1314,18 @@ export class CreatePageComponent implements AfterViewInit {
 
   checkSelectedObject(): void {
     const activeObject: any = this.canvas.getActiveObject();
+    console.log('activeObject', activeObject);
     if (activeObject && activeObject.objectType === 'text') {
       this.selectedText = activeObject;
       activeObject.setCoords()
       this.CurrentSelected('text');
-    } else if (activeObject && activeObject.objectType === 'image') {
+    }
+    else if (activeObject && activeObject.objectType === 'image') {
       this.selectedImage = activeObject;
       this.CurrentSelected('image');
+    } else if (activeObject && activeObject.objectType === 'shape') {
+      this.selectedShape = activeObject;
+      this.CurrentSelected('shape');
     } else {
       this.selectedText = null;
       this.selectedImage = null;
@@ -1243,6 +1347,11 @@ export class CreatePageComponent implements AfterViewInit {
       this.rotate = Math.round(this.selectedText.angle) || 0;
       this.text = this.selectedText.text;
       this.lineHeight = this.selectedText.lineHeight ? Math.round(this.selectedText.lineHeight) * 100 : 100;
+      this.shadowEnabled = this.selectedText.shadow ? true : false;
+      this.isTextStrokeEnabled = this.selectedText.stroke ? true : false;
+      this.isArcEnabled = this.selectedText.path ? true : false;
+      this.selectedImage = null;
+      this.selectedShape = null;
       this.togglePanel('text');
     } else if (type == 'image') {
       this.imgBlur = this.getFilterValue(this.selectedImage.filters, 'Blur') * 100;
@@ -1258,7 +1367,15 @@ export class CreatePageComponent implements AfterViewInit {
       this.imgNoise = this.getFilterValue(this.selectedImage.filters, 'Noise') / 10;
       this.imgNoise = Math.round(this.imgNoise);
       this.selectedText = null;
+      this.selectedShape = null;
       this.togglePanel('Image');
+    } else if (type == 'shape') {
+      console.log('shape', this.selectedShape);
+      this.isShapeStrokeEnabled = this.selectedShape.stroke != 'none' && this.shapeStrokeSize != 0 ? true : false;
+      this.shapeStrokeSize = this.selectedShape.strokeWidth * 20 || 0;
+      this.selectedText = null;
+      this.selectedImage = null;
+      this.togglePanel('Shapes-editor');
     }
   }
 
@@ -1293,7 +1410,6 @@ export class CreatePageComponent implements AfterViewInit {
     }
     this.appservice.postImage(formData).subscribe(
       (response) => {
-        console.log(response, 'response')
         this.router.navigate(['/tees']);
       },
       (error) => {
@@ -1352,6 +1468,41 @@ export class CreatePageComponent implements AfterViewInit {
     this.dragging = false;
     this.animationFrameId && cancelAnimationFrame(this.animationFrameId);
     this.animationFrameId = null;
+  }
+
+  addSvg() {
+    console.log('svg', this.svgData);
+    const valid = this.isValidSVG(this.svgData);
+    if (!valid) {
+      window.alert("Svg icon not supported");
+    } else {
+      this.addElement(this.canvas);
+    }
+  }
+
+  isValidSVG(input: string): boolean {
+    if (typeof input !== 'string') return false;
+
+    const trimmed = input.trim();
+
+    // Check if it starts with <svg and ends with </svg>
+    if (!trimmed.startsWith('<svg') || !trimmed.includes('</svg>')) {
+      return false;
+    }
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(trimmed, 'image/svg+xml');
+      const svgEl = doc.documentElement;
+
+      // Check if root is <svg> and there are no parser errors
+      return (
+        svgEl.nodeName === 'svg' &&
+        !doc.querySelector('parsererror')
+      );
+    } catch {
+      return false;
+    }
   }
 
 

@@ -45,7 +45,8 @@
     </div>
 
 
-    <div class="hideOnPc mob-properties-btn " *ngIf="activePanel != 'Properties'">
+    <div class="hideOnPc mob-properties-btn "
+        *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes'">
         <button class="property-btn" (click)="toggleDrawer()">
             Properties
         </button>
@@ -63,8 +64,11 @@
                     d="M4 4h16a2 2 0 0 1 2 2v3H2V6a2 2 0 0 1 2-2zm16 7H4v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9zM7 14h5v2H7v-2z" />
             </svg> Templates
         </button>
-        <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
+        <!-- <button class="bottom-btn" (click)="togglePanel('Shapes')" title="Templates">
             <i class="fas fa-shapes"></i> Shapes
+        </button> -->
+        <button class="bottom-btn" (click)="togglePanel('Svg')" title="Templates">
+            <i class="fas fa-shapes"></i> SVG
         </button>
         <button type="button" class="bottom-btn" [popover]="popoverContent" popoverTitle="T-Shirt Color"
             [outsideClick]="true">
@@ -323,22 +327,10 @@
     <div *ngIf="activePanel === 'Templates'" class="property-controls">
         <div>
             <div class="scroll-section">
-                <h2 class="section-header">Title Text Templates</h2>
-                <div class="scroll-container">
-                    <div class="template-list">
-                        <div *ngFor="let template of shapeTemplates" class="template-box"
-                            (click)="addPredefinedText(template)">
-                            <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="scroll-section">
                 <h2 class="section-header">Body Text Templates</h2>
                 <div class="scroll-container">
                     <div class="template-list">
-                        <div *ngFor="let template of bodytexttemplates" class="template-box"
+                        <div *ngFor="let template of titleTextTemplates" class="template-box"
                             (click)="addPredefinedText(template)">
                             <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
                         </div>
@@ -348,8 +340,49 @@
         </div>
     </div>
 
-    <div *ngIf="activePanel === 'Shapes'" class="property-controls">
-        <p>Shape panel content</p>
+    <!-- <div *ngIf="activePanel === 'Shapes'" class="property-controls">
+        <div class="scroll-section">
+            <h2 class="section-header">Shapes</h2>
+            <div class="scroll-container">
+                <div class="template-list">
+                    <div *ngFor="let template of shapeTemplates" class="template-box"
+                        (click)="addPredefinedText(template)">
+                        <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div *ngIf="activePanel === 'Shapes-editor'" class="property-controls">
+        <div class="text-control1">
+            <div class="arch-container">
+                <div class="toggle-header" (click)="resetShapeStroke()">
+                    <span class="arrow" [class.expanded]="isShapeStrokeEnabled"> <i class="fa"
+                            [ngClass]="isShapeStrokeEnabled ? 'fa-chevron-down' : 'fa-chevron-right'"></i></span>
+                    <label>Border</label>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="isShapeStrokeEnabled" (click)="resetShapeStroke()" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="content" *ngIf="isShapeStrokeEnabled">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Size</span>
+                            <span id="slider-value">{{shapeStrokeSize}}</span>
+                        </div>
+                        <input type="range" class="opacity-slider" min="0" max="100" [value]="shapeStrokeSize"
+                            (input)="updateShapeStroke($event,strokeColor)" />
+                    </div>
+                    <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="strokeColor"
+                        [(colorPicker)]="strokeColor" (colorPickerChange)="updateShapeStroke(null,strokeColor)">
+                        <span class="tooltip">Stroke Color</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div *ngIf="activePanel === 'Image'" class="property-controls">
@@ -407,5 +440,19 @@
 
     <div *ngIf="activePanel === 'Properties'" class="property-controls">
         <p>✨ Please Add/Select Elements to view their properties! 📝</p>
+    </div>
+
+    <div *ngIf="activePanel === 'Svg'" class="property-controls">
+        <p>1. Go to SVGRepo.com or any free SVG site</p>
+        <p> 2. Find a shape you like (make sure it's marked "Free for commercial use")
+        <p> 3. Click the shape → Select "Copy SVG" or "Download SVG"
+        <p> 4. Paste the full SVG code below (starting with {{htmlSvg}})</p>
+        <div class="form-group">
+            <label>Area, Sector, Town/City</label>
+            <input [(ngModel)]="svgData" />
+        </div>
+        <button class="Svgbottom-btn" (click)="addSvg()">
+            Add SVG
+        </button>
     </div>
 </ng-template>

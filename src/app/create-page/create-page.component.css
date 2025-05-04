@@ -587,6 +587,23 @@ body {
     justify-content: center;
 }
 
+.Svgbottom-btn {
+    background: #0056b3; /* Default Blue Button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out, color 0.2s;
+    min-width: 50px;
+    justify-content: center;
+}
+
+
 /* Default Icon Fill */
 .bottom-btn i {
     font-size: 18px;
@@ -760,7 +777,31 @@ body {
 }
 
 /* element ends */
+.form-group {
+    margin-bottom: 15px;
+}
 
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group input:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
 
 
 /* Responsive Design */
@@ -860,19 +901,19 @@ body {
     }
 
     .bottom-btn {
-    background: none;
-    border: none;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 10px;
-    padding: 5px;
+        background: none;
+        border: none;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 10px;
+        padding: 5px;
     }
 
     .bottom-btn i, .bottom-btn svg {
-    font-size: 16px;
-    margin-bottom: 3px;
+        font-size: 16px;
+        margin-bottom: 3px;
     }
 
     .btn.btn-primary {
@@ -921,9 +962,27 @@ body {
     }
 
     .drawer-header-content{
-    display: flex;
-    justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
     }
+
+    .close-drawer {
+        position: absolute;
+        top: 32px;
+        right: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        background: none;
+        border: none;
+        color: #333;
+        cursor: pointer;
+        transition: color 0.2s, transform 0.2s;
+      }
+      
+      .close-drawer:hover {
+        color: #ff0000;
+        transform: scale(1.2);
+      }
     
     .element-modal{
         width: 300px;

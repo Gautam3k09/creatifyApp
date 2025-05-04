@@ -14,6 +14,24 @@ export const imageBackUrls = [
 
 export const titleTextTemplates = [
   {
+    id: 'wavy_nevermind',
+    elements: [
+      {
+        text: 'NEVERMIND',
+        left: 50,
+        top: 50,
+        fontSize: 60,
+        fontFamily: 'Impact',
+        fill: 'black',
+        type: 'text',
+        wave: {
+          amplitude: 10,
+          frequency: 0.6
+        }
+      }
+    ]
+  },
+  {
     id: 'createefi_fashion_express',
     elements: [
       { text: 'Createefi', left: 30, top: 10, fontSize: 28, fontFamily: 'Dancing Script', fontStyle: 'italic', type: 'text' },
@@ -172,8 +190,8 @@ export const shapeTemplates = [
   {
     id: 'basic_rect',
     elements: [{
-      type: 'shape',
-      objectType: 'rect',
+      objectType: 'shape',
+      type: 'rect',
       left: 50,
       top: 20,
       width: 10,
@@ -186,8 +204,8 @@ export const shapeTemplates = [
   {
     id: 'basic_circle',
     elements: [{
-      type: 'shape',
-      objectType: 'circle',
+      objectType: 'shape',
+      type: 'circle',
       left: 50,
       top: 20,
       radius: 5,
@@ -199,8 +217,8 @@ export const shapeTemplates = [
   {
     id: 'basic_triangle',
     elements: [{
-      type: 'shape',
-      objectType: 'triangle',
+      objectType: 'shape',
+      type: 'triangle',
       left: 50,
       top: 20,
       width: 10,
