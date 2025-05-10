@@ -25,38 +25,24 @@
             </div>
             <div class="add-element" (click)="openElementModal()">+</div>
             <div>
-                <ul #itemListRef class="element-list">
-                    <li *ngFor="let item of itemList" [attr.data-id]="item.id" (click)="selectItem(item.id)"
-                        class="element-item">
-                        <span class="drag-handle">⠿</span>
-                        <span class="element-name" title="{{ item.name }}">
-                            {{ item.type === 'text' ? '🔤' : '🖼️' }} {{ item.name }}
-                        </span>
-                        <div class="element-controls">
-                            <button class="visibility-btn" (click)="toggleVisibility(item.id)">
-                                {{ item.visible ? '👁️' : '🚫' }}
-                            </button>
-                            <button class="delete-btn" (click)="deleteItem(item.id)">🗑️</button>
-                        </div>
-                    </li>
-                </ul>
+                <ng-container *ngTemplateOutlet="layerList"></ng-container>
             </div>
         </div>
     </div>
 
 
     <div class="hideOnPc mob-properties-btn "
-        *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes'">
+        *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes' && activePanel != 'Svg'">
         <button class="property-btn" (click)="toggleDrawer()">
             Properties
         </button>
     </div>
     <div class="bottom-container">
+        <button class="bottom-btn hideOnPc " (click)="openElementModal()">
+            <i class="fa-solid fa-circle-plus"></i> Add
+        </button>
         <button class="bottom-btn" (click)="toggleCanvas()">
             <i class="fa-solid fa-rotate"></i> Flip
-        </button>
-        <button class="bottom-btn" (click)="openElementModal()">
-            <i class="fa-solid fa-circle-plus"></i> Add
         </button>
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
             <svg class="" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white">
@@ -72,8 +58,9 @@
         </button>
         <button type="button" class="bottom-btn" [popover]="popoverContent" popoverTitle="T-Shirt Color"
             [outsideClick]="true">
-            <i class="fa-solid fa-palette"></i>Tee Color
+            <i class="fa-solid fa-shirt"></i>Color
         </button>
+
         <ng-template #popoverContent>
             <div class="color-buttons">
                 <button class="color-btn blue" (click)="setColor(2)"></button>
@@ -83,6 +70,9 @@
             </div>
         </ng-template>
 
+        <button class="bottom-btn" (click)="toggleLayer()">
+            <i class="fas fa-layer-group"></i>Layer
+        </button>
         <button class="bottom-btn" (click)="saveCanvasDataToDB()">
             <i class="fas fa-save"></i>Save
         </button>
@@ -116,17 +106,25 @@
 </div>
 
 
-<div class="drawer" id="bottomDrawer" *ngIf="drawerOpen" [ngStyle]="{ height: drawerHeight + 'px' }">
+<div class="drawer hideOnPc " id="bottomDrawer" *ngIf="drawerOpen" [ngStyle]="{ height: drawerHeight + 'px' }">
     <div class="drawer-header">
         <div class="drawer-handle" (touchstart)="startDrag($event)" (touchmove)="onDrag($event)" (touchend)="endDrag()">
         </div>
         <div class="drawer-header-content">
-            <span>Properties</span>
-            <button class="close-drawer" (click)="toggleDrawer()">&times;</button>
+            <span>{{!layerDrawerOpen ? activePanel : 'Layer' }}</span>
+            <button class="close-drawer" (click)="!layerDrawerOpen ? toggleDrawer() :toggleLayer() ">&times;</button>
         </div>
     </div>
 
-    <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+    <ng-container *ngIf="layerDrawerOpen; else closedDrawer">
+        <ng-container *ngTemplateOutlet="layerList"></ng-container>
+    </ng-container>
+
+    <ng-template #closedDrawer>
+        <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+    </ng-template>
+
+
 </div>
 
 
@@ -222,10 +220,13 @@
                         <div class="slider-label">
                             <span>Color</span>
                         </div>
-                        <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="textcolor"
-                            [(colorPicker)]="textcolor" (colorPickerChange)="changeTextColor(textcolor)">
-                            <span class="tooltip">Text Color</span>
-                        </button>
+                        <div class="color-picker-wrapper">
+                            <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="textcolor"
+                                [(colorPicker)]="textcolor" (colorPickerChange)="changeTextColor(textcolor)">
+                                <span class="tooltip">Text Color</span>
+                            </button>
+                            <span class="color-code-label">{{ textcolor }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -249,10 +250,13 @@
                         <input type="range" class="opacity-slider" min="0" max="100" [value]="textStrokeSize"
                             (input)="updateTextStroke($event,strokeColor)" />
                     </div>
-                    <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="strokeColor"
-                        [(colorPicker)]="strokeColor" (colorPickerChange)="updateTextStroke(null,strokeColor)">
-                        <span class="tooltip">Stroke Color</span>
-                    </button>
+                    <div class="color-picker-wrapper">
+                        <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="strokeColor"
+                            [(colorPicker)]="strokeColor" (colorPickerChange)="updateTextStroke(null,strokeColor)">
+                            <span class="tooltip">strokeColor Color</span>
+                        </button>
+                        <span class="color-code-label">{{ strokeColor }}</span>
+                    </div>
                 </div>
             </div>
             <div class="arch-container">
@@ -267,10 +271,14 @@
                 </div>
 
                 <div class="content" *ngIf="shadowEnabled">
-                    <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="shadowColor"
-                        [(colorPicker)]="shadowColor" (colorPickerChange)="updateTextShadow('color',shadowColor,null)">
-                        <span class="tooltip">Shadow Color</span>
-                    </button>
+                    <div class="color-picker-wrapper">
+                        <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="shadowColor"
+                            [(colorPicker)]="shadowColor"
+                            (colorPickerChange)="updateTextShadow('color',shadowColor,null)">
+                            <span class="tooltip">Shadow Color</span>
+                        </button>
+                        <span class="color-code-label">{{ shadowColor }}</span>
+                    </div>
                     <div class="slider-container">
                         <div class="slider-label">
                             <span>Blur</span>
@@ -376,10 +384,13 @@
                         <input type="range" class="opacity-slider" min="0" max="100" [value]="shapeStrokeSize"
                             (input)="updateShapeStroke($event,strokeColor)" />
                     </div>
-                    <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="strokeColor"
-                        [(colorPicker)]="strokeColor" (colorPickerChange)="updateShapeStroke(null,strokeColor)">
-                        <span class="tooltip">Stroke Color</span>
-                    </button>
+                    <div class="color-picker-wrapper">
+                        <button class="text-color-btn" [cpOutputFormat]="'hex'" [style.background-color]="strokeColor"
+                            [(colorPicker)]="strokeColor" (colorPickerChange)="updateShapeStroke(null,strokeColor)">
+                            <span class="tooltip">Stroke Color</span>
+                        </button>
+                        <span class="color-code-label">{{ strokeColor }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -443,16 +454,34 @@
     </div>
 
     <div *ngIf="activePanel === 'Svg'" class="property-controls">
-        <p>1. Go to SVGRepo.com or any free SVG site</p>
+        <p>1. Go to <a href="https://www.svgrepo.com" target="_blank">SVGRepo.com</a> or any free SVG site</p>
         <p> 2. Find a shape you like (make sure it's marked "Free for commercial use")
         <p> 3. Click the shape → Select "Copy SVG" or "Download SVG"
         <p> 4. Paste the full SVG code below (starting with {{htmlSvg}})</p>
         <div class="form-group">
-            <label>Area, Sector, Town/City</label>
+            <label>Input svg code here</label>
             <input [(ngModel)]="svgData" />
         </div>
         <button class="Svgbottom-btn" (click)="addSvg()">
             Add SVG
         </button>
     </div>
+</ng-template>
+
+
+<ng-template #layerList>
+    <ul #itemListRef class="element-list">
+        <li *ngFor="let item of itemList" [attr.data-id]="item.id" class="element-item">
+            <span class="drag-handle">⠿</span>
+            <span class="element-name" (click)="selectItem(item.id)" title="{{ item.name }}">
+                {{ item.type === 'text' ? '🔤' : '🖼️' }} {{ item.name }}
+            </span>
+            <div class="element-controls">
+                <button class="visibility-btn" (click)="toggleVisibility(item.id)">
+                    {{ item.visible ? '👁️' : '🚫' }}
+                </button>
+                <button class="delete-btn" (click)="deleteItem(item.id)">🗑️</button>
+            </div>
+        </li>
+    </ul>
 </ng-template>

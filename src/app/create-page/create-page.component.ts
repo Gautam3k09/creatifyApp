@@ -34,7 +34,7 @@ export class CreatePageComponent implements AfterViewInit {
   canvas1ItemList: any = [];
   canvas2ItemList: any = [];
   itemList: any = [];
-  activePanel: string = 'Svg';
+  activePanel: string = 'Properties';
   tshirtName: string = '';
   showAddElementModal: boolean = false;
   mobilePropertyButton: any = 'Text Properties';
@@ -132,6 +132,7 @@ export class CreatePageComponent implements AfterViewInit {
   drawerOpen = false;
   htmlSvg = '<svg>'
   svgData: any;
+  layerDrawerOpen = false;
 
   private dragging = false;
   private animationFrameId: number | null = null;
@@ -206,6 +207,7 @@ export class CreatePageComponent implements AfterViewInit {
       this.selectedShape = null;
       this.togglePanel('Properties');
       this.removeGuideLines();
+      this.drawerOpen = false;
     });
 
     this.canvas.on('mouse:down', () => {
@@ -557,8 +559,8 @@ export class CreatePageComponent implements AfterViewInit {
         left: 62,
         top: 90,
         fontSize: 40,
-        fontFamily: 'Merriweather',
-        fill: 'black',
+        fontFamily: 'Oswald',
+        fill: '#000000',
         type: 'text',
         selectable: targetCanvas === this.canvas,
         evented: targetCanvas === this.canvas,
@@ -577,7 +579,7 @@ export class CreatePageComponent implements AfterViewInit {
               top: this.isMobileView ? 22 : el.top,
               width: this.isMobileView ? 2 : el.width,
               height: this.isMobileView ? 2 : el.height,
-              fill: el.fill ?? 'black',
+              fill: el.fill ?? '#000000',
               stroke: el.stroke,
               strokeWidth: el.strokeWidth,
               selectable: el.selectable,
@@ -599,7 +601,7 @@ export class CreatePageComponent implements AfterViewInit {
               left: el.left ?? 0,
               top: el.top ?? 0,
               radius: el.radius ?? 50,
-              fill: el.fill ?? 'black',
+              fill: el.fill ?? '#000000',
               stroke: el.stroke,
               strokeWidth: el.strokeWidth,
               selectable: el.selectable,
@@ -615,7 +617,7 @@ export class CreatePageComponent implements AfterViewInit {
               top: el.top ?? 0,
               width: el.width ?? 80,
               height: el.height ?? 80,
-              fill: el.fill ?? 'black',
+              fill: el.fill ?? '#000000',
               stroke: el.stroke,
               strokeWidth: el.strokeWidth,
               selectable: el.selectable,
@@ -639,27 +641,28 @@ export class CreatePageComponent implements AfterViewInit {
           left: el.left ?? 0,
           top: el.top ?? 0,
           fontSize: el.fontSize ?? 40,
-          fontFamily: el.fontFamily ?? 'Merriweather',
-          fill: el.fill ?? 'black',
+          fontFamily: el.fontFamily,
+          fill: el.fill ?? '#000000',
           selectable: el.selectable,
           evented: el.evented,
           id,
           objectType: 'text',
         });
-
         if (targetCanvas === this.canvas) {
           this.itemList.unshift({ id, type: 'text', name: el.text, visible: true });
         }
       }
 
-      object.setCoords();
       object.scaleX = this.isMobileView ? 25 : 5;
       object.scaleY = this.isMobileView ? 25 : 5;
+      object.setCoords();
 
-      targetCanvas.add(object);
-      if (targetCanvas === this.canvas) {
-        targetCanvas.setActiveObject(object);
-      }
+      setTimeout(() => {
+        targetCanvas.add(object);
+        if (targetCanvas === this.canvas) {
+          targetCanvas.setActiveObject(object);
+        }
+      }, 100);
     }
 
     this.canvasClicked = true;
@@ -698,7 +701,9 @@ export class CreatePageComponent implements AfterViewInit {
   changeFont(font: string): void {
     if (this.selectedText) {
       this.selectedText.set({ fontFamily: font });
-      this.canvas.renderAll();
+      this.selectedText.setCoords();
+      this.selectedText.initDimensions();
+      this.canvas.requestRenderAll();
     }
   }
 
@@ -1195,8 +1200,13 @@ export class CreatePageComponent implements AfterViewInit {
     const item = this.itemList.find((item: any) => item.id === itemId);
 
     if (target && item) {
-      target.set('visible', !target.visible);
-      item.visible = target.visible;
+      const newVisibility = !target.visible;
+      target.set('visible', newVisibility);
+      item.visible = newVisibility;
+      console.log(target, this.canvas.getActiveObject())
+      if (newVisibility) {
+        this.canvas.setActiveObject(target);
+      }
       this.canvas.renderAll();
     }
   }
@@ -1204,6 +1214,9 @@ export class CreatePageComponent implements AfterViewInit {
   deleteItem(itemId: string): void {
     const target = this.canvas.getObjects().find((obj: any) => obj.id === itemId);
     if (target) {
+      if (this.canvas.getActiveObject() === target) {
+        this.canvas.discardActiveObject();
+      }
       this.canvas.remove(target);
       this.itemList = this.itemList.filter((item: any) => item.id !== itemId);
       this.canvas.renderAll();
@@ -1335,7 +1348,7 @@ export class CreatePageComponent implements AfterViewInit {
   CurrentSelected(type: any) {
     if (type == 'text') {
       this.textcolor = this.selectedText.fill as string;
-      this.textfont = this.selectedText.fontFamily || 'Oswald';
+      this.textfont = this.selectedText.fontFamily || 'CinemaGroovy';
       this.fontSize = this.selectedText.fontSize || 24;
       this.textStrokeSize = this.selectedText.strokeWidth * 20 || 50;
       this.shadowBlur = this.selectedText.shadow?.blur || 60;
@@ -1505,5 +1518,10 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
+  toggleLayer() {
+    this.layerDrawerOpen = !this.layerDrawerOpen;
+    console.log('layerDrawerOpen', this.layerDrawerOpen);
+    this.toggleDrawer();
+  }
 
 }
