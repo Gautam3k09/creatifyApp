@@ -16,7 +16,7 @@ export class HeaderPageComponent {
     @Input() from: any;
     sidebarClose: any = false;
     isMenuOpen = false;
-    isLoggedIn: any;
+    isLoggedIn: any = "";
     dialogConfig = new MatDialogConfig();
     modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
     visitor: any = '';
@@ -60,7 +60,7 @@ export class HeaderPageComponent {
     openModal() {
         let width = window.innerWidth;
         if (width > 600) {
-            this.dialogConfig.width = '30%';
+            this.dialogConfig.width = '25%';
         } else {
             this.dialogConfig.width = '80%';
         }

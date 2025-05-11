@@ -4,13 +4,13 @@
     <div class="hero-container">
         <div class="hero-content">
             <h1>STOP SEARCHING. START CREATING.</h1>
-            <p>Your Dream Oversized Tee is Just a Click Away!</p>
+            <p>Customize. Click. Wear — It’s That Easy!</p>
             <div class="text-container">
-                <div class="text-wrapper">
-                    <div class="sub-text desktop-buttons text-slide"
-                        [style.transform]="'translateY(-' + (currentIndex * 110) + '%)'"
-                        [style.transition]="currentIndex === 0 ? 'none' : '0.6s ease-in-out'">
-                        <p *ngFor="let sentence of sentence">{{ sentence }}</p>
+                <div class="text-wrapper  desktop-buttons">
+                    <div class="sentence-container">
+                        <div *ngIf=" show" [@slideInOut] class="sentence" (@slideInOut.done)="onAnimationDone()">
+                            {{ currentSentence }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -20,19 +20,19 @@
             </div>
         </div>
         <div class="hero-image">
-            <!-- <img src="../../assets/createefi/_Createefi_homepagevideo.webm" alt="Hero Image"> -->
-            <video #bgVideo muted loop playsinline style="width:100%">
+            <video #bgVideo muted loop playsinline>
                 <source src="../../assets/createefi/_Createefi_homepagevideo.webm" type="video/webm">
                 Your browser does not support the video tag.
             </video>
         </div>
-        <p class="sub-text mobile-buttons">
-            Why settle for someone else’s style? Upload your artwork, and let Createefi
-            turn your design into the perfect oversized tee.
-        </p>
+        <div class="sentence-container">
+            <div *ngIf="show" [@slideInOut] class="sentence mobile-buttons" (@slideInOut.done)="onAnimationDone()">
+                {{ currentSentence }}
+            </div>
+        </div>
         <div class="buttons mobile-buttons">
-            <button class="btn btn-primary">Start Creating →</button>
-            <button class="btn btn-outline-light">Explore</button>
+            <button class="btn btn-primary" (click)="openCreate()">Start Creating →</button>
+            <button class="btn btn-outline-light" (click)="openExplore()">Explore</button>
         </div>
     </div>
 
@@ -42,12 +42,12 @@
                 <h2>Popular Designs</h2>
                 <p class="subtitle">Get inspired by our exclusive’s </p>
             </div>
-            <a href="#" class="view-all">View All <i class="fa fa-arrow-right"></i></a>
+            <a (click)="openExplore()" class="view-all">View More <i class="fa fa-arrow-right"></i></a>
         </div>
 
         <div class="carousel-container">
             <div class="carousel-wrapper" id="carousel">
-                <div class="card" *ngFor="let product of products">
+                <div class="card" *ngFor="let product of products" #cardRef>
                     <img [src]="product.img" [alt]="product.alt">
                     <div class="color-options">
                         <span *ngFor="let color of colors" class="color" [class.active]="color === product.activeColor"
@@ -60,8 +60,8 @@
                     <p>{{ product.colorName }}</p>
                     <p class="price">{{ product.price }}</p>
                     <div class="buttons">
-                        <button class="btn btn-primary">Buy Now</button>
-                        <button class="btn btn-outline-dark">Add To Cart</button>
+                        <button class="btn btn-primary" (click)="openCreate()">Craft Yours</button>
+                        <!-- <button class="btn btn-outline-dark">Add To Cart</button> -->
                     </div>
                 </div>
             </div>
@@ -76,3 +76,4 @@
         </div>
     </div>
 </body>
+<!-- <app-footer></app-footer> -->

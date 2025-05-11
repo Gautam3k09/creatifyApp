@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { HeaderPageComponent } from '../header-page/header-page.component';
 import { FooterComponent } from '../footer/footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,22 +6,38 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { localStorageService } from '../local-storage-service';
 import { CommonModule } from '@angular/common';
+import { trigger, style, transition, animate } from '@angular/animations';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [HeaderPageComponent, FooterComponent, CommonModule],
+    imports: [HeaderPageComponent, CommonModule, FooterComponent],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
+    animations: [
+        trigger('slideInOut', [
+            transition(':enter', [
+                style({ transform: 'translateY(100%)', opacity: 0 }),
+                animate('400ms ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+            ]),
+            transition(':leave', [
+                animate('400ms ease-in', style({ transform: 'translateY(-100%)', opacity: 0 }))
+            ])
+        ])
+    ]
 })
 export class HomeComponent {
     @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
+    @ViewChildren('cardRef', { read: ElementRef }) cards!: QueryList<ElementRef>;
 
-    sentence: any = [
+    sentences: any = [
         "Why settle for someone else’s style? Upload your artwork, and let Createefi turn your design into the perfect oversized tee.",
         "Turn your designs into merch! Create your store with Createefi. Upload your designs—we'll handle printing and fulfillment.",
         "The Practice of expressing creativity through personalized fashion, turning unique ideas into wearable art.",
-    ]
+    ];
+    currentSentenceIndex = 0;
+    currentSentence = this.sentences[this.currentSentenceIndex];
+    show = true;
 
     dialogConfig = new MatDialogConfig();
     modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
@@ -31,9 +47,7 @@ export class HomeComponent {
         'assets/home-page-display/untitled.png',
         'assets/home-page-display/white-createefi.png',
     ];
-    currentSlide: number = 0;
     currentIndex: number = 0;
-    intervalId: any;
     isSwitching = false;
 
     products = [
@@ -78,6 +92,9 @@ export class HomeComponent {
         public localStorage: localStorageService,
         route: ActivatedRoute
     ) {
+        setInterval(() => {
+            this.show = false; // Triggers leave
+        }, 3000);
         this.storedData = localStorage.getUserLocalStorage();
         if (this.storedData && this.storedData.visitor == null) {
             this.isLogin = this.storedData.LoggedIn;
@@ -91,24 +108,12 @@ export class HomeComponent {
     }
 
     ngOnInit() {
-        this.startSentence();
         if (this.storedData && this.storedData.visitor != null) {
             this.localStorage.removeUserLocalStorage();
             location.reload();
         }
     }
 
-    startSentence() {
-        this.sentence.push(this.sentence[0]);
-        this.intervalId = setInterval(() => {
-            this.currentIndex++;
-            if (this.currentIndex === this.sentence.length - 1) {
-                setTimeout(() => {
-                    this.currentIndex = 0;
-                }, 500);
-            }
-        }, 3000);
-    }
     openCreate(name: any = '') {
         if (!this.isLogin) {
             this.openModal(name);
@@ -126,15 +131,24 @@ export class HomeComponent {
     }
 
     openModal(name: any = '') {
+        let width = window.innerWidth;
+        if (width > 600) {
+            this.dialogConfig.width = '25%';
+        } else {
+            this.dialogConfig.width = '80%';
+        }
         this.dialogConfig.id = 'projects-modal-component';
-        this.dialogConfig.height = '500px';
-        this.dialogConfig.width = '650px';
-        this.dialogConfig.data = name;
+        this.dialogConfig.height = 'auto';
         this.modalDialog = this.dialog.open(LoginModalComponent, this.dialogConfig);
     }
 
     ngAfterViewInit() {
         this.updateDots(0);
+        const carousel = document.getElementById('carousel')!;
+        carousel.addEventListener('scroll', () => {
+            this.detectActiveCard(carousel.scrollLeft);
+        });
+
         const video = this.bgVideo.nativeElement;
         video.muted = true;
         video.play().then(() => {
@@ -142,6 +156,23 @@ export class HomeComponent {
         }).catch((err) => {
             console.error('Autoplay blocked:', err);
         });
+    }
+
+    detectActiveCard(scrollLeft: number) {
+        const cardArray = this.cards.toArray();
+        let closestIndex = 0;
+        let minDiff = Infinity;
+
+        cardArray.forEach((card, i) => {
+            const offsetLeft = card.nativeElement.offsetLeft;
+            const diff = Math.abs(offsetLeft - scrollLeft);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestIndex = i;
+            }
+        });
+
+        this.updateDots(closestIndex);
     }
 
     scrollToCard(index: number) {
@@ -156,8 +187,17 @@ export class HomeComponent {
         dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
     }
 
+    onAnimationDone() {
+        // After leave animation
+        if (!this.show) {
+            this.currentSentenceIndex = (this.currentSentenceIndex + 1) % this.sentences.length;
+            this.currentSentence = this.sentences[this.currentSentenceIndex];
+            this.show = true; // Triggers enter
+        }
+    }
+
     ngOnDestroy() {
-        clearInterval(this.intervalId);
+
     }
 }
 

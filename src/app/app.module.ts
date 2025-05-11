@@ -9,6 +9,7 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [],
@@ -22,6 +23,7 @@ import { routes } from './app.routes';
         ModalModule.forRoot(),
         MatFormFieldModule,
         RouterModule.forRoot(routes),
+        BrowserAnimationsModule
     ],
     providers: [BsModalService],
 })

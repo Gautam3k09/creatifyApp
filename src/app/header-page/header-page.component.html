@@ -1,6 +1,7 @@
 <header class="navbar" [ngClass]="{ 'bg-white ': from == 'create' }">
     <div class="nav-left">
-        <button class="menu-btn" (click)="openMobileHamburger()">&#9776;</button>
+        <button class="menu-btn" (click)="openMobileHamburger()"
+            *ngIf="isLoggedIn !== '' && isLoggedIn !== null">&#9776;</button>
         <img src="../../assets/createefi/lgo.png" (click)="onDivClick('')" alt="CREATEEFI Logo" class="logo" />
     </div>
 
@@ -9,7 +10,16 @@
         <a [ngClass]="{ 'text-dark' : from == 'create'}" (click)="onDivClick('tees')">Create</a>
     </nav>
 
-    <div class="nav-right">
-        <i class="icon" (click)="onDivClick('account')">👤</i>
+    <!-- If logged in -->
+    <div class="nav-right" *ngIf="isLoggedIn !== '' && isLoggedIn !== null; else loginButton">
+        <i class="fa-solid fa-user" (click)="onDivClick('account')"></i>
     </div>
+
+    <!-- If NOT logged in -->
+    <ng-template #loginButton>
+        <div class="nav-right">
+            <i class="fa-solid fa-right-to-bracket" (click)="openModal()"></i>
+        </div>
+    </ng-template>
+
 </header>
