@@ -1,213 +1,38 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    background-color: #e9ecef;
-    height: auto;
+    background-color: #18181B;
+    height: 100vh;
+    overflow: auto;
     width: 100vw;
+    font-family: merriWeather, sans-serif;
 }
 
-.container {
-    height: 90vh;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: auto;
-    margin-top: 4%;
-}
-.container {
-    margin: auto;
-    margin-top: 2%;
-}
-
-.noTees {
-    position: fixed;
-    inset: 0px;
-    width: 65vw;
-    height: 5rem;
-    margin: auto;
-}
-
-.shop-modal {
-    right: 2%;
-    width: 95vw;
-}
-
-.RotateBtn {
-    padding: 5px;
-    margin-left: 3%;
-    margin-top: 3%;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-}
-
-.tshirtDiv {
-    margin-top: -3%;
-    cursor: pointer;
-}
-
-.exceedText {
-    margin: 3%;
-    text-align: center;
-}
-
-.imageContainer {
-    img {
-        height: 50%;
-    }
-}
-
-.canvas {
-    height: 242px;
-    margin-top: -68%;
-    margin-left: 29%;
-    width: 280px;
-}
 .card {
-    border-color: #0056b3;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
+    background-color: #18181B;
+    transition: transform 0.2s;
+    border:#656565 1px solid;
+    border-radius: 20px;
 }
-
-.NameText {
-    color: black;
-    font-weight: bolder;
-    text-transform: uppercase;
-}
-
-.loadMore {
-    display: flex;
-    justify-content: center;
-}
-
-.helperButton {
-    z-index: 99;
-    display: flex;
-    align-items: center;
-    .delete {
-        margin-inline: 4%;
-        margin-top: 4%;
-        margin-bottom: -3%;
-        color: red;
-    }
-    .share {
-        margin-inline: 2%;
-        margin-top: 4%;
-        margin-bottom: -3%;
-        color: black;
-    }
-}
-
-.card-text {
-    color: #000;
-}
-.tee-text {
-    color: #000;
-}
-
-.rupee-text {
-    color: #000;
-}
-
-.create {
-    justify-content: center;
-}
-
-.card-body {
-    margin-left: 5%;
-    margin-bottom: 5%;
-    text-transform: capitalize;
+.card:hover {
+  transform: scale(1.02);
 }
 
 .image-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .parent-image {
-    width: 100%;
-    height: auto;
-  }
-  
-  .overlay-image {
+  position: relative;
+  display: inline-block;
+}
+
+.parent-image {
+  height: auto;
+}
+
+.overlay-image {
     position: absolute;
-    bottom: 8vh;
+    bottom: 4vh;
     left: 50.5%;
     transform: translateX(-50%);
-    width: 48%;
+    width: 27%;
     height: 64%;
-  }
-
-@media (max-width: 600px) {
-    body {
-        margin-top: 10%;
-        margin-inline: 0;
-        padding: 20px 0px 75px 0px;
-    }
-
-    .bucket {
-        height: 69vh;
-    }
-
-    .container {
-        height: 72vh;
-    }
-
-    .loadMore {
-        display: flex;
-        justify-content: center;
-        margin-top: 5%;
-        margin-right: 10px;
-    }
-    .mainCard {
-        width: 50%;
-    }
-
-    .canvas-container {
-        position: relative;
-        height: 260px;
-        margin-top: -10px;
-    }
-
-    canvas {
-        margin-top: 20px;
-        margin-left: 0;
-        height: 180px;
-        position: absolute;
-    }
-
-    .canvas {
-        height: 140px;
-        margin-top: 54px;
-        margin-left: 29%;
-        width: 110px;
-    }
-
-    .card-body {
-        margin-top: 5px;
-        font-size: 10px;
-    }
-
-    .card-text {
-        margin-top: 197px;
-    }
-
-    .helperButton {
-        z-index: 99;
-        display: flex;
-
-        .share {
-            margin-inline: 2%;
-            margin-bottom: -3%;
-        }
-    }
+    pointer-events: none;
 }
 
 /* scroll bar */
@@ -231,3 +56,5 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
+
+

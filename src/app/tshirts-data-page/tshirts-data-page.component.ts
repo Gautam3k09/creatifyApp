@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { localStorageService } from '../local-storage-service';
 import { environment } from '../../../environment';
 import { LoaderComponent } from '../loader/loader.component';
+import { HeaderPageComponent } from "../header-page/header-page.component";
 
 @Component({
     selector: 'app-tshirts-data-page',
     standalone: true,
-    imports: [CommonModule, LoaderComponent],
+    imports: [CommonModule, LoaderComponent, HeaderPageComponent],
     templateUrl: './tshirts-data-page.component.html',
     styleUrl: './tshirts-data-page.component.css',
 })
