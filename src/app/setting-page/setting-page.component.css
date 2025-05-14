@@ -1,26 +1,26 @@
 body {
     overflow: hidden;
     height: auto;
+    background-color: #18181B;
 }
 .container {
     margin-top: 10vh;
 }
 
 .nav-link {
-    color: rgb(0, 0, 0);
+    color: white;
 }
 
 .nav-link.active {
-    background-color: rgb(0, 0, 0) !important;
-    border-color: black;
-    color: white;
+    background-color: #e9ecef !important;
+    border-color: #e9ecef;
+    color: rgb(0, 0, 0);
 }
 
 .content-container {
     padding: 4%;
     border-radius: 37px;
-    color: black;
-    /* width: 60vw; */
+    color: white;
     height: 70vh;
 }
 
@@ -28,7 +28,7 @@ body {
     font-family: 'Oswald', sans-serif;
     font-size: 1.7rem;
     font-weight: 700;
-    color: black;
+    color: white;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-align: center;
@@ -46,7 +46,7 @@ body {
     gap: 8px;
     font-family: 'Merriweather', serif;
     font-size: 1rem;
-    color: black;
+    color: white;
 }
 
 .InfoForm div {
@@ -67,7 +67,7 @@ body {
 
 .addressForm {
     font-family: 'Merriweather', serif;
-    color: #000;
+    color: white;
     max-width: 600px;
     margin: auto;
 }
@@ -97,7 +97,9 @@ body {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
 }
-
+.form-group :disabled{
+    color: white;
+}
 .flex-group {
     display: flex;
     gap: 20px;
@@ -114,19 +116,19 @@ body {
 }
 
 .addressBtn {
-    background-color: black !important;
+    background-color: white !important;
     border: none;
     padding: 10px 20px;
     font-size: 1rem;
     font-weight: bold;
     border-radius: 5px;
-    color: #fff;
+    color: black;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .addressBtn:hover {
-    background-color: black !important;
+    background-color: white !important;
 }
 
 .upgradeContainer {
@@ -184,10 +186,10 @@ body {
     font-family: 'Oswald', sans-serif;
     font-size: 1.2rem;
     font-weight: bold;
-    color: #000;
+    color: #fff;
     margin-bottom: 10px;
     text-align: center;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #fff;
     padding-bottom: 5px;
 }
 
@@ -201,11 +203,11 @@ body {
 
 .statsLabel {
     font-weight: bold;
-    color: #000;
+    color: #fff;
 }
 
 .statsValue {
-    color: #000;
+    color: #fff;
 }
 
 /* Coupon Form */
@@ -293,8 +295,8 @@ body {
 }
 
 .withdrawBtn {
-    background-color: #000;
-    color: #fff;
+    background-color: #fff;
+    color: #000;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 0.9rem;
@@ -308,8 +310,8 @@ body {
 .profile-title-help {
     font-family: 'Oswald', sans-serif;
     font-size: 24px;
-    color: black;
-    border-bottom: 2px solid black;
+    color: white;
+    border-bottom: 2px solid white;
     margin-bottom: 15px;
     padding-bottom: 5px;
 }

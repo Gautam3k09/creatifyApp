@@ -4,11 +4,11 @@
 }
 
 body {
-    background-color: #e9ecef;
+    background-color: #18181B;
     height: 100vh;
     margin: 0;
     overflow: auto;
-    color: black;
+    color: white;
     position: fixed;
     width: 100vw;
     overflow-x: hidden;
@@ -31,47 +31,7 @@ body {
         width: 30vw;
     }
 }
-.mainCanvas {
-    height: 350px;
-    margin-left: 60%;
-    margin-top: 40%;
-}
 
-.canvas-container {
-    position: relative;
-    width: 175px;
-    height: 150px;
-}
-
-.canvas-container canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.canvasFront {
-    height: 190px;
-    position: absolute;
-    margin-top: 145px;
-    margin-left: 225px;
-    width: 340px;
-}
-
-.canvasBack {
-    height: 220px;
-    position: absolute;
-    margin-top: 153px;
-    margin-left: 225px;
-    width: 340px;
-}
-
-.imgTag {
-    margin-left: 10%;
-    height: 80vh;
-    img {
-        border: solid;
-        height: 100%;
-    }
-}
 
 .right-side {
     margin-top: 2%;
@@ -81,7 +41,7 @@ body {
     overflow: auto;
     padding: 5px;
     font-weight: 600;
-
+    color:white;
     .sellerlabel {
         padding-inline: 5px;
         padding-inline: 5px;
@@ -95,22 +55,21 @@ body {
         font-family: 'Merriweather', serif;
         font-weight: 700; /* Bold for emphasis */
         font-style: italic; /* Slightly stylish */
-        font-size: 20px; /* Adjust as needed */
-        color: #222;
+        font-size: 20px;
+        color: white;
     }
     .old-price {
         font-family: 'Merriweather', serif;
         font-weight: 400;
         font-size: 18px;
         text-decoration: line-through;
-        color: #888;
     }
 
     .delivery {
         font-family: 'Merriweather', serif;
         font-style: italic;
         font-size: 14px;
-        color: #555;
+        color: #aeaeae;
     }
 
     .tee-Name {
@@ -167,7 +126,7 @@ body {
     font-family: 'Merriweather', serif;
     font-weight: 600;
     font-size: 16px;
-    color: #333;
+    color: white;
 }
 
 .chartText {
@@ -197,17 +156,16 @@ body {
     z-index: 9999;
     display: flex;
     justify-content: space-between;
-    color: #0056b3;
     font-family: 'Merriweather', serif;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
     transition: all 0.3s ease;
     button {
         z-index: 99;
         font-weight: 600;
         width: 15%;
         border: 1px solid #ccc;
+        color: white;
         padding: 6px 12px;
         border-radius: 5px;
     }
@@ -217,7 +175,7 @@ body {
     font-family: 'Merriweather', serif;
     font-size: 16px;
     font-weight: 600;
-    color: #555;
+    color: #ffffff;
     text-transform: capitalize;
 }
 
@@ -285,17 +243,16 @@ input {
     font-family: 'Merriweather', serif;
     font-size: 14px;
     font-weight: 600;
-    padding: 6px 16px;
     border-radius: 5px;
-    background-color: black;
-    color: white;
-    border: none;
-    transition: all 0.3s ease-in-out;
+    background-color: #ffffff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    transition: all 0.3s ease;
 }
 
 .btn-apply:hover {
-    background-color: #0056b3;
-    color: #fff;
+    background: #f2f2f2;
 }
 
 .btn-apply:disabled {
@@ -363,6 +320,11 @@ input {
     color: #155724;
 }
 
+.coins-container {
+    display: flex;
+    align-items: center;
+}
+
 .coins {
     display: flex;
     align-items: center;
@@ -382,7 +344,7 @@ input {
     font-family: 'Oswald', sans-serif;
     font-size: 16px;
     font-weight: 600;
-    color: #222;
+    color: white;
 }
 
 .refer-title {
@@ -390,7 +352,7 @@ input {
     font-size: 20px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #222;
+    color: white;
     letter-spacing: 1px;
 }
 
@@ -398,7 +360,7 @@ input {
     font-family: 'Merriweather', serif;
     font-size: 16px;
     font-weight: 500;
-    color: #444;
+    color: white;
     line-height: 1.5;
 }
 
@@ -406,8 +368,8 @@ input {
     font-family: 'Oswald', sans-serif;
     font-size: 16px;
     font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, #222, #000);
+    color: #000;
+  background: #fff;
     padding: 8px 16px;
     border-radius: 5px;
     text-transform: uppercase;
@@ -419,8 +381,8 @@ input {
 }
 
 .refer-now:hover {
-    background: linear-gradient(135deg, #000, #444);
-    transform: scale(1.05);
+  background: #f0f0f0;
+  transform: scale(1.05);
 }
 
 .refer-now:active {
@@ -433,11 +395,11 @@ input {
     font-family: 'Oswald', sans-serif;
     font-size: 20px;
     font-weight: 700;
-    color: #222;
+    color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 1px;
     padding-bottom: 6px;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #ffffff;
 }
 
 .product-container {
@@ -489,33 +451,35 @@ input {
 }
 
 .image-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .parent-image {
-    width: 100%;
-    height: auto;
-  }
-  
-  .overlay-image {
-    position: absolute;
-    bottom: 10vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
-    height: 55%;
-  }
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-@media (max-width: 600px) {
+.parent-image{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.overlay-image{
+    position: absolute;
+    top: 107px;
+    left: 127px;
+    width: 46%;
+    height: 67%;
+    mix-blend-mode: multiply;
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+
+@media (max-width: 991px){
     .mainBox {
         margin-top: 0;
     }
-
     .container {
         position: relative;
         height: 142vh;
@@ -524,52 +488,16 @@ input {
         margin: auto;
         color: black;
         border-radius: 0px;
-        padding-bottom: 12%;
-        margin-bottom: 12%;
     }
-    .mainCanvas {
-        height: 320px;
-        margin-left: 4px;
-        margin-top: 16px;
-    }
-
-    .canvas-container {
-        position: relative;
-        width: 175px; /* Adjust to the width of your canvas */
-        height: 150px; /* Adjust to the height of your canvas */
-    }
-
-    .canvas-container canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-    .canvasFront {
-        height: 190px;
-        position: absolute;
-        margin-top: 80px;
-        margin-left: 104px;
-        width: 340px;
-    }
-
-    .canvasBack {
-        height: 220px;
-        position: absolute;
-        margin-top: 80px;
-        margin-left: 109px;
-        width: 340px;
-    }
-
     .right-side {
         height: auto;
-        margin-top: 50%;
         width: auto;
         float: none;
-        padding: 0px;
         margin-left: 3%;
         overflow: hidden;
+        padding-right: 3%;
+        /* padding-bottom: 52px; */
     }
-
     .left-side {
         margin-top: 6%;
         width: 80vw;
@@ -577,22 +505,12 @@ input {
         padding: 1% 2% 1% 2%;
         border-radius: 6%;
     }
-    .imgTag {
-        height: auto;
-        img {
-            border: solid;
-            height: 56vh;
-            width: 80vw;
-        }
-    }
-
     .colorBtn {
         border: 2px solid black;
         height: 25px;
         width: 25px;
         border-radius: 50px;
     }
-
     .buyButton {
         position: fixed;
         bottom: 0;
@@ -607,7 +525,6 @@ input {
             width: 105% !important;
         }
     }
-
     .checkoutText {
         position: relative;
         z-index: 999;
@@ -616,7 +533,6 @@ input {
         cursor: pointer;
         margin-top: -5px;
     }
-
     .icon-style {
         border: 1px solid black;
         padding: 5px;
@@ -627,27 +543,46 @@ input {
         position: absolute;
         z-index: 999;
     }
-
     .productDetails {
         padding-inline-end: 10px;
     }
-}
 
-@media (max-width: 480px) {
+    .tshirt-wrapper {
+        width: 360px;
+        height: 380px;
+    }
+    .image-container {
+        position: relative;
+        width: fit-content;
+        max-width: 100%;
+    }
+    .parent-image {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+    .overlay-image {
+        position: absolute;
+        top: 75px;
+        left: 99px;
+        width: 163px;
+        height: 257px;
+        pointer-events: none;
+    }
     .chartText {
         font-size: 13px;
         gap: 4px;
     }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .product-container {
         flex-direction: column;
     }
     .productChild {
         flex: 1 1 100%;
     }
-}
+} */
 
 @keyframes fadeIn {
     from {

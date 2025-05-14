@@ -106,6 +106,10 @@ export class AppServiceService {
         return this.http.get(` https://api.postalpincode.in/pincode/${pincode}`);
     }
 
+    getPincode(data: any) {
+        return this.http.get(`${this.serverUrl}/nimbus/check-pincode-availabilty`, { params: data });
+    }
+
     // otp apis
     sendOtp(email: string) {
         return this.http.post(`${this.serverUrl}/send-otp`, { email });

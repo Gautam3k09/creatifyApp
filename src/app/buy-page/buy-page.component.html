@@ -5,10 +5,15 @@
     <div class="mainBox">
         <div class="container">
             <div class="left-side">
-                <i class="fa-solid fa-rotate icon-style" (click)="changeSide()"></i>
-                <div class="image-container">
-                    <img [src]="data.currentSide" class="parent-image">
-                    <img *ngIf="data.currentPrint" [src]=" data.currentPrint" class="overlay-image" alt="">
+                <button class="btn btn-dark btn-sm rounded shadow px-3 py-1" title="Flip T-shirt"
+                    (click)="changeSide()">
+                    <i class="fa fa-sync-alt text-white me-1"></i>
+                </button>
+                <div class="tshirt-wrapper">
+                    <div class="image-container">
+                        <img [src]="data.currentSide" class="parent-image" />
+                        <img *ngIf="data.currentPrint" [src]="data.currentPrint" class="overlay-image" alt="Design" />
+                    </div>
                 </div>
             </div>
             <div class="right-side custom-scrollbar">
@@ -98,7 +103,7 @@
                     </button>
                 </div>
 
-                <div class="ReferralSection" *ngIf="!visitor">
+                <div class="ReferralSection mt-2" *ngIf="!visitor">
                     <h2 class="refer-title mb-1">Refer & Earn</h2>
                     <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
                     <label class="refer-now mb-1" (click)="openRefferalModal()">Refer Now</label>

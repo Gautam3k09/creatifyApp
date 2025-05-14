@@ -158,7 +158,7 @@ export class CreatePageComponent implements AfterViewInit {
     });
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
-    const left = this.isMobileView ? -21.2 : 28.2;
+    const left = this.isMobileView ? -18.2 : 28.2;
     const top = this.isMobileView ? 0.7 : 6;
     upperCanvas.style.left = left + '%';
     upperCanvas.style.top = top + '%';

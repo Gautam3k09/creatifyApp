@@ -18,11 +18,8 @@
                     </div>
 
                     <div class="text-center mt-4 position-relative image-container">
-                        <!-- Base Shirt Image -->
                         <img [src]="shirt.teeSrc" class="parent-image img-fluid" style="max-height: 240px;"
                             alt="Base Shirt" />
-
-                        <!-- Overlay Image -->
                         <img [src]="shirt.img" class="overlay-image img-fluid" style="max-height: 240px;"
                             alt="Overlay" />
                     </div>
@@ -61,8 +58,8 @@
                         this.teeDatas.length != 0;
                     else elseBlockfornoshirt
                 ">
-                <div *ngIf="teeDatas.length > 3; else createBlockElse" style="display: flex; justify-content: center">
-                    <div class="create text-center">
+                <div *ngIf="teeDatas.length >= 5; else createBlockElse" style="display: flex; justify-content: center">
+                    <div class="create text-center mb-2">
                         Tee design overload! Free up some space to unleash your creativity.
                     </div>
                 </div>

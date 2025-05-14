@@ -32,7 +32,17 @@ body {
     transform: translateX(-50%);
     width: 27%;
     height: 64%;
+    mix-blend-mode: multiply;
+    opacity: 0.85;
     pointer-events: none;
+}
+
+.loadMore {
+    justify-self: center;
+}
+
+.create {
+    color: white;
 }
 
 /* scroll bar */

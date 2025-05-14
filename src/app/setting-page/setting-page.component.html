@@ -1,89 +1,44 @@
 <app-loader *ngIf="isLoading"></app-loader>
 <app-header-page style="position: relative"></app-header-page>
+
 <body>
     <!--code for multiple tab we might need -->
     <div class="container">
         <div class="align-items-center sidebar buttonList">
             <div class="main-container">
                 <div class="hideOnMobile">
-                    <div
-                        class="nav flex-column nav-pills me-3 tablist"
-                        id="v-pills-tab"
-                        role="tablist"
-                        aria-orientation="vertical"
-                    >
-                        <button
-                            class="nav-link sideButton active"
-                            id="v-pills-profile-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-profile"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-profile"
-                            aria-selected="false"
-                            (click)="changeTab('profile')"
-                        >
+                    <div class="nav flex-column nav-pills me-3 tablist" id="v-pills-tab" role="tablist"
+                        aria-orientation="vertical">
+                        <button class="nav-link sideButton active" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+                            aria-selected="false" (click)="changeTab('profile')">
                             Profile
                         </button>
-                        <button
-                            class="nav-link sideButton"
-                            id="v-pills-profile-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-profile"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-profile"
-                            aria-selected="false"
-                            (click)="changeTab('merch')"
-                        >
+                        <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+                            aria-selected="false" (click)="changeTab('merch')">
                             Merch
                         </button>
-                        <button
-                            class="nav-link sideButton"
-                            id="v-pills-profile-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-profile"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-profile"
-                            aria-selected="false"
-                            (click)="changeTab('help')"
-                        >
+                        <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+                            aria-selected="false" (click)="changeTab('help')">
                             Need help?
                         </button>
-                        <button
-                            class="nav-link sideButton"
-                            id="v-pills-profile-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-profile"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-profile"
-                            aria-selected="false"
-                            (click)="changeTab('order')"
-                        >
+                        <button class="nav-link sideButton" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+                            aria-selected="false" (click)="changeTab('order')">
                             Orders
                         </button>
-                        <button
-                            class="nav-link sideButton"
-                            data-bs-target="#v-pills-Payout"
-                            type="button"
-                            role="tab"
-                            aria-selected="false"
-                            (click)="logout()"
-                        >
+                        <button class="nav-link sideButton" data-bs-target="#v-pills-Payout" type="button" role="tab"
+                            aria-selected="false" (click)="logout()">
                             Logout
                         </button>
                     </div>
                 </div>
                 <!-- content from here  -->
-                <div
-                    class="tab-pane fade show active"
-                    id="v-pills-profile"
-                    role="tabpanel"
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
                     aria-labelledby="v-pills-profile-tab"
-                    style="margin-top: -50px; width: 100%; overflow-y: auto; overflow-x: hidden"
-                >
+                    style="margin-top: -50px; width: 100%; overflow-y: auto; overflow-x: hidden">
                     <div class="content-container">
                         <div class="profile" *ngIf="this.activeTab == 'profile'">
                             <div class="profile-title">Profile Information</div>
@@ -113,11 +68,8 @@
 
                                     <div class="form-group">
                                         <label>Landmark</label>
-                                        <input
-                                            formControlName="landmark"
-                                            [disabled]="formEdit"
-                                            placeholder="E.g. Near Apollo Hospital - Dombivli(E)"
-                                        />
+                                        <input formControlName="landmark" [disabled]="formEdit"
+                                            placeholder="E.g. Near Apollo Hospital - Dombivli(E)" />
                                     </div>
 
                                     <div class="flex-group">
@@ -128,25 +80,16 @@
 
                                         <div class="form-group half-width">
                                             <label>Pincode</label>
-                                            <input
-                                                type="number"
-                                                onpaste="return false;"
+                                            <input type="number" onpaste="return false;"
                                                 onKeyPress="if(this.value.length>=6) return false;"
-                                                [(ngModel)]="pincode"
-                                                (input)="fetchAddress()"
-                                                formControlName="pincode"
-                                                [disabled]="formEdit"
-                                            />
+                                                (input)="fetchAddress()" formControlName="pincode"
+                                                [disabled]="formEdit" />
                                         </div>
                                     </div>
 
                                     <div class="btn-container">
-                                        <button
-                                            class="btn addressBtn"
-                                            type="submit"
-                                            [disabled]="myForm.invalid"
-                                            (click)="AddOrUpdateAddress()"
-                                        >
+                                        <button class="btn addressBtn" type="submit" [disabled]="myForm.invalid"
+                                            (click)="AddOrUpdateAddress()">
                                             Update
                                         </button>
                                     </div>
@@ -155,23 +98,15 @@
                         </div>
                         <div *ngIf="this.activeTab == 'merch'" class="merch-container">
                             <div *ngIf="this.merchAccount == 'Normal'; else merchArea">
-                                <div
-                                    class="tab-pane fade show active"
-                                    id="v-pills-profile"
-                                    role="tabpanel"
-                                >
+                                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel">
                                     <div class="upgradeContainer">
                                         <p class="upgradeText">
                                             Upgrade your account to a Merch account and start
                                             selling your creatives!
                                         </p>
                                         <div class="btnContainer">
-                                            <button
-                                                class="btn btn-black"
-                                                type="submit"
-                                                [disabled]="myForm.invalid"
-                                                (click)="updateMerch()"
-                                            >
+                                            <button class="btn btn-black" type="submit" [disabled]="myForm.invalid"
+                                                (click)="updateMerch()">
                                                 Upgrade
                                             </button>
                                         </div>
@@ -179,11 +114,7 @@
                                 </div>
                             </div>
                             <ng-template #merchArea>
-                                <div
-                                    class="tab-pane fade show active"
-                                    id="v-pills-profile"
-                                    role="tabpanel"
-                                >
+                                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel">
                                     <div class="statsContainer">
                                         <!-- Merch Statistics Section -->
                                         <div class="sectionTitle">Merch Statistics</div>
@@ -206,38 +137,27 @@
                                             <div class="couponForm">
                                                 <div>
                                                     <label>Coupon Name</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Monti20"
-                                                        [(ngModel)]="couponName"
-                                                        [ngModelOptions]="{ standalone: true }"
-                                                    />
+                                                    <input type="text" placeholder="Monti20" [(ngModel)]="couponName"
+                                                        [ngModelOptions]="{ standalone: true }" />
                                                 </div>
                                                 <div>
                                                     <label>Coupon Discount</label>
-                                                    <input
-                                                        type="number"
-                                                        min="5"
-                                                        max="15"
-                                                        [(ngModel)]="couponOff"
+                                                    <input type="number" min="5" max="15" [(ngModel)]="couponOff"
                                                         (keyup)="
                                                             couponOff =
                                                                 couponOff > 15 || couponOff < 5
                                                                     ? null
                                                                     : couponOff
-                                                        "
-                                                    />
+                                                        " />
                                                 </div>
                                             </div>
                                             <div class="discountRange">
                                                 Discount range: 5% to 15%
                                             </div>
                                             <div class="couponBtn">
-                                                <button
-                                                    class="btn btn-black"
+                                                <button class="btn btn-black"
                                                     [disabled]="couponOff == 0 || couponName == ''"
-                                                    (click)="addCoupon()"
-                                                >
+                                                    (click)="addCoupon()">
                                                     Add Coupon
                                                 </button>
                                             </div>
@@ -249,7 +169,7 @@
                                                 <span>Active Coupon:</span>
                                                 <span class="activeCouponValue">{{
                                                     couponName
-                                                }}</span>
+                                                    }}</span>
                                                 <button class="deleteBtn" (click)="removeCoupon()">
                                                     <i class="fa fa-trash fa-xs"></i>
                                                 </button>
@@ -257,13 +177,10 @@
                                         </ng-template>
 
                                         <!-- Withdraw Section -->
-                                        <div class="sectionTitle">Pay Out</div>
+                                        <div class="sectionTitle mt-2 mb-2">Pay Out</div>
                                         <div class="withdrawContainer">
-                                            <button
-                                                class="btn btn-black withdrawBtn"
-                                                [disabled]="upiId.length < 15"
-                                                (click)="withdraw()"
-                                            >
+                                            <button class="btn btn-black withdrawBtn" [disabled]="upiId.length < 15"
+                                                (click)="withdraw()">
                                                 Withdraw
                                             </button>
                                         </div>
@@ -274,22 +191,12 @@
                         <div *ngIf="this.activeTab == 'help'" class="helpDiv">
                             <div class="profile-title-help">Help</div>
 
-                            <div
-                                class="tab-pane fade show active"
-                                id="v-pills-profile"
-                                role="tabpanel"
-                                aria-labelledby="v-pills-profile-tab"
-                            >
+                            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                                aria-labelledby="v-pills-profile-tab">
                                 <div class="helpForm">
                                     <div class="help">
-                                        <textarea
-                                            id="textarea"
-                                            type="text"
-                                            (keyup)="onKeyUp($event)"
-                                            rows="3"
-                                            cols="50"
-                                            placeholder="Raise A Concern/Query"
-                                        ></textarea>
+                                        <textarea id="textarea" type="text" (keyup)="onKeyUp($event)" rows="3" cols="50"
+                                            placeholder="Raise A Concern/Query"></textarea>
                                         <div class="note-text">
                                             * Please enter a minimum of 15 letters for your
                                             Concern/Query.
@@ -297,26 +204,17 @@
                                     </div>
 
                                     <div class="raiseBtn">
-                                        <button
-                                            class="btn btn-black"
-                                            type="submit"
-                                            [disabled]="queryQuetions.length < 15"
-                                            (click)="postQuestion()"
-                                        >
+                                        <button class="btn btn-black" type="submit"
+                                            [disabled]="queryQuetions.length < 15" (click)="postQuestion()">
                                             Raise
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div
-                            *ngIf="this.activeTab == 'order' && orderData.length > 0"
-                            class="orderDiv"
-                        >
-                            <div
-                                class="order-summary hideOnMobile mb-2"
-                                *ngFor="let orders of orderData; let i = index"
-                            >
+                        <div *ngIf="this.activeTab == 'order' && orderData.length > 0" class="orderDiv">
+                            <div class="order-summary hideOnMobile mb-2"
+                                *ngFor="let orders of orderData; let i = index">
                                 <div class="order-details">
                                     <div>
                                         <strong>ORDER PLACED</strong><br />{{ orders.createdAt }}
@@ -339,10 +237,7 @@
                                     <div><a href="#">View order details</a></div>
                                 </div>
                             </div>
-                            <div
-                                class="booking-card hideOnDesktop"
-                                *ngFor="let orders of orderData; let i = index"
-                            >
+                            <div class="booking-card hideOnDesktop" *ngFor="let orders of orderData; let i = index">
                                 <div class="date">
                                     {{ orders.createdAt }} - {{ orders.order_status }}
                                 </div>
@@ -358,48 +253,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="empty-order-message"
-                            *ngIf="this.activeTab == 'order' && orderData.length == 0"
-                        >
+                        <div class="empty-order-message" *ngIf="this.activeTab == 'order' && orderData.length == 0">
                             No orders yet! Your next favorite outfit is just a click away.
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bottomNav hideOnDesktop">
-                <button
-                    class="navButton"
-                    [ngClass]="{ active: activeTab === 'profile' }"
-                    (click)="changeTab('profile')"
-                >
+                <button class="navButton" [ngClass]="{ active: activeTab === 'profile' }"
+                    (click)="changeTab('profile')">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <p class="navText">Profile</p>
                 </button>
 
-                <button
-                    class="navButton"
-                    [ngClass]="{ active: activeTab === 'merch' }"
-                    (click)="changeTab('merch')"
-                >
+                <button class="navButton" [ngClass]="{ active: activeTab === 'merch' }" (click)="changeTab('merch')">
                     <i class="fas fa-tshirt" aria-hidden="true"></i>
                     <p class="navText">Merch</p>
                 </button>
 
-                <button
-                    class="navButton"
-                    [ngClass]="{ active: activeTab === 'help' }"
-                    (click)="changeTab('help')"
-                >
+                <button class="navButton" [ngClass]="{ active: activeTab === 'help' }" (click)="changeTab('help')">
                     <i class="fa fa-question-circle" aria-hidden="true"></i>
                     <p class="navText">Help?</p>
                 </button>
 
-                <button
-                    class="navButton"
-                    [ngClass]="{ active: activeTab === 'orders' }"
-                    (click)="changeTab('order')"
-                >
+                <button class="navButton" [ngClass]="{ active: activeTab === 'orders' }" (click)="changeTab('order')">
                     <i class="fa fa-cart-shopping" aria-hidden="true"></i>
                     <p class="navText">Orders</p>
                 </button>

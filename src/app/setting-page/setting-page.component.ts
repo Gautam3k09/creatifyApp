@@ -34,7 +34,6 @@ export class SettingPageComponent {
     upiId: string = '';
     storedData: any;
     orderData: any = [];
-    pincode: any;
     isLoading = false;
 
     constructor(
@@ -69,6 +68,7 @@ export class SettingPageComponent {
                 [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
             ],
         });
+        this.fetchAddress()
     }
 
     getUserData() {
@@ -294,8 +294,10 @@ export class SettingPageComponent {
     }
 
     fetchAddress() {
-        if (this.pincode.toString().length == 6) {
-            this.appservice.getAddressByPincode(this.pincode).subscribe(
+        const pincode = this.myForm.get('pincode')?.value;
+        const pincodeLength = pincode ? pincode.toString().length : 0;
+        if (pincodeLength == 6) {
+            this.appservice.getAddressByPincode(pincode.toString()).subscribe(
                 (data) => {
                     if (data[0]?.Status === 'Success') {
                         this.myForm.controls['city'].setValue(data[0].PostOffice[0].State);
@@ -309,6 +311,26 @@ export class SettingPageComponent {
                     this.myForm.controls['city'].setValue('');
                 }
             );
+            // this.appservice.getPincode({ pincode: pincode }).subscribe(
+            //     (data) => {
+            //         let availabilty = this.checkavl(data);
+            //         console.log('Availability:', availabilty);
+            //     },
+            //     (error) => {
+            //         console.error('Error fetching address:', error);
+            //         this.myForm.controls['city'].setValue('');
+            //     }
+            // );
         }
+    }
+
+    checkavl(filtered: any) {
+        const hasBothY = filtered.some((item: any) => item.cod === 'Y' && item.prepaid === 'Y');
+        if (hasBothY) return "available";
+
+        const hasPrepaidY = filtered.some((item: any) => item.prepaid === 'Y');
+        if (hasPrepaidY) return "online-available";
+
+        return "not available";
     }
 }
