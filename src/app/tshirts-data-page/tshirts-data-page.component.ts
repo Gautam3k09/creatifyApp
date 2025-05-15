@@ -116,14 +116,18 @@ export class TshirtsDataPageComponent {
     }
 
     copytext(teeDataId: string) {
-        let text = environment.frontend + 'buy/' + teeDataId;
-        const tempElement = document.createElement('textarea');
-        tempElement.value = text;
-        document.body.appendChild(tempElement);
-        tempElement.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempElement);
-        window.alert('Text copied successfully');
+        console.log('teeDataId', teeDataId);
+        if (navigator.share) {
+            navigator.share({
+                title: 'Check out my Oversized Tee!',
+                text: `I just ordered this from Createefi!`,
+                url: environment.frontend + 'buy/' + teeDataId
+            }).catch((err) => {
+                console.error('Sharing failed:', err);
+            });
+        } else {
+            alert('Sharing not supported on this device.');
+        }
     }
 
     openCanvas(string: any) {

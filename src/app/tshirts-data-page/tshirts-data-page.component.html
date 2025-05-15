@@ -20,8 +20,8 @@
                     <div class="text-center mt-4 position-relative image-container">
                         <img [src]="shirt.teeSrc" class="parent-image img-fluid" style="max-height: 240px;"
                             alt="Base Shirt" />
-                        <img [src]="shirt.img" class="overlay-image img-fluid" style="max-height: 240px;"
-                            alt="Overlay" />
+                        <img *ngIf="shirt.img" [src]="shirt.img" class="overlay-image img-fluid"
+                            style="max-height: 240px;" alt="Overlay" />
                     </div>
 
                     <!-- Shirt Info -->

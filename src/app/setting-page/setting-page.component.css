@@ -397,6 +397,7 @@ body {
     background-color: #f9f9f9;
     text-align: center;
     width: 62%;
+    color: #000;
 }
 .order-details {
     display: contents;

@@ -213,28 +213,27 @@
                             </div>
                         </div>
                         <div *ngIf="this.activeTab == 'order' && orderData.length > 0" class="orderDiv">
-                            <div class="order-summary hideOnMobile mb-2"
-                                *ngFor="let orders of orderData; let i = index">
+                            <div class="order-summary hideOnMobile mb-2" *ngFor="let order of orderData; let i = index">
                                 <div class="order-details">
                                     <div>
-                                        <strong>ORDER PLACED</strong><br />{{ orders.createdAt }}
+                                        <strong>ORDER PLACED</strong><br />{{ order.createdAt }}
                                     </div>
                                     <div>
-                                        <strong>ORDER STATUS</strong><br />{{ orders.order_status }}
+                                        <strong>ORDER STATUS</strong><br />{{ order.order_status }}
                                     </div>
-                                    <div><strong>TOTAL</strong><br />₹{{ orders.order_price }}</div>
-                                    <div *ngIf="orders.tee_from != 'You'">
-                                        <strong>Made By</strong><br />c/{{ orders.tee_from }}
+                                    <div><strong>TOTAL</strong><br />₹{{ order.order_price }}</div>
+                                    <div *ngIf="order.tee_from != 'You'">
+                                        <strong>Made By</strong><br />c/{{ order.tee_from }}
                                     </div>
-                                    <div *ngIf="orders.tee_from == 'You'">
-                                        <strong>Made By</strong><br />{{ orders.tee_from }}
+                                    <div *ngIf="order.tee_from == 'You'">
+                                        <strong>Made By</strong><br />{{ order.tee_from }}
                                     </div>
                                 </div>
                                 <div class="order-actions">
                                     <div>
-                                        <strong>ORDER # {{ orders.order_Id }}</strong>
+                                        <strong>ORDER # {{ order.order_Id }}</strong>
                                     </div>
-                                    <div><a href="#">View order details</a></div>
+                                    <div><a (click)="navigateBuyPage(order.order_tshirtId)">View Tee here</a></div>
                                 </div>
                             </div>
                             <div class="booking-card hideOnDesktop" *ngFor="let orders of orderData; let i = index">

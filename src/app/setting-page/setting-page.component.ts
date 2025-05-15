@@ -135,6 +135,7 @@ export class SettingPageComponent {
     }
 
     changeTab(tab: string) {
+        if (this.activeTab == tab) return
         this.activeTab = tab;
         if (this.activeTab == 'merch') {
             let data = {
@@ -162,6 +163,7 @@ export class SettingPageComponent {
             };
             this.appservice.getOrder(data).subscribe((response) => {
                 if (response.data && response.data.length > 0) {
+                    console.log(response.data, 'here')
                     this.orderData = response.data;
                     this.convertTime();
                 } else {
@@ -332,5 +334,9 @@ export class SettingPageComponent {
         if (hasPrepaidY) return "online-available";
 
         return "not available";
+    }
+
+    navigateBuyPage(id: any) {
+        this.router.navigate(['/buy/' + id]);
     }
 }
