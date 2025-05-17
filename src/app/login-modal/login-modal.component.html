@@ -3,14 +3,8 @@
         <form [formGroup]="myLoginForm">
             <div class="input-group">
                 <label for="emailInput">Email</label>
-                <input
-                    type="email"
-                    id="emailInput"
-                    placeholder="Enter your email"
-                    formControlName="email"
-                    (keyup)="onkeyUp($event, true)"
-                    required
-                />
+                <input type="email" id="emailInput" placeholder="Enter your email" formControlName="email"
+                    (keyup)="onkeyUp($event, true)" required />
                 <p class="alert" *ngIf="emailExists">User Email Doesn't Exist</p>
             </div>
 
@@ -18,53 +12,21 @@
             <div class="otp-container" *ngIf="sendOtp">
                 <p>Enter OTP sent to your email</p>
                 <div class="otp-inputs">
-                    <input
-                        type="text"
-                        maxlength="1"
-                        placeholder="•"
-                        formControlName="otp1"
-                        (keyup)="moveToNextInput($event)"
-                        id="input1"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        placeholder="•"
-                        formControlName="otp2"
-                        (keyup)="moveToNextInput($event)"
-                        id="input2"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        placeholder="•"
-                        formControlName="otp3"
-                        (keyup)="moveToNextInput($event)"
-                        id="input3"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        placeholder="•"
-                        formControlName="otp4"
-                        (keyup)="moveToNextInput($event)"
-                        id="input4"
-                    />
+                    <input type="text" inputmode="numeric" maxlength="1" placeholder="•" formControlName="otp1"
+                        (keyup)="moveToNextInput($event)" id="input1" />
+                    <input type="text" inputmode="numeric" maxlength="1" placeholder="•" formControlName="otp2"
+                        (keyup)="moveToNextInput($event)" id="input2" />
+                    <input type="text" inputmode="numeric" maxlength="1" placeholder="•" formControlName="otp3"
+                        (keyup)="moveToNextInput($event)" id="input3" />
+                    <input type="text" inputmode="numeric" maxlength="1" placeholder="•" formControlName="otp4"
+                        (keyup)="moveToNextInput($event)" id="input4" />
                 </div>
                 <p class="alert" *ngIf="showWrongOtpError">Please enter a valid OTP</p>
             </div>
 
-            <div
-                class="text-center mt-3"
-                style="display: flex; flex-direction: column; align-items: center"
-            >
-                <button
-                    type="submit"
-                    *ngIf="!btnLoader"
-                    class="btn"
-                    [disabled]="myLoginForm.invalid"
-                    (click)="login(true)"
-                >
+            <div class="text-center mt-3" style="display: flex; flex-direction: column; align-items: center">
+                <button type="submit" *ngIf="!btnLoader" class="btn" [disabled]="myLoginForm.invalid"
+                    (click)="login(true)">
                     Sign In
                 </button>
                 <div *ngIf="btnLoader" class="spinner"></div>
@@ -86,84 +48,47 @@
             <form [formGroup]="mySignupForm">
                 <div class="input-group">
                     <label for="signupEmailInput">Email</label>
-                    <input
-                        type="email"
-                        id="signupEmailInput"
-                        (keyup)="onkeyUp($event, false)"
-                        placeholder="Enter your email"
-                        formControlName="email"
-                        required
-                    />
+                    <input type="email" id="signupEmailInput" (keyup)="onkeyUp($event, false)"
+                        placeholder="Enter your email" formControlName="email" required />
                     <p class="alert" *ngIf="regEmailExists">User Already Exist</p>
                 </div>
                 <div class="input-group">
                     <label for="usernameInput">Username</label>
-                    <input
-                        type="text"
-                        id="usernameInput"
-                        (keyup)="onkeyUpName($event)"
-                        placeholder="Enter your username"
-                        formControlName="userName"
-                        maxlength="12"
-                        required
-                    />
-                    <p
-                        class="alert"
-                        *ngIf="mySignupForm.controls['userName'].hasError('minlength')"
-                    >
+                    <input type="text" id="usernameInput" (keyup)="onkeyUpName($event)"
+                        placeholder="Enter your username" formControlName="userName" maxlength="12" required />
+                    <p class="alert" *ngIf="mySignupForm.controls['userName'].hasError('minlength')">
                         Username must be at least 4 characters long.
                     </p>
-                    <p
-                        class="alert"
-                        *ngIf="mySignupForm.controls['userName'].hasError('maxlength')"
-                    >
+                    <p class="alert" *ngIf="mySignupForm.controls['userName'].hasError('maxlength')">
                         Username cannot exceed 12 characters.
                     </p>
-                    <p
-                        class="alert"
-                        *ngIf="
+                    <p class="alert" *ngIf="
                             mySignupForm.controls['userName'].hasError('required') &&
                             mySignupForm.controls['userName'].dirty
-                        "
-                    >
+                        ">
                         Username is required
                     </p>
-                    <p
-                        class="alert"
-                        *ngIf="
+                    <p class="alert" *ngIf="
                             mySignupForm.controls['userName'].hasError('usernameAlreadyExist') &&
                             mySignupForm.controls['userName'].dirty
-                        "
-                    >
+                        ">
                         Username Already Exists
                     </p>
                 </div>
                 <div class="input-group">
                     <label for="referralInput">Referred By (Optional)</label>
-                    <input
-                        type="text"
-                        id="referralInput"
-                        (keyup)="processVerifyReferral()"
-                        placeholder="Enter referral code"
-                        formControlName="referral"
-                    />
-                    <p
-                        class="alert"
-                        *ngIf="
+                    <input type="text" id="referralInput" (keyup)="processVerifyReferral()"
+                        placeholder="Enter referral code" formControlName="referral" />
+                    <p class="alert" *ngIf="
                             mySignupForm.controls['referral'].hasError('referralCode') &&
                             mySignupForm.controls['referral'].dirty
-                        "
-                    >
+                        ">
                         Referral Code Unavailable
                     </p>
                 </div>
                 <div class="text-center">
-                    <button
-                        *ngIf="!btnLoader"
-                        type="submit"
-                        [disabled]="mySignupForm.invalid"
-                        (click)="Proceed('proceed')"
-                    >
+                    <button *ngIf="!btnLoader" type="submit" [disabled]="mySignupForm.invalid"
+                        (click)="Proceed('proceed')">
                         Proceed
                     </button>
                     <div *ngIf="btnLoader" class="spinner"></div>
@@ -185,38 +110,14 @@
             <form [formGroup]="otpForm">
                 <div class="row pb-2 mb-2">
                     <div class="otp-inputs">
-                        <input
-                            type="text"
-                            maxlength="1"
-                            id="input1r"
-                            formControlName="rOtp1"
-                            (keyup)="moveToNextInput($event)"
-                            id="input1"
-                        />
-                        <input
-                            type="text"
-                            maxlength="1"
-                            id="input2r"
-                            formControlName="rOtp2"
-                            (keyup)="moveToNextInput($event)"
-                            id="input2"
-                        />
-                        <input
-                            type="text"
-                            maxlength="1"
-                            id="input3r"
-                            formControlName="rOtp3"
-                            (keyup)="moveToNextInput($event)"
-                            id="input3"
-                        />
-                        <input
-                            type="text"
-                            maxlength="1"
-                            id="input4r"
-                            formControlName="rOtp4"
-                            (keyup)="moveToNextInput($event)"
-                            id="input4"
-                        />
+                        <input type="text" inputmode="numeric" maxlength="1" id="input1r" formControlName="rOtp1"
+                            (keyup)="moveToNextInput($event)" id="input1" />
+                        <input type="text" maxlength="1" inputmode="numeric" id="input2r" formControlName="rOtp2"
+                            (keyup)="moveToNextInput($event)" id="input2" />
+                        <input type="text" maxlength="1" inputmode="numeric" id="input3r" formControlName="rOtp3"
+                            (keyup)="moveToNextInput($event)" id="input3" />
+                        <input type="text" inputmode="numeric" maxlength="1" id="input4r" formControlName="rOtp4"
+                            (keyup)="moveToNextInput($event)" id="input4" />
                     </div>
                     <p class="alert" *ngIf="showWrongOtpErrorForRegister">
                         Please enter a valid OTP

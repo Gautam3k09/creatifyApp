@@ -108,8 +108,6 @@ export class CreatePageComponent implements AfterViewInit {
   designName: any = 'Trial-Tee';
   formDataFront = new FormData();
   formDataBack = new FormData();
-  frontImgName: any;
-  BackImgName: any;
 
   gridSize = 18;
   guideLines: fabric.Line[] = [];
@@ -305,6 +303,9 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   toggleCanvas() {
+    this.canvas.discardActiveObject();
+    let side = this.isCanvas1Visible ? 'front' : 'back';
+    this.processCanvasObjects(side);
     this.saveState(); // Save current state before switching
     this.canvas.clear();
     const canvasContainer = document.querySelector('.canvas-containers') as HTMLElement;
@@ -1275,38 +1276,36 @@ export class CreatePageComponent implements AfterViewInit {
   async saveCanvasDataToDB(): Promise<void> {
     this.isLoading = true;
     this.canvas.discardActiveObject();
-    const scaleFactor = 15.38;
+    if (!this.isCanvas1Visible) this.toggleCanvas();
+    let side = this.isCanvas1Visible ? 'front' : 'back';
     try {
-      await this.processCanvasObjects(scaleFactor);
-      await this.toggleCanvas();
-      await this.processCanvasObjects(scaleFactor);
-      await this.uploadImage();
+      await this.processCanvasObjects(side);
+      setTimeout(() => {
+        this.uploadImage();
+      }, 100);
     } catch (error) {
       this.isLoading = false;
       console.error("Error saving canvas data:", error);
     }
   }
 
-  private async processCanvasObjects(scaleFactor: number): Promise<void> {
+  private async processCanvasObjects(sideLabel: any): Promise<void> {
     const promises = this.canvas?.getObjects().map(async (obj: any) => {
-      let file = obj ? this.canvas.toDataURL({ format: 'png', multiplier: scaleFactor, quality: 1.0 }) : '';
-      return this.convertToBlob(file);
+      let file = obj ? this.canvas.toDataURL({ format: 'png', multiplier: 6, quality: 1.0 }) : '';
+      return this.convertToBlob(file, sideLabel);
     }) || [];
-
-    await Promise.all(promises); // Wait for all blobs to be processed
+    await Promise.all(promises);
   }
 
-  async convertToBlob(formData: string): Promise<void> {
+  async convertToBlob(formData: string, sideLabel: any): Promise<void> {
     try {
       const response: any = await fetch(formData);
       const blob: any = await response.blob();
-
-      if (this.isCanvas1Visible) {
-        this.frontImgName = `${Date.now()}_${this.userData.user_Name}_front.png`
-        this.formDataFront.append('image', blob, this.frontImgName);
+      const filename = `${Date.now()}_${this.userData.user_Name}_${sideLabel}.png`;
+      if (sideLabel == 'front') {
+        this.formDataFront.append('image', blob, filename);
       } else {
-        this.BackImgName = `${Date.now()}_${this.userData.user_Name}_back.png`
-        this.formDataBack.append('image', blob, this.BackImgName);
+        this.formDataBack.append('image', blob, filename);
       }
     } catch (error) {
       console.error('Error converting canvas to Blob:', error);
@@ -1327,7 +1326,6 @@ export class CreatePageComponent implements AfterViewInit {
 
   checkSelectedObject(): void {
     const activeObject: any = this.canvas.getActiveObject();
-    console.log('activeObject', activeObject);
     if (activeObject && activeObject.objectType === 'text') {
       this.selectedText = activeObject;
       activeObject.setCoords()
@@ -1404,8 +1402,6 @@ export class CreatePageComponent implements AfterViewInit {
     formData.append('price', this.priceRange);
     formData.append('teeName', this.designName);
     formData.append('role', this.userData.user_Role);
-    formData.append('frontUrl', this.frontImgName || '');
-    formData.append('backUrl', this.BackImgName || '');
     formData.append('teeColor', this.imageColor);
 
     // 🔹 Append image files to FormData
