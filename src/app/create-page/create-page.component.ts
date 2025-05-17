@@ -25,8 +25,6 @@ export class CreatePageComponent implements AfterViewInit {
   @ViewChild('itemListRef', { static: false }) itemListRef!: ElementRef<HTMLUListElement>;
   @ViewChildren('templateCanvas') templateCanvasRefs!: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChild('imageInput') imageInput!: ElementRef;
-  @ViewChild('wrapper', { static: true }) wrapperRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   canvas!: fabric.Canvas;
   canvasData1: any = null;
   canvasData2: any | null = null;
@@ -156,12 +154,13 @@ export class CreatePageComponent implements AfterViewInit {
     });
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
-    const left = this.isMobileView ? -18.2 : 28.2;
-    const top = this.isMobileView ? 0.7 : 6;
-    upperCanvas.style.left = left + '%';
-    upperCanvas.style.top = top + '%';
-    const scale = this.isMobileView ? 0.17 : 0.7;
+    const left = this.isMobileView ? -26 + 'vw' : 13 + 'vw';
+    const top = this.isMobileView ? 26 + 'vh' : 22 + 'vh';
+    upperCanvas.style.marginLeft = left;
+    upperCanvas.style.marginTop = top;
+    const scale = 0.3;
     upperCanvas.style.transform = `scale(${scale})`;
+    upperCanvas.style.transformOrigin = 'top';
     this.canvas.setZoom(scale);
 
     // Optional but HIGHLY recommended
@@ -212,59 +211,35 @@ export class CreatePageComponent implements AfterViewInit {
       this.canvasClicked = true;
     });
 
-    // Initialize Snap to Grid
-    this.initSnapToGrid();
-
-
-    //for zoom
-    const wrapper = this.wrapperRef.nativeElement;
-    const container: any = this.containerRef.nativeElement;
-
-    const sizeScale = this.isMobileView ? 1.6 : 0.5;
-    this.scale = sizeScale;
-    if (!this.isMobileView) container.style.maxHeight = 0;
-    container.style.transform = `translate(-50%, -50%) scale(${sizeScale})`;
-
-    wrapper.addEventListener('wheel', (e: WheelEvent) => {
-      if (!e.ctrlKey) return;
-      e.preventDefault();
-
-      const delta = e.deltaY * -0.0085;
-      this.scale = Math.min(Math.max(0.2, this.scale + delta), 5);
-
-      container.style.transform = `translate(-50%, -50%) scale(${this.scale})`;
-    }, { passive: false });
-
-    wrapper.addEventListener('touchstart', (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        this.lastTouchDistance = this.getTouchDistance(e);
-      }
+    this.canvas.on('text:editing:entered', () => {
+      setTimeout(() => {
+        const ta = document.querySelector('body > textarea') as HTMLTextAreaElement | null;
+        if (!ta) return;
+        Object.assign(ta.style, {
+          position: 'fixed',
+          top: '0px',
+          left: '0px',
+          width: '1px',
+          height: '1px',
+          margin: '0',
+          padding: '0',
+          border: 'none',
+          outline: 'none',
+          opacity: '0',
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          resize: 'none',
+        });
+        // ensure focus doesn’t scroll
+        ta.focus({ preventScroll: true });
+      }, 0);
     });
 
-    wrapper.addEventListener('touchmove', (e: TouchEvent) => {
-      if (e.touches.length !== 2) return;
-      e.preventDefault();
-
-      const newDist = this.getTouchDistance(e);
-      const delta = (newDist - this.lastTouchDistance) * 0.0025;
-      this.lastTouchDistance = newDist;
-
-      this.scale = Math.min(Math.max(0.2, this.scale + delta), 5);
-      container.style.transform = `translate(-50%, -50%) scale(${this.scale})`;
-    }, { passive: false });
+    // Initialize Snap to Grid
+    this.initSnapToGrid();
   }
-
-
-  getTouchDistance(e: TouchEvent): number {
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-
 
   @HostListener('document:click', ['$event'])
-
   onClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
     const isInsidePanel = clickedElement.closest('.wrapper');
@@ -292,11 +267,16 @@ export class CreatePageComponent implements AfterViewInit {
       obj.set({
         borderColor: '#0056b3',
         cornerColor: '#0056b3',
-        cornerSize: 25,
+        cornerSize: 40,
         transparentCorners: false,
         selectionBackgroundColor: 'rgba(129, 129, 129, 0.3)',
-        borderScaleFactor: 5
+        borderScaleFactor: 5,
+        hasRotatingPoint: false
       });
+
+      if (obj.controls && obj.controls['mtr']) {
+        obj.controls['mtr'].visible = false;
+      }
       obj.setCoords();
     });
     this.canvas.renderAll();
@@ -308,7 +288,7 @@ export class CreatePageComponent implements AfterViewInit {
     this.processCanvasObjects(side);
     this.saveState(); // Save current state before switching
     this.canvas.clear();
-    const canvasContainer = document.querySelector('.canvas-containers') as HTMLElement;
+    const canvasContainer = document.querySelector('.container') as HTMLElement;
 
     if (this.isCanvas1Visible) {
       if (this.canvasData2) {
