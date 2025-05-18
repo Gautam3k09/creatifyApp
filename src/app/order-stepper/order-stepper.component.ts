@@ -1,4 +1,4 @@
-import { Component, Inject, inject, Input } from '@angular/core';
+import { Component, Inject, Input, NgZone } from '@angular/core';
 import {
     FormBuilder,
     FormsModule,
@@ -49,7 +49,6 @@ export class OrderStepperComponent {
     userData: any;
     userQuantity: any = 1;
     finalPrice: any;
-    // modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
     numberVerified = true;
     verifyLabel: any = 'Verify & Proceed';
     storedData: any;
@@ -68,6 +67,7 @@ export class OrderStepperComponent {
         private winRef: WindowRefService,
         private appservice: AppServiceService,
         public matDialog: MatDialog,
+        private ngZone: NgZone,
         @Inject(MAT_DIALOG_DATA)
         public buyPageData: {
             teeName_Name: any;
@@ -134,7 +134,6 @@ export class OrderStepperComponent {
     }
 
     createRazorPayOrder() {
-        return;
         const options: any = {
             amount: this.buyPageData?.price * 100,
             currency: 'INR',
@@ -151,7 +150,7 @@ export class OrderStepperComponent {
             key: 'rzp_test_TbWyYgkbb7t7xX',
             amount: this.buyPageData?.price * 100, // amount should be in paisa
             currency: 'INR',
-            name: 'Creatify',
+            name: 'CREATEEFI',
             description: 'Test Transaction',
             order_id: order_id,
             // image: 'assets/blue-purple.jpg',
@@ -161,30 +160,37 @@ export class OrderStepperComponent {
 
             prefill: {
                 name: this.userData.user_Name,
-                email: 'monti@example.com',
-                // contact: '9511830363',
+                email: this.userData.email,
             },
             notes: {
-                teeName: 'this.data.teeName_Name',
+                teeName: this.buyPageData.teeName_Name,
             },
             theme: {
                 color: '#3399cc',
             },
         };
         options.handler = (response: any) => {
-            console.log(response, 'response');
-
-            // if(response.razorpay_payment_id){
-            // this.placeOrder();
-            setTimeout(() => {
-                console.log('settimeout')
-                this.verifyOrder(response);
-            }, 100);
-            // }
+            this.verifyOrder(response).subscribe({
+                next: (result: any) => {
+                    if (result.paid) {
+                        this.ngZone.run(() => {
+                            this.isLoading = true;
+                            this.openOrderPlacedModal('paid'); // << inside Angular zone
+                            this.placeOrder('ONLINE');
+                        });
+                    } else {
+                        alert('Payment verification failed.');
+                    }
+                },
+                error: (err) => {
+                    alert('Could not verify payment. Please try again.');
+                }
+            });
         };
         options.modal.ondismiss = () => {
             console.log('payment cancelled');
-            // Handle the cancellation of the payment
+            alert('payment cancelled');
+            this.failedUrl();
         };
         const rzp = this.winRef.nativeWindow.Razorpay(options);
         rzp.open();
@@ -192,9 +198,7 @@ export class OrderStepperComponent {
 
 
     openOrderPlacedModal(from: 'cod' | 'paid') {
-        // this.orderId = orderId;
         this.fromCod = from === 'cod';
-        console.log(this.buyPageData.price, 'this.buyPageData.price')
         this.finalPrice = this.fromCod ? parseFloat(this.buyPageData.price) + 59 : this.buyPageData.price;
         document.body.style.overflow = 'hidden';
         this.showOrderPlacedModal = true;
@@ -229,14 +233,7 @@ export class OrderStepperComponent {
     }
 
     verifyOrder(data: any) {
-
-        this.openOrderPlacedModal('paid');
-        this.isLoading = true;
-        this.appservice.verify(data).subscribe((result) => {
-            if (result.paid) {
-                this.placeOrder('ONLINE');
-            }
-        });
+        return this.appservice.verify(data);
     }
 
     moveToNextInputReg(event: any) {
@@ -251,8 +248,6 @@ export class OrderStepperComponent {
             nextInput.focus();
         }
     }
-
-    onkeyUp(data: any) { }
 
     verify() {
         this.numberVerified = true;
@@ -290,7 +285,6 @@ export class OrderStepperComponent {
     }
 
     redirectShop() {
-        // this.closeModal('shop');
         this.showOrderPlacedModal = false;
         this.closeModal()
         this.router.navigate(['/shop']);
@@ -301,5 +295,9 @@ export class OrderStepperComponent {
         //         '/' + this.storeData.visitor + '/merch/' + this.data.buyPageData.user_Id,
         //     ]);
         // }
+    }
+
+    failedUrl() {
+        window.location.reload();
     }
 }
