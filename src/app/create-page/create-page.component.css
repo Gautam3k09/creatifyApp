@@ -907,6 +907,7 @@ body {
     .mob-properties-btn {
         position: relative;
         text-align: center;
+        bottom: 8vw;
     }
     .property-btn {
         font-family: merriweather;

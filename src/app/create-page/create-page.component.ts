@@ -1439,7 +1439,7 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   setColor(id: any) {
-    const canvasContainer = document.querySelector('.canvas-containers') as HTMLElement;
+    const canvasContainer = document.querySelector('.container') as HTMLElement;
     this.imageFrontSrc = this.imageFrontUrls[id].value;
     this.imageBackSrc = this.imageBackUrls[id].value;
     if (this.isCanvas1Visible) {
