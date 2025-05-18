@@ -18,10 +18,10 @@ import {
     MatDialogConfig,
     MatDialogRef,
 } from '@angular/material/dialog';
-import { OrderPlacedComponent } from '../order-placed/order-placed.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { localStorageService } from '../local-storage-service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-order-stepper',
@@ -49,14 +49,21 @@ export class OrderStepperComponent {
     userData: any;
     userQuantity: any = 1;
     finalPrice: any;
-    modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
+    // modalDialog: MatDialogRef<OrderPlacedComponent, any> | undefined;
     numberVerified = true;
     verifyLabel: any = 'Verify & Proceed';
     storedData: any;
     pincode: any;
     state: any = false;
 
+    //for another modal
+    showOrderPlacedModal = false;
+    orderId: any;
+    fromCod: boolean = false;
+    isLoading = false;
+
     constructor(
+        private router: Router,
         private fb: FormBuilder,
         private winRef: WindowRefService,
         private appservice: AppServiceService,
@@ -127,6 +134,7 @@ export class OrderStepperComponent {
     }
 
     createRazorPayOrder() {
+        return;
         const options: any = {
             amount: this.buyPageData?.price * 100,
             currency: 'INR',
@@ -165,11 +173,13 @@ export class OrderStepperComponent {
         };
         options.handler = (response: any) => {
             console.log(response, 'response');
-            this.verifyOrder(response);
+
             // if(response.razorpay_payment_id){
             // this.placeOrder();
-            // setTimeout(() => {
-            // }, 1000);
+            setTimeout(() => {
+                console.log('settimeout')
+                this.verifyOrder(response);
+            }, 100);
             // }
         };
         options.modal.ondismiss = () => {
@@ -180,52 +190,28 @@ export class OrderStepperComponent {
         rzp.open();
     }
 
-    openModal(string: any, rpData: any = '') {
-        this.buyPageData.quantity = this.userQuantity;
-        let data = {
-            from: string,
-            buyPageData: this.buyPageData,
-            userData: this.storedData.LoggedIn != null ? this.userData : this.secondFormGroup.value,
-            finalPrice: this.finalPrice,
-            address: this.firstFormGroup.value,
-            rpData: rpData,
-        };
-        let width = window.innerWidth;
-        this.dialogConfig = {
-            data: data,
-            disableClose: true,
-        };
-        if (width > 600) {
-            this.dialogConfig.width = 'auto';
-            this.dialogConfig.height = 'auto';
-        } else {
-            this.dialogConfig.width = 'auto';
-            this.dialogConfig.height = 'auto';
-        }
-        this.modalDialog = this.matDialog.open(OrderPlacedComponent, this.dialogConfig);
 
-        this.modalDialog.afterClosed().subscribe((result) => {
-            console.log('The dialog was closed', result);
-            if (result != 'back') {
-                this.closeModal();
-            }
-        });
+    openOrderPlacedModal(from: 'cod' | 'paid') {
+        // this.orderId = orderId;
+        this.fromCod = from === 'cod';
+        console.log(this.buyPageData.price, 'this.buyPageData.price')
+        this.finalPrice = this.fromCod ? parseFloat(this.buyPageData.price) + 59 : this.buyPageData.price;
+        document.body.style.overflow = 'hidden';
+        this.showOrderPlacedModal = true;
     }
 
     closeModal() {
         this.dialogRef.close();
     }
 
-    placeOrder() {
+    placeOrder(method: string) {
+        this.isLoading = true;
         let data = {
             tshirtId: this.buyPageData._id,
-            by:
-                this.storedData.LoggedIn != null
-                    ? this.userData.user_Name
-                    : this.secondFormGroup.value.phoneNumber,
+            by: this.storedData.LoggedIn != null ? this.userData.user_Name : this.secondFormGroup.value.phoneNumber,
             madeBy: this.buyPageData.user_Id,
             address: this.firstFormGroup.value,
-            paymentMethod: 'ONLINE',
+            paymentMethod: method,
             tshirtPrice: this.buyPageData.price,
             // quantity : this.userQuantity,
             size: this.buyPageData.size,
@@ -235,16 +221,20 @@ export class OrderStepperComponent {
         };
         this.appservice.postOrder(data).subscribe((result) => {
             if (result.status && result.data) {
-                const orderId = result.data;
-                this.openModal('paid');
+                this.orderId = result.data;
+                this.fromCod = false;
+                this.isLoading = false;
             }
         });
     }
 
     verifyOrder(data: any) {
+
+        this.openOrderPlacedModal('paid');
+        this.isLoading = true;
         this.appservice.verify(data).subscribe((result) => {
             if (result.paid) {
-                this.openModal('paid', data);
+                this.placeOrder('ONLINE');
             }
         });
     }
@@ -297,5 +287,19 @@ export class OrderStepperComponent {
                 }
             );
         }
+    }
+
+    redirectShop() {
+        // this.closeModal('shop');
+        this.showOrderPlacedModal = false;
+        this.closeModal()
+        this.router.navigate(['/shop']);
+        // if (this.storeData.visitor == null) {
+        //     this.router.navigate(['/shop']);
+        // } else {
+        //     this.router.navigate([
+        //         '/' + this.storeData.visitor + '/merch/' + this.data.buyPageData.user_Id,
+        //     ]);
+        // }
     }
 }

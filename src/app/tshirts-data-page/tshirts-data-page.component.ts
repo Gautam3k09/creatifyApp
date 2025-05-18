@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AppServiceService } from '../app-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localStorageService } from '../local-storage-service';

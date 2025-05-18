@@ -573,6 +573,11 @@ input {
         font-size: 13px;
         gap: 4px;
     }
+
+    .product-container {
+        margin: 15px;
+        margin-bottom: 140px;
+    }
 }
 
 /* @media (max-width: 768px) {

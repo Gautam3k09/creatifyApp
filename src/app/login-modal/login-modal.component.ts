@@ -199,6 +199,7 @@ export class LoginModalComponent {
     }
 
     sendOtpUser(login: any) {
+        console.log(this.mobileEmail, 'this.mobileEmail')
         let email: any;
         if (login) {
             email = this.mobileEmail;

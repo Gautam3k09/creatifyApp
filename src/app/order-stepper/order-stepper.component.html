@@ -120,7 +120,7 @@
         </div>
         <div class="buttonContainer">
             <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
-            <button type="button" class="btnAction btnCod" matStepperNext (click)="openModal('cod')">
+            <button type="button" class="btnAction btnCod" matStepperNext (click)="openOrderPlacedModal('cod')">
                 Pay on Delivery
             </button>
             <button type="button" class="btnAction btnOnline" matStepperNext (click)="createRazorPayOrder()">
@@ -129,3 +129,51 @@
         </div>
     </mat-step>
 </mat-stepper>
+
+
+
+<div class="order-modal" [class.show]="showOrderPlacedModal">
+    <div class="order-modal-content">
+        <div *ngIf="isLoading; else mainPage" class="spinner"></div>
+        <ng-template #mainPage>
+            <div class="confirm-container" *ngIf="fromCod === true; else orderPlaced">
+                <div class="confirm-message">
+                    Proceeding with cash on delivery will add an extra ₹59, making the total ₹{{
+                    finalPrice
+                    }}.
+                </div>
+                <div class="confirm-actions">
+                    <button type="button" class="confirm-btn proceed-btn" (click)="placeOrder('COD')">
+                        Proceed
+                    </button>
+                    <button type="button" class="confirm-btn back-btn" (click)="redirectShop()">
+                        Back
+                    </button>
+                </div>
+            </div>
+
+            <ng-template #orderPlaced>
+                <div class="success-container">
+                    <h1 class="success-title">Thank you for your order</h1>
+
+                    <div class="confirm-box">
+                        <h5>ORDER CONFIRMATION</h5>
+                        <p>Your order #{{ orderId }} has been placed!</p>
+                        <p>Thank you for choosing Createefi.</p>
+                    </div>
+
+                    <div class="confirm-actions">
+                        <button type="button" class="confirm-btn back-shop-btn" (click)="redirectShop()">
+                            Back to Shop
+                        </button>
+                    </div>
+                </div>
+
+                <!-- <h2>Thank you for your order!</h2>
+            <p>Your order #{{ orderId }} has been placed.</p> -->
+                <!-- <button (click)="redirectShop()">Back to Shop</button> -->
+            </ng-template>
+        </ng-template>
+    </div>
+
+</div>

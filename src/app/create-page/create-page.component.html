@@ -34,8 +34,6 @@
         </div>
     </div>
 
-
-
     <div class="bottom-container">
         <button class="bottom-btn hideOnPc " (click)="openElementModal()">
             <i class="fa-solid fa-circle-plus"></i> Add
@@ -76,8 +74,6 @@
             <i class="fas fa-save"></i>Save
         </button>
     </div>
-
-
 </body>
 
 <div class="element-modal" [class.show]="showAddElementModal">
@@ -128,7 +124,6 @@
 
 
 <ng-template #sharedContent>
-
     <div *ngIf="activePanel === 'text'" class="property-controls custom-scrollbar">
         <div class="text-control1">
             <div class="input-container">
@@ -478,7 +473,6 @@
         </button>
     </div>
 </ng-template>
-
 
 <ng-template #layerList>
     <ul #itemListRef class="element-list">

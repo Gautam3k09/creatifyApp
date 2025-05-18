@@ -43,49 +43,52 @@
             </div>
         </div>
     </div>
-
-    <div class="loadMore" *ngIf="from == 'common' && !DataFetched && !hideLoadbtn; else normalTees">
-        <button type="button" class="btn btn-dark px-3 py-2" (click)="getTees()">
-            Load more
-        </button>
-    </div>
-    <ng-template #normalTees>
-        <div *ngIf="from != 'common'">
-            <div *ngIf="
+    <div style="margin-bottom: 90px;">
+        <div class="loadMore" *ngIf="from == 'common' && !DataFetched && !hideLoadbtn; else normalTees">
+            <button type="button" class="btn btn-dark px-3 py-2" (click)="getTees()">
+                Load more
+            </button>
+        </div>
+        <ng-template #normalTees>
+            <div *ngIf="from != 'common'">
+                <div *ngIf="
                     from == 'personal' &&
                         !DataFetched &&
                         !hideLoadbtn &&
                         this.teeDatas.length != 0;
                     else elseBlockfornoshirt
                 ">
-                <div *ngIf="teeDatas.length >= 4; else createBlockElse" style="display: flex; justify-content: center">
-                    <div class="create text-center mb-2">
-                        Tee design overload! Free up some space to unleash your creativity.
+                    <div *ngIf="teeDatas.length >= 4; else createBlockElse"
+                        style="display: flex; justify-content: center">
+                        <div class="create text-center mb-2">
+                            Tee design overload! Free up some space to unleash your creativity.
+                        </div>
                     </div>
+                    <ng-template #createBlockElse>
+                        <div class="loadMore">
+                            <button type="button" class="btn btn-dark px-3 py-2" (click)="openCanvas('create')">
+                                Create
+                            </button>
+                        </div>
+                    </ng-template>
                 </div>
-                <ng-template #createBlockElse>
-                    <div class="loadMore">
-                        <button type="button" class="btn btn-dark px-3 py-2" (click)="openCanvas('create')">
-                            Create
-                        </button>
+
+                <ng-template #elseBlockfornoshirt>
+                    <div class="noTees">
+                        <div style="text-align: center;color: white;">
+                            Looks like your t-shirt collection is empty. Time to add some style!
+                        </div>
+                        <div class="d-flex justify-content-center mt-2">
+                            <button type="button" class="create btn btn-dark p-2" (click)="openCanvas('create')">
+                                Create
+                            </button>
+                        </div>
                     </div>
                 </ng-template>
             </div>
+        </ng-template>
+    </div>
 
-            <ng-template #elseBlockfornoshirt>
-                <div class="noTees">
-                    <div style="text-align: center">
-                        Looks like your t-shirt collection is empty. Time to add some style!
-                    </div>
-                    <div class="d-flex justify-content-center mt-2">
-                        <button type="button" class="create btn btn-dark p-2" (click)="openCanvas('create')">
-                            Create
-                        </button>
-                    </div>
-                </div>
-            </ng-template>
-        </div>
-    </ng-template>
 
 
 </body>
