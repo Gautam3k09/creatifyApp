@@ -1,7 +1,7 @@
 <app-loader *ngIf="isLoading"></app-loader>
 
 <body>
-    <app-header-page [from]="'create'"></app-header-page>
+    <app-header-page></app-header-page>
     <div class="control-container">
         <div class="property-container hideonmobile" *ngIf="!isMobileView" [class.open]="activePanel !== ''"
             id='drawerContentSource'>
@@ -14,6 +14,12 @@
         <div #wrapper class="wrapper">
             <div #container class="container">
                 <canvas #canvas id="canvas"></canvas>
+            </div>
+            <div class="hideOnPc mob-properties-btn "
+                *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes' && activePanel != 'Svg'">
+                <button class="property-btn" (click)="toggleDrawer()">
+                    Properties
+                </button>
             </div>
         </div>
 
@@ -29,12 +35,7 @@
     </div>
 
 
-    <div class="hideOnPc mob-properties-btn "
-        *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes' && activePanel != 'Svg'">
-        <button class="property-btn" (click)="toggleDrawer()">
-            Properties
-        </button>
-    </div>
+
     <div class="bottom-container">
         <button class="bottom-btn hideOnPc " (click)="openElementModal()">
             <i class="fa-solid fa-circle-plus"></i> Add
@@ -105,8 +106,8 @@
 
 
 <div class="drawer hideOnPc " id="bottomDrawer" *ngIf="drawerOpen" [ngStyle]="{ height: drawerHeight + 'px' }">
-    <div class="drawer-header">
-        <div class="drawer-handle" (touchstart)="startDrag($event)" (touchmove)="onDrag($event)" (touchend)="endDrag()">
+    <div class="drawer-header" (touchstart)="startDrag($event)" (touchmove)="onDrag($event)" (touchend)="endDrag()">
+        <div class="drawer-handle">
         </div>
         <div class="drawer-header-content">
             <span>{{!layerDrawerOpen ? activePanel : 'Layer' }}</span>
@@ -177,12 +178,24 @@
             </div>
             <div class="font-container">
                 <label for="font-family">Font Family</label>
-                <select [(ngModel)]="textfont" (change)="changeFont(textfont)" class="icon-select"
+                <!-- <select [(ngModel)]="textfont" (change)="changeFont(textfont)" class="icon-select"
                     [ngStyle]="{'font-family': textfont}">
                     <option *ngFor="let font of fontList" [ngValue]="font" [ngStyle]="{'font-family': font}">
                         {{ font }}
                     </option>
-                </select>
+                </select> -->
+                <div class="font-select-container" (click)="toggleDropdown()" [class.open]="dropdownOpen">
+                    <div class="selected-font" [ngStyle]="{ 'font-family': textfont }">
+                        {{ textfont }}
+                        <span class="arrow">&#9662;</span>
+                    </div>
+                    <div class="font-options" *ngIf="dropdownOpen">
+                        <div class="font-option" *ngFor="let font of fontList" (click)="selectFont(font)"
+                            [ngStyle]="{ 'font-family': font }">
+                            {{ font }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="style-container">

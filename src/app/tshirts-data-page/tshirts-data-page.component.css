@@ -1,6 +1,6 @@
 body {
     background-color: #18181B;
-    height: 100vh;
+        height: 88vh;
     overflow: auto;
     width: 100vw;
     font-family: merriWeather, sans-serif;
@@ -38,7 +38,9 @@ body {
 }
 
 .loadMore {
-    justify-self: center;
+    display: block;
+        text-align: center;
+    /* place-self: center; */
 }
 
 .create {

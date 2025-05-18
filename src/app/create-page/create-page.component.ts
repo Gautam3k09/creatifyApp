@@ -77,6 +77,7 @@ export class CreatePageComponent implements AfterViewInit {
     'CinemaGroovy', 'DesignerThickers', 'NightRumble', 'RetroImpact', 'SnakeheadGraffiti', 'ComicZine', 'Flipped', 'NaishilaDancingScript', 'Oswald', 'Ryzes', 'SpookyStories', 'CooperBlack',
     'DASHER', 'GEMSEAtrial', 'NekoNeco', 'Supernova', 'NCLBroesq', 'StarKillers'
   ];
+  dropdownOpen = false;
   textTemplates: any = [];
   titleTextTemplates: any = titleTextTemplates;
 
@@ -129,6 +130,7 @@ export class CreatePageComponent implements AfterViewInit {
   htmlSvg = '<svg>'
   svgData: any;
   layerDrawerOpen = false;
+  closeThreshold = window.innerHeight * 0.76;
 
   private dragging = false;
   private animationFrameId: number | null = null;
@@ -154,8 +156,17 @@ export class CreatePageComponent implements AfterViewInit {
     });
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     const upperCanvas = canvasElement.nextElementSibling as HTMLCanvasElement; // Overlay canvas
-    const left = this.isMobileView ? -26 + 'vw' : 13 + 'vw';
-    const top = this.isMobileView ? 26 + 'vh' : 22 + 'vh';
+    let left: any;
+    if (window.innerWidth <= 340) {
+      left = '-23.5vw';
+    } else if (window.innerWidth <= 370) {
+      left = '-20vw';
+    } else if (this.isMobileView) {
+      left = '-26vw';
+    } else {
+      left = '13vw';
+    }
+    const top = this.isMobileView ? 16 + 'vh' : 22 + 'vh';
     upperCanvas.style.marginLeft = left;
     upperCanvas.style.marginTop = top;
     const scale = 0.3;
@@ -251,6 +262,14 @@ export class CreatePageComponent implements AfterViewInit {
     this.canvasClicked = false;
   }
 
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.font-select-container')) {
+      this.dropdownOpen = false;
+    }
+  }
+
 
   initializeCanvas1() {
     this.canvas.clear();
@@ -267,11 +286,12 @@ export class CreatePageComponent implements AfterViewInit {
       obj.set({
         borderColor: '#0056b3',
         cornerColor: '#0056b3',
-        cornerSize: 40,
+        cornerSize: 60,
+        hasCorners: false,
         transparentCorners: false,
         selectionBackgroundColor: 'rgba(129, 129, 129, 0.3)',
         borderScaleFactor: 5,
-        hasRotatingPoint: false
+        touchCornerSize: 60,
       });
 
       if (obj.controls && obj.controls['mtr']) {
@@ -686,6 +706,17 @@ export class CreatePageComponent implements AfterViewInit {
       this.selectedText.initDimensions();
       this.canvas.requestRenderAll();
     }
+  }
+
+  selectFont(font: string) {
+    this.textfont = font;
+    this.changeFont(font); // your existing method
+    this.dropdownOpen = false;
+  }
+
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
   }
 
   updateFontSize(event: Event) {
@@ -1430,9 +1461,17 @@ export class CreatePageComponent implements AfterViewInit {
 
 
   startDrag(event: TouchEvent) {
+    const targetEl = (event.target as HTMLElement);
+
+    // if we tapped the close button (or something inside it), do nothing
+    if (targetEl.closest('.close-drawer')) {
+      return;
+    }
+
     this.dragging = true;
     event.preventDefault();
   }
+
 
   onDrag(event: TouchEvent) {
     if (!this.dragging) return;
@@ -1453,7 +1492,20 @@ export class CreatePageComponent implements AfterViewInit {
   }
 
   endDrag() {
+    if (!this.dragging) return;
 
+    this.dragging = false;
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+
+    const bottomOffset = window.innerHeight - this.drawerHeight;
+    console.log('bottomOffset', bottomOffset, this.closeThreshold);
+    // Close if user dragged too close to the bottom
+    if (bottomOffset > this.closeThreshold) {
+      this.toggleDrawer(); // or this.toggleDrawer()
+    }
     this.dragging = false;
     this.animationFrameId && cancelAnimationFrame(this.animationFrameId);
     this.animationFrameId = null;
