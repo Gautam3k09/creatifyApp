@@ -27,7 +27,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
     ]
 })
 export class HomeComponent {
-    @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
+    // @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
     @ViewChildren('cardRef', { read: ElementRef }) cards!: QueryList<ElementRef>;
 
     sentences: any = [
@@ -56,7 +56,7 @@ export class HomeComponent {
             alt: 'White Tee',
             name: 'First Expression',
             colorName: 'Pearl White',
-            price: 'Rs. 549',
+            price: 'Rs. 599',
             activeColor: 'white'
         },
         {
@@ -64,7 +64,7 @@ export class HomeComponent {
             alt: 'Black Tee',
             name: 'Createefi Eclipse',
             colorName: 'Onyx Black',
-            price: 'Rs. 549',
+            price: 'Rs. 599',
             activeColor: 'black'
         },
         {
@@ -72,7 +72,7 @@ export class HomeComponent {
             alt: 'Blue Tee',
             name: 'Last Puff',
             colorName: 'Sapphire Blue',
-            price: 'Rs. 549',
+            price: 'Rs. 599',
             activeColor: 'blue'
         },
         {
@@ -80,11 +80,21 @@ export class HomeComponent {
             alt: 'Maroon Tee',
             name: 'Bruised Velvet',
             colorName: 'Ruby Maroon',
-            price: 'Rs. 549',
+            price: 'Rs. 599',
             activeColor: 'maroon'
         }
     ];
     colors = ['white', 'black', 'blue', 'maroon'];
+
+
+    //for video
+    @ViewChild('animationCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+
+    frameCount = 431; // Change based on your number of images
+    fps = 30;
+    frameImages: HTMLImageElement[] = [];
+    currentFrame = 0;
+    ctx!: CanvasRenderingContext2D;
 
     constructor(
         private dialog: MatDialog,
@@ -149,13 +159,46 @@ export class HomeComponent {
             this.detectActiveCard(carousel.scrollLeft);
         });
 
-        const video = this.bgVideo.nativeElement;
-        video.muted = true;
-        video.play().then(() => {
-            console.log('Autoplay success!');
-        }).catch((err) => {
-            console.error('Autoplay blocked:', err);
+        // const video = this.bgVideo.nativeElement;
+        // video.muted = true;
+        // video.play().then(() => {
+        //     console.log('Autoplay success!');
+        // }).catch((err) => {
+        //     console.error('Autoplay blocked:', err);
+        // });
+
+
+
+        const canvas = this.canvasRef.nativeElement;
+        this.ctx = canvas.getContext('2d')!;
+        this.loadImages().then(() => {
+            setInterval(() => this.renderFrame(), 1000 / this.fps);
         });
+    }
+
+    loadImages(): Promise<void[]> {
+        const promises: Promise<void>[] = [];
+        for (let i = 0; i < this.frameCount; i++) {
+            const paddedIndex = String(i).padStart(5, '0');
+            const img = new Image();
+            img.src = `assets/frames/tshirt_pngsequence_${paddedIndex}.webp`;
+            const promise = new Promise<void>((resolve, reject) => {
+                img.onload = () => resolve();
+                img.onerror = (e) => reject(`Failed to load: ${img.src}`);
+            });
+            this.frameImages.push(img);
+            promises.push(promise);
+        }
+
+        return Promise.all(promises);
+    }
+
+    renderFrame(): void {
+        const canvas = this.canvasRef.nativeElement;
+        const image = this.frameImages[this.currentFrame];
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        this.currentFrame = (this.currentFrame + 1) % this.frameCount;
     }
 
     detectActiveCard(scrollLeft: number) {

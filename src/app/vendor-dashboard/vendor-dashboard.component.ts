@@ -5,12 +5,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { AppServiceService } from '../app-service.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-vendor-dashboard',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatCheckboxModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatCheckboxModule, FormsModule],
   templateUrl: './vendor-dashboard.component.html',
   styleUrl: './vendor-dashboard.component.css'
 })
@@ -20,6 +22,7 @@ export class VendorDashboardComponent {
   //pending
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: any = ['orderBy', 'address', 'type', 'price', 'quantity', 'size', 'status', 'preview'];
+  displayedColumnsforprinting: any = ['orderBy', 'quantity', 'size', 'status', 'preview', 'print'];
   orderData: any = [];
   dataSource: any = new MatTableDataSource<any>(this.orderData);
   showAddElementModal: boolean = false;
@@ -53,10 +56,19 @@ export class VendorDashboardComponent {
 
   displayedColumnsforStorage = ['rowHeader', ...this.colHeaders];
 
-  constructor(public appservice: AppServiceService) { }
+  userId: any;
+
+  selectedPrintOptions: { [id: number]: string } = {};
+  options: string[] = ['Normal', 'A4', 'A3'];
+
+  constructor(private router: Router, public appservice: AppServiceService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.changeView('pending');
+    this.userId = this.route.snapshot.paramMap.get('id')!;
+    if (this.userId != '123' && this.userId != '456') {
+      this.router.navigate(['']);
+    }
+    this.changeView(this.userId == '123' ? 'pending' : 'printing');
   }
 
   ngAfterViewInit() {
@@ -97,6 +109,9 @@ export class VendorDashboardComponent {
         this.orderData.push(obj);
       });
       this.dataSource = new MatTableDataSource<any>(this.orderData);
+      for (const row of this.orderData) {
+        this.selectedPrintOptions[row.tshirtId] = 'Normal';
+      }
       console.log(this.dataSource);
     });
   }
@@ -107,7 +122,8 @@ export class VendorDashboardComponent {
   }
 
   onStatusChange(element: any, status: any) {
-    this.appservice.updateOrder({ order_Id: element.order_Id, order_status: status }).subscribe((response: any) => {
+    const value = this.selectedPrintOptions[element.tshirtId];
+    this.appservice.updateOrder({ order_Id: element.order_Id, order_status: status, value: value, tshirtId: element.tshirtId }).subscribe((response: any) => {
       console.log(response)
       if (response.status) {
         const data = this.dataSource.filteredData.filter((item: any) => item.order_Id !== element.order_Id);

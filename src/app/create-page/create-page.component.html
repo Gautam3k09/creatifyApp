@@ -1,7 +1,46 @@
 <app-loader *ngIf="isLoading"></app-loader>
 
 <body>
-    <app-header-page></app-header-page>
+    <div class="header-container">
+        <div class="header-bar">
+            <div class="header-left">
+                <div class="header-button">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>Back</span>
+                </div>
+            </div>
+            <div class="header-right">
+
+                <div class="header-button">
+                    <i class="fas fa-question-circle" title="Help" (click)="openHelpModal()"></i>
+                    <span>Help</span>
+                </div>
+                <div class="header-button" (click)="toggleGrid()">
+                    <i class="fa fa-clipboard-check"></i>
+                    <span>inches</span>
+                </div>
+                <div class="header-button">
+                    <i class="fas fa-circle" [ngClass]="{
+                    'status-green': qualityStatus === 'green' ,
+                    'status-yellow': qualityStatus === 'yellow',
+                    'status-red': qualityStatus === 'red' 
+                    }"></i>
+                    <span>Quality</span>
+                </div>
+                <div class="header-button">
+                    <i class="fa fa-eye"></i>
+                    <span>Preview</span>
+                </div>
+                <div class="header-button" [class.disabled]="!isObjectSelected" (click)="deleteObject()"
+                    [style.pointerEvents]="isObjectSelected ? 'auto' : 'none'"
+                    [style.opacity]="isObjectSelected ? '1' : '0.5'">
+                    <i class="fa fa-trash"></i>
+                    <span>Delete</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="control-container">
         <div class="property-container hideonmobile" *ngIf="!isMobileView" [class.open]="activePanel !== ''"
             id='drawerContentSource'>
@@ -15,12 +54,12 @@
             <div #container class="container">
                 <canvas #canvas id="canvas"></canvas>
             </div>
-            <div class="hideOnPc mob-properties-btn "
-                *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes' && activePanel != 'Svg'">
-                <button class="property-btn" (click)="toggleDrawer()">
-                    Properties
-                </button>
-            </div>
+        </div>
+        <div class="hideOnPc mob-properties-btn "
+            *ngIf="activePanel != 'Properties' && activePanel != 'Templates' && activePanel != 'Shapes' && activePanel != 'Svg'">
+            <button class="property-btn" (click)="toggleDrawer()">
+                Properties
+            </button>
         </div>
 
         <div class="layers-container hideonmobile">
@@ -42,11 +81,10 @@
             <i class="fa-solid fa-rotate"></i> Flip
         </button>
         <button class="bottom-btn" (click)="togglePanel('Templates')" title="Templates">
-            <svg class="" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white">
-                <path
-                    d="M4 4h16a2 2 0 0 1 2 2v3H2V6a2 2 0 0 1 2-2zm16 7H4v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9zM7 14h5v2H7v-2z" />
-            </svg> Templates
+            <i class="fa fa-boxes"></i>
+            Templates
         </button>
+
         <!-- <button class="bottom-btn" (click)="togglePanel('Shapes')" title="Templates">
             <i class="fas fa-shapes"></i> Shapes
         </button> -->
@@ -485,8 +523,55 @@
                 <button class="visibility-btn" (click)="toggleVisibility(item.id)">
                     {{ item.visible ? '👁️' : '🚫' }}
                 </button>
-                <button class="delete-btn" (click)="deleteItem(item.id)">🗑️</button>
+                <button class="delete-btn" (click)="deleteObject(item.id)">🗑️</button>
             </div>
         </li>
     </ul>
 </ng-template>
+
+
+<div class="help-modal" [class.show]="showHelpModal">
+    <div class="help-modal-content">
+        <div class="help-modal-header">
+            <span>Help</span>
+            <button class="help-close-btn" (click)="showHelpModal = false">&times;</button>
+        </div>
+
+        <div class="help-modal-body">
+            <h4>Image Quality Indicators</h4>
+            <ul style="list-style: none; padding-left: 0;">
+                <li>
+                    <i class="fas fa-circle status-red"></i>
+                    Image quality is too low. Please upload a higher-resolution photo. Your T-shirt print might appear
+                    blurry if the image is stretched too large.
+                </li>
+                <li>
+                    <i class="fas fa-circle status-orange"></i>
+                    The image might be printable, but it could result in a slightly blurry print. It's recommended to
+                    use a better-quality image for clearer results.
+                </li>
+                <li>
+                    <i class="fas fa-circle status-green"></i>
+                    No need to worry! Your image is perfect and will print exactly as expected — sharp and accurate.
+                </li>
+            </ul>
+
+            <h3>📏 Inches Button</h3>
+            <p>
+                Clicking the <strong>Inches</strong> button will display a grid overlay on the canvas.
+                Each box in the grid represents <strong>1 inch</strong>, helping you measure and position your design
+                accurately on the T-shirt.
+            </p>
+
+            <h3>🖼️ Print Area</h3>
+            <p>
+                The print area defines the safe zone where your design will appear on the T-shirt.
+                Make sure your artwork stays <strong>within this area</strong> to ensure it prints correctly and doesn't
+                get cropped.
+            </p>
+
+            <img src="../../assets/createefi/printArea.png" alt="Print area guide"
+                style="width: 100%; margin-top: 10px;" />
+        </div>
+    </div>
+</div>

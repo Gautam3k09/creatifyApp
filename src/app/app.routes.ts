@@ -10,6 +10,7 @@ import { MerchHomePageComponent } from './merch-home-page/merch-home-page.compon
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
+import { TshirtPreviewComponent } from './tshirt-preview/tshirt-preview.component';
 
 export const routes: Routes = [
     { path: 'create', component: CreatePageComponent },
@@ -22,8 +23,8 @@ export const routes: Routes = [
     { path: 'refferedBy/:userName', component: HomeComponent },
 
     //admin
-    { path: 'admin', component: AdminHomePageComponent },
-    { path: 'order', component: VendorDashboardComponent },
+    { path: 'admin', component: TshirtPreviewComponent },
+    { path: 'order/:id', component: VendorDashboardComponent },
 
     // end
     { path: '**', component: NotFoundComponent },

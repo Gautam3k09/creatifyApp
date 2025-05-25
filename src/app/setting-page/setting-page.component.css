@@ -242,7 +242,7 @@ body {
 
 .discountRange {
     font-size: 0.85rem;
-    color: #555;
+    color: white;
     text-align: center;
     margin-bottom: 10px;
 }
@@ -263,6 +263,7 @@ body {
 
 /* Active Coupon */
 .activeCoupon {
+    color: #000;
     display: flex;
     align-items: center;
     gap: 10px;

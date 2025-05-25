@@ -1,7 +1,7 @@
 <div class="layout">
      <div class="sidebar">
           <h3>Createefi</h3>
-          <button (click)="changeView('pending')">Pending</button>
+          <button (click)="changeView('pending')" *ngIf="this.userId == '123'">Pending</button>
           <button (click)="changeView('printing')">Printing</button>
           <button (click)="changeView('packed')">Packed</button>
           <button (click)="changeView('storage')">Storage</button>
@@ -117,11 +117,6 @@
                                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                               </ng-container>
 
-                              <ng-container matColumnDef="address">
-                                   <th mat-header-cell *matHeaderCellDef>Address</th>
-                                   <td mat-cell *matCellDef="let element">{{ element.address }}</td>
-                              </ng-container>
-
                               <ng-container matColumnDef="status">
                                    <th mat-header-cell *matHeaderCellDef>Update Status</th>
                                    <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
@@ -140,9 +135,20 @@
                                    </td>
                               </ng-container>
 
+                              <ng-container matColumnDef="print">
+                                   <th mat-header-cell *matHeaderCellDef> Print </th>
+                                   <td mat-cell *matCellDef="let element">
+                                        <select [(ngModel)]="selectedPrintOptions[element.tshirtId]"
+                                             name="print-{{element.tshirtId}}">
+                                             <option *ngFor="let item of options" [value]="item">{{ item }}</option>
+                                        </select>
+                                   </td>
+                              </ng-container>
 
-                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                              <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="modalBox()"></tr>
+
+                              <tr mat-header-row *matHeaderRowDef="displayedColumnsforprinting"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumnsforprinting"
+                                   (click)="modalBox()"></tr>
                          </table>
                          <!-- <mat-paginator showFirstLastButtons aria-label="Select page of periodic elements">
                          </mat-paginator> -->
@@ -154,8 +160,8 @@
                          <button class="flip-button" (click)="changeSide(previewTeeData)">Flip</button>
                     </div>
                     <div class="image-container">
-                         <img [src]="previewTeeData.currentSide" class="parent-image">
-                         <img *ngIf="previewTeeData.currentPrint" [src]=" previewTeeData.currentPrint"
+                         <img [src]="previewTeeData?.currentSide" class="parent-image">
+                         <img *ngIf="previewTeeData?.currentPrint" [src]=" previewTeeData.currentPrint"
                               class="overlay-image" alt="">
                     </div>
                </ng-template>

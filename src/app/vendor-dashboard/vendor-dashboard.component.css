@@ -100,8 +100,9 @@
   
   .overlay-image {
     position: absolute;
+    top: 22%;
     left: 50%;
     transform: translateX(-50%);
-    width: 190px;
-    height: 35%;
+    width: 165px;
+    height: 251px;
   }

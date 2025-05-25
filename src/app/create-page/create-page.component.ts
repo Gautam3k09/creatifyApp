@@ -11,11 +11,12 @@ import { Router } from '@angular/router';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { HeaderPageComponent } from "../header-page/header-page.component";
 import { LoaderComponent } from '../loader/loader.component';
+import { TshirtPreviewComponent } from '../tshirt-preview/tshirt-preview.component';
 
 @Component({
   selector: 'app-create-page',
   standalone: true,
-  imports: [CommonModule, ColorPickerModule, FormsModule, PopoverModule, HeaderPageComponent, LoaderComponent],
+  imports: [CommonModule, ColorPickerModule, FormsModule, PopoverModule, TshirtPreviewComponent, LoaderComponent],
   providers: [AppServiceService],
   templateUrl: './create-page.component.html',
   styleUrl: './create-page.component.css',
@@ -118,7 +119,17 @@ export class CreatePageComponent implements AfterViewInit {
 
   //for zoom
   scale = 1;
-  lastTouchDistance = 0;
+
+  @ViewChild('wrapper') wrapperRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('container') containerRef!: ElementRef<HTMLDivElement>;
+
+  zoomLevel = 1;
+  minZoom = 0.2;
+  maxZoom = 4;
+
+  initialDistance = 0;
+  lastZoom = 1;
+  initialMidpoint = { x: 0, y: 0 };
 
 
   // for drawer
@@ -134,6 +145,13 @@ export class CreatePageComponent implements AfterViewInit {
 
   private dragging = false;
   private animationFrameId: number | null = null;
+  private gridGroup?: fabric.Group;
+
+  qualityStatus: any = 'green';
+
+  //help
+
+  showHelpModal: boolean = false;
 
   constructor(
     private appservice: AppServiceService,
@@ -164,9 +182,9 @@ export class CreatePageComponent implements AfterViewInit {
     } else if (this.isMobileView) {
       left = '-26vw';
     } else {
-      left = '13vw';
+      left = '12.7vw';
     }
-    const top = this.isMobileView ? 16 + 'vh' : 22 + 'vh';
+    const top = this.isMobileView ? 16 + 'vh' : 23 + 'vh';
     upperCanvas.style.marginLeft = left;
     upperCanvas.style.marginTop = top;
     const scale = 0.3;
@@ -248,6 +266,91 @@ export class CreatePageComponent implements AfterViewInit {
 
     // Initialize Snap to Grid
     this.initSnapToGrid();
+
+    const wrapper = this.wrapperRef.nativeElement;
+    const container = this.containerRef.nativeElement;
+
+    // Scroll wheel zoom centered on pointer
+    wrapper.addEventListener('wheel', (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+
+        const delta = -e.deltaY * 0.01;
+        const oldZoom = this.zoomLevel;
+        const newZoom = Math.min(this.maxZoom, Math.max(this.minZoom, this.zoomLevel + delta));
+
+        const rect = container.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+        const zoomFactor = newZoom / oldZoom;
+
+        this.zoomLevel = newZoom;
+        this.updateZoom();
+
+        // Adjust scroll to keep zoom centered on pointer
+        const scrollLeft = wrapper.scrollLeft;
+        const scrollTop = wrapper.scrollTop;
+
+        wrapper.scrollLeft = (offsetX * (zoomFactor - 1)) + scrollLeft;
+        wrapper.scrollTop = (offsetY * (zoomFactor - 1)) + scrollTop;
+      }
+    });
+
+    // Touch pinch zoom
+
+    wrapper.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        this.initialDistance = this.getDistance(e.touches[0], e.touches[1]);
+        this.lastZoom = this.zoomLevel;
+        this.initialMidpoint = this.getMidpoint(e.touches[0], e.touches[1]);
+      }
+    }, { passive: false });
+
+    wrapper.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+
+        const newDist = this.getDistance(e.touches[0], e.touches[1]);
+        let scaleFactor = newDist / this.initialDistance;
+        let newZoom = Math.min(this.maxZoom, Math.max(this.minZoom, this.lastZoom * scaleFactor));
+
+        const oldZoom = this.zoomLevel;
+        const zoomFactor = newZoom / oldZoom;
+
+        const rect = container.getBoundingClientRect();
+        const offsetX = this.initialMidpoint.x - rect.left;
+        const offsetY = this.initialMidpoint.y - rect.top;
+
+        this.zoomLevel = newZoom;
+        this.updateZoom();
+
+        const scrollLeft = wrapper.scrollLeft;
+        const scrollTop = wrapper.scrollTop;
+
+        wrapper.scrollLeft = (offsetX * (zoomFactor - 1)) + scrollLeft;
+        wrapper.scrollTop = (offsetY * (zoomFactor - 1)) + scrollTop;
+      }
+    }, { passive: false });
+
+  }
+
+  updateZoom() {
+    const container = this.containerRef.nativeElement;
+    container.style.transform = `scale(${this.zoomLevel})`;
+  }
+
+  getDistance(t1: Touch, t2: Touch): number {
+    const dx = t2.clientX - t1.clientX;
+    const dy = t2.clientY - t1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  getMidpoint(t1: Touch, t2: Touch): { x: number, y: number } {
+    return {
+      x: (t1.clientX + t2.clientX) / 2,
+      y: (t1.clientY + t2.clientY) / 2,
+    };
   }
 
   @HostListener('document:click', ['$event'])
@@ -451,12 +554,28 @@ export class CreatePageComponent implements AfterViewInit {
         imgElement.src = e.target.result;
 
         imgElement.onload = async () => {
-          const MIN_WIDTH = 1620;
-          const MIN_HEIGHT = 880;
+          const targetDPI = 300;
+          const imgWidth = imgElement.naturalWidth;
+          const imgHeight = imgElement.naturalHeight;
 
-          if (imgElement.naturalWidth < MIN_WIDTH || imgElement.naturalHeight < MIN_HEIGHT) {
-            alert('Image must be at least 1920x1080 (1080p) for good print quality.');
-            return;
+          // Calculate max print size in inches at target DPI
+          const maxPrintWidthInches = imgWidth / targetDPI;
+          const maxPrintHeightInches = imgHeight / targetDPI;
+
+          // Define your desired minimum print size in inches (for example, 6x4 inches)
+          const minPrintWidthInches = 6;
+          const minPrintHeightInches = 4;
+
+          if (
+            maxPrintWidthInches < minPrintWidthInches ||
+            maxPrintHeightInches < minPrintHeightInches
+          ) {
+            alert(
+              `Image resolution is too low for a good print at ${minPrintWidthInches}" × ${minPrintHeightInches}". ` +
+              `Your image can only print at approximately ${maxPrintWidthInches.toFixed(2)}" × ${maxPrintHeightInches.toFixed(2)}" ` +
+              `at ${targetDPI} DPI. Please upload a higher resolution image or reduce print size. or upscale this image`
+            );
+            // return;
           }
 
           try {
@@ -497,6 +616,10 @@ export class CreatePageComponent implements AfterViewInit {
 
       reader.readAsDataURL(file);
       eventOrCanvas.target.value = ''; // Allow re-uploading same file
+      setTimeout(() => {
+        this.updateQualityStatus()
+
+      }, 500);
       return;
     }
 
@@ -672,6 +795,7 @@ export class CreatePageComponent implements AfterViewInit {
     targetCanvas.requestRenderAll();
 
     targetCanvas.renderAll();
+    this.updateQualityStatus()
   }
 
   updateTextName(itemId: string, newText: string): void {
@@ -1223,17 +1347,46 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
-  deleteItem(itemId: string): void {
-    const target = this.canvas.getObjects().find((obj: any) => obj.id === itemId);
-    if (target) {
-      if (this.canvas.getActiveObject() === target) {
-        this.canvas.discardActiveObject();
-      }
-      this.canvas.remove(target);
-      this.itemList = this.itemList.filter((item: any) => item.id !== itemId);
-      this.canvas.renderAll();
+  deleteObject(itemId?: string): void {
+    let target: any;
+
+    if (itemId) {
+      // Find object by ID
+      target = this.canvas.getObjects().find((obj: any) => obj.id === itemId);
+    } else {
+      // Get currently selected object
+      target = this.canvas.getActiveObject();
     }
+
+    if (itemId) {
+      this.itemList = this.itemList.filter((item: any) => item.id !== itemId);
+    } else {
+      itemId = target.id;
+      this.itemList = this.itemList.filter((item: any) => item.id !== itemId);
+    }
+
+    if (!target) return;
+
+    // Remove from canvas
+    this.canvas.remove(target);
+
+    // Discard selection if this was the active object
+    if (this.canvas.getActiveObject() === target) {
+      this.canvas.discardActiveObject();
+    }
+
+
+    // Clear selection refs if any of them point to the deleted object
+    if (this.selectedText === target) this.selectedText = null;
+    if (this.selectedImage === target) this.selectedImage = null;
+    if (this.selectedShape === target) this.selectedShape = null;
+
+    // Remove from itemList if it's a tracked ID
+
+
+    this.canvas.renderAll();
   }
+
 
   initSortable(): void {
     Sortable.create(this.itemListRef.nativeElement, {
@@ -1551,5 +1704,124 @@ export class CreatePageComponent implements AfterViewInit {
     console.log('layerDrawerOpen', this.layerDrawerOpen);
     this.toggleDrawer();
   }
+
+  toggleGrid() {
+    if (this.gridGroup) {
+      this.canvas.remove(this.gridGroup);
+      this.gridGroup = undefined;
+      this.canvas.renderAll();
+      return;
+    }
+
+    const zoom = this.canvas.getZoom(); // e.g. 0.1
+    const canvasWidth = this.canvas.getWidth() / zoom;
+    const canvasHeight = this.canvas.getHeight() / zoom;
+
+    // Columns still by inch
+    const inchesWidth = 10.7;
+    const ppiX = canvasWidth / inchesWidth;
+
+    // Rows: exactly 17 boxes
+    const rows = 17;
+    const ppiY = canvasHeight / rows;
+
+    const gridLines: fabric.Line[] = [];
+    const halfPixel = 0.5;
+
+    // Vertical lines (columns by inch)
+    const cols = Math.ceil(canvasWidth / ppiX) + 1;
+    for (let i = 0; i <= cols; i++) {
+      const x = i * ppiX + halfPixel;
+      gridLines.push(new fabric.Line([x, 0, x, canvasHeight], {
+        stroke: 'black',
+        selectable: false,
+        evented: false,
+        strokeWidth: 10,
+        excludeFromExport: true,
+      }));
+    }
+
+    // Horizontal lines (exactly 17 rows)
+    for (let i = 0; i <= rows; i++) {
+      const y = i * ppiY + halfPixel;
+      gridLines.push(new fabric.Line([0, y, canvasWidth, y], {
+        stroke: 'black',
+        selectable: false,
+        evented: false,
+        strokeWidth: 10,
+        excludeFromExport: true,
+      }));
+    }
+
+    this.gridGroup = new fabric.Group(gridLines, {
+      selectable: false,
+      evented: false,
+      originX: 'left',
+      originY: 'top',
+      hoverCursor: 'default',
+      excludeFromExport: true,
+    });
+
+    this.canvas.add(this.gridGroup);
+
+    // Move grid to back
+    const objs = this.canvas.getObjects();
+    const idx = objs.indexOf(this.gridGroup!);
+    if (idx > -1) {
+      objs.splice(idx, 1);
+      objs.unshift(this.gridGroup!);
+    }
+
+    this.canvas.renderAll();
+  }
+
+  updateQualityStatus() {
+    let newStatus: any = 'green';
+
+    const redThresholdPx = 300;    // below 600px is red
+    const yellowThresholdPx = 500; // below 900px is yellow
+
+    const objects = this.canvas.getObjects().filter(obj =>
+      obj.selectable && !obj.excludeFromExport && obj.type !== 'line'
+    );
+
+    for (const obj of objects) {
+      const pixelWidth = (obj.width ?? 0) * (obj.scaleX ?? 1);
+      const pixelHeight = (obj.height ?? 0) * (obj.scaleY ?? 1);
+      console.log(pixelWidth, pixelHeight)
+
+      if (pixelWidth < redThresholdPx || pixelHeight < redThresholdPx) {
+        newStatus = 'red';
+        break;
+      } else if (pixelWidth < yellowThresholdPx || pixelHeight < yellowThresholdPx) {
+        if (newStatus !== 'red') newStatus = 'yellow';
+      }
+    }
+
+    this.qualityStatus = newStatus;
+  }
+
+  openHelpModal() {
+    this.showHelpModal = true;
+  }
+
+  get isObjectSelected(): boolean {
+    return !!(this.selectedText || this.selectedImage || this.selectedShape);
+  }
+
+  deleteSelectedObject(): void {
+    if (this.selectedText) {
+      this.canvas.remove(this.selectedText);
+      this.selectedText = null;
+    } else if (this.selectedImage) {
+      this.canvas.remove(this.selectedImage);
+      this.selectedImage = null;
+    } else if (this.selectedShape) {
+      this.canvas.remove(this.selectedShape);
+      this.selectedShape = null;
+    }
+  }
+
+
 
 }

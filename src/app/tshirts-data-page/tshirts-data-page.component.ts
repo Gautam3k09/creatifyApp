@@ -38,6 +38,8 @@ export class TshirtsDataPageComponent {
         { key: 'Ruby maroon', value: 'assets/Tees/maroon-b.png' },
     ];
 
+    wasabiUrl = environment.wasabiUrl;
+
     constructor(
         public appservice: AppServiceService,
         private router: Router,
@@ -49,6 +51,7 @@ export class TshirtsDataPageComponent {
         if (this.storedData && this.storedData.LoggedIn != null) {
             this.userData = JSON.parse(this.storedData.userData);
         }
+        this.wasabiUrl = environment.wasabiUrl;
     }
 
     async ngOnInit() {
