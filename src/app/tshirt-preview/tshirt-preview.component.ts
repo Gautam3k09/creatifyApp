@@ -43,7 +43,7 @@ export class TshirtPreviewComponent implements AfterViewInit, OnDestroy {
 
   private initThree() {
     this.scene = new Scene();
-    this.scene.background = new Color(0xf0f0f0);
+    this.scene.background = new Color(0x333333);
     const width = this.threeContainer.nativeElement.clientWidth;
     const height = this.threeContainer.nativeElement.clientHeight;
     this.camera = new PerspectiveCamera(45, width / height, 0.1, 1000);
@@ -67,12 +67,12 @@ export class TshirtPreviewComponent implements AfterViewInit, OnDestroy {
     const ctx = canvas.getContext('2d')!;
 
     // Optional: Add light gray background if needed
-    ctx.fillStyle = '#f0f0f0';
+    ctx.fillStyle = 'rgba(147, 147, 147, 1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw white T-shirt area or placeholder (simulate it for visibility)
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+    ctx.fillStyle = 'rgba(147, 147, 147, 1)';
+    ctx.strokeStyle = 'rgba(147, 147, 147, 1)';
     ctx.lineWidth = 10;
 
     // Example: Centered shirt shape area (rectangle)
@@ -92,7 +92,7 @@ export class TshirtPreviewComponent implements AfterViewInit, OnDestroy {
   private loadModelAndApplyTexture() {
     const loader = new GLTFLoader();
     // <-- Load your .glb here
-    loader.load('assets/gltfs/test.glb', (gltf) => {
+    loader.load('assets/gltfs/test2.glb', (gltf) => {
       const model = gltf.scene;
       this.scene.add(model);
 

@@ -50,7 +50,7 @@ export class YourTeesComponent {
         const data = {
             id: id._id,
         };
-        this.appservice.getTees(data).subscribe((result) => {
+        this.appservice.getItems(data).subscribe((result) => {
             if (result && result.data) {
                 this.teesCount = result.data.length;
             }

@@ -21,16 +21,16 @@
                     {{ user_Id }}
                 </div>
                 <div class="tee-Name">
-                    {{ data?.teeName_Name }}
+                    {{ data?.designName }}
                 </div>
                 <div class="mb-2">
                     <div class="d-flex">
                         <p class="mb-0 price mr-1" *ngIf="showContent; else elseBlockforPrice">
-                            Rs. {{ data?.tee_Price }}
+                            Rs. {{ data?.sellingPrice }}
                         </p>
                         <ng-template #elseBlockforPrice>
                             <s style="margin-right: 5px" class="old-price">
-                                Rs. {{ data?.tee_Price }}
+                                Rs. {{ data?.sellingPrice }}
                             </s>
                             <p class="price">Rs. {{ discountedPrice }}</p>
                         </ng-template>
@@ -118,7 +118,7 @@
                 <div class="product-container mt-2">
                     <div class="productChild">
                         <p>Color</p>
-                        <p>{{ data?.tee_Color }}</p>
+                        <p>{{ data?.itemColor }}</p>
                     </div>
                     <div class="productChild">
                         <p>Fabric</p>

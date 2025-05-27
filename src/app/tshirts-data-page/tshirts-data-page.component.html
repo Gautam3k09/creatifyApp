@@ -12,7 +12,7 @@
                             <i class="fa fa-share-alt text-white"></i>
                         </button>
                         <button *ngIf="from == 'personal'" class="btn btn-dark btn-sm rounded-circle shadow"
-                            title="Delete" (click)="deleteTees(shirt._id)">
+                            title="Delete" (click)="deleteDesign(shirt._id)">
                             <i class="fa fa-trash text-white"></i>
                         </button>
                     </div>
@@ -20,16 +20,16 @@
                     <div class="text-center mt-4 position-relative image-container">
                         <img [src]="shirt.teeSrc" class="parent-image img-fluid" style="max-height: 240px;"
                             alt="Base Shirt" />
-                        <img *ngIf="shirt.img" [src]="wasabiUrl + shirt.img" class="overlay-image img-fluid"
+                        <img *ngIf="shirt.img" [src]="wasabiUrl + shirt.img + '?v=2'" class="overlay-image img-fluid"
                             style="max-height: 240px;" alt="Overlay" />
                     </div>
 
                     <!-- Shirt Info -->
                     <div class="text-center mt-3">
-                        <div class="fw-semibold fs-6">{{ shirt.teeName_Name }}</div>
+                        <div class="fw-semibold fs-6">{{ shirt.designName }}</div>
                         <div class="small">Premium Oversized Tee</div>
                         <div class="small">Pearl White</div>
-                        <div class="fw-bold mt-1 fs-6">Rs. {{ shirt.tee_Price }}</div>
+                        <div class="fw-bold mt-1 fs-6">Rs. {{ shirt.sellingPrice }}</div>
                     </div>
 
                     <!-- Action Buttons -->

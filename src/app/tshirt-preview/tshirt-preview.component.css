@@ -1,5 +1,24 @@
+.viewer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Center & size the Three.js canvas */
 .viewer-container {
-  width: 50vw;
-  height: 50vh;
+  width: 600px;
+  height: 600px;
+  background-color: #333;
+  border-radius: 8px;
   overflow: hidden;
+}
+
+/* Simple styling for upload controls */
+.upload-controls {
+  font-family: sans-serif;
+  color: #fff;
+}
+.upload-controls input {
+  margin-left: 0.5rem;
 }

@@ -67,7 +67,7 @@ export class TshirtsDataPageComponent {
                     pageNumber: this.pageCount,
                 };
 
-                const result = await this.appservice.getAlltees(data).toPromise();
+                const result = await this.appservice.getItems(data).toPromise();
                 if (result) {
                     if (result.data.length < 1) {
                         this.DataFetched = true;
@@ -85,12 +85,12 @@ export class TshirtsDataPageComponent {
             } else {
                 let data: any;
                 if (this.from === 'personal' && !this.storedData.visitor) {
-                    data = { id: this.userData.user_Name };
+                    data = { id: this.userData._id };
                 } else {
                     data = { id: this.userId };
                 }
 
-                const result = await this.appservice.getTees(data).toPromise();
+                const result = await this.appservice.getItems(data).toPromise();
                 if (result) {
                     this.teeDatas = result.data;
                     this.mapTeesData();
@@ -104,8 +104,8 @@ export class TshirtsDataPageComponent {
         }
     }
 
-    deleteTees(data: any) {
-        this.appservice.deleteTees({ _id: data }).subscribe((res) => {
+    deleteDesign(data: any) {
+        this.appservice.deleteDesign({ _id: data }).subscribe((res) => {
             this.teeDatas.forEach((element: any, index: any) => {
                 if (element._id === data) this.teeDatas.splice(index, 1);
             });
@@ -140,14 +140,14 @@ export class TshirtsDataPageComponent {
     mapTeesData() {
         this.teeDatas = this.teeDatas.map((item: any) => {
             let url;
-            if (item.teeUrl_FrontsideImg != "") {
-                url = this.imageFrontUrls.find(img => img.key === item.tee_Color);
-                item.img = item.teeUrl_FrontsideImg;
-            } else if (item.teeUrl_BacksideImg != "") {
-                url = this.imageBackUrls.find(img => img.key === item.tee_Color);
-                item.img = item.teeUrl_BacksideImg;
+            if (item.frontImageUrl != "") {
+                url = this.imageFrontUrls.find(img => img.key === item.itemColor);
+                item.img = item.frontImageUrl;
+            } else if (item.backImageUrl != "") {
+                url = this.imageBackUrls.find(img => img.key === item.itemColor);
+                item.img = item.backImageUrl;
             } else {
-                url = this.imageFrontUrls.find(img => img.key === item.tee_Color);
+                url = this.imageFrontUrls.find(img => img.key === item.itemColor);
                 item.img = ""
             }
             item.teeSrc = url?.value || '';

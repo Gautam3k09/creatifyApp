@@ -136,14 +136,14 @@ export class VendorDashboardComponent {
     let img: any = [];
     this.appservice.getOnetee({ _id: element.tshirtId }).subscribe((response: any) => {
       if (response.data && response.status) {
-        if (response.data.teeUrl_FrontsideImg != "" || response.data.teeUrl_BacksideImg == "") {
-          img = this.imageFrontUrls.find(img => img.key === response.data.tee_Color);
+        if (response.data.frontImageUrl != "" || response.data.backImageUrl == "") {
+          img = this.imageFrontUrls.find(img => img.key === response.data.itemColor);
           response.data.currentSide = img?.value;
-          response.data.currentPrint = response.data.teeUrl_FrontsideImg;
+          response.data.currentPrint = response.data.frontImageUrl;
         } else {
-          img = this.imageBackUrls.find(img => img.key === response.data.tee_Color);
+          img = this.imageBackUrls.find(img => img.key === response.data.itemColor);
           response.data.currentSide = img?.value;
-          response.data.currentPrint = response.data.teeUrl_BacksideImg;
+          response.data.currentPrint = response.data.backImageUrl;
         }
       }
       this.previewTeeData = response.data;
@@ -208,14 +208,14 @@ export class VendorDashboardComponent {
     let img;
     if (this.currentSide == 'back') {
       this.currentSide = 'front';
-      img = this.imageFrontUrls.find(img => img.key === element.tee_Color);
+      img = this.imageFrontUrls.find(img => img.key === element.itemColor);
       element.currentSide = img?.value;
-      element.currentPrint = element.teeUrl_FrontsideImg;
+      element.currentPrint = element.frontImageUrl;
     } else {
       this.currentSide = 'back';
-      img = this.imageBackUrls.find(img => img.key === element.tee_Color);
+      img = this.imageBackUrls.find(img => img.key === element.itemColor);
       element.currentSide = img?.value;
-      element.currentPrint = element.teeUrl_BacksideImg;
+      element.currentPrint = element.backImageUrl;
       this.currentSide = 'back';
     }
   }

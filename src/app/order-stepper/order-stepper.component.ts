@@ -70,14 +70,17 @@ export class OrderStepperComponent {
         private ngZone: NgZone,
         @Inject(MAT_DIALOG_DATA)
         public buyPageData: {
-            teeName_Name: any;
-            price: any;
+            createdById: any;
+            designName: any;
+            discountedPrice: any;
+            originalPrice: any;
             user_Id: any;
             _id: any;
             quantity: any;
             size: any;
             coinsUsed: any;
             coupon: any;
+            itemColor: any;
         },
         public dialogRef: MatDialogRef<OrderStepperComponent>,
         public localStorage: localStorageService
@@ -130,12 +133,12 @@ export class OrderStepperComponent {
     }
 
     calculatePrice() {
-        this.finalPrice = this.buyPageData?.price * this.userQuantity;
+        // this.finalPrice = this.buyPageData?.price * this.userQuantity;
     }
 
     createRazorPayOrder() {
         const options: any = {
-            amount: this.buyPageData?.price * 100,
+            amount: this.buyPageData?.discountedPrice * 100,
             currency: 'INR',
             // receipt: 'order_123456780',
         };
@@ -148,7 +151,7 @@ export class OrderStepperComponent {
     payWithRazor(order_id: any) {
         const options: any = {
             key: 'rzp_test_TbWyYgkbb7t7xX',
-            amount: this.buyPageData?.price * 100, // amount should be in paisa
+            amount: this.buyPageData?.discountedPrice * 100, // amount should be in paisa
             currency: 'INR',
             name: 'CREATEEFI',
             description: 'Test Transaction',
@@ -163,7 +166,7 @@ export class OrderStepperComponent {
                 email: this.userData.email,
             },
             notes: {
-                teeName: this.buyPageData.teeName_Name,
+                teeName: this.buyPageData.designName,
             },
             theme: {
                 color: '#3399cc',
@@ -199,7 +202,7 @@ export class OrderStepperComponent {
 
     openOrderPlacedModal(from: 'cod' | 'paid') {
         this.fromCod = from === 'cod';
-        this.finalPrice = this.fromCod ? parseFloat(this.buyPageData.price) + 59 : this.buyPageData.price;
+        this.finalPrice = this.fromCod ? parseFloat(this.buyPageData.discountedPrice) + 59 : this.buyPageData.discountedPrice;
         document.body.style.overflow = 'hidden';
         this.showOrderPlacedModal = true;
     }
@@ -211,21 +214,23 @@ export class OrderStepperComponent {
     placeOrder(method: string) {
         this.isLoading = true;
         let data = {
+            customerId: this.storedData.LoggedIn != null ? this.userData._id : this.secondFormGroup.value.phoneNumber,
+            sku: 'OVRS-' + this.buyPageData.size + '-' + this.buyPageData.itemColor,
+            order_quantity: 1,
             tshirtId: this.buyPageData._id,
-            by: this.storedData.LoggedIn != null ? this.userData.user_Name : this.secondFormGroup.value.phoneNumber,
-            madeBy: this.buyPageData.user_Id,
+            tshirtName: this.buyPageData.designName,
+            createdById: this.userData._id,
+            createdByName: this.buyPageData.user_Id,
             address: this.firstFormGroup.value,
             paymentMethod: method,
-            tshirtPrice: this.buyPageData.price,
-            // quantity : this.userQuantity,
-            size: this.buyPageData.size,
-            coinsUsed: this.buyPageData.coinsUsed,
             finalPrice: this.finalPrice,
-            coupon: this.buyPageData.coupon,
+            subtotal: this.buyPageData.originalPrice,
+            coupon: { code: this.buyPageData.coinsUsed ? 'cCoinsUsed' : this.buyPageData.coupon },
+            couponAmount: this.buyPageData.originalPrice - this.buyPageData.discountedPrice
         };
         this.appservice.postOrder(data).subscribe((result) => {
-            if (result.status && result.data) {
-                this.orderId = result.data;
+            if (result.status && result.orderData) {
+                this.orderId = result.orderData;
                 this.fromCod = false;
                 this.isLoading = false;
             }

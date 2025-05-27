@@ -91,6 +91,7 @@ export class BuyPageComponent implements OnInit {
             if (result && result.data != null) {
                 this.data = result.data;
                 this.user_Id = this.user_Id != this.data.user_Id ? this.data.user_Id : 'CreateeFi';
+                this.discountedPrice = this.data.sellingPrice;
                 this.changeTshirtColor();
                 this.isLoading = false;
             } else {
@@ -101,9 +102,11 @@ export class BuyPageComponent implements OnInit {
 
     openModal() {
         this.data.coupon = this.couponData.couponAvailable ? this.couponData.coupon_id : '';
-        this.data.price = this.showContent ? this.data.tee_Price : this.discountedPrice;
+        this.data.discountedPrice = this.discountedPrice
+        this.data.originalPrice = this.data.sellingPrice;
         this.data.size = this.activeSizeBtn;
         this.data.coinsUsed = this.isChecked;
+        console.log('Data to be sent to modal:', this.data);
         this.modalDialog = this.matDialog.open(OrderStepperComponent, {
             width: '510px',
             height: '495px',
@@ -155,7 +158,7 @@ export class BuyPageComponent implements OnInit {
 
     checkCoupon(forCoupon: any = true) {
         if (!forCoupon && !this.isChecked) {
-            this.discountedPrice = this.data?.tee_Price - 100;
+            this.discountedPrice = this.data?.sellingPrice - 100;
             this.showContent = false;
             return;
         }
@@ -183,8 +186,8 @@ export class BuyPageComponent implements OnInit {
                 };
                 this.showContent = false;
                 this.discountedPrice =
-                    this.data?.tee_Price -
-                    (this.data?.tee_Price * this.couponData.coupon_Off) / 100;
+                    this.data?.sellingPrice -
+                    (this.data?.sellingPrice * this.couponData.coupon_Off) / 100;
                 if (!Number.isInteger(this.discountedPrice)) {
                     this.discountedPrice =
                         this.discountedPrice % 1 >= 0.5
@@ -209,14 +212,14 @@ export class BuyPageComponent implements OnInit {
 
     changeTshirtColor() {
         let img;
-        if (this.data.teeUrl_FrontsideImg != "" || this.data.teeUrl_BacksideImg == "") {
-            img = this.imageFrontUrls.find(img => img.key === this.data.tee_Color);
+        if (this.data.frontImageUrl != "" || this.data.backImageUrl == "") {
+            img = this.imageFrontUrls.find(img => img.key === this.data.itemColor);
             this.data.currentSide = img?.value;
-            this.data.currentPrint = this.data.teeUrl_FrontsideImg;
+            this.data.currentPrint = this.data.frontImageUrl;
         } else {
-            img = this.imageBackUrls.find(img => img.key === this.data.tee_Color);
+            img = this.imageBackUrls.find(img => img.key === this.data.itemColor);
             this.data.currentSide = img?.value;
-            this.data.currentPrint = this.data.teeUrl_BacksideImg;
+            this.data.currentPrint = this.data.backImageUrl;
             this.currentSide = 'back';
         }
     }
@@ -225,14 +228,14 @@ export class BuyPageComponent implements OnInit {
         let img;
         if (this.currentSide == 'back') {
             this.currentSide = 'front';
-            img = this.imageFrontUrls.find(img => img.key === this.data.tee_Color);
+            img = this.imageFrontUrls.find(img => img.key === this.data.itemColor);
             this.data.currentSide = img?.value;
-            this.data.currentPrint = this.data.teeUrl_FrontsideImg;
+            this.data.currentPrint = this.data.frontImageUrl;
         } else {
             this.currentSide = 'back';
-            img = this.imageBackUrls.find(img => img.key === this.data.tee_Color);
+            img = this.imageBackUrls.find(img => img.key === this.data.itemColor);
             this.data.currentSide = img?.value;
-            this.data.currentPrint = this.data.teeUrl_BacksideImg;
+            this.data.currentPrint = this.data.backImageUrl;
         }
     }
 

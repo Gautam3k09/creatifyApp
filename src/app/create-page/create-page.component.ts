@@ -104,7 +104,7 @@ export class CreatePageComponent implements AfterViewInit {
   selectedColor: string = '#000'; // Default color
 
   userData: any;
-  priceRange: any = 549;
+  priceRange: any = 799;
   designName: any = 'Trial-Tee';
   formDataFront = new FormData();
   formDataBack = new FormData();
@@ -1561,12 +1561,15 @@ export class CreatePageComponent implements AfterViewInit {
 
 
   uploadImage(): any {
+    const cut: any = 0;
     const formData = new FormData();
-    formData.append('userId', this.userData.user_Name);
-    formData.append('price', this.priceRange);
-    formData.append('teeName', this.designName);
+    formData.append('userId', this.userData._id);
+    formData.append('designName', this.designName);
+    formData.append('sellingPrice', this.priceRange);
+    formData.append('creatorCut', cut);
     formData.append('role', this.userData.user_Role);
-    formData.append('teeColor', this.imageColor);
+    formData.append('itemColor', this.imageColor);
+    formData.append('description', 'Description of the design');
 
     // 🔹 Append image files to FormData
     if (this.formDataFront) {

@@ -43,16 +43,12 @@ export class AppServiceService {
         return this.http.post(`${this.serverUrl}/upload-print`, data);
     }
 
-    getTees(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/fetch-tees`, data);
+    getItems(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/get-items`, data);
     }
 
-    deleteTees(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/delete-tees`, data);
-    }
-
-    getAlltees(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/get-all-tees`, data);
+    deleteDesign(data: any): Observable<any> {
+        return this.http.post(`${this.serverUrl}/delete-design`, data);
     }
 
     getOnetee(data: any): Observable<any> {
