@@ -12,7 +12,7 @@
             <div class="header-right">
 
                 <div class="header-button">
-                    <i class="fas fa-question-circle" title="Help" (click)="openHelpModal()"></i>
+                    <i class="fas fa-question-circle" title="Help" (click)="openModal('help')"></i>
                     <span>Help</span>
                 </div>
                 <div class="header-button" (click)="toggleGrid()">
@@ -66,7 +66,7 @@
             <div class="layers-header">
                 Layers
             </div>
-            <div class="add-element" (click)="openElementModal()">+</div>
+            <div class="add-element" (click)="openModal('add')">+</div>
             <div>
                 <ng-container *ngTemplateOutlet="layerList"></ng-container>
             </div>
@@ -74,7 +74,7 @@
     </div>
 
     <div class="bottom-container">
-        <button class="bottom-btn hideOnPc " (click)="openElementModal()">
+        <button class="bottom-btn hideOnPc " (click)="openModal('add')">
             <i class="fa-solid fa-circle-plus"></i> Add
         </button>
         <button class="bottom-btn" (click)="toggleCanvas()">
@@ -108,36 +108,11 @@
         <button class="bottom-btn" (click)="toggleLayer()">
             <i class="fas fa-layer-group"></i>Layer
         </button>
-        <button class="bottom-btn" (click)="saveCanvasDataToDB()">
+        <button class="bottom-btn" (click)="openModal('save')">
             <i class="fas fa-save"></i>Save
         </button>
     </div>
 </body>
-
-<div class="element-modal" [class.show]="showAddElementModal">
-    <div class="element-modal-content">
-        <div class="element-modal-header">
-            <span>Add Element</span>
-            <button class="element-close-btn" (click)="openElementModal()">&times;</button>
-        </div>
-        <div class="element-modal-body">
-            <p>Select what type of element to add</p>
-            <div class="layer-options">
-                <div class="layer-item" (click)="triggerFileInput()">
-                    <div class="icon">🖼️</div>
-                    <span>Image</span>
-                    <input #imageInput id="imageInput" type="file" class="file" (change)="addElement($event)"
-                        accept="image/*" />
-                </div>
-                <div class="layer-item" (click)="addCustomText()">
-                    <div class="icon">T</div>
-                    <span>Text</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div class="drawer hideOnPc " id="bottomDrawer" *ngIf="drawerOpen" [ngStyle]="{ height: drawerHeight + 'px' }">
     <div class="drawer-header" (touchstart)="startDrag($event)" (touchmove)="onDrag($event)" (touchend)="endDrag()">
@@ -528,50 +503,3 @@
         </li>
     </ul>
 </ng-template>
-
-
-<div class="help-modal" [class.show]="showHelpModal">
-    <div class="help-modal-content">
-        <div class="help-modal-header">
-            <span>Help</span>
-            <button class="help-close-btn" (click)="showHelpModal = false">&times;</button>
-        </div>
-
-        <div class="help-modal-body">
-            <h4>Image Quality Indicators</h4>
-            <ul style="list-style: none; padding-left: 0;">
-                <li>
-                    <i class="fas fa-circle status-red"></i>
-                    Image quality is too low. Please upload a higher-resolution photo. Your T-shirt print might appear
-                    blurry if the image is stretched too large.
-                </li>
-                <li>
-                    <i class="fas fa-circle status-orange"></i>
-                    The image might be printable, but it could result in a slightly blurry print. It's recommended to
-                    use a better-quality image for clearer results.
-                </li>
-                <li>
-                    <i class="fas fa-circle status-green"></i>
-                    No need to worry! Your image is perfect and will print exactly as expected — sharp and accurate.
-                </li>
-            </ul>
-
-            <h3>📏 Inches Button</h3>
-            <p>
-                Clicking the <strong>Inches</strong> button will display a grid overlay on the canvas.
-                Each box in the grid represents <strong>1 inch</strong>, helping you measure and position your design
-                accurately on the T-shirt.
-            </p>
-
-            <h3>🖼️ Print Area</h3>
-            <p>
-                The print area defines the safe zone where your design will appear on the T-shirt.
-                Make sure your artwork stays <strong>within this area</strong> to ensure it prints correctly and doesn't
-                get cropped.
-            </p>
-
-            <img src="../../assets/createefi/printArea.png" alt="Print area guide"
-                style="width: 100%; margin-top: 10px;" />
-        </div>
-    </div>
-</div>

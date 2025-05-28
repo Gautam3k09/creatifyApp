@@ -9,9 +9,10 @@ import { titleTextTemplates, imageFrontUrls, imageBackUrls } from '../common-con
 import { AppServiceService } from '../app-service.service';
 import { Router } from '@angular/router';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { HeaderPageComponent } from "../header-page/header-page.component";
 import { LoaderComponent } from '../loader/loader.component';
 import { TshirtPreviewComponent } from '../tshirt-preview/tshirt-preview.component';
+import { CreatePageModalComponent } from './create-page-modal/create-page-modal.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-page',
@@ -25,7 +26,6 @@ export class CreatePageComponent implements AfterViewInit {
   @ViewChild('canvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('itemListRef', { static: false }) itemListRef!: ElementRef<HTMLUListElement>;
   @ViewChildren('templateCanvas') templateCanvasRefs!: QueryList<ElementRef<HTMLCanvasElement>>;
-  @ViewChild('imageInput') imageInput!: ElementRef;
   canvas!: fabric.Canvas;
   canvasData1: any = null;
   canvasData2: any | null = null;
@@ -35,7 +35,6 @@ export class CreatePageComponent implements AfterViewInit {
   itemList: any = [];
   activePanel: string = 'Properties';
   tshirtName: string = '';
-  showAddElementModal: boolean = false;
   mobilePropertyButton: any = 'Text Properties';
 
   // text
@@ -148,15 +147,21 @@ export class CreatePageComponent implements AfterViewInit {
   private gridGroup?: fabric.Group;
 
   qualityStatus: any = 'green';
+  //save
 
-  //help
+  modalDialog: MatDialogRef<CreatePageModalComponent, any> | undefined;
 
-  showHelpModal: boolean = false;
+  showSaveModal = false;
+  shirtName = '';
+  shirtPrice = 799; // Default starting point between 799–1499
+  termsAccepted = false;
 
   constructor(
     private appservice: AppServiceService,
     public localStorage: localStorageService,
-    private router: Router) {
+    private router: Router,
+    public matDialog: MatDialog,
+  ) {
 
     this.userData = this.localStorage.getUserLocalStorage();
     this.userData = JSON.parse(this.userData.userData);
@@ -533,14 +538,6 @@ export class CreatePageComponent implements AfterViewInit {
     this.guideLines = [];
   }
 
-  openElementModal() {
-    this.showAddElementModal = !this.showAddElementModal;
-  }
-  triggerFileInput() {
-    this.imageInput.nativeElement.click();
-  }
-
-
   async addElement(eventOrCanvas: any, text: string = '', templateId: string = ''): Promise<void> {
     // IMAGE UPLOAD MODE
     if (eventOrCanvas?.target?.files?.[0]) {
@@ -604,7 +601,6 @@ export class CreatePageComponent implements AfterViewInit {
             this.canvas.renderAll();
             this.saveState();
             this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
-            this.showAddElementModal = false;
           } catch (error) {
             console.error('Image loading failed:', error);
             alert('Failed to load image onto canvas.');
@@ -1171,7 +1167,6 @@ export class CreatePageComponent implements AfterViewInit {
   // Add Custom Text
   addCustomText() {
     this.addElement(this.canvas, 'text');
-    this.showAddElementModal = false;
   }
 
   onBrightnessChange(event: any) {
@@ -1804,10 +1799,6 @@ export class CreatePageComponent implements AfterViewInit {
     this.qualityStatus = newStatus;
   }
 
-  openHelpModal() {
-    this.showHelpModal = true;
-  }
-
   get isObjectSelected(): boolean {
     return !!(this.selectedText || this.selectedImage || this.selectedShape);
   }
@@ -1825,6 +1816,59 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
+  openSaveModal() {
+    this.showSaveModal = true;
+    this.shirtName = '';
+    this.shirtPrice = 799;
+    this.termsAccepted = false;
+  }
+  saveShirt() {
+    if (!this.termsAccepted || !this.shirtName) return;
 
+    console.log('Saving T-shirt:', {
+      name: this.shirtName,
+      price: this.shirtPrice
+    });
+
+    // TODO: Add actual save logic
+    this.showSaveModal = false;
+  }
+
+
+
+  //for modals
+  openModal(type: any) {
+    let data = {
+      dialogType: type,
+      userType: this.userData.user_Role
+    }
+    // console.log('Data to be sent to modal:', this.data);
+    this.modalDialog = this.matDialog.open(CreatePageModalComponent, {
+      width: '450px',
+      maxWidth: '90vw',
+      // height: 'auto' is default, so the content dictates height
+      autoFocus: false,
+      restoreFocus: false,
+      data: data,
+    });
+
+    this.modalDialog.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      if (result) {
+        if (type === 'save') {
+          result.name = this.tshirtName;
+          result.price = this.shirtPrice;
+          this.saveCanvasDataToDB()
+        }
+        if (type === 'add') {
+          if (result == 'text') {
+            this.addCustomText()
+          } else {
+            this.addElement(result)
+          }
+        }
+      }
+    });
+  }
 
 }

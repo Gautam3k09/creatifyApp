@@ -1,0 +1,139 @@
+.full-width {
+  width: 100%;
+}
+
+.save-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group input:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+.form-group :disabled{
+    color: white;
+}
+
+
+/* help */
+
+.help-modal {
+  display: block;
+  position: relative;
+  background: #f8f9fa;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  color: #212529;
+}
+
+.help-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.help-close-btn {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.help-close-btn:hover {
+  color: #000;
+}
+
+.help-modal-body {
+  padding: 1.5rem 0;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.quality-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.quality-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.quality-list i {
+  font-size: 12px;
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+.status-red {
+  color: #e53935;
+}
+
+.status-orange {
+  color: #fb8c00;
+}
+
+.status-green {
+  color: #43a047;
+}
+
+.print-area-img {
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+
+/* add */
+
+.add-modal-body {
+  padding: 25px
+}
+
+.add-header {
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}

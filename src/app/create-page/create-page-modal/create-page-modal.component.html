@@ -1,0 +1,122 @@
+<div *ngIf="data.dialogType === 'save'">
+     <h2 mat-dialog-title>Save T-shirt</h2>
+     <mat-dialog-content class="save-dialog-content">
+          <div class="form-group">
+               <label>👕 T-shirt Name</label>
+               <input placeholder="Oversized Originals" [(ngModel)]="tshirtName" />
+          </div>
+          <div class="mb-2">
+               <label for="shirtPrice" class="form-label fw-bold">💰 Set Your Price:</label>
+
+               <!-- Show slider if user is merch -->
+               <div *ngIf="data.userType != 'Normal'; else fixedPrice">
+                    <input type="range" id="shirtPrice" class="form-range" min="799" max="1499" step="1"
+                         [(ngModel)]="shirtPrice" />
+                    <div class="d-flex justify-content-between small text-muted">
+                         <span>₹799</span>
+                         <span>₹1499</span>
+                    </div>
+                    <p class="mt-2"><strong>Selected Price: ₹{{ shirtPrice }}</strong></p>
+               </div>
+
+               <!-- Static price display if user is not merch -->
+               <ng-template #fixedPrice>
+                    <div class="p-2 border rounded bg-light text-center">
+                         <p class="mb-0 text-muted small">Fixed Price</p>
+                         <h5 class="fw-bold text-success">₹799</h5>
+                    </div>
+               </ng-template>
+          </div>
+
+          <mat-checkbox [(ngModel)]="termsAccepted">
+               I agree to the <a href="/terms" target="_blank">terms and conditions</a>
+          </mat-checkbox>
+     </mat-dialog-content>
+     <mat-dialog-actions align="end">
+          <button mat-button (click)="onCancel()">Cancel</button>
+          <button mat-flat-button color="primary" [disabled]="!tshirtName.trim() || !termsAccepted" (click)="onSave()">
+               Save Design
+          </button>
+     </mat-dialog-actions>
+</div>
+
+
+
+<div *ngIf="data.dialogType === 'help'" class="help-modal show">
+     <div class="help-modal-content">
+          <div class="help-modal-header">
+               <span>Help</span>
+               <button class="help-close-btn" (click)="onCancel()">&times;</button>
+          </div>
+
+          <div class="help-modal-body">
+               <h4>Image Quality Indicators</h4>
+               <ul class="quality-list">
+                    <li>
+                         <i class="fas fa-circle status-red"></i>
+                         Image quality is too low. Please upload a higher-resolution photo.
+                         Your T-shirt print might appear blurry if the image is stretched too large.
+                    </li>
+                    <li>
+                         <i class="fas fa-circle status-orange"></i>
+                         The image might be printable, but it could result in a slightly blurry print.
+                         It's recommended to use a better-quality image for clearer results.
+                    </li>
+                    <li>
+                         <i class="fas fa-circle status-green"></i>
+                         No need to worry! Your image is perfect and will print exactly as expected —
+                         sharp and accurate.
+                    </li>
+               </ul>
+
+               <h3>📏 Inches Button</h3>
+               <p>
+                    Clicking the <strong>Inches</strong> button will display a grid overlay on the canvas.
+                    Each box in the grid represents <strong>1 inch</strong>, helping you measure and position your
+                    design
+                    accurately on the T-shirt.
+               </p>
+
+               <h3>🖼️ Print Area</h3>
+               <p>
+                    The print area defines the safe zone where your design will appear on the T-shirt.
+                    Make sure your artwork stays <strong>within this area</strong> to ensure it prints correctly and
+                    doesn't
+                    get cropped.
+               </p>
+
+               <img src="../../assets/createefi/printArea.png" alt="Print area guide" class="print-area-img" />
+          </div>
+     </div>
+</div>
+
+
+<div *ngIf="data.dialogType === 'add'">
+     <div class="add-modal-body">
+          <h5 class="mb-3 fw-bold add-header">Add Element</h5>
+          <p class="mb-4">Select what type of element to add:</p>
+
+          <div class="d-flex gap-4 justify-content-around  flex-wrap">
+               <!-- Image Option -->
+               <div class="text-center element-option" (click)="triggerFileInput()" style="cursor: pointer;">
+                    <div class="element-icon bg-light border rounded p-3 d-flex align-items-center justify-content-center mx-auto"
+                         style="width: 60px; height: 60px;">
+                         🖼️
+                    </div>
+                    <span class="d-block mt-2 fw-medium">Image</span>
+                    <input #imageInput type="file" class="d-none" (change)="onSave($event)" accept="image/*"
+                         id="imageInput" />
+               </div>
+
+               <!-- Text Option -->
+               <div class="text-center element-option" (click)="onSave('text')" style="cursor: pointer;">
+                    <div class="element-icon bg-light border rounded p-3 d-flex align-items-center justify-content-center mx-auto"
+                         style="width: 60px; height: 60px;">
+                         <span class="fw-bold fs-5">T</span>
+                    </div>
+                    <span class="d-block mt-2 fw-medium">Text</span>
+               </div>
+          </div>
+     </div>
+
+</div>
