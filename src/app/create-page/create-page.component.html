@@ -2,45 +2,59 @@
 
 <body>
     <div class="header-container">
-        <div class="header-bar">
-            <div class="header-left">
-                <div class="header-button">
-                    <i class="fa fa-arrow-left"></i>
-                    <span>Back</span>
-                </div>
-            </div>
-            <div class="header-right">
+        <nav class="navbar navbar-dark bg-dark border-bottom border-secondary px-3 py-2">
+            <div class="container-fluid d-flex justify-content-between align-items-center text-white">
 
-                <div class="header-button">
-                    <i class="fas fa-question-circle" title="Help" (click)="openModal('help')"></i>
-                    <span>Help</span>
-                </div>
-                <div class="header-button" (click)="toggleGrid()">
-                    <i class="fa fa-clipboard-check"></i>
-                    <span>inches</span>
-                </div>
-                <div class="header-button">
-                    <i class="fas fa-circle" [ngClass]="{
-                    'status-green': qualityStatus === 'green' ,
-                    'status-yellow': qualityStatus === 'yellow',
-                    'status-red': qualityStatus === 'red' 
-                    }"></i>
-                    <span>Quality</span>
-                </div>
-                <div class="header-button">
-                    <i class="fa fa-eye"></i>
-                    <span>Preview</span>
-                </div>
-                <div class="header-button" [class.disabled]="!isObjectSelected" (click)="deleteObject()"
-                    [style.pointerEvents]="isObjectSelected ? 'auto' : 'none'"
-                    [style.opacity]="isObjectSelected ? '1' : '0.5'">
-                    <i class="fa fa-trash"></i>
-                    <span>Delete</span>
+                <!-- Left side -->
+                <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column align-items-center me-3" role="button" style="cursor:pointer;">
+                        <i class="fa fa-arrow-left"></i>
+                        <small (click)="back()">Back</small>
+                    </div>
                 </div>
 
+                <!-- Right side -->
+                <div class="d-flex align-items-center">
+
+                    <div class="d-flex flex-column align-items-center me-3" role="button" title="Help"
+                        (click)="openModal('help')" style="cursor:pointer;">
+                        <i class="fas fa-question-circle"></i>
+                        <small>Help</small>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center me-3" role="button" (click)="toggleGrid()"
+                        style="cursor:pointer;">
+                        <i class="fa fa-clipboard-check"></i>
+                        <small>inches</small>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center me-3" role="button" style="cursor:pointer;">
+                        <i class="fas fa-circle" [ngClass]="{
+              'status-green': qualityStatus === 'green',
+              'status-yellow': qualityStatus === 'yellow',
+              'status-red': qualityStatus === 'red'
+            }"></i>
+                        <small>Quality</small>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center me-3" role="button" style="cursor:pointer;">
+                        <i class="fa fa-eye"></i>
+                        <small>Preview</small>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center" role="button"
+                        [class.disabled]="!isObjectSelected" (click)="deleteObject()"
+                        [style.pointerEvents]="isObjectSelected ? 'auto' : 'none'"
+                        [style.opacity]="isObjectSelected ? '1' : '0.5'" style="cursor:pointer;">
+                        <i class="fa fa-trash"></i>
+                        <small>Delete</small>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </nav>
     </div>
+
     <div class="control-container">
         <div class="property-container hideonmobile" *ngIf="!isMobileView" [class.open]="activePanel !== ''"
             id='drawerContentSource'>

@@ -1,0 +1,13 @@
+:host {
+  font-family: 'Merriweather', serif;
+  color: #333;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+}
+
+.card-body {
+  padding: 2rem;
+}

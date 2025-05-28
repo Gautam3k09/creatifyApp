@@ -34,7 +34,6 @@ export class CreatePageComponent implements AfterViewInit {
   canvas2ItemList: any = [];
   itemList: any = [];
   activePanel: string = 'Properties';
-  tshirtName: string = '';
   mobilePropertyButton: any = 'Text Properties';
 
   // text
@@ -150,11 +149,6 @@ export class CreatePageComponent implements AfterViewInit {
   //save
 
   modalDialog: MatDialogRef<CreatePageModalComponent, any> | undefined;
-
-  showSaveModal = false;
-  shirtName = '';
-  shirtPrice = 799; // Default starting point between 799–1499
-  termsAccepted = false;
 
   constructor(
     private appservice: AppServiceService,
@@ -1482,7 +1476,6 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
-
   checkSelectedObject(): void {
     const activeObject: any = this.canvas.getActiveObject();
     if (activeObject && activeObject.objectType === 'text') {
@@ -1554,7 +1547,6 @@ export class CreatePageComponent implements AfterViewInit {
     this.isArcEnabled = !this.isArcEnabled;
   }
 
-
   uploadImage(): any {
     const cut: any = 0;
     const formData = new FormData();
@@ -1581,7 +1573,7 @@ export class CreatePageComponent implements AfterViewInit {
     }
     this.appservice.postImage(formData).subscribe(
       (response) => {
-        this.router.navigate(['/tees']);
+        this.back()
       },
       (error) => {
         console.log(error);
@@ -1816,26 +1808,6 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
-  openSaveModal() {
-    this.showSaveModal = true;
-    this.shirtName = '';
-    this.shirtPrice = 799;
-    this.termsAccepted = false;
-  }
-  saveShirt() {
-    if (!this.termsAccepted || !this.shirtName) return;
-
-    console.log('Saving T-shirt:', {
-      name: this.shirtName,
-      price: this.shirtPrice
-    });
-
-    // TODO: Add actual save logic
-    this.showSaveModal = false;
-  }
-
-
-
   //for modals
   openModal(type: any) {
     let data = {
@@ -1856,8 +1828,8 @@ export class CreatePageComponent implements AfterViewInit {
       console.log('The dialog was closed', result);
       if (result) {
         if (type === 'save') {
-          result.name = this.tshirtName;
-          result.price = this.shirtPrice;
+          result.name = this.designName;
+          result.price = this.priceRange;
           this.saveCanvasDataToDB()
         }
         if (type === 'add') {
@@ -1871,4 +1843,7 @@ export class CreatePageComponent implements AfterViewInit {
     });
   }
 
+  back() {
+    this.router.navigate(['/tees']);
+  }
 }

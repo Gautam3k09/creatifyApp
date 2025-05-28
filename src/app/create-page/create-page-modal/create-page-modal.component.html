@@ -93,7 +93,10 @@
 
 <div *ngIf="data.dialogType === 'add'">
      <div class="add-modal-body">
-          <h5 class="mb-3 fw-bold add-header">Add Element</h5>
+          <div class="d-flex align-items-center justify-content-between mb-3 add-header">
+               <h5 class="fw-bold mb-0 ">Add Element</h5>
+               <button class="help-close-btn btn-close" (click)="onCancel()" aria-label="Close">&times;</button>
+          </div>
           <p class="mb-4">Select what type of element to add:</p>
 
           <div class="d-flex gap-4 justify-content-around  flex-wrap">
