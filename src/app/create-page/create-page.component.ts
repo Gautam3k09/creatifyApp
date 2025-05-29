@@ -1828,8 +1828,8 @@ export class CreatePageComponent implements AfterViewInit {
       console.log('The dialog was closed', result);
       if (result) {
         if (type === 'save') {
-          result.name = this.designName;
-          result.price = this.priceRange;
+          this.designName = result.name;
+          this.priceRange = result.price;
           this.saveCanvasDataToDB()
         }
         if (type === 'add') {

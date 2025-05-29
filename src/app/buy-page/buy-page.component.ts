@@ -51,7 +51,7 @@ export class BuyPageComponent implements OnInit {
     coins: any;
     showContent: boolean = true;
     isLoading: boolean = false;
-
+    cloudflareSharp = environment.cloudflareSharp;
     constructor(
         public bsModalRef: BsModalRef,
         private winRef: WindowRefService,

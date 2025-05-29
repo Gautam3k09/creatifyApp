@@ -79,7 +79,7 @@
                     </div>
                     <div class="image-container">
                          <img [src]="previewTeeData.currentSide" class="parent-image">
-                         <img *ngIf="previewTeeData.currentPrint" [src]=" previewTeeData.currentPrint"
+                         <img *ngIf="previewTeeData.currentPrint" [src]="cloudflareSharp +  previewTeeData.currentPrint"
                               class="overlay-image" alt="">
                     </div>
                </ng-template>
@@ -161,8 +161,8 @@
                     </div>
                     <div class="image-container">
                          <img [src]="previewTeeData?.currentSide" class="parent-image">
-                         <img *ngIf="previewTeeData?.currentPrint" [src]=" previewTeeData.currentPrint"
-                              class="overlay-image" alt="">
+                         <img *ngIf="previewTeeData?.currentPrint"
+                              [src]="cloudflareSharp +  previewTeeData.currentPrint" class="overlay-image" alt="">
                     </div>
                </ng-template>
           </ng-container>

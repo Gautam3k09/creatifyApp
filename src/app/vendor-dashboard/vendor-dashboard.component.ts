@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environment';
 
 
 @Component({
@@ -60,7 +61,7 @@ export class VendorDashboardComponent {
 
   selectedPrintOptions: { [id: number]: string } = {};
   options: string[] = ['Normal', 'A4', 'A3'];
-
+  cloudflareSharp = environment.cloudflareSharp;
   constructor(private router: Router, public appservice: AppServiceService, private route: ActivatedRoute) { }
 
   ngOnInit() {

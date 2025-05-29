@@ -12,7 +12,8 @@
                 <div class="tshirt-wrapper">
                     <div class="image-container">
                         <img [src]="data.currentSide" class="parent-image" />
-                        <img *ngIf="data.currentPrint" [src]="data.currentPrint" class="overlay-image" alt="Design" />
+                        <img *ngIf="data.currentPrint" [src]="cloudflareSharp + data.currentPrint" class="overlay-image"
+                            alt="Design" />
                     </div>
                 </div>
             </div>
