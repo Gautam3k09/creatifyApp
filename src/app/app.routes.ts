@@ -21,7 +21,7 @@ export const routes: Routes = [
     { path: 'buy/:userId', component: BuyPageComponent },
     { path: ':userName/merch/:userId', component: MerchHomePageComponent },
     { path: 'refferedBy/:userName', component: HomeComponent },
-
+    // GautamJha/merch/67d57c01135958e9180275f1
     //admin
     { path: 'admin', component: TshirtPreviewComponent },
     { path: 'order/:id', component: VendorDashboardComponent },

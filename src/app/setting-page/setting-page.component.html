@@ -219,9 +219,9 @@
                                         <strong>ORDER PLACED</strong><br />{{ order.createdAt }}
                                     </div>
                                     <div>
-                                        <strong>ORDER STATUS</strong><br />{{ order.order_status }}
+                                        <strong>ORDER STATUS</strong><br />{{ order.status }}
                                     </div>
-                                    <div><strong>TOTAL</strong><br />₹{{ order.order_price }}</div>
+                                    <div><strong>TOTAL</strong><br />₹{{ order.pricing.total }}</div>
                                     <div *ngIf="order.tee_from != 'You'">
                                         <strong>Made By</strong><br />c/{{ order.tee_from }}
                                     </div>
@@ -233,7 +233,10 @@
                                     <div>
                                         <strong>ORDER # {{ order.order_Id }}</strong>
                                     </div>
-                                    <div><a (click)="navigateBuyPage(order.order_tshirtId)">View Tee here</a></div>
+                                    <div style="cursor: pointer;"><a
+                                            (click)="navigateBuyPage(order.item[0].tshirt.tshirtId)">View Tee
+                                            here</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="booking-card hideOnDesktop" *ngFor="let orders of orderData; let i = index">

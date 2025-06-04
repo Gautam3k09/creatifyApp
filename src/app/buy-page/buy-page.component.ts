@@ -46,11 +46,12 @@ export class BuyPageComponent implements OnInit {
     ];
     user_Id: any;
     currentSide: any = 'front'
-    visitor: any;
+    visitorData: any = [];
     isChecked: any = false;
     coins: any;
     showContent: boolean = true;
     isLoading: boolean = false;
+    isActive: boolean = true;
     cloudflareSharp = environment.cloudflareSharp;
     constructor(
         public bsModalRef: BsModalRef,
@@ -61,12 +62,16 @@ export class BuyPageComponent implements OnInit {
         public matDialog: MatDialog,
         public localStorage: localStorageService
     ) {
-        const data = this.localStorage.getUserLocalStorage();
+        let data = this.localStorage.getUserLocalStorage();
         if (data && data.userData && !data?.visitor) {
-            this.user_Id = JSON.parse(data.userData).user_Name;
-            this.visitor = false;
+            data = JSON.parse(data.userData)
+            this.user_Id = data;
+            this.visitorData = null;
         } else {
-            this.visitor = true;
+            console.log('User Data:', data);
+            // data = JSON.parse(data)
+            this.visitorData.visitor = data?.visitor;
+            this.visitorData.user_id = data.visitor;
         }
     }
     ngOnInit() {
@@ -74,7 +79,7 @@ export class BuyPageComponent implements OnInit {
         this.route.params.subscribe((params: any) => {
             this.tshirtId = params['userId'];
         });
-        this.getCoins();
+        if (!this.visitorData) this.getCoins();
         this.getTee();
     }
 
@@ -90,9 +95,11 @@ export class BuyPageComponent implements OnInit {
         this.appservice.getOnetee(data).subscribe((result) => {
             if (result && result.data != null) {
                 this.data = result.data;
-                this.user_Id = this.user_Id != this.data.user_Id ? this.data.user_Id : 'CreateeFi';
+                this.user_Id = this.visitorData ? this.visitorData.visitor : this.user_Id._id != this.data.userId ? this.data.user_Name : 'CreateeFi';
                 this.discountedPrice = this.data.sellingPrice;
                 this.changeTshirtColor();
+                this.isActive = this.data.isActive;
+                if (!this.isActive) this.cloudflareSharp = environment.cloudflareRaw
                 this.isLoading = false;
             } else {
                 this.router.navigate(['']);
@@ -106,6 +113,9 @@ export class BuyPageComponent implements OnInit {
         this.data.originalPrice = this.data.sellingPrice;
         this.data.size = this.activeSizeBtn;
         this.data.coinsUsed = this.isChecked;
+        this.data.visitorData = this.visitorData ? this.visitorData : null;
+        this.data.createdById = this.data.userId;
+        this.data.createdByName = this.data.user_Name;
         console.log('Data to be sent to modal:', this.data);
         this.modalDialog = this.matDialog.open(OrderStepperComponent, {
             width: '510px',
@@ -121,7 +131,7 @@ export class BuyPageComponent implements OnInit {
     }
 
     showImage() {
-        let imageSrc: string = '../../assets/sizeChart.jpg';
+        let imageSrc: string = '../../assets/createefi/size_chart.jpg';
         window.open(imageSrc, '_blank');
     }
 
@@ -175,25 +185,30 @@ export class BuyPageComponent implements OnInit {
                 response.status &&
                 response.data &&
                 response.data.length > 0 &&
-                response.data[0].coupon_Active
+                response.data[0].isActive
             ) {
                 this.couponData = {
                     coupon_id: response.data[0]._id,
-                    coupon_Name: response.data[0].coupon_Name,
-                    coupon_Off: response.data[0].coupon_Off,
+                    code: response.data[0].code,
+                    discountValue: response.data[0].discountValue,
                     coupon_text: 'Coupon Applied ✅',
                     couponAvailable: true,
                 };
                 this.showContent = false;
-                this.discountedPrice =
-                    this.data?.sellingPrice -
-                    (this.data?.sellingPrice * this.couponData.coupon_Off) / 100;
-                if (!Number.isInteger(this.discountedPrice)) {
+                if (response.data[0].discountType === 'PERCENT') {
                     this.discountedPrice =
-                        this.discountedPrice % 1 >= 0.5
-                            ? Math.ceil(this.discountedPrice)
-                            : Math.floor(this.discountedPrice);
+                        this.data?.sellingPrice -
+                        (this.data?.sellingPrice * this.couponData.discountValue) / 100;
+                    if (!Number.isInteger(this.discountedPrice)) {
+                        this.discountedPrice =
+                            this.discountedPrice % 1 >= 0.5
+                                ? Math.ceil(this.discountedPrice)
+                                : Math.floor(this.discountedPrice);
+                    }
+                } else {
+                    this.discountedPrice = this.data?.sellingPrice - this.couponData.discountValue;
                 }
+                console.log('Discounted Price:', this.discountedPrice);
             } else {
                 this.couponData = {
                     coupon_text: 'Coupon Not Available ❌',
@@ -240,7 +255,7 @@ export class BuyPageComponent implements OnInit {
     }
 
     getCoins() {
-        this.appservice.getCoins({ userName: this.user_Id }).subscribe((response) => {
+        this.appservice.getCoins({ userName: this.user_Id.user_Name }).subscribe((response) => {
             if (response.status && response.data) {
                 this.coins = response.data;
             }

@@ -17,7 +17,10 @@
                     </div>
                 </div>
             </div>
-            <div class="right-side custom-scrollbar">
+            <div *ngIf="!isActive" class="right-side" style="text-align: center;">
+                This design has been taken off the market by the user.
+            </div>
+            <div class="right-side custom-scrollbar" *ngIf="isActive">
                 <div class="sellerlabel">
                     {{ user_Id }}
                 </div>
@@ -91,7 +94,7 @@
                             </ng-template>
                         </div>
                     </ng-template>
-                    <div class="coins-container mt-2">
+                    <div class="coins-container mt-2" *ngIf="!this.visitorData">
                         <input class="createefi-checkbox" type="checkbox" [(ngModel)]="isChecked"
                             (click)="checkCoupon(false)" [disabled]="couponData.couponAvailable || coins < 99" />
                         <span class="createefi-coins">Use Createefi Coins ({{ coins }} available)</span>
@@ -104,14 +107,14 @@
                     </button>
                 </div>
 
-                <div class="ReferralSection mt-2" *ngIf="!visitor">
+                <div class="ReferralSection mt-2" *ngIf="!visitorData">
                     <h2 class="refer-title mb-1">Refer & Earn</h2>
                     <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
                     <label class="refer-now mb-1" (click)="openRefferalModal()">Refer Now</label>
                 </div>
-                <div class="ReferralSection" *ngIf="visitor">
-                    <h2 class="refer-title mb-2">Refer & Earn</h2>
-                    <p class="refer-text mb-1">You will get Rs.500 for every friend</p>
+                <div class="ReferralSection" *ngIf="visitorData">
+                    <h2 class="refer-title mb-2">Create & Earn</h2>
+                    <p class="refer-text mb-1">You will get Rs.200 As signing in bonus</p>
                     <label class="refer-now mb-1" (click)="openSingup()">Register Now</label>
                 </div>
 

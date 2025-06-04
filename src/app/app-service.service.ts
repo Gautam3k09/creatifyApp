@@ -73,7 +73,7 @@ export class AppServiceService {
     }
 
     deleteCoupon(data: any): Observable<any> {
-        return this.http.post(`${this.serverUrl}/delete-coupon/`, data);
+        return this.http.post(`${this.serverUrl}/delete-coupon`, data);
     }
 
     //help api

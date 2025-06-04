@@ -39,20 +39,21 @@
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Verify User" *ngIf="this.storedData?.visitor != null">
+    <mat-step [stepControl]="secondFormGroup" label="Verify User" *ngIf="this.buyPageData.visitorData">
         <form [formGroup]="secondFormGroup">
-            <!-- <ng-template matStepLabel>Enter Mobile Number</ng-template> -->
             <div>
                 <mat-form-field style="width: 100%">
-                    <mat-label class="mobileFontSize">Mobile Number</mat-label>
-                    <input matInput type="text" placeholder="Mobile Number" maxlength="10" formControlName="phoneNumber"
-                        required [disabled]="true" />
-                    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()">
-                        <mat-icon>close</mat-icon>
+                    <mat-label class="mobileFontSize">Email</mat-label>
+                    <input matInput type="email" placeholder="Email" formControlName="email" required
+                        [disabled]="true" />
+                    <button *ngIf="secondFormGroup.get('email')?.value || !secondFormGroup.disabled" matSuffix
+                        mat-button aria-label="Clear" (click)="clearForm()"
+                        style="min-width: 24px; padding: 0; font-weight: bold;">
+                        X
                     </button>
                 </mat-form-field>
             </div>
-            <div class="d-flex justify-content-around" *ngIf="secondFormGroup.value.phoneNumber.length == 10">
+            <div class="d-flex justify-content-around" *ngIf="emailOtpSent">
                 <mat-form-field style="width: 20%">
                     <input class="otpButton" matInput placeholder="" [disabled]="numberVerified" formControlName="otp1"
                         (keyup)="moveToNextInputReg($event)" maxlength="1" required />
@@ -70,11 +71,18 @@
                         (keyup)="moveToNextInputReg($event)" maxlength="1" required />
                 </mat-form-field>
             </div>
-            <div class="buttonContainer">
+            <div *ngIf="emailOtpSent && !btnLoader" class="buttonContainer">
                 <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
-                <button type="button" class="btnAction btnOnline" matStepperNext [disabled]="secondFormGroup.invalid"
-                    (click)="verify()">
+                <button type="button" class="btnAction btnOnline" (click)="verifyOtp(stepper)">
                     {{ verifyLabel }}
+                </button>
+            </div>
+            <div *ngIf="btnLoader" class="spinner"></div>
+            <div *ngIf="!emailOtpSent && !btnLoader" class="buttonContainer">
+                <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
+                <button type="button" class="btnAction btnOnline" [disabled]="secondFormGroup.get('email')?.invalid"
+                    (click)="sendEmailOtp()">
+                    Send OTP
                 </button>
             </div>
         </form>
@@ -100,8 +108,8 @@
                 </div>
 
                 <div class="detailsFlex">
-                    <div class="detailsFlexContainer">Delivery Charges (applicable for COD)</div>
-                    <div class="detailsFlexContainer">₹59</div>
+                    <div class="detailsFlexContainer">Cash on Delivery is not supported at this time.</div>
+                    <div class="detailsFlexContainer">--</div>
                 </div>
                 <div class="detailsFlex totalAmount">
                     <div class="detailsFlexContainer orderTshirtName">Total Amount</div>
@@ -120,7 +128,8 @@
         </div>
         <div class="buttonContainer">
             <button type="button" class="btnAction btnBack" matStepperPrevious>Back</button>
-            <button type="button" class="btnAction btnCod" matStepperNext (click)="openOrderPlacedModal('cod')">
+            <button type="button" class="btnAction btnCod" matStepperNext (click)="openOrderPlacedModal('cod')"
+                [disabled]="true">
                 Pay on Delivery
             </button>
             <button type="button" class="btnAction btnOnline" matStepperNext (click)="createRazorPayOrder()">

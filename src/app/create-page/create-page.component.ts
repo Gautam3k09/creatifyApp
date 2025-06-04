@@ -1551,6 +1551,7 @@ export class CreatePageComponent implements AfterViewInit {
     const cut: any = 0;
     const formData = new FormData();
     formData.append('userId', this.userData._id);
+    formData.append('user_Name', this.userData.user_Name);
     formData.append('designName', this.designName);
     formData.append('sellingPrice', this.priceRange);
     formData.append('creatorCut', cut);

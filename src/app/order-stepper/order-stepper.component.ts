@@ -54,6 +54,9 @@ export class OrderStepperComponent {
     storedData: any;
     pincode: any;
     state: any = false;
+    emailOtpSent: boolean = false;
+    btnLoader: boolean = false;
+
 
     //for another modal
     showOrderPlacedModal = false;
@@ -71,6 +74,7 @@ export class OrderStepperComponent {
         @Inject(MAT_DIALOG_DATA)
         public buyPageData: {
             createdById: any;
+            createdByName: any;
             designName: any;
             discountedPrice: any;
             originalPrice: any;
@@ -81,12 +85,13 @@ export class OrderStepperComponent {
             coinsUsed: any;
             coupon: any;
             itemColor: any;
+            visitorData: any;
         },
         public dialogRef: MatDialogRef<OrderStepperComponent>,
         public localStorage: localStorageService
     ) {
-        this.storedData = this.localStorage.getUserLocalStorage();
-        if (this.storedData && this.storedData.LoggedIn != null) {
+        if (!this.buyPageData.visitorData) {
+            this.storedData = this.localStorage.getUserLocalStorage();
             this.userData = JSON.parse(this.storedData.userData);
         }
 
@@ -117,9 +122,9 @@ export class OrderStepperComponent {
             ],
         });
         this.secondFormGroup = this.fb.group({
-            phoneNumber: [
+            email: [
                 '',
-                [Validators.required, Validators.minLength(10), Validators.maxLength(10)],
+                [Validators.required, Validators.email],
             ],
             otp1: ['', [Validators.required, Validators.pattern('[0-9]')]],
             otp2: ['', [Validators.required, Validators.pattern('[0-9]')]],
@@ -129,11 +134,12 @@ export class OrderStepperComponent {
     }
 
     ngOnInit() {
+        console.log('Buy Page Data:', this.buyPageData, this.buyPageData.visitorData);
         this.calculatePrice();
     }
 
     calculatePrice() {
-        // this.finalPrice = this.buyPageData?.price * this.userQuantity;
+        this.finalPrice = this.buyPageData?.discountedPrice * this.userQuantity;
     }
 
     createRazorPayOrder() {
@@ -214,24 +220,35 @@ export class OrderStepperComponent {
     placeOrder(method: string) {
         this.isLoading = true;
         let data = {
-            customerId: this.storedData.LoggedIn != null ? this.userData._id : this.secondFormGroup.value.phoneNumber,
+            customerId: !this.buyPageData.visitorData ? this.userData._id : null,
+            email: this.buyPageData.visitorData ? this.secondFormGroup.value.email : null,
             sku: 'OVRS-' + this.buyPageData.size + '-' + this.buyPageData.itemColor,
             order_quantity: 1,
             tshirtId: this.buyPageData._id,
             tshirtName: this.buyPageData.designName,
-            createdById: this.userData._id,
-            createdByName: this.buyPageData.user_Id,
+            createdById: this.buyPageData.createdById,
+            createdByName: this.buyPageData.createdByName,
             address: this.firstFormGroup.value,
             paymentMethod: method,
             finalPrice: this.finalPrice,
-            subtotal: this.buyPageData.originalPrice,
+            subtotal: method == 'COD' ? this.buyPageData.originalPrice + 59 : this.buyPageData.originalPrice,
             coupon: { code: this.buyPageData.coinsUsed ? 'cCoinsUsed' : this.buyPageData.coupon },
             couponAmount: this.buyPageData.originalPrice - this.buyPageData.discountedPrice
         };
-        this.appservice.postOrder(data).subscribe((result) => {
-            if (result.status && result.orderData) {
-                this.orderId = result.orderData;
-                this.fromCod = false;
+        this.appservice.postOrder(data).subscribe({
+            next: (result) => {
+                if (result.status && result.orderId) {
+                    this.orderId = result.orderId;
+                    this.fromCod = false;
+                    this.isLoading = false;
+                } else {
+                    window.alert("Order could not be placed. Please try again.");
+                    this.isLoading = false;
+                }
+            },
+            error: (err) => {
+                console.error("Order API Error:", err);
+                window.alert("Something went wrong. Please try again later.");
                 this.isLoading = false;
             }
         });
@@ -252,12 +269,6 @@ export class OrderStepperComponent {
         if (nextInput) {
             nextInput.focus();
         }
-    }
-
-    verify() {
-        this.numberVerified = true;
-        this.verifyLabel = 'proceed';
-        this.secondFormGroup.disable();
     }
 
     clearForm() {
@@ -292,17 +303,51 @@ export class OrderStepperComponent {
     redirectShop() {
         this.showOrderPlacedModal = false;
         this.closeModal()
-        this.router.navigate(['/shop']);
-        // if (this.storeData.visitor == null) {
-        //     this.router.navigate(['/shop']);
-        // } else {
-        //     this.router.navigate([
-        //         '/' + this.storeData.visitor + '/merch/' + this.data.buyPageData.user_Id,
-        //     ]);
-        // }
+        if (!this.buyPageData.visitorData) {
+            this.router.navigate(['/shop']);
+        } else {
+            this.router.navigate(['/' + this.buyPageData.visitorData.visitor + '/merch/' + this.buyPageData.visitorData.user_id]);
+        }
     }
 
     failedUrl() {
         window.location.reload();
+    }
+
+    sendEmailOtp() {
+        this.btnLoader = true;
+        const email = this.secondFormGroup.value.email;
+        console.log(email, 'this.mobileEmail');
+
+        this.appservice.sendOtp(email).subscribe({
+            next: () => {
+                this.btnLoader = false;
+                this.emailOtpSent = true;
+            },
+            error: () => {
+                this.btnLoader = false;
+                window.alert('Failed to send OTP. Please check your email and try again.');
+            }
+
+        });
+    }
+
+    verifyOtp(stepper: any) {
+        let userOtp =
+            this.secondFormGroup.value.otp1 +
+            this.secondFormGroup.value.otp2 +
+            this.secondFormGroup.value.otp3 +
+            this.secondFormGroup.value.otp4;
+        this.appservice.verifyOtp(this.secondFormGroup.value.email, userOtp).subscribe({
+            next: () => {
+                stepper.next();
+                this.numberVerified = true;
+                this.verifyLabel = 'proceed';
+                this.secondFormGroup.disable();
+            },
+            error: () => {
+                window.alert('Otp is incorrect. Please try again.');
+            },
+        });
     }
 }

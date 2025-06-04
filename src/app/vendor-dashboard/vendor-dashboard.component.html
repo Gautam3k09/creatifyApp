@@ -5,6 +5,7 @@
           <button (click)="changeView('printing')">Printing</button>
           <button (click)="changeView('packed')">Packed</button>
           <button (click)="changeView('storage')">Storage</button>
+          <button (click)="changeView('coupon')" *ngIf="this.userId == '123'">Coupon</button>
      </div>
 
      <div class="content">
@@ -231,6 +232,73 @@
                </div>
 
 
+          </ng-container>
+
+          <ng-container *ngIf="currentView === 'coupon'">
+               <div class="container mt-4">
+                    <div class="card p-4 shadow">
+                         <h4 class="mb-3">Create Admin Coupon</h4>
+
+                         <form [formGroup]="couponForm" (ngSubmit)="submitCoupon()">
+                              <div class="mb-3">
+                                   <label for="code" class="form-label">Coupon Code</label>
+                                   <input type="text" class="form-control" id="code" formControlName="code"
+                                        placeholder="e.g. FLAT100">
+                                   <div class="text-danger"
+                                        *ngIf="couponSubmitted && couponForm.controls['code'].errors">
+                                        Coupon code is required.</div>
+                              </div>
+
+                              <div class="mb-3">
+                                   <label class="form-label">Discount Type</label>
+                                   <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="flat" value="flat"
+                                             formControlName="discountType">
+                                        <label class="form-check-label" for="flat">Flat ₹</label>
+                                   </div>
+                                   <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="percent" value="percent"
+                                             formControlName="discountType">
+                                        <label class="form-check-label" for="percent">Percentage %</label>
+                                   </div>
+                              </div>
+
+                              <div class="mb-3">
+                                   <label for="discountValue" class="form-label">Discount Value</label>
+                                   <input type="number" class="form-control" id="discountValue"
+                                        formControlName="discountValue" placeholder="e.g. 100 or 15">
+                                   <div class="text-danger"
+                                        *ngIf="couponSubmitted && couponForm.controls['discountValue'].errors">
+                                        Enter a valid discount amount.
+                                   </div>
+                              </div>
+
+                              <div class="mb-3">
+                                   <label for="usageLimit" class="form-label">Usage Limit</label>
+                                   <input type="number" class="form-control" id="usageLimit"
+                                        formControlName="usageLimit" placeholder="e.g. 50">
+                              </div>
+
+                              <div class="mb-3 d-none">
+                                   <label for="validFrom" class="form-label">Valid From</label>
+                                   <input type="date" class="form-control" id="validFrom" formControlName="validFrom">
+                              </div>
+
+                              <div class="mb-3 d-none">
+                                   <label for="validTo" class="form-label">Valid To</label>
+                                   <input type="date" class="form-control" id="validTo" formControlName="validTo">
+                              </div>
+
+                              <div class="form-check mb-3">
+                                   <input type="checkbox" class="form-check-input" id="isActive"
+                                        formControlName="isActive">
+                                   <label class="form-check-label" for="isActive">Activate Coupon</label>
+                              </div>
+
+                              <button type="submit" class="btn btn-primary w-100">Create Coupon</button>
+                         </form>
+                    </div>
+               </div>
           </ng-container>
      </div>
 </div>

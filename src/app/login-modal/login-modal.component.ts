@@ -108,11 +108,11 @@ export class LoginModalComponent {
             this.myLoginForm.controls['email'].setErrors({
                 email: true,
             });
-            this.verifyNumber(this.mobileEmail, login);
+            this.verifyEmail(this.mobileEmail, login);
         }
         if (!login) {
             this.registerEmail = data.target.value;
-            this.verifyNumber(this.registerEmail, login);
+            this.verifyEmail(this.registerEmail, login);
         }
     }
 
@@ -176,7 +176,7 @@ export class LoginModalComponent {
         if (action === 'back') this.otpPage = false;
     }
 
-    verifyNumber(data: any, login: any) {
+    verifyEmail(data: any, login: any) {
         this.appservice.postUserCheck({ data: data }).subscribe(
             (response) => {
                 if (!response.status && !login) {

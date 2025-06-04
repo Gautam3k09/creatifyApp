@@ -147,10 +147,10 @@ export class SettingPageComponent {
                     response.status &&
                     response.data &&
                     response.data.length > 0 &&
-                    response.data[0].coupon_Active
+                    response.data[0].isActive
                 ) {
-                    this.couponName = response.data[0].coupon_Name;
-                    this.couponOff = response.data[0].coupon_Off;
+                    this.couponName = response.data[0].code;
+                    this.couponOff = response.data[0].discountValue;
                     this.couponAvailable = true;
                 } else {
                     this.couponAvailable = false;
@@ -159,7 +159,7 @@ export class SettingPageComponent {
         }
         if (this.activeTab == 'order') {
             let data = {
-                name: this.userData.user_Name,
+                customerId: this.userData._id,
             };
             this.appservice.getOrder(data).subscribe((response) => {
                 if (response.data && response.data.length > 0) {
@@ -187,13 +187,26 @@ export class SettingPageComponent {
             'Discounted amount will be split in a 60:40 ratio, where you cover 60%, and Createefi covers 40%.'
         );
         let data = {
-            name: this.couponName,
-            off: this.couponOff,
-            _id: this.userData._id,
+            code: this.couponName,
+            discountValue: this.couponOff,
+            createdBy: this.userData._id,
+            assignedToUser: null,
+            isActive: true,
+            discountType: "percent",
+            usageLimit: 0
         };
-        this.appservice.createCoupon(data).subscribe((response) => {
-            if (response.status) {
-                this.couponAvailable = true;
+
+        this.appservice.createCoupon(data).subscribe({
+            next: (response) => {
+                if (response.status) {
+                    this.couponAvailable = true;
+                } else {
+                    window.alert('Failed to create coupon. Please try again.');
+                }
+            },
+            error: (err) => {
+                console.error(err);
+                window.alert('An error occurred while creating the coupon.');
             }
         });
     }

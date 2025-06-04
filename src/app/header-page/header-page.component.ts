@@ -13,37 +13,43 @@ import { localStorageService } from '../local-storage-service';
     styleUrl: './header-page.component.css',
 })
 export class HeaderPageComponent {
-    @Input() from: any;
     sidebarClose: any = false;
     isMenuOpen = false;
     isLoggedIn: any = "";
     dialogConfig = new MatDialogConfig();
     modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
-    visitor: any = '';
-    storedData: any;
+    visitor: any = {};
     merchPage: any = false;
     constructor(
         private router: Router,
         public matDialog: MatDialog,
         public localStorage: localStorageService
     ) {
-        this.storedData = this.localStorage.getUserLocalStorage();
-        if (this.storedData) {
-            this.visitor = this.storedData.visitor ? this.storedData.visitor : '';
-            this.isLoggedIn = this.storedData.LoggedIn ? this.storedData.LoggedIn : '';
+        let data = this.localStorage.getUserLocalStorage();
+        if (data && data.userData && !data?.visitor) {
+            data = JSON.parse(data.userData)
+            this.isLoggedIn = data.user_Name;
+            this.visitor = '';
+        } else {
+            console.log('visitor data', data);
+            this.visitor.visitor = data.visitor.toUpperCase();
+            this.visitor.user_id = data.user_id;
+            this.isLoggedIn = ''
         }
     }
 
     ngOnInit() {
-        if (this.visitor != '') this.merchPage = true;
-        if (this.visitor != '') this.visitor = this.visitor;
+        if (this.visitor != '') {
+            this.merchPage = true;
+            if (this.visitor != '') this.visitor = this.visitor;
+        }
     }
 
     onDivClick(string: any) {
-        if (!this.merchPage && this.visitor != null) {
+        if (!this.merchPage) {
             this.router.navigate([string]);
         } else {
-            this.router.navigate(['/' + string + '/merch/' + this.storedData.user_id]);
+            this.router.navigate(['/' + this.visitor.visitor + '/merch/' + this.visitor.user_id]);
         }
     }
 

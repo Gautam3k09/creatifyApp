@@ -6,14 +6,14 @@ import { AppServiceService } from '../app-service.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../../../environment';
 
 
 @Component({
   selector: 'app-vendor-dashboard',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatCheckboxModule, FormsModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatCheckboxModule, FormsModule, ReactiveFormsModule],
   templateUrl: './vendor-dashboard.component.html',
   styleUrl: './vendor-dashboard.component.css'
 })
@@ -62,7 +62,21 @@ export class VendorDashboardComponent {
   selectedPrintOptions: { [id: number]: string } = {};
   options: string[] = ['Normal', 'A4', 'A3'];
   cloudflareSharp = environment.cloudflareSharp;
-  constructor(private router: Router, public appservice: AppServiceService, private route: ActivatedRoute) { }
+
+  //coupon
+  couponForm: FormGroup;
+  couponSubmitted = false;
+  constructor(private router: Router, public appservice: AppServiceService, private route: ActivatedRoute, private fb: FormBuilder) {
+    this.couponForm = this.fb.group({
+      code: ['', Validators.required],
+      discountType: ['flat', Validators.required], // 'flat' or 'percent'
+      discountValue: [null, [Validators.required, Validators.min(1)]],
+      usageLimit: [0, [Validators.required, Validators.min(0)]],
+      validFrom: [null],
+      validTo: [null],
+      isActive: [true]
+    });
+  }
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id')!;
@@ -90,13 +104,13 @@ export class VendorDashboardComponent {
     this.appservice.getAllOrder({ data: string }).subscribe((response: any) => {
       response.data.map((data: any) => {
         let address =
-          data.order_address[0].building +
+          data.shippingAddress.building +
           ' ' +
-          data.order_address[0].area +
+          data.shippingAddress.area +
           ' ' +
-          data.order_address[0].landmark +
+          data.shippingAddress.landmark +
           ' ' +
-          data.order_address[0].pincode;
+          data.shippingAddress.pincode;
         let obj = {
           orderBy: data.orderBys,
           tshirtId: data.order_tshirtId,
@@ -219,6 +233,35 @@ export class VendorDashboardComponent {
       element.currentPrint = element.backImageUrl;
       this.currentSide = 'back';
     }
+  }
+
+  submitCoupon() {
+    this.couponSubmitted = true;
+    if (this.couponForm.invalid) return;
+
+    let couponData = this.couponForm.value;
+    couponData.createdBy = '67d57c01135958e9180275f1';
+    couponData.assignedToUser = null;
+    console.log('Coupon Submitted:', couponData);
+    this.appservice.createCoupon(couponData).subscribe({
+      next: (response) => {
+        if (response.status) {
+          window.alert('Coupon created successfully!');
+          this.couponForm.reset();
+          this.couponSubmitted = false;
+          // Optionally, you can navigate to another page or update the UI
+        } else {
+          window.alert('Failed to create coupon.');
+        }
+      },
+      error: (err) => {
+        console.error('Error creating coupon:', err);
+        window.alert('An error occurred while creating the coupon.');
+      },
+      complete: () => {
+        console.log('Coupon creation request completed.');
+      }
+    });
   }
 
 }
