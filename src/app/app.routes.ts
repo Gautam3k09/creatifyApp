@@ -11,6 +11,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 import { TshirtPreviewComponent } from './tshirt-preview/tshirt-preview.component';
+import { TestComponentComponent } from './test-component/test-component.component';
 
 export const routes: Routes = [
     { path: 'create', component: CreatePageComponent },
@@ -24,6 +25,7 @@ export const routes: Routes = [
     // GautamJha/merch/67d57c01135958e9180275f1
     //admin
     { path: 'admin', component: TshirtPreviewComponent },
+    { path: 'test', component: TestComponentComponent },
     { path: 'order/:id', component: VendorDashboardComponent },
 
     // end

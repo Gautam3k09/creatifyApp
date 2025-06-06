@@ -1,0 +1,16 @@
+<div style="position: relative; user-select:none;">
+     <canvas #paperCanvas width="500" height="300"
+          style="border:1px solid #ccc; position:absolute; z-index:0; cursor:pointer;"></canvas>
+
+     <svg width="500" height="300" style="position:absolute; z-index:1; pointer-events:none;">
+          <defs>
+               <path #svgTextPath id="svgPath" d="M50,200 C200,100 350,200 350,200" fill="none" stroke="transparent" />
+          </defs>
+          <text font-size="24" font-family="Oswald" fill="black">
+               <textPath href="#svgPath">Curved Like Kittl</textPath>
+          </text>
+     </svg>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #555;">
+     <p>Click near curve to add points. Right-click (context menu) on point to remove it. Minimum 2 points required.</p>
+</div>
