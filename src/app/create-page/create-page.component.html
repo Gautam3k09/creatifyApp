@@ -43,6 +43,12 @@
                         <small>Preview</small>
                     </div>
 
+                    <div class="d-flex flex-column align-items-center me-3" role="button" style="cursor:pointer;"
+                        (click)="togglePanel('Svg')">
+                        <i class="fa fa-vector-square"></i>
+                        <small>SVG</small>
+                    </div>
+
                     <div class="d-flex flex-column align-items-center" role="button"
                         [class.disabled]="!isObjectSelected" (click)="deleteObject()"
                         [style.pointerEvents]="isObjectSelected ? 'auto' : 'none'"
@@ -100,12 +106,12 @@
             Templates
         </button>
 
-        <!-- <button class="bottom-btn" (click)="togglePanel('Shapes')" title="Templates">
+        <button class="bottom-btn" (click)="togglePanel('Shapes')" title="Templates">
             <i class="fas fa-shapes"></i> Shapes
-        </button> -->
-        <button class="bottom-btn" (click)="togglePanel('Svg')" title="Templates">
-            <i class="fas fa-shapes"></i> SVG
         </button>
+        <!-- <button class="bottom-btn" (click)="togglePanel('Svg')" title="Templates">
+            <i class="fas fa-shapes"></i> SVG
+        </button> -->
         <button type="button" class="bottom-btn" [popover]="popoverContent" popoverTitle="T-Shirt Color"
             [outsideClick]="true">
             <i class="fa-solid fa-shirt"></i>Color
@@ -157,6 +163,14 @@
             <div class="input-container">
                 <label for="frame-name">Name</label>
                 <input type="text" id="frame-name" [value]="text" (keyup)="updateText($event)" />
+            </div>
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Visibility</span>
+                    <span id="slider-value">{{textHeight}}</span>
+                </div>
+                <input type="range" class="opacity-slider" min="0" max="100" [value]="textHeight"
+                    (input)="updateHeight($event)" />
             </div>
             <div class="slider-container">
                 <div class="slider-label">
@@ -367,34 +381,106 @@
     </div>
 
     <div *ngIf="activePanel === 'Templates'" class="property-controls">
+
+        <!-- createefi uno -->
+        <!-- createefi trifecta -->
         <div>
             <div class="scroll-section">
-                <h2 class="section-header">Body Text Templates</h2>
+                <h2 class="section-header d-flex align-items-center gap-2">
+                    CREATEEFI DUALITY
+                    <button type="button" class="btn btn-sm" [popover]="duality" popoverTitle="Double-Sided Print"
+                        placement="bottom" [outsideClick]="true">ℹ️
+                    </button>
+                </h2>
+
+                <ng-template #duality>
+                    <div>While only the back design is displayed, this template features artwork on both sides of the
+                        T-shirt.</div>
+                </ng-template>
+
                 <div class="scroll-container">
                     <div class="template-list">
-                        <div *ngFor="let template of titleTextTemplates" class="template-box"
-                            (click)="addPredefinedText(template)">
-                            <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
+                        <div *ngFor="let print of doubleSide" class="template-box"
+                            (click)="onImageTemplateClick(print,true)">
+                            <img [src]="print.url" [alt]="print.name" class="template-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-section">
+                <h2 class="section-header">CREATEEFI UNO<button type="button" class="btn btn-sm" [popover]="uno"
+                        popoverTitle="Single-Sided Print" placement="bottom" [outsideClick]="true">ℹ️
+                    </button>
+                </h2>
+
+                <ng-template #uno>
+                    <div>This is a single-side template that will be applied on the selected side of the T-shirt.</div>
+                </ng-template>
+                <div class="scroll-container">
+                    <div class="template-list">
+                        <div *ngFor="let print of singleSide" class="template-box"
+                            (click)="onImageTemplateClick(print,true)">
+                            <img [src]="print.url" [alt]="print.name" class="template-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div *ngIf="activePanel === 'Shapes'" class="property-controls">
+        <div>
+            <div class="scroll-section">
+                <h2 class="section-header">Clip Arts</h2>
+                <div class="scroll-container">
+                    <div class="template-list">
+                        <div *ngFor="let clipart of clipArts" class="template-box"
+                            (click)="onImageTemplateClick(clipart,false)">
+                            <img [src]="clipart.url" [alt]="clipart.name" class="template-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-section">
+                <h2 class="section-header">Graphics</h2>
+                <div class="scroll-container">
+                    <div class="template-list">
+                        <div *ngFor="let graphic of graphics" class="template-box"
+                            (click)="onImageTemplateClick(graphic,false)">
+                            <img [src]="graphic.url" [alt]="graphic.name" class="template-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-section">
+                <h2 class="section-header">Legend</h2>
+                <div class="scroll-container">
+                    <div class="template-list">
+                        <div *ngFor="let legend of legends" class="template-box"
+                            (click)="onImageTemplateClick(legend,false)">
+                            <img [src]="legend.url" [alt]="legend.name" class="template-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-section">
+                <h2 class="section-header">Grids</h2>
+                <div class="scroll-container">
+                    <div class="template-list">
+                        <div *ngFor="let grid of grids" class="template-box" (click)="onImageTemplateClick(grid,false)">
+                            <img [src]="grid.url" [alt]="grid.name" class="template-image" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- <div *ngIf="activePanel === 'Shapes'" class="property-controls">
-        <div class="scroll-section">
-            <h2 class="section-header">Shapes</h2>
-            <div class="scroll-container">
-                <div class="template-list">
-                    <div *ngFor="let template of shapeTemplates" class="template-box"
-                        (click)="addPredefinedText(template)">
-                        <canvas #templateCanvas [attr.id]="'template-' + template.id"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <div *ngIf="activePanel === 'Shapes-editor'" class="property-controls">
         <div class="text-control1">
@@ -490,7 +576,7 @@
     <div *ngIf="activePanel === 'Svg'" class="property-controls">
         <p>1. Go to <a href="https://www.svgrepo.com" target="_blank">SVGRepo.com</a> or any free SVG site</p>
         <p> 2. Find a shape you like (make sure it's marked "Free for commercial use")
-        <p> 3. Click the shape → Select "Copy SVG" or "Download SVG"
+        <p> 3. Click the shape → Select "Copy SVG"
         <p> 4. Paste the full SVG code below (starting with {{htmlSvg}})</p>
         <div class="form-group">
             <label>Input svg code here</label>

@@ -23,7 +23,7 @@ export class VendorDashboardComponent {
   //pending
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: any = ['orderBy', 'address', 'type', 'price', 'quantity', 'size', 'status', 'preview'];
-  displayedColumnsforprinting: any = ['orderBy', 'quantity', 'size', 'status', 'preview', 'print'];
+  displayedColumnsforprinting: any = ['sideTag', 'quantity', 'size', 'print', 'preview', 'status'];
   orderData: any = [];
   dataSource: any = new MatTableDataSource<any>(this.orderData);
   showAddElementModal: boolean = false;
@@ -59,8 +59,8 @@ export class VendorDashboardComponent {
 
   userId: any;
 
-  selectedPrintOptions: { [id: number]: string } = {};
-  options: string[] = ['Normal', 'A4', 'A3'];
+  selectedPrintOptions: { [tshirtId: string]: string[] } = {};
+  options: string[] = ['Normal', 'A4', 'A3', 'Poster'];
   cloudflareSharp = environment.cloudflareSharp;
 
   //coupon
@@ -111,23 +111,26 @@ export class VendorDashboardComponent {
           data.shippingAddress.landmark +
           ' ' +
           data.shippingAddress.pincode;
+        const input = data.item[0].sku;
+        const [code, size, color] = input.split("-", 3);
         let obj = {
-          orderBy: data.orderBys,
-          tshirtId: data.order_tshirtId,
+          orderBy: data.customer,
+          tshirtId: data.item[0].tshirt.tshirtId,
           address: address,
-          type: data.order_payment,
-          price: data.order_price,
-          quantity: data.order_quantity,
-          size: data.order_size,
-          order_Id: data.order_Id
+          type: data.payment.method,
+          price: data.pricing.total,
+          quantity: data.item[0].quantity,
+          size: size,
+          order_Id: data.order_Id,
+          color: color,
+          sideName: data.item[0].tshirt.createdByName
         };
         this.orderData.push(obj);
       });
       this.dataSource = new MatTableDataSource<any>(this.orderData);
       for (const row of this.orderData) {
-        this.selectedPrintOptions[row.tshirtId] = 'Normal';
+        this.selectedPrintOptions[row.tshirtId] = ['Normal'];
       }
-      console.log(this.dataSource);
     });
   }
 
@@ -138,8 +141,8 @@ export class VendorDashboardComponent {
 
   onStatusChange(element: any, status: any) {
     const value = this.selectedPrintOptions[element.tshirtId];
-    this.appservice.updateOrder({ order_Id: element.order_Id, order_status: status, value: value, tshirtId: element.tshirtId }).subscribe((response: any) => {
-      console.log(response)
+    const displayText = value.join(' & ');
+    this.appservice.updateOrder({ order_Id: element.order_Id, order_status: status, value: displayText, tshirtId: element.tshirtId }).subscribe((response: any) => {
       if (response.status) {
         const data = this.dataSource.filteredData.filter((item: any) => item.order_Id !== element.order_Id);
         this.dataSource = new MatTableDataSource<any>(data);

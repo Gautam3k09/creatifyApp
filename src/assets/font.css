@@ -107,3 +107,7 @@
   font-family: 'StarKillers';
   src: url('../assets/font/StarKillers.woff2') format('woff2');
 }
+@font-face {
+  font-family: 'Orbitron';
+  src: url('../assets/font/Orbitron.woff2') format('woff2');
+}

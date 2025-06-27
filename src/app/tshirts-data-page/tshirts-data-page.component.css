@@ -32,7 +32,7 @@ body {
     transform: translateX(-50%);
     width: 27%;
     height: 64%;
-    mix-blend-mode: multiply;
+    /* mix-blend-mode: multiply; */
     opacity: 0.85;
     pointer-events: none;
 }

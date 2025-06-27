@@ -302,7 +302,7 @@ export class SettingPageComponent {
     convertTime() {
         this.orderData.forEach((element: any) => {
             element.createdAt = moment(element.createdAt).tz('Asia/Kolkata').format('DD MMMM YYYY');
-            if (element.tee_from == element.orderBys) {
+            if (element.tee_from == element.customer) {
                 element.tee_from = 'You';
             }
         });

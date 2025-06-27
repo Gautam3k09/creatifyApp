@@ -470,7 +470,7 @@ input {
     left: 127px;
     width: 46%;
     height: 67%;
-    mix-blend-mode: multiply;
+    /* mix-blend-mode: multiply; */
     opacity: 0.85;
     pointer-events: none;
 }

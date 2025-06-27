@@ -380,6 +380,10 @@ body {
     /* css for text end */
 }
 
+.scroll-section {
+    margin-bottom: 10px;
+}
+
 .select-text-message {
     font-family: "Oswald", sans-serif; /* Matches your style */
     font-size: 16px;
@@ -684,19 +688,23 @@ body {
 
 .template-box {
     margin: auto;
-    width: 150px;
+    width: 90px;
     height: 100px;
     border: 2px solid #007bff;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #6a6a6a;
     display: flex;
     align-items: center;
     justify-content: center !important;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
     flex: 0 0 auto;
-    
     margin-right: 10px;
+    img {
+        width: 71px;
+        height: 93px;
+        border-radius: 6px;
+    }
 }
 
 .template-box:hover {
