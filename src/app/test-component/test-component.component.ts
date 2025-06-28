@@ -3,11 +3,9 @@ import {
   AfterViewInit,
   ViewChild,
   ElementRef,
-  NgZone
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as fabric from 'fabric';
-import paper from 'paper';
 
 @Component({
   selector: 'app-test-component',
