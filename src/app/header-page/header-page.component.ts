@@ -30,7 +30,7 @@ export class HeaderPageComponent {
             data = JSON.parse(data.userData)
             this.isLoggedIn = data.user_Name;
             this.visitor = '';
-        } else {
+        } else if (data && data.visitor && data.user_id) {
             console.log('visitor data', data);
             this.visitor.visitor = data.visitor.toUpperCase();
             this.visitor.user_id = data.user_id;
