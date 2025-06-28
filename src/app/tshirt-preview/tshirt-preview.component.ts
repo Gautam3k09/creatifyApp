@@ -92,21 +92,21 @@ export class TshirtPreviewComponent implements AfterViewInit, OnDestroy {
   private loadModelAndApplyTexture() {
     const loader = new GLTFLoader();
     // <-- Load your .glb here
-    loader.load('assets/gltfs/test2.glb', (gltf) => {
-      const model = gltf.scene;
-      this.scene.add(model);
+    // loader.load('assets/gltfs/test2.glb', (gltf) => {
+    //   const model = gltf.scene;
+    //   this.scene.add(model);
 
-      // Traverse and apply the canvas texture
-      model.traverse((child: any) => {
-        if (child.isMesh) {
-          // ensure material is basic so it shows the texture unlit
-          child.material = new MeshBasicMaterial({ map: this.designTexture });
-          child.material.needsUpdate = true;
-        }
-      });
-    }, undefined, (err) => {
-      console.error('Error loading .glb:', err);
-    });
+    //   // Traverse and apply the canvas texture
+    //   model.traverse((child: any) => {
+    //     if (child.isMesh) {
+    //       // ensure material is basic so it shows the texture unlit
+    //       child.material = new MeshBasicMaterial({ map: this.designTexture });
+    //       child.material.needsUpdate = true;
+    //     }
+    //   });
+    // }, undefined, (err) => {
+    //   console.error('Error loading .glb:', err);
+    // });
   }
 
   /** Call this when user draws on the designCanvas */
