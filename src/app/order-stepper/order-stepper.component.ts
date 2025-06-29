@@ -51,7 +51,6 @@ export class OrderStepperComponent {
     finalPrice: any;
     numberVerified = true;
     verifyLabel: any = 'Verify & Proceed';
-    storedData: any;
     pincode: any;
     state: any = false;
     emailOtpSent: boolean = false;
@@ -91,8 +90,8 @@ export class OrderStepperComponent {
         public localStorage: localStorageService
     ) {
         if (!this.buyPageData.visitorData) {
-            this.storedData = this.localStorage.getUserLocalStorage();
-            this.userData = JSON.parse(this.storedData.userData);
+            const storedData = this.localStorage.getUserLocalStorage();
+            this.userData = storedData;
         }
 
         this.firstFormGroup = this.fb.group({

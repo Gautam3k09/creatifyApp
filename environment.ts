@@ -2,7 +2,7 @@ export const environment = {
   // backend: 'http://localhost:443',
   backend: 'https://createefiback.onrender.com',
   // frontend: 'http://localhost:4200/'
-  frontend: 'https://createefi.com/',
+  frontend: 'https://createefi.in/',
 
   cloudflareSharp: 'https://cdn.createefi.in/sharp/',
   cloudflareRaw: 'https://cdn.createefi.in/raw/',

@@ -63,15 +63,23 @@ export class BuyPageComponent implements OnInit {
         public localStorage: localStorageService
     ) {
         let data = this.localStorage.getUserLocalStorage();
-        if (data && data.userData && !data?.visitor) {
-            data = JSON.parse(data.userData)
-            this.user_Id = data;
+
+        console.log('BuyPageComponent initialized with data:', data);
+        if (data && data.LoggedIn) {
+            const parsedUser = data;
+            this.user_Id = parsedUser;
             this.visitorData = null;
+
+        } else if (data?.visitor) {
+            this.visitorData = {
+                visitor: data.visitor,
+                user_id: data.visitor
+            };
+            this.user_Id = null;
+
         } else {
-            console.log('User Data:', data);
-            // data = JSON.parse(data)
-            this.visitorData.visitor = data?.visitor;
-            this.visitorData.user_id = data.visitor;
+            this.user_Id = null;
+            this.visitorData = null;
         }
     }
     ngOnInit() {
@@ -79,7 +87,7 @@ export class BuyPageComponent implements OnInit {
         this.route.params.subscribe((params: any) => {
             this.tshirtId = params['userId'];
         });
-        if (!this.visitorData) this.getCoins();
+        if (this.user_Id) this.getCoins();
         this.getTee();
     }
 
@@ -95,7 +103,7 @@ export class BuyPageComponent implements OnInit {
         this.appservice.getOnetee(data).subscribe((result) => {
             if (result && result.data != null) {
                 this.data = result.data;
-                this.user_Id = this.visitorData ? this.visitorData.visitor : this.user_Id._id != this.data.userId ? this.data.user_Name : 'CreateeFi';
+                this.user_Id = this.visitorData ? this.visitorData.visitor : this.user_Id?._id != this.data.userId ? this.data.user_Name : 'CreateeFi';
                 this.discountedPrice = this.data.sellingPrice;
                 this.changeTshirtColor();
                 this.isActive = this.data.isActive;

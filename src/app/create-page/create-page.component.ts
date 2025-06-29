@@ -166,7 +166,6 @@ export class CreatePageComponent implements AfterViewInit {
   ) {
 
     this.userData = this.localStorage.getUserLocalStorage();
-    this.userData = JSON.parse(this.userData.userData);
     this.isMobileView = window.innerWidth <= 768;
   }
 
@@ -414,6 +413,7 @@ export class CreatePageComponent implements AfterViewInit {
     const canvasContainer = document.querySelector('.container') as HTMLElement;
     this.canvas.renderOnAddRemove = false;
     this.canvas.discardActiveObject();
+
     this.saveState();
     this.canvas.clear();
     if (this.isCanvas1Visible) {
@@ -1607,8 +1607,8 @@ export class CreatePageComponent implements AfterViewInit {
   onImageTemplateClick(element: any, istemplate: any) {
     if (!istemplate) this.addElement(this.canvas, '', '', element);
 
-    this.isLoading = true;
     if (istemplate) {
+      this.isLoading = true;
       if (element.doubleside) {
         this.setColor(element.teeColor);
         if (this.isCanvas1Visible) this.toggleCanvas();

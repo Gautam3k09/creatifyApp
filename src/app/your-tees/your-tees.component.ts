@@ -39,8 +39,7 @@ export class YourTeesComponent {
 
     getTees() {
         let id: any = this.storedData;
-        // JSON.parse(id);
-        id = JSON.parse(this.storedData.userData);
+        id = this.storedData;
         const data = {
             id: id._id,
         };

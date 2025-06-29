@@ -14,8 +14,8 @@ export class ReferralPageComponent {
     isCopied = false;
     constructor(public localStorage: localStorageService) {
         const data = this.localStorage.getUserLocalStorage();
-        if (data && data.userData) {
-            this.localData = JSON.parse(data.userData).user_Name;
+        if (data && data.LoggedIn) {
+            this.localData = data.user_Name;
         }
     }
 

@@ -49,7 +49,7 @@ export class TshirtsDataPageComponent {
         this.userId = route.snapshot.params['userId'];
         this.storedData = this.localstorage.getUserLocalStorage();
         if (this.storedData && this.storedData.LoggedIn != null) {
-            this.userData = JSON.parse(this.storedData.userData);
+            this.userData = this.storedData;
         }
     }
 
@@ -112,9 +112,9 @@ export class TshirtsDataPageComponent {
     }
 
     navigateBuyPage(teeData: any) {
-        if (this.storedData != null || this.storedData.Visitor == '') {
-            this.router.navigate(['/buy/' + teeData._id]);
-        }
+        // if (this.storedData != null || this.storedData.Visitor == '') {
+        this.router.navigate(['/buy/' + teeData._id]);
+        // }
     }
 
     copytext(teeDataId: string) {

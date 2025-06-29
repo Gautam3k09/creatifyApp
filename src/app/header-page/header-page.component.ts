@@ -27,9 +27,8 @@ export class HeaderPageComponent {
         public localStorage: localStorageService
     ) {
         const data = this.localStorage.getUserLocalStorage();
-
-        if (data?.userData && !data?.visitor) {
-            const user = JSON.parse(data.userData);
+        if (data?.LoggedIn) {
+            const user = data;
             this.isLoggedIn = user.user_Name || '';
         } else if (data?.visitor && data?.user_id) {
             this.visitor.visitor = data.visitor.toUpperCase();

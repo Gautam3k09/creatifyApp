@@ -5,19 +5,18 @@ import { Injectable } from '@angular/core';
 })
 export class localStorageService {
     constructor() { }
-    // localdata structure ->
-    // LoggedIn Or Visitor
-    // userData
 
+    // Save user data (automatically stringify)
     setUserLocalStorage(data: any) {
-        localStorage.setItem('whoAmI', data);
+        localStorage.setItem('whoAmI', JSON.stringify(data)); // ✅ Fix here
     }
 
+    // Get user data (automatically parse)
     getUserLocalStorage(): any {
-        let data: any = localStorage.getItem('whoAmI');
-        data = JSON.parse(data);
-        return data;
+        const data = localStorage.getItem('whoAmI');
+        return data ? JSON.parse(data) : null;
     }
+
     removeUserLocalStorage() {
         localStorage.removeItem('whoAmI');
     }

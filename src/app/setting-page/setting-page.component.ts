@@ -45,7 +45,7 @@ export class SettingPageComponent {
     ) {
         this.storedData = this.localStorage.getUserLocalStorage();
         if (this.storedData) {
-            this.userData = JSON.parse(this.storedData.userData);
+            this.userData = this.storedData;
         }
     }
 
@@ -104,12 +104,12 @@ export class SettingPageComponent {
 
     updateLocalStorage() {
         this.appservice.postUserCheck({ data: this.userData.user_Email }).subscribe((response) => {
-            let localData: any = {
-                LoggedIn: true,
-                userData: JSON.stringify(response.data[0]),
-            };
-            localData = JSON.stringify(localData);
-            this.localStorage.setUserLocalStorage(localData);
+            response.data[0].LoggedIn = true;
+            delete response.data[0].createdAt;
+            delete response.data[0].updatedAt;
+            delete response.data[0].user_Mobile;
+            delete response.data[0].__v;
+            this.localStorage.setUserLocalStorage(response.data[0]);
         });
     }
 

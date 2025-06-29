@@ -36,7 +36,6 @@ export class LoginViaGoogleComponent {
       }],
       referredBy: ['']
     });
-    console.log(this.stepTwoForm)
   }
 
   signInWithGoogle(): void {
@@ -46,30 +45,24 @@ export class LoginViaGoogleComponent {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        console.log("Google login successful:", user);
         this.email = user.email;
         this.appservice.postUserCheck({ data: result.user.email }).subscribe((response) => {
           if (!response.status) {
             this.currentStep = 2; // Move to step two if user is not found
           } else {
-            console.log("User already exists, redirecting to home page.", response);
-            let localData: any = {
-              LoggedIn: true,
-              userData: JSON.stringify(response.data[0]),
-            };
-            localData = JSON.stringify(localData);
-            this.localStorage.setUserLocalStorage(localData);
-            location.reload(); // Reload the page to reflect the logged-in state
+            response.data[0].LoggedIn = true;
+            delete response.data[0].createdAt;
+            delete response.data[0].updatedAt;
+            delete response.data[0].user_Mobile;
+            delete response.data[0].__v;
+            this.localStorage.setUserLocalStorage(response.data[0]);
+            location.reload();
           }
-          console.log("User check response:", response);
         });
         return;
-
-        this.dialogRef.close(); // Close the modal after login
       })
       .catch((error) => {
-        this.currentStep = 1; // Reset to step one on error
-        console.error("Google login error:", error);
+        this.currentStep = 1;
         alert("Login failed. Please try again.");
       });
   }
@@ -87,11 +80,9 @@ export class LoginViaGoogleComponent {
   );
 
   processOnKeyUpName(data: any) {
-    console.log('onkeyUpName called with data:', data);
     data = {
       userName: this.stepTwoForm.value.name,
     };
-    console.log(this.stepTwoForm.value, 'lengh');
 
     if (
       this.stepTwoForm.value.name.length >= 4 &&
