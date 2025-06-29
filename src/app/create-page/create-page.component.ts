@@ -393,7 +393,7 @@ export class CreatePageComponent implements AfterViewInit {
       obj.set({
         borderColor: '#0056b3',
         cornerColor: '#0056b3',
-        cornerSize: 60,
+        cornerSize: this.isMobileView ? 60 : 30,
         hasCorners: false,
         transparentCorners: false,
         selectionBackgroundColor: 'rgba(129, 129, 129, 0.3)',
@@ -709,8 +709,9 @@ export class CreatePageComponent implements AfterViewInit {
       }
 
       if (object) {
-        object.scaleX = this.isMobileView ? 20 : 5;
-        object.scaleY = this.isMobileView ? 20 : 5;
+        const textSize = templateId ? 5 : 20;
+        object.scaleX = textSize;
+        object.scaleY = textSize;
         object.setCoords();
         targetCanvas.add(object);
       }

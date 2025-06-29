@@ -52,7 +52,7 @@ export class HomeComponent {
 
     products = [
         {
-            img: '../../assets/createefi/white.png',
+            img: '../../assets/createefi/white.webp',
             alt: 'White Tee',
             name: 'First Expression',
             colorName: 'Pearl White',
@@ -60,7 +60,7 @@ export class HomeComponent {
             activeColor: 'white'
         },
         {
-            img: '../../assets/createefi/black.png',
+            img: '../../assets/createefi/black.webp',
             alt: 'Black Tee',
             name: 'Createefi Eclipse',
             colorName: 'Onyx Black',
@@ -68,7 +68,7 @@ export class HomeComponent {
             activeColor: 'black'
         },
         {
-            img: '../../assets/createefi/blue.png',
+            img: '../../assets/createefi/blue.webp',
             alt: 'Blue Tee',
             name: 'Last Puff',
             colorName: 'Sapphire Blue',
@@ -76,7 +76,7 @@ export class HomeComponent {
             activeColor: 'blue'
         },
         {
-            img: '../../assets/createefi/maroon.png',
+            img: '../../assets/createefi/maroon.webp',
             alt: 'Maroon Tee',
             name: 'Bruised Velvet',
             colorName: 'Ruby Maroon',
@@ -88,13 +88,17 @@ export class HomeComponent {
 
 
     //for video
-    @ViewChild('animationCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('animationCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
+    canvasVisible: boolean = false;
 
     frameCount = 431; // Change based on your number of images
     fps = 30;
     frameImages: HTMLImageElement[] = [];
     currentFrame = 0;
     ctx!: CanvasRenderingContext2D;
+
+
+    private sentenceLoopActive = true;
 
     constructor(
         private dialog: MatDialog,
@@ -154,22 +158,36 @@ export class HomeComponent {
     }
 
     ngAfterViewInit() {
+        this.startSentenceLoop();
         this.updateDots(0);
+
         const carousel = document.getElementById('carousel')!;
         carousel.addEventListener('scroll', () => {
             this.detectActiveCard(carousel.scrollLeft);
         });
 
-        // const video = this.bgVideo.nativeElement;
-        // video.muted = true;
-        // video.play().then(() => {
-        //     console.log('Autoplay success!');
-        // }).catch((err) => {
-        //     console.error('Autoplay blocked:', err);
-        // });
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                this.canvasVisible = true;
 
+                setTimeout(() => {
+                    const canvas = this.canvasRef?.nativeElement;
+                    if (!canvas) return;
+                    this.ctx = canvas.getContext('2d')!;
+                    this.loadImages().then(() => this.animateFrames());
+                }, 10); // Slight delay to ensure DOM is ready
 
+                observer.disconnect(); // Stop observing after first load
+            }
+        }, {
+            threshold: 0.1
+        });
 
+        const canvasContainer = document.querySelector('.hero-image');
+        if (canvasContainer) observer.observe(canvasContainer);
+    }
+
+    animateFrames(): void {
         const canvas = this.canvasRef.nativeElement;
         this.ctx = canvas.getContext('2d')!;
         this.loadImages().then(() => {
@@ -240,8 +258,19 @@ export class HomeComponent {
         }
     }
 
-    ngOnDestroy() {
+    startSentenceLoop(): void {
+        if (!this.sentenceLoopActive) return;
 
+        setTimeout(() => {
+            if (!this.sentenceLoopActive) return;
+            this.show = false;
+            this.startSentenceLoop();
+        }, 3000);
+    }
+
+
+    ngOnDestroy() {
+        this.sentenceLoopActive = false;
     }
 }
 

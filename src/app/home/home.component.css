@@ -14,7 +14,7 @@ body {
     text-align: center;
     padding: 40px 20px;
     position: relative;
-    background-image: url('../../assets/createefi/00-wall-dark.png');
+    background-image: url('../../assets/createefi/00-wall-dark.webp');
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -390,4 +390,15 @@ body {
     scroll-snap-type: x mandatory;
   }
 
+}
+
+.fade-in-canvas {
+  opacity: 0;
+  animation: fadeInCanvas 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeInCanvas {
+  to {
+    opacity: 1;
+  }
 }
