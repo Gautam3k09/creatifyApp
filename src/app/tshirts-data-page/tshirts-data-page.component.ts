@@ -51,7 +51,6 @@ export class TshirtsDataPageComponent {
         if (this.storedData && this.storedData.LoggedIn != null) {
             this.userData = JSON.parse(this.storedData.userData);
         }
-        // this.cloudflareSharp = environment.cloudflareSharp;
     }
 
     async ngOnInit() {

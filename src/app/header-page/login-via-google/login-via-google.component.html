@@ -1,0 +1,74 @@
+<div class="container text-center py-4 position-relative" *ngIf="currentStep === 1">
+
+     <!-- ❌ Close Button -->
+     <button class="btn btn-light position-absolute top-0 end-0 m-2"
+          style="border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.1); font-size: 1.5rem; width: 40px; height: 40px; padding: 0;"
+          (click)="closeDialog()" aria-label="Close">
+          &times;
+     </button>
+
+     <h4 class="mb-3 fw-bold">Welcome to CREATEEFI</h4>
+     <p class="text-muted mb-4">Sign in to continue and create something amazing</p>
+
+     <button class="btn btn-outline-dark d-flex align-items-center justify-content-center mx-auto px-3 py-2"
+          style="max-width: 300px; border-radius: 8px;" (click)="signInWithGoogle()">
+          <img src="assets/createefi/google.png" alt="Google" width="24" height="24" class="me-2" />
+          <span>Login with Google</span>
+     </button>
+</div>
+
+<div *ngIf="currentStep === 2">
+     <div class="container my-5 d-flex justify-content-center">
+          <div class="card p-4 rounded-5 shadow border-0" style="width: 100%; max-width: 350px;">
+               <h2 class="text-center fw-bold mb-4"
+                    style="font-family: 'Oswald', sans-serif; font-size: 2rem; letter-spacing: 1px;">
+                    TELL US<br>ABOUT<br>YOU
+               </h2>
+
+               <form [formGroup]="stepTwoForm" (ngSubmit)="onSubmit()">
+                    <!-- Name Field with Validation -->
+                    <div class="mb-4">
+                         <label class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
+                         <input type="text" class="form-control form-control-lg rounded-3" formControlName="name"
+                              placeholder="e.g. Aarav" (input)="onkeyUpName($event)">
+
+                         <!-- Validation Alerts -->
+                         <p class="text-danger small mt-2 mb-0" *ngIf="name?.hasError('required') && name?.dirty">
+                              Name is required.
+                         </p>
+                         <p class="text-danger small mt-2 mb-0" *ngIf="name?.hasError('minlength')">
+                              Name must be at least 4 characters long.
+                         </p>
+                         <p class="text-danger small mt-2 mb-0" *ngIf="name?.hasError('maxlength')">
+                              Name cannot exceed 16 characters.
+                         </p>
+                         <p class="text-danger small mt-2 mb-0"
+                              *ngIf="name?.hasError('usernameAlreadyExist') && name?.dirty">
+                              This name is already taken.
+                         </p>
+                    </div>
+
+                    <!-- Referred By -->
+                    <div class="mb-4">
+                         <label class="form-label fw-semibold">Referred By<br><small>(optional)</small></label>
+                         <input (keyup)="processVerifyReferral()" type="text"
+                              class="form-control form-control-lg rounded-3" formControlName="referredBy"
+                              placeholder="e.g. Gautam">
+                         <p class="text-danger small mt-2 mb-0"
+                              *ngIf=" stepTwoForm.controls['referredBy']?.hasError('referralCode') && stepTwoForm.controls['referredBy']?.dirty">
+                              Referral Code Unavailable.
+                         </p>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="d-grid">
+                         <button [disabled]="stepTwoForm.invalid || !referralAvailable || !usernameAvailable"
+                              type="submit" class="btn btn-dark btn-lg rounded-3 text-uppercase fw-semibold">
+                              Continue <span class="ms-1">→</span>
+                         </button>
+                    </div>
+               </form>
+          </div>
+     </div>
+
+</div>

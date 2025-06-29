@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class localStorageService {
-    constructor() {}
+    constructor() { }
     // localdata structure ->
     // LoggedIn Or Visitor
     // userData

@@ -3,7 +3,7 @@ import { HeaderPageComponent } from '../header-page/header-page.component';
 import { FooterComponent } from '../footer/footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { LoginViaGoogleComponent } from '../header-page/login-via-google/login-via-google.component';
 import { localStorageService } from '../local-storage-service';
 import { CommonModule } from '@angular/common';
 import { trigger, style, transition, animate } from '@angular/animations';
@@ -40,7 +40,7 @@ export class HomeComponent {
     show = true;
 
     dialogConfig = new MatDialogConfig();
-    modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
+    modalDialog: MatDialogRef<LoginViaGoogleComponent, any> | undefined;
     isLogin: any = false;
     storedData: any;
     images: string[] = [
@@ -56,7 +56,7 @@ export class HomeComponent {
             alt: 'White Tee',
             name: 'First Expression',
             colorName: 'Pearl White',
-            price: 'Rs. 599',
+            price: 'Rs. 799',
             activeColor: 'white'
         },
         {
@@ -64,7 +64,7 @@ export class HomeComponent {
             alt: 'Black Tee',
             name: 'Createefi Eclipse',
             colorName: 'Onyx Black',
-            price: 'Rs. 599',
+            price: 'Rs. 799',
             activeColor: 'black'
         },
         {
@@ -72,7 +72,7 @@ export class HomeComponent {
             alt: 'Blue Tee',
             name: 'Last Puff',
             colorName: 'Sapphire Blue',
-            price: 'Rs. 599',
+            price: 'Rs. 799',
             activeColor: 'blue'
         },
         {
@@ -80,7 +80,7 @@ export class HomeComponent {
             alt: 'Maroon Tee',
             name: 'Bruised Velvet',
             colorName: 'Ruby Maroon',
-            price: 'Rs. 599',
+            price: 'Rs. 799',
             activeColor: 'maroon'
         }
     ];
@@ -149,7 +149,8 @@ export class HomeComponent {
         }
         this.dialogConfig.id = 'projects-modal-component';
         this.dialogConfig.height = 'auto';
-        this.modalDialog = this.dialog.open(LoginModalComponent, this.dialogConfig);
+        this.dialogConfig.disableClose = true;
+        this.modalDialog = this.dialog.open(LoginViaGoogleComponent, this.dialogConfig);
     }
 
     ngAfterViewInit() {

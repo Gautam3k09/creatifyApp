@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { LoginViaGoogleComponent } from './login-via-google/login-via-google.component';
 import { localStorageService } from '../local-storage-service';
 
 @Component({
@@ -13,66 +13,55 @@ import { localStorageService } from '../local-storage-service';
     styleUrl: './header-page.component.css',
 })
 export class HeaderPageComponent {
-    sidebarClose: any = false;
+    sidebarClose = false;
     isMenuOpen = false;
-    isLoggedIn: any = "";
+    isLoggedIn: string | null = null;
     dialogConfig = new MatDialogConfig();
-    modalDialog: MatDialogRef<LoginModalComponent, any> | undefined;
+    modalDialog?: MatDialogRef<LoginViaGoogleComponent>;
     visitor: any = {};
-    merchPage: any = false;
+    merchPage = false;
+
     constructor(
         private router: Router,
         public matDialog: MatDialog,
         public localStorage: localStorageService
     ) {
-        let data = this.localStorage.getUserLocalStorage();
-        if (data && data.userData && !data?.visitor) {
-            data = JSON.parse(data.userData)
-            this.isLoggedIn = data.user_Name;
-            this.visitor = '';
-        } else if (data && data.visitor && data.user_id) {
-            console.log('visitor data', data);
+        const data = this.localStorage.getUserLocalStorage();
+
+        if (data?.userData && !data?.visitor) {
+            const user = JSON.parse(data.userData);
+            this.isLoggedIn = user.user_Name || '';
+        } else if (data?.visitor && data?.user_id) {
             this.visitor.visitor = data.visitor.toUpperCase();
             this.visitor.user_id = data.user_id;
-            this.isLoggedIn = ''
-        }
-    }
-
-    ngOnInit() {
-        if (this.visitor != '') {
             this.merchPage = true;
-            if (this.visitor != '') this.visitor = this.visitor;
         }
     }
 
-    onDivClick(string: any) {
+    ngOnInit() { }
+
+    onDivClick(path: string) {
         if (!this.merchPage) {
-            this.router.navigate([string]);
+            this.router.navigate([path]);
         } else {
             this.router.navigate(['/' + this.visitor.visitor + '/merch/' + this.visitor.user_id]);
         }
     }
 
     showSidebar(string = '') {
-        if (string != '') this.sidebarClose = !this.sidebarClose;
-        const sidebar: any = document.querySelector('.sidebar');
-        if (this.sidebarClose) {
-            sidebar.style.setProperty('display', 'flex', 'important');
-        } else {
-            sidebar.style.display = 'none';
+        if (string) this.sidebarClose = !this.sidebarClose;
+        const sidebar: HTMLElement | null = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.style.display = this.sidebarClose ? 'flex' : 'none';
         }
     }
 
     openModal() {
-        let width = window.innerWidth;
-        if (width > 600) {
-            this.dialogConfig.width = '25%';
-        } else {
-            this.dialogConfig.width = '80%';
-        }
+        this.dialogConfig.width = window.innerWidth > 600 ? '25%' : '80%';
         this.dialogConfig.id = 'projects-modal-component';
         this.dialogConfig.height = 'auto';
-        this.modalDialog = this.matDialog.open(LoginModalComponent, this.dialogConfig);
+        this.dialogConfig.disableClose = true;
+        this.modalDialog = this.matDialog.open(LoginViaGoogleComponent, this.dialogConfig);
     }
 
     openMobileHamburger() {

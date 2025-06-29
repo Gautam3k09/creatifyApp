@@ -1,12 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { HeaderPageComponent } from '../header-page/header-page.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppServiceService } from '../app-service.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { BuyPageComponent } from '../buy-page/buy-page.component';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { TshirtsDataPageComponent } from '../tshirts-data-page/tshirts-data-page.component';
 import { localStorageService } from '../local-storage-service';
 
@@ -15,10 +12,7 @@ import { localStorageService } from '../local-storage-service';
     standalone: true,
     imports: [
         CommonModule,
-        HeaderPageComponent,
         ReactiveFormsModule,
-        BuyPageComponent,
-        LoginModalComponent,
         TshirtsDataPageComponent,
     ],
     providers: [AppServiceService, BsModalService],

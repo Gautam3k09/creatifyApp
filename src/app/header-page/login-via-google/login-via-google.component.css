@@ -1,0 +1,8 @@
+.card {
+  background-color: #ffffff;
+}
+@media (max-width: 768px) {
+  h4 {
+    font-size: 1.2rem;
+  }
+}

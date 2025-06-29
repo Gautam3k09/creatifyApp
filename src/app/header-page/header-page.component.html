@@ -1,31 +1,31 @@
 <header>
-    <div class="navbar" *ngIf="isLoggedIn !== '';else merchHeader">
+    <!-- Normal header for users -->
+    <div class="navbar" *ngIf="!merchPage; else merchHeader">
         <div class="nav-left">
-            <button class="menu-btn" (click)="openMobileHamburger()"
-                *ngIf="isLoggedIn !== '' && isLoggedIn !== null">&#9776;</button>
+            <button class="menu-btn" (click)="openMobileHamburger()" *ngIf="isLoggedIn">
+                &#9776;
+            </button>
             <img src="../../assets/createefi/lgo.png" style="width: 205px;" (click)="onDivClick('')"
                 alt="CREATEEFI Logo" class="logo" />
         </div>
 
-        <div *ngIf="isLoggedIn !== '' && isLoggedIn !== null;">
-            <nav class=" nav-center" [ngClass]="{ 'show': isMenuOpen}">
-                <a (click)="onDivClick('shop')">Shop</a>
-                <a (click)="onDivClick('tees')">Create</a>
-            </nav>
-        </div>
+        <nav class="nav-center" [ngClass]="{ 'show': isMenuOpen }">
+            <a (click)="onDivClick('shop')">Shop</a>
+            <a (click)="onDivClick('tees')" *ngIf="isLoggedIn">Create</a>
+        </nav>
 
-        <!-- If logged in -->
-        <div class="nav-right" *ngIf="isLoggedIn !== '' && isLoggedIn !== null; else loginButton">
+        <div class="nav-right" *ngIf="isLoggedIn; else loginButton">
             <i class="fa-solid fa-user" (click)="onDivClick('account')"></i>
         </div>
 
-        <!-- If NOT logged in -->
         <ng-template #loginButton>
             <div class="nav-right">
                 <i class="fa-solid fa-right-to-bracket" (click)="openModal()"></i>
             </div>
         </ng-template>
     </div>
+
+    <!-- Guest header (Merch page) -->
     <ng-template #merchHeader>
         <header class="navbar creator-merch-header">
             <div class="creator-logo-left">
@@ -36,5 +36,4 @@
             </div>
         </header>
     </ng-template>
-
 </header>
