@@ -50,12 +50,12 @@ export class LoginViaGoogleComponent {
           if (!response.status) {
             this.currentStep = 2; // Move to step two if user is not found
           } else {
-            response.data[0].LoggedIn = true;
-            delete response.data[0].createdAt;
-            delete response.data[0].updatedAt;
-            delete response.data[0].user_Mobile;
-            delete response.data[0].__v;
-            this.localStorage.setUserLocalStorage(response.data[0]);
+            response.data.LoggedIn = true;
+            delete response.data.createdAt;
+            delete response.data.updatedAt;
+            delete response.data.user_Mobile;
+            delete response.data.__v;
+            this.localStorage.setUserLocalStorage(response.data);
             location.reload();
           }
         });

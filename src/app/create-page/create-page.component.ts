@@ -564,85 +564,67 @@ export class CreatePageComponent implements AfterViewInit {
       const file = eventOrCanvas.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
+      const dataURL = await this.readFileAsDataURL(file);
+      const imgElement = await this.loadImage(dataURL);
 
-      reader.onload = async (e: any) => {
-        const imgElement = new Image();
-        imgElement.src = e.target.result;
+      const targetDPI = 300;
+      const imgWidth = imgElement.naturalWidth;
+      const imgHeight = imgElement.naturalHeight;
 
-        imgElement.onload = async () => {
-          const targetDPI = 300;
-          const imgWidth = imgElement.naturalWidth;
-          const imgHeight = imgElement.naturalHeight;
+      const maxPrintWidthInches = imgWidth / targetDPI;
+      const maxPrintHeightInches = imgHeight / targetDPI;
 
-          // Calculate max print size in inches at target DPI
-          const maxPrintWidthInches = imgWidth / targetDPI;
-          const maxPrintHeightInches = imgHeight / targetDPI;
+      const minPrintWidthInches = 6;
+      const minPrintHeightInches = 4;
 
-          // Define your desired minimum print size in inches (for example, 6x4 inches)
-          const minPrintWidthInches = 6;
-          const minPrintHeightInches = 4;
+      if (maxPrintWidthInches < minPrintWidthInches || maxPrintHeightInches < minPrintHeightInches) {
+        alert(
+          `Image resolution is too low for a good print at ${minPrintWidthInches}" × ${minPrintHeightInches}". ` +
+          `Your image can only print at approximately ${maxPrintWidthInches.toFixed(2)}" × ${maxPrintHeightInches.toFixed(2)}" ` +
+          `at ${targetDPI} DPI. Please upload a higher resolution image or reduce print size.`
+        );
+      }
 
-          if (
-            maxPrintWidthInches < minPrintWidthInches ||
-            maxPrintHeightInches < minPrintHeightInches
-          ) {
-            alert(
-              `Image resolution is too low for a good print at ${minPrintWidthInches}" × ${minPrintHeightInches}". ` +
-              `Your image can only print at approximately ${maxPrintWidthInches.toFixed(2)}" × ${maxPrintHeightInches.toFixed(2)}" ` +
-              `at ${targetDPI} DPI. Please upload a higher resolution image or reduce print size. or upscale this image`
-            );
-            // return;
-          }
+      try {
+        const img = await fabric.Image.fromURL(dataURL, { crossOrigin: 'anonymous' });
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        const scale = Math.min(canvasWidth / img.width!, canvasHeight / img.height!);
+        const scaledWidth = img.width! * scale;
+        const scaledHeight = img.height! * scale;
+        const uniqueId = 'item_' + Date.now();
 
-          try {
-            const img = await fabric.Image.fromURL(e.target.result, { crossOrigin: 'anonymous' });
-            const canvasWidth = this.canvas.getWidth();
-            const canvasHeight = this.canvas.getHeight();
-            const scale = Math.min(canvasWidth / img.width, canvasHeight / img.height);
-            const scaledWidth = img.width * scale;
-            const scaledHeight = img.height * scale;
-            const uniqueId = 'item_' + Date.now();
+        img.set({
+          scaleX: scale,
+          scaleY: scale,
+          left: (canvasWidth - scaledWidth) / 2,
+          top: (canvasHeight - scaledHeight) / 2,
+          selectable: true,
+          hasControls: true,
+          id: uniqueId,
+          objectType: 'image',
+        });
 
-            img.set({
-              scaleX: scale,
-              scaleY: scale,
-              left: (canvasWidth - scaledWidth) / 2,
-              top: (canvasHeight - scaledHeight) / 2,
-              selectable: true,
-              hasControls: true,
-              id: uniqueId,
-              objectType: 'image',
-            });
+        this.canvas.add(img);
+        this.canvas.setActiveObject(img);
+        this.reapplyObjectStyles();
+        this.canvas.renderAll();
+        this.saveState();
+        this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
+      } catch (error) {
+        console.error('Image loading failed:', error);
+        alert('Failed to load image onto canvas.');
+      }
 
-            this.canvas.add(img);
-            this.canvas.setActiveObject(img);
-            this.reapplyObjectStyles();
-            this.canvas.renderAll();
-            this.saveState();
-            this.itemList.unshift({ id: uniqueId, type: 'image', name: file.name, visible: true });
-          } catch (error) {
-            console.error('Image loading failed:', error);
-            alert('Failed to load image onto canvas.');
-          }
-        };
-
-        imgElement.onerror = () => alert('Could not load the image.');
-      };
-
-      reader.readAsDataURL(file);
       eventOrCanvas.target.value = ''; // Allow re-uploading same file
-      setTimeout(() => {
-        this.updateQualityStatus()
-
-      }, 500);
+      await this.updateQualityStatus(); // make sure this is async
       return;
     }
 
+    // SVG MODE
     if (this.svgData?.startsWith('<svg')) {
       try {
         const svgObj = await fabric.loadSVGFromString(this.svgData);
-        console.log('SVG options:', svgObj);
         const objects = svgObj.objects.map((obj: any) => {
           obj.set({
             selectable: true,
@@ -710,119 +692,18 @@ export class CreatePageComponent implements AfterViewInit {
       const el = elements[i];
       const id = `${uniqueId}_${i}`;
       let object: fabric.Object | null = null;
+
       if (el.objectType === 'shape') {
-        switch (el.type) {
-          case 'rect':
-            object = new fabric.Rect({
-              left: el.left ?? 0,
-              top: el.top ?? 0,
-              width: el.width ?? 10,
-              height: el.height ?? 10,
-              fill: el.fill ?? '#000000',
-              stroke: el.stroke ?? undefined,
-              strokeWidth: el.strokeWidth ?? 0,
-              selectable: el.selectable ?? false,
-              evented: el.evented ?? false,
-              objectCaching: false,
-              type: 'rect',
-              objectType: 'shape',
-              id,
-            });
-            break;
-
-          case 'circle':
-            object = new fabric.Circle({
-              left: el.left ?? 0,
-              top: el.top ?? 0,
-              radius: el.radius ?? 50,
-              fill: el.fill ?? '#000000',
-              stroke: el.stroke,
-              strokeWidth: el.strokeWidth,
-              selectable: el.selectable,
-              evented: el.evented,
-              id,
-              type: 'circle',
-            });
-            break;
-
-          case 'triangle':
-            object = new fabric.Triangle({
-              left: el.left ?? 0,
-              top: el.top ?? 0,
-              width: el.width ?? 80,
-              height: el.height ?? 80,
-              fill: el.fill ?? '#000000',
-              stroke: el.stroke,
-              strokeWidth: el.strokeWidth,
-              selectable: el.selectable,
-              evented: el.evented,
-              id,
-              type: 'triangle',
-            });
-            break;
-
-          case 'line':
-            object = new fabric.Line([el.x1, el.y1, el.x2, el.y2], {
-              stroke: el.stroke ?? '#000000',
-              strokeWidth: el.strokeWidth ?? 2,
-              strokeDashArray: el.strokeDashArray ?? undefined,
-              selectable: el.selectable,
-              evented: el.evented,
-              id,
-              type: 'line',
-              objectType: 'shape',
-              left: el.left ?? 0,
-              top: el.top ?? 0
-            });
-            break;
-
-          default:
-            console.warn('Unsupported shape type:', el.type);
-            return;
-        }
-
-        if (targetCanvas === this.canvas) {
+        object = this.createShape(el, id);
+        if (object && targetCanvas === this.canvas) {
           this.itemList.unshift({ id, type: 'shape', name: el.type, visible: true });
         }
-
       } else if (el.objectType === 'image') {
         await this.addImageFromUrl(el, false);
-      }
-      else {
-        object = new fabric.IText(el.text ?? '', {
-          fontFamily: el.fontFamily,
-          left: el.left ?? 0,
-          top: el.top ?? 0,
-          fontSize: el.fontSize ?? 40,
-          fill: el.fill ? el.fill != 'transparent' ? el.fill : null : '#000000',
-          stroke: el.stroke ? el.stroke : null,
-          strokeWidth: el.strokeWidth ? el.strokeWidth / 20 : 0,
-          selectable: el.selectable,
-          evented: el.evented,
-          id,
-          objectType: 'text',
-          lineHeight: el.lineHeight ?? this.lineHeight,
-          charSpacing: el.charSpacing ?? this.charSpacing,
-          angle: el.angle ?? 0,
-          fontStyle: el.fontStyle ?? 'normal',
-          textAlign: el.textAlign ?? 'center',
-          opacity: el.opacity ?? 1,
-          fontWeight: el.fontWeight ?? 'normal',
-        });
-        if (el.textheight) object.set('textheight', el.textheight);
-        if (el.textheight) {
-          const height = (object.height ?? 0) * el.textheight / 50;
-          const clipPath = new fabric.Rect({
-            left: 0,
-            top: object.height! / 2 - el.textheight,
-            width: object.width ?? 0,
-            height: height,
-            originX: 'center',
-            originY: 'top',
-          });
-          object['clipPath'] = clipPath;
-        }
-        if (targetCanvas === this.canvas) {
+        continue;
+      } else {
+        object = this.createTextObject(el, id);
+        if (object && targetCanvas === this.canvas) {
           this.itemList.unshift({ id, type: 'text', name: el.text, visible: true });
         }
       }
@@ -831,15 +712,7 @@ export class CreatePageComponent implements AfterViewInit {
         object.scaleX = this.isMobileView ? 20 : 5;
         object.scaleY = this.isMobileView ? 20 : 5;
         object.setCoords();
-      }
-
-      if (targetCanvas && object) {
-        setTimeout(() => {
-          targetCanvas.add(object);
-          if (targetCanvas === this.canvas) {
-            // targetCanvas.setActiveObject(object);
-          }
-        }, 100);
+        targetCanvas.add(object);
       }
     }
 
@@ -849,7 +722,132 @@ export class CreatePageComponent implements AfterViewInit {
     this.reorderCanvasObjects();
     targetCanvas.requestRenderAll();
     targetCanvas.renderAll();
-    // this.updateQualityStatus()
+  }
+
+  private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private loadImage(src: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  private createShape(el: any, id: string): fabric.Object | null {
+    switch (el.type) {
+      case 'rect':
+        return new fabric.Rect({
+          left: el.left ?? 0,
+          top: el.top ?? 0,
+          width: el.width ?? 10,
+          height: el.height ?? 10,
+          fill: el.fill ?? '#000000',
+          stroke: el.stroke ?? undefined,
+          strokeWidth: el.strokeWidth ?? 0,
+          selectable: el.selectable ?? false,
+          evented: el.evented ?? false,
+          objectCaching: false,
+          type: 'rect',
+          objectType: 'shape',
+          id,
+        });
+
+      case 'circle':
+        return new fabric.Circle({
+          left: el.left ?? 0,
+          top: el.top ?? 0,
+          radius: el.radius ?? 50,
+          fill: el.fill ?? '#000000',
+          stroke: el.stroke,
+          strokeWidth: el.strokeWidth,
+          selectable: el.selectable,
+          evented: el.evented,
+          id,
+          type: 'circle',
+        });
+
+      case 'triangle':
+        return new fabric.Triangle({
+          left: el.left ?? 0,
+          top: el.top ?? 0,
+          width: el.width ?? 80,
+          height: el.height ?? 80,
+          fill: el.fill ?? '#000000',
+          stroke: el.stroke,
+          strokeWidth: el.strokeWidth,
+          selectable: el.selectable,
+          evented: el.evented,
+          id,
+          type: 'triangle',
+        });
+
+      case 'line':
+        return new fabric.Line([el.x1, el.y1, el.x2, el.y2], {
+          stroke: el.stroke ?? '#000000',
+          strokeWidth: el.strokeWidth ?? 2,
+          strokeDashArray: el.strokeDashArray ?? undefined,
+          selectable: el.selectable,
+          evented: el.evented,
+          id,
+          type: 'line',
+          objectType: 'shape',
+          left: el.left ?? 0,
+          top: el.top ?? 0
+        });
+
+      default:
+        console.warn('Unsupported shape type:', el.type);
+        return null;
+    }
+  }
+
+  private createTextObject(el: any, id: string): fabric.IText {
+    const object = new fabric.IText(el.text ?? '', {
+      fontFamily: el.fontFamily,
+      left: el.left ?? 0,
+      top: el.top ?? 0,
+      fontSize: el.fontSize ?? 40,
+      fill: el.fill ? el.fill != 'transparent' ? el.fill : null : '#000000',
+      stroke: el.stroke ? el.stroke : null,
+      strokeWidth: el.strokeWidth ? el.strokeWidth / 20 : 0,
+      selectable: el.selectable,
+      evented: el.evented,
+      id,
+      objectType: 'text',
+      lineHeight: el.lineHeight ?? this.lineHeight,
+      charSpacing: el.charSpacing ?? this.charSpacing,
+      angle: el.angle ?? 0,
+      fontStyle: el.fontStyle ?? 'normal',
+      textAlign: el.textAlign ?? 'center',
+      opacity: el.opacity ?? 1,
+      fontWeight: el.fontWeight ?? 'normal',
+    });
+
+    if (el.textheight) object.set('textheight', el.textheight);
+    if (el.textheight) {
+      const height = (object.height ?? 0) * el.textheight / 50;
+      const clipPath = new fabric.Rect({
+        left: 0,
+        top: object.height! / 2 - el.textheight,
+        width: object.width ?? 0,
+        height: height,
+        originX: 'center',
+        originY: 'top',
+      });
+      object['clipPath'] = clipPath;
+    }
+
+    return object;
   }
 
   async addImageFromUrl(fromUrl: any, selectable: any): Promise<void> {
@@ -1557,39 +1555,49 @@ export class CreatePageComponent implements AfterViewInit {
   async saveCanvasDataToDB(): Promise<void> {
     this.isLoading = true;
     this.canvas.discardActiveObject();
-    if (!this.isCanvas1Visible) this.toggleCanvas();
-    let side = this.isCanvas1Visible ? 'front' : 'back';
+
     try {
-      await this.processCanvasObjects(side);
-      setTimeout(() => {
-        this.uploadImage();
-      }, 100);
+      let currentSide = this.isCanvas1Visible ? 'front' : 'back';
+      await this.processCanvasObjects(currentSide);
+      this.toggleCanvas();
+      await this.waitForCanvasLoad();
+      let nextSide = this.isCanvas1Visible ? 'front' : 'back';
+      await this.processCanvasObjects(nextSide);
+      await this.uploadImage();
     } catch (error) {
       this.isLoading = false;
       console.error("Error saving canvas data:", error);
     }
   }
 
-  private async processCanvasObjects(sideLabel: any): Promise<void> {
-    const promises = this.canvas?.getObjects().map(async (obj: any) => {
-      let file = obj ? this.canvas.toDataURL({ format: 'png', multiplier: 6, quality: 1.0 }) : '';
-      return this.convertToBlob(file, sideLabel);
-    }) || [];
-    await Promise.all(promises);
+  private waitForCanvasLoad(): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 200);
+    });
   }
 
-  async convertToBlob(formData: string, sideLabel: any): Promise<void> {
+  private async processCanvasObjects(sideLabel: any): Promise<void> {
+    if (!this.canvas) return;
+    const dataURL = this.canvas.toDataURL({ format: 'png', multiplier: 1, quality: 1.0 });
+    const blob = await this.convertToBlob(dataURL);
+    const filename = `${Date.now()}_${this.userData.user_Name}_${sideLabel}.png`;
+    if (sideLabel === 'front') {
+      this.formDataFront.append('image', blob, filename);
+    } else {
+      this.formDataBack.append('image', blob, filename);
+    }
+  }
+
+  private async convertToBlob(dataURL: string): Promise<Blob> {
     try {
-      const response: any = await fetch(formData);
-      const blob: any = await response.blob();
-      const filename = `${Date.now()}_${this.userData.user_Name}_${sideLabel}.png`;
-      if (sideLabel == 'front') {
-        this.formDataFront.append('image', blob, filename);
-      } else {
-        this.formDataBack.append('image', blob, filename);
-      }
+      const res = await fetch(dataURL);
+      const blob = await res.blob();
+      return blob;
     } catch (error) {
       console.error('Error converting canvas to Blob:', error);
+      throw error;
     }
   }
 
@@ -1604,26 +1612,26 @@ export class CreatePageComponent implements AfterViewInit {
     }
   }
 
-  onImageTemplateClick(element: any, istemplate: any) {
+  async onImageTemplateClick(element: any, istemplate: any) {
     if (!istemplate) this.addElement(this.canvas, '', '', element);
-
     if (istemplate) {
       this.isLoading = true;
       if (element.doubleside) {
         this.setColor(element.teeColor);
-        if (this.isCanvas1Visible) this.toggleCanvas();
-        this.addElement(this.canvas, '', element.name, '');
-        setTimeout(() => {
+        if (this.isCanvas1Visible) {
           this.toggleCanvas();
-        }, 300)
-        setTimeout(() => {
-          this.addElement(this.canvas, '', element.name + '_front', '');
-          this.canvas.requestRenderAll();
-        }, 500);
-        setTimeout(() => {
+          await this.waitForCanvasLoad();
+        }
+        await this.addElement(this.canvas, '', element.name, '');
+        this.toggleCanvas();
+        await this.waitForCanvasLoad();
+        await this.addElement(this.canvas, '', element.name + '_front', '');
+        this.canvas.requestRenderAll();
+        setTimeout(async () => {
           this.toggleCanvas();
+          await this.waitForCanvasLoad();
           this.isLoading = false;
-        }, 700);
+        }, 10);
       } else {
         this.addElement(this.canvas, '', element.name, '');
         setTimeout(() => {
@@ -1705,7 +1713,7 @@ export class CreatePageComponent implements AfterViewInit {
     this.isArcEnabled = !this.isArcEnabled;
   }
 
-  uploadImage(): any {
+  async uploadImage(): Promise<void> {
     const cut: any = 0;
     const formData = new FormData();
     formData.append('userId', this.userData._id);
@@ -1717,27 +1725,23 @@ export class CreatePageComponent implements AfterViewInit {
     formData.append('itemColor', this.imageColor);
     formData.append('description', 'Description of the design');
 
-    // 🔹 Append image files to FormData
-    if (this.formDataFront) {
-      const frontImage = this.formDataFront.get('image');
-      if (frontImage) {
-        formData.append('frontImage', frontImage as Blob);
-      }
-    }
-    if (this.formDataBack) {
-      const backImage = this.formDataBack.get('image');
-      if (backImage) {
-        formData.append('backImage', backImage as Blob);
-      }
-    }
-    this.appservice.postImage(formData).subscribe(
-      (response) => {
-        this.back()
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    const frontImage = this.formDataFront.get('image');
+    const backImage = this.formDataBack.get('image');
+    if (frontImage) formData.append('frontImage', frontImage as Blob);
+    if (backImage) formData.append('backImage', backImage as Blob);
+
+    return new Promise<void>((resolve, reject) => {
+      this.appservice.postImage(formData).subscribe(
+        (response) => {
+          this.back();
+          resolve();
+        },
+        (error) => {
+          console.log(error);
+          reject(error);
+        }
+      );
+    });
   }
 
   setColor(id: any) {
@@ -1979,7 +1983,6 @@ export class CreatePageComponent implements AfterViewInit {
     });
 
     this.modalDialog.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
       if (result) {
         if (type === 'save') {
           this.designName = result.name;

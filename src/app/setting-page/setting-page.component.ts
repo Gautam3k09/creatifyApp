@@ -104,12 +104,12 @@ export class SettingPageComponent {
 
     updateLocalStorage() {
         this.appservice.postUserCheck({ data: this.userData.user_Email }).subscribe((response) => {
-            response.data[0].LoggedIn = true;
-            delete response.data[0].createdAt;
-            delete response.data[0].updatedAt;
-            delete response.data[0].user_Mobile;
-            delete response.data[0].__v;
-            this.localStorage.setUserLocalStorage(response.data[0]);
+            response.data.LoggedIn = true;
+            delete response.data.createdAt;
+            delete response.data.updatedAt;
+            delete response.data.user_Mobile;
+            delete response.data.__v;
+            this.localStorage.setUserLocalStorage(response.data);
         });
     }
 
